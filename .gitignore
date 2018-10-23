@@ -1,0 +1,53 @@
+### Package Files #
+*.jar
+*.zip
+*.tar.gz
+*.rar
+*.war
+*.nar
+*.ear
+
+### Scala #
+*.class
+*.log
+
+### Gradle files #
+.gradle/
+build/
+.gradletasknamecache
+### Do not ignore the gradle wrapper jar
+!gradle-wrapper.jar
+
+### Intellij #
+*.iml
+*.ipr
+*.iws
+.idea
+out/
+
+### WINDOWS TEMPLATE
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# Windows thumbnail cache files
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+
+# Linux KDE Dolphin
+.directory
+
+# MAC OS
+*.DS_Store
