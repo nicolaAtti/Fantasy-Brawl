@@ -8,14 +8,3 @@ mainClassName = 'main'
 
 dependencies {
 }
-
-sourceSets {
-    main {
-        scala {
-            srcDir 'src/scala'
-        }
-        resources {
-            srcDir 'src/resources'
-        }
-    }
-}

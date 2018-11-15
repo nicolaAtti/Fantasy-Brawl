@@ -1,7 +1,7 @@
 package model
 
-import main.resources.Utility
 import org.scalatest.FunSuite
+import utilities.Utility
 
 class CharacterFactoryTest extends FunSuite {
   private val stats =  Statistics(51,33,13,5,27) //This will be taken by a prolog file
