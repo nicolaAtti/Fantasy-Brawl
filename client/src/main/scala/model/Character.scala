@@ -1,6 +1,6 @@
 package model
 
-import main.resources.Utility
+import utilities.Utility
 
 //Aspetti condivisi : le 5 statistiche (che vanno nel costruttore) i metodi per accedervici ,
 //Aspetti differenti: i modificatori con cui vengono aleterati i valori delle statistiche secondarie
@@ -19,12 +19,13 @@ trait Character{
   var stats: Statistics
   var statMods: StatModifiers
 
+  import Utility._
 
-  def getPhysDamage: Int = Utility.roundDown(stats.strength * statMods.strMod)
-  def getPysCritDamage: Int = Utility.roundDown((stats.strength * statMods.strMod)/5 +150)
-  def getSpeed: Int = Utility.roundDown((stats.agility * statMods.agiMod)/10)
-  def getCritChance: Int = Utility.roundDown((stats.agility * statMods.agiMod)/2)
-  def getMagDefence: Int = Utility.roundDown(stats.spirit * statMods.spiMod)
+  def getPhysDamage: Int = roundDown(stats.strength * statMods.strMod)
+  def getPysCritDamage: Int = roundDown((stats.strength * statMods.strMod)/5 +150)
+  def getSpeed: Int = roundDown((stats.agility * statMods.agiMod)/10)
+  def getCritChance: Int = roundDown((stats.agility * statMods.agiMod)/2)
+  def getMagDefence: Int = roundDown(stats.spirit * statMods.spiMod)
   def getMaxMP: Int = Utility.roundDown((stats.spirit * statMods.spiMod)*5)
   def getMagDamage: Int = Utility.roundDown(stats.intelligence * statMods.intMod)
   def getMagicCritDamage: Int = Utility.roundDown((stats.intelligence * statMods.intMod)/10 +150)
