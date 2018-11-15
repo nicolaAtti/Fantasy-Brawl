@@ -1,14 +1,21 @@
 plugins{
     id 'scala'
+    id 'java'
     id 'application'
 }
 
 mainClassName = 'main'
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.12.7'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.scalatest:scalatest_2.11:3.0.5'
+}
 
-    testRuntime 'org.scala-lang.modules:scala-xml_2.11:1.0.6'
+sourceSets {
+    main {
+        scala {
+            srcDir 'src/scala'
+        }
+        resources {
+            srcDir 'src/resources'
+        }
+    }
 }

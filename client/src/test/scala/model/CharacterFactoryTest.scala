@@ -1,12 +1,11 @@
 package model
 
-import main.scala.model.CharacterFactory
+import main.resources.Utility
 import org.scalatest.FunSuite
 
 class CharacterFactoryTest extends FunSuite {
-  private val stats = new Statistics(51,33,13,5,27)
-  private val warMods =  new StatModifiers(2,1,1,0.5,1.5,2)
-  private val warriorFactory =  CharacterFactory("Warrior","Jacob",stats,warMods)
+  private val stats =  Statistics(51,33,13,5,27) //This will be taken by a prolog file
+  private val warriorFactory =  CharacterFactory("Warrior","Jacob",stats)
   //private val thiefFactory =  CharacterFactory("Thief","Annabelle",34,46,22,8,27)
   //private val wizardFactory =  CharacterFactory("Wizard","Lidya",7,22,34,58,23)
   //private val healerFactory =  CharacterFactory("Healer","Albert",19,11,33,54,27)
@@ -16,11 +15,11 @@ class CharacterFactoryTest extends FunSuite {
 
     assert(warriorFactory.charName equals "Jacob")
 
-    assert(warriorFactory.stats.getStrength == 51)
-    assert(warriorFactory.stats.getAgility == 33)
-    assert(warriorFactory.stats.getSpirit == 13)
-    assert(warriorFactory.stats.getIntelligence == 5)
-    assert(warriorFactory.stats.getResistance == 27)
+    assert(warriorFactory.stats.strength == 51)
+    assert(warriorFactory.stats.agility == 33)
+    assert(warriorFactory.stats.spirit == 13)
+    assert(warriorFactory.stats.intelligence == 5)
+    assert(warriorFactory.stats.resistance == 27)
   }
   test("test the right calculation of sub-statistics"){
     assert(warriorFactory.getPhysDamage == 102)
@@ -37,6 +36,17 @@ class CharacterFactoryTest extends FunSuite {
 
     assert(warriorFactory.getMaxHP == 540)
     assert(warriorFactory.getPhysDefence == 40)
+  }
+  test("The initial health and mp should be equal to it's maximum value when created"){
+    assert(warriorFactory.currHP == warriorFactory.getMaxHP) //540
+    assert(warriorFactory.currMP == warriorFactory.getMaxMP) //65
+  }
+  test("Adding and removing health or mp shouldn't exceede the maximum value or the minimum value(0)"){
+    assert(warriorFactory.changeCurrHPMP("HP",Utility.sub,40) == 500)
+    assert(warriorFactory.changeCurrHPMP("MP",Utility.sub,25) == 40)
+
+    assert(warriorFactory.changeCurrHPMP("HP",Utility.add,60) == 540)
+    assert(warriorFactory.changeCurrHPMP("MP",Utility.sub,60) == 0)
   }
 
 }
