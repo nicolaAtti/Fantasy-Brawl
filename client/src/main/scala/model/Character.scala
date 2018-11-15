@@ -26,11 +26,11 @@ trait Character{
   def getSpeed: Int = roundDown((stats.agility * statMods.agiMod)/10)
   def getCritChance: Int = roundDown((stats.agility * statMods.agiMod)/2)
   def getMagDefence: Int = roundDown(stats.spirit * statMods.spiMod)
-  def getMaxMP: Int = Utility.roundDown((stats.spirit * statMods.spiMod)*5)
-  def getMagDamage: Int = Utility.roundDown(stats.intelligence * statMods.intMod)
-  def getMagicCritDamage: Int = Utility.roundDown((stats.intelligence * statMods.intMod)/10 +150)
-  def getMaxHP: Int = Utility.roundDown((stats.resistance * statMods.hpMod)*10)
-  def getPhysDefence: Int = Utility.roundDown(stats.resistance * statMods.resMod)
+  def getMaxMP: Int = roundDown((stats.spirit * statMods.spiMod)*5)
+  def getMagDamage: Int = roundDown(stats.intelligence * statMods.intMod)
+  def getMagicCritDamage: Int = roundDown((stats.intelligence * statMods.intMod)/10 +150)
+  def getMaxHP: Int = roundDown((stats.resistance * statMods.hpMod)*10)
+  def getPhysDefence: Int = roundDown(stats.resistance * statMods.resMod)
 
   var currHP: Int = getMaxHP
   var currMP: Int = getMaxMP
