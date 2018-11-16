@@ -9,7 +9,7 @@
 allprojects {
     apply plugin: 'idea'
     apply plugin: 'scala'
-    apply plugin: 'java'
+    apply plugin: 'java-library'
 
     repositories {
         jcenter()
@@ -18,8 +18,8 @@ allprojects {
 
     dependencies {
         implementation 'org.scala-lang:scala-library:2.12.7'
-        implementation 'junit:junit:4.12'
-        implementation 'org.scalatest:scalatest_2.12:3.0.5'
+        testimplementation 'junit:junit:4.12'
+        testimplementation 'org.scalatest:scalatest_2.12:3.0.5'
 
         testRuntime 'org.scala-lang.modules:scala-xml_2.11:1.0.6'
     }

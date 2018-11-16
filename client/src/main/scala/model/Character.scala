@@ -64,8 +64,8 @@ private case class Wizard(override var charName: String, override var stats: Sta
 private case class Healer(override var charName: String,override var stats: Statistics, override var classMods: StatModifiers = StatModifiers(1.5,0.5,1,2,1,1.5)) extends Character {
 }
 
-//Companion object
-object CharacterFactory{
+
+object Character{
         def apply(role: String,charName: String,stats: Statistics): Character = role match{
                 case "Warrior" => Warrior(charName,stats)
                 case "Thief" => Thief(charName,stats)
@@ -74,5 +74,3 @@ object CharacterFactory{
         }
 
 }
-
-
