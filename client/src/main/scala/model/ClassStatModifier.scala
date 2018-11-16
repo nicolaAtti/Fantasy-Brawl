@@ -12,6 +12,3 @@ package model
   */
 case class StatModifiers(strMod: Double, agiMod: Double, spiMod: Double, intMod: Double, resMod: Double, hpMod: Double){
 }
-
-
-

@@ -13,10 +13,10 @@ class CharacterTest extends FunSuite {
   val annabelleStats = Statistics(34,46,22,8,27)
   val lidyaStats = Statistics(7,22,34,58,23)
   val albertStats = Statistics(19,11,33,54,27)
-  private val warrior =  CharacterFactory("Warrior","Jacob",jacobStats)
-  private val thief =  CharacterFactory("Thief","Annabelle",annabelleStats)
-  private val wizard =  CharacterFactory("Wizard","Lidya",lidyaStats)
-  private val healer =  CharacterFactory("Healer","Albert",albertStats)
+  private val warrior =  Character("Warrior","Jacob",jacobStats)
+  private val thief =  Character("Thief","Annabelle",annabelleStats)
+  private val wizard =  Character("Wizard","Lidya",lidyaStats)
+  private val healer =  Character("Healer","Albert",albertStats)
 
   test("test character creation") {
 
