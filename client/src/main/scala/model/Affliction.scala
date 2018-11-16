@@ -1,5 +1,3 @@
 package model
 
-trait Affliction {
-
-}
+trait Affliction {}

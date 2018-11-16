@@ -1,3 +1,1 @@
-class main extends App{
-
-}
+class main extends App {}

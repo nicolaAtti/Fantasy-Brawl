@@ -1,4 +1,5 @@
 package model
+
 /**
   * Contains the class modifiers to the Character statistics, based on the Character's class
   *
@@ -10,5 +11,9 @@ package model
   * @param hpMod the class modifier impacting maximum HP values
   * @author Nicola Atti
   */
-case class StatModifiers(strMod: Double, agiMod: Double, spiMod: Double, intMod: Double, resMod: Double, hpMod: Double){
-}
+case class StatModifiers(strMod: Double,
+                         agiMod: Double,
+                         spiMod: Double,
+                         intMod: Double,
+                         resMod: Double,
+                         hpMod: Double) {}

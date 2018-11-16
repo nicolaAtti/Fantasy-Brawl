@@ -1,5 +1,3 @@
 package model
 
-trait Modifier {
-
-}
+trait Modifier {}
