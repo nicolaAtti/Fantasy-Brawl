@@ -9,14 +9,14 @@ import utilities.Utility._
   * @author Nicola Atti
   */
 class CharacterTest extends FunSuite {
-  val jacobStats =  Statistics(51,33,13,5,27) //This will be taken by a prolog file
-  val annabelleStats = Statistics(34,46,22,8,27)
-  val lidyaStats = Statistics(7,22,34,58,23)
-  val albertStats = Statistics(19,11,33,54,27)
-  private val warrior =  Character("Warrior","Jacob",jacobStats)
-  private val thief =  Character("Thief","Annabelle",annabelleStats)
-  private val wizard =  Character("Wizard","Lidya",lidyaStats)
-  private val healer =  Character("Healer","Albert",albertStats)
+  val jacobStats = Statistics(51, 33, 13, 5, 27) //This will be taken by a prolog file
+  val annabelleStats = Statistics(34, 46, 22, 8, 27)
+  val lidyaStats = Statistics(7, 22, 34, 58, 23)
+  val albertStats = Statistics(19, 11, 33, 54, 27)
+  private val warrior = Character("Warrior", "Jacob", jacobStats)
+  private val thief = Character("Thief", "Annabelle", annabelleStats)
+  private val wizard = Character("Wizard", "Lidya", lidyaStats)
+  private val healer = Character("Healer", "Albert", albertStats)
 
   test("test character creation") {
 
@@ -28,7 +28,7 @@ class CharacterTest extends FunSuite {
     assert(warrior.stats.intelligence == 5)
     assert(warrior.stats.resistance == 27)
   }
-  test("test the right calculation of sub-statistics"){
+  test("test the right calculation of sub-statistics") {
     assert(warrior.getPhysDamage == 102)
     assert(warrior.getPysCritDamage == 170)
 
@@ -44,18 +44,20 @@ class CharacterTest extends FunSuite {
     assert(warrior.getMaxHP == 540)
     assert(warrior.getPhysDefence == 40)
   }
-  test("The initial health and mp should be equal to it's maximum value when created"){
+  test(
+    "The initial health and mp should be equal to it's maximum value when created") {
     assert(warrior.currHP == warrior.getMaxHP) //540
     assert(warrior.currMP == warrior.getMaxMP) //65
   }
-  test("Adding and removing health or mp shouldn't exceede the maximum value or the minimum value(0)"){
-    warrior.changeCurrHPMP("HP",sub,40)
-    warrior.changeCurrHPMP("MP",sub,25)
+  test(
+    "Adding and removing health or mp shouldn't exceede the maximum value or the minimum value(0)") {
+    warrior.changeCurrHPMP("HP", sub, 40)
+    warrior.changeCurrHPMP("MP", sub, 25)
 
-    assert(warrior.currHP== 500)
+    assert(warrior.currHP == 500)
     assert(warrior.currMP == 40)
-    warrior.changeCurrHPMP("HP",add,60)
-    warrior.changeCurrHPMP("MP",sub,60)
+    warrior.changeCurrHPMP("HP", add, 60)
+    warrior.changeCurrHPMP("MP", sub, 60)
 
     assert(warrior.currHP == 540)
     assert(warrior.currMP == 0)
@@ -64,7 +66,7 @@ class CharacterTest extends FunSuite {
   test("Different character should have a different name") {
     assert(!(warrior.charName equals thief.charName))
   }
-  test("Other classes should have the right statistics"){
+  test("Other classes should have the right statistics") {
     assert(thief.getPhysDamage == 51)
     assert(thief.getPysCritDamage == 160)
 

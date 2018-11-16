@@ -24,7 +24,3 @@ allprojects {
         testRuntime 'org.scala-lang.modules:scala-xml_2.11:1.0.6'
     }
 }
-
-subprojects {
-    version = '1.0'
-}
