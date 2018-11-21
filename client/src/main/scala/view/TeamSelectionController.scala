@@ -5,16 +5,14 @@ import java.util.ResourceBundle
 
 import javafx.event.ActionEvent
 import javafx.fxml.{FXML, Initializable}
-import play.api.libs.json._
+import ApplicationView.viewSelector._
 
 class TeamSelectionController extends Initializable with ViewController {
-  implicit val dataFormat = Json.format[Data]
-  //@FXML var counterLabel: Label = _
 
   @FXML def handleLoginAsGuest(event: ActionEvent) {
     println("pressed button")
 
-    ApplicationView changeView ApplicationView.viewSelector.LOGIN
+    ApplicationView changeView LOGIN
   }
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {}
