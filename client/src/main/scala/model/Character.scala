@@ -1,5 +1,7 @@
 package model
 
+import scala.collection.mutable._
+
 /**
   * Default implementation of a game Character
   *
@@ -13,29 +15,42 @@ trait Character {
   var charName: String
   var stats: Statistics
   var classMods: StatModifiers
-  var afflictions: List[Affliction] = List()
-  var statMods: List[Modifier] = List()
+  var afflictions: MutableList[Affliction] = MutableList()
+  var statMods: MutableList[Modifier] = MutableList()
   import utilities.Utility._
 
   //Mi immagino che questi metodi dovranno controllare anche evenutali modificatori o afflizioni dovuti alle mosse
-  def getPhysDamage: Int = roundDown(stats.strength * classMods.strMod)
-  def getPysCritDamage: Int =
-    roundDown((stats.strength * classMods.strMod) / 5 + 150)
-  def getSpeed: Int = roundDown((stats.agility * classMods.agiMod) / 10)
-  def getCritChance: Int = roundDown((stats.agility * classMods.agiMod) / 2)
-  def getMagDefence: Int = roundDown(stats.spirit * classMods.spiMod)
+  def getPhysDamage: Int = roundDown(stats.strength * classMods.strMod) + getModifierValues("PHYS_DAMAGE")
+  def getPysCritDamage: Int = roundDown((stats.strength * classMods.strMod) / 5 + 150) + getModifierValues("PHYS_DAMAGE")
+  def getSpeed: Int = roundDown((stats.agility * classMods.agiMod) / 10) + getModifierValues("PHYS_DAMAGE")
+  def getCritChance: Int = roundDown((stats.agility * classMods.agiMod) / 2) + getModifierValues("PHYS_DAMAGE")
+  def getMagDefence: Int = roundDown(stats.spirit * classMods.spiMod) + getModifierValues("PHYS_DAMAGE")
   def getMaxMP: Int = roundDown((stats.spirit * classMods.spiMod) * 5)
-  def getMagDamage: Int = roundDown(stats.intelligence * classMods.intMod)
-  def getMagicCritDamage: Int =
-    roundDown((stats.intelligence * classMods.intMod) / 10 + 150)
+  def getMagDamage: Int = roundDown(stats.intelligence * classMods.intMod) + getModifierValues("PHYS_DAMAGE")
+  def getMagicCritDamage: Int = roundDown((stats.intelligence * classMods.intMod) / 10 + 150) + getModifierValues("PHYS_DAMAGE")
   def getMaxHP: Int = roundDown((stats.resistance * classMods.hpMod) * 10)
-  def getPhysDefence: Int = roundDown(stats.resistance * classMods.resMod)
+  def getPhysDefence: Int = roundDown(stats.resistance * classMods.resMod) + getModifierValues("PHYS_DAMAGE")
 
   var currHP: Int = getMaxHP
   var currMP: Int = getMaxMP
 
   //Passagli la funzione della mossa, sia essa speciale, attacco base o passare il turno   STRATEGY
   def doMove = ???
+
+  def addModifier(newMod: Modifier): Unit = {
+    statMods += newMod
+  }
+  def addAffliction(newAffl: Affliction): Unit = {
+    afflictions += newAffl
+  }
+
+  def getModifierValues(affectedStat: String): Int = {
+    var allModsValue = 0
+    for (modifier <- statMods){
+      allModsValue = allModsValue + modifier.modValue
+    }
+    allModsValue
+  }
 
   def changeCurrHPMP(stat: String,
                      function: (Int, Int) => Int,
