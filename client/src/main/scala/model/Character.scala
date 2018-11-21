@@ -44,11 +44,13 @@ trait Character {
     afflictions += newAffl
   }
 
+  def countDownAfflictions(): Unit = {
+    afflictions foreach(affliction => affliction.decreaseDuration())
+  }
+
   def getModifierValues(affectedStat: String): Int = {
     var allModsValue = 0
-    for (modifier <- statMods){
-      allModsValue = allModsValue + modifier.modValue
-    }
+    statMods foreach(modifier => allModsValue = add(allModsValue,modifier.modValue))
     allModsValue
   }
 
