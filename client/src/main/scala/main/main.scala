@@ -1,0 +1,1 @@
+class main extends App {}
