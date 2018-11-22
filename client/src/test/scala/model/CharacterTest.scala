@@ -3,7 +3,7 @@ package model
 import org.scalatest.FunSuite
 import utilities.Utility._
 
-/***
+/** *
   * Test for the Character class, and classes composing it
   *
   * @author Nicola Atti
