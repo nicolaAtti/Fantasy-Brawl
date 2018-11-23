@@ -9,6 +9,9 @@ import play.api.libs.json._
 import com.spingo.op_rabbit.{Message, PlayJsonSupport}
 import com.spingo.op_rabbit.properties.ReplyTo
 import messages._
+import view._
+import ApplicationView.viewSelector._
+import main.LoginManager
 
 class LoginController extends Initializable with ViewController {
   implicit val dataFormat = Json.format[LoginGuestRequest]
@@ -23,9 +26,13 @@ class LoginController extends Initializable with ViewController {
       LoginManager.publisher,
       Seq(ReplyTo(LoginManager.loginGuestResponseQueue.queueName))
     )
+
+    ApplicationView changeView WAITING
   }
 
-  override def initialize(location: URL, resources: ResourceBundle): Unit = {}
+  override def initialize(location: URL, resources: ResourceBundle): Unit = {
+    LoginManager
+  }
 }
 
 object LoginController {

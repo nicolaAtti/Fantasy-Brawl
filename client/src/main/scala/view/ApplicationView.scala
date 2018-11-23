@@ -10,7 +10,7 @@ object ApplicationView {
   private var stage: Stage = new Stage()
 
   object viewSelector extends Enumeration {
-    val LOGIN, TEAM = Value
+    val LOGIN, TEAM, WAITING = Value
   }
 
   type ViewSelector = viewSelector.Value
@@ -20,10 +20,13 @@ object ApplicationView {
   def changeView(view: ViewSelector): Unit = view match {
     case LOGIN =>
       setupScene(title = ViewConfiguration.LoginTitle, form = ViewConfiguration.LoginForm, controller =
-        LoginController())
+        Some(LoginController()))
     case TEAM =>
       setupScene(title = ViewConfiguration.TeamSelectionTitle, form = ViewConfiguration.TeamSelectionForm, controller
-        = TeamSelectionController())
+        = Some(TeamSelectionController()))
+    case WAITING =>
+      setupScene(title = ViewConfiguration.WaitingTitle, form = ViewConfiguration.WaitingForm, controller
+        = None)
     case _ => hideView()
   }
 
@@ -48,9 +51,12 @@ object ApplicationView {
       stage hide()
     })
 
-  private def setupScene(title: String, form: String, controller: ViewController) {
+  private def setupScene(title: String, form: String, controller: Option[ViewController]) {
     val loader: FXMLLoader = new FXMLLoader(getClass getResource form)
-    loader setController controller
+    controller match {
+      case Some(c) => loader setController c
+      case _ => Unit
+    }
     val scene: Scene = new Scene(loader.load())
     Platform runLater (() => {
       stage setTitle title
