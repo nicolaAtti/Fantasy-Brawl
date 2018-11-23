@@ -9,12 +9,12 @@ script:
   - './gradlew clean build' 
 
 deploy:
-   provider: releases
-   api_key:
-      secure : HO3HYy6dXlrPZShyrV7erMD5sW8HXiKMnxj/GK/uExuvSK53XW4OkfDRW1u5UUbIgSbJd4HfYqIJmTcUuJHhSuffzzSAmPFPFl4aEtoEDaozdlgZnioILpXSaekrEB8qoUDEfmzUG7jSfsHtuERlVgGrQPKXycby0pRo9rmb17w8WsBxM9OAtLXhkrpeAcg2NAHRboTB4gHJXiExyIsb093TWIBpdBxCSaTrsQwBs5ypXc3m16dcJffabzilD7ZRAVaRtc1RsOc6ucStiNdhl8ziHb/BfAeKfK+PmSbKsvi//65HZ9nE9LPI9ruc/57JYIKEEIL/urT9lGeLR/Kg0ZzJNv97zSsI8fcVSLbAUOMkCz8rNBbwgtiJXSPS+eIGpvcNQ8GnWEizx2bbgSUYQtD0yTsaTow5C7kgvTSFFklWkEpK2ue52BJn9Q7XW5OOIJ0KyXjC6rksMILOUJfp49kXUgR2zwUeTEtkEsKXZo4WXZJzf+0gfAx1yRJ4wINtRa3HgipT24VO2SSrITtHgt1e0OwkEHPqVEcOxOGdZVRira4UX7i9yDaLplQoOYSunVUNMaobygQGD4BvWR25LW9643zj+a6+MFJzoSkBM5WGj2VpQU7Maq4doXttDl4I2O7Y27jjgdcYRYmSX1VDzdduFqiB84ICgIteeLq3B9c=
-   skip_cleanup: true
-   file: production/*
-   file_glob: true
-     on:
-       repo: nicolaAtti/pps-17-fb
-       tags: true
+  provider: releases
+  api_key:
+    secure : HO3HYy6dXlrPZShyrV7erMD5sW8HXiKMnxj/GK/uExuvSK53XW4OkfDRW1u5UUbIgSbJd4HfYqIJmTcUuJHhSuffzzSAmPFPFl4aEtoEDaozdlgZnioILpXSaekrEB8qoUDEfmzUG7jSfsHtuERlVgGrQPKXycby0pRo9rmb17w8WsBxM9OAtLXhkrpeAcg2NAHRboTB4gHJXiExyIsb093TWIBpdBxCSaTrsQwBs5ypXc3m16dcJffabzilD7ZRAVaRtc1RsOc6ucStiNdhl8ziHb/BfAeKfK+PmSbKsvi//65HZ9nE9LPI9ruc/57JYIKEEIL/urT9lGeLR/Kg0ZzJNv97zSsI8fcVSLbAUOMkCz8rNBbwgtiJXSPS+eIGpvcNQ8GnWEizx2bbgSUYQtD0yTsaTow5C7kgvTSFFklWkEpK2ue52BJn9Q7XW5OOIJ0KyXjC6rksMILOUJfp49kXUgR2zwUeTEtkEsKXZo4WXZJzf+0gfAx1yRJ4wINtRa3HgipT24VO2SSrITtHgt1e0OwkEHPqVEcOxOGdZVRira4UX7i9yDaLplQoOYSunVUNMaobygQGD4BvWR25LW9643zj+a6+MFJzoSkBM5WGj2VpQU7Maq4doXttDl4I2O7Y27jjgdcYRYmSX1VDzdduFqiB84ICgIteeLq3B9c=
+  skip_cleanup: true
+  file: production/*
+  file_glob: true
+  on:
+    repo: nicolaAtti/pps-17-fb
+    tags: true
