@@ -27,10 +27,11 @@ object ApplicationView {
     case _ => hideView()
   }
 
-  def setupStage(stage: Stage, minHeight: Double, minWidth: Double): Unit = {
+  def setupStage(stage: Stage, height: Double, width: Double): Unit = {
     this.stage = stage
-    stage setMinHeight minHeight
-    stage setMinWidth minWidth
+    stage setHeight height
+    stage setWidth width
+    stage setResizable false
     stage setOnCloseRequest (_ => {
       Platform exit()
       System exit 0

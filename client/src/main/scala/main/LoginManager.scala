@@ -25,20 +25,34 @@ object LoginManager {
     import Directives._
     channel(qos = 3) {
       consume(loginGuestResponseQueue) {
-        body(as[LoginGuestResponse]) {
-          case LoginGuestResponse(Some(id), None) => {
+        body(as[LoginGuestResponse]) { response =>
+          response.guestId match {
+            case Some(id) => {
+              println("Login as guest" + id)
+              ApplicationView changeView TEAM
+            }
+            case _ => println("Login error")
+          }
+          response.details match {
+            case Some(details) => {
+              println(details)
+            }
+            case _ =>
+          }
+          ack
+          /*case LoginGuestResponse(Some(id), None) => {
             println("Login as guest" + id)
             ApplicationView changeView TEAM
             ack
           }
-          case LoginGuestResponse(None, Some(error)) => {
-            println(error)
+          case LoginGuestResponse(None, Some(details)) => {
+            println("ERROR: " + details)
             ack
           }
           case _ => {
-            println("Another case")
+            println("Message syntax error: accepted only (id,None) or (None,error).")
             ack
-          }
+          }*/
         }
       }
     }
