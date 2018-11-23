@@ -17,7 +17,7 @@ class LoginController extends Initializable with ViewController {
   implicit val dataFormat = Json.format[LoginGuestRequest]
 
   @FXML def handleLoginAsGuest(event: ActionEvent) {
-    println("Pressed login as a guest")
+    println("Login as a guest pressed")
 
     import messaging.LoginManager
     import PlayJsonSupport._

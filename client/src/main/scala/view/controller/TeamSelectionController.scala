@@ -9,8 +9,8 @@ import ApplicationView.viewSelector._
 
 class TeamSelectionController extends Initializable with ViewController {
 
-  @FXML def handleLoginAsGuest(event: ActionEvent) {
-    println("Pressed button")
+  @FXML def handleLogout(event: ActionEvent) {
+    println("Logout pressed")
 
     ApplicationView changeView LOGIN
   }
