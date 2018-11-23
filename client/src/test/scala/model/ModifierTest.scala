@@ -2,6 +2,10 @@ package model
 
 import org.scalatest.FunSuite
 
+/** Test for all the modifier features
+  *
+  * @author Nicola Atti
+  */
 class ModifierTest extends FunSuite{
   val jacobStats = Statistics(51,33,13,5,27)
   val warrior = Character("Warrior","Jacob",jacobStats)
@@ -26,7 +30,7 @@ class ModifierTest extends FunSuite{
     assert(warrior.getPhysDamage == 162)
   }
   test("After a turn the modifiers timer should decrease by 1"){
-    warrior.newTurnCountdown("Modifiers")
+    warrior.newTurnCountdown()
     assert(newModifier.turnDuration == 2)
     assert(anotherModifier.turnDuration == 1)
   }
@@ -38,7 +42,7 @@ class ModifierTest extends FunSuite{
   }
 
   test("A modifiers that reaches 0 in turnDuration should be removed from the list"){
-    warrior.newTurnCountdown("Modifiers")
+    warrior.newTurnCountdown()
     assert(anotherModifier.turnDuration == 0)
     assert(warrior.getPhysDamage == 122)
   }

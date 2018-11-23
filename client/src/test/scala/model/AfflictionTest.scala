@@ -25,7 +25,7 @@ class AfflictionTest extends FunSuite {
   test("A poisoned character should lose hp each of his turns"){
     assert(warrior.currHP == 540)
     warrior.addAffliction(poisoned)
-    warrior.newTurnCountdown("Afflictions")
+    warrior.newTurnCountdown()
     assert(warrior.currHP == 405)
   }
 
