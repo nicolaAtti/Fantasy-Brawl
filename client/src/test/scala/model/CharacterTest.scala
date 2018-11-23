@@ -29,57 +29,57 @@ class CharacterTest extends FunSuite {
     assert(warrior.stats.resistance == 27)
   }
   test("test the right calculation of sub-statistics") {
-    assert(warrior.getPhysDamage == 102)
-    assert(warrior.getPysCritDamage == 170)
+    assert(warrior.calculatePhysDamage == 102)
+    assert(warrior.calculatePysCritDamage == 170)
 
-    assert(warrior.getSpeed == 3)
-    assert(warrior.getCritChance == 16)
+    assert(warrior.calculateSpeed == 3)
+    assert(warrior.calculateCritChance == 16)
 
-    assert(warrior.getMagDefence == 13)
+    assert(warrior.calculateMagDefence == 13)
     assert(warrior.maxMP == 65)
 
-    assert(warrior.getMagDamage == 2)
-    assert(warrior.getMagicCritDamage == 150)
+    assert(warrior.calculateMagDamage == 2)
+    assert(warrior.calculateMagicCritDamage == 150)
 
     assert(warrior.maxHP == 540)
-    assert(warrior.getPhysDefence == 40)
+    assert(warrior.calculatePhysDefence == 40)
   }
   test(
     "The initial health and mp should be equal to it's maximum value when created") {
-    assert(warrior.currHP == warrior.maxHP) //540
-    assert(warrior.currMP == warrior.maxMP) //65
+    assert(warrior.status.currHP == warrior.maxHP) //540
+    assert(warrior.status.currMP == warrior.maxMP) //65
   }
   test(
     "Adding and removing health or mp shouldn't exceede the maximum value or the minimum value(0)") {
-    warrior.changeCurrHPMP("HP", sub, 40)
-    warrior.changeCurrHPMP("MP", sub, 25)
+    warrior.status.changeCurrHPMP("HP", sub, 40)
+    warrior.status.changeCurrHPMP("MP", sub, 25)
 
-    assert(warrior.currHP == 500)
-    assert(warrior.currMP == 40)
-    warrior.changeCurrHPMP("HP", add, 60)
-    warrior.changeCurrHPMP("MP", sub, 60)
+    assert(warrior.status.currHP == 500)
+    assert(warrior.status.currMP == 40)
+    warrior.status.changeCurrHPMP("HP", add, 60)
+    warrior.status.changeCurrHPMP("MP", sub, 60)
 
-    assert(warrior.currHP == 540)
-    assert(warrior.currMP == 0)
+    assert(warrior.status.currHP == 540)
+    assert(warrior.status.currMP == 0)
   }
 
   test("Different character should have a different name") {
     assert(!(warrior.charName equals thief.charName))
   }
   test("Other classes should have the right statistics") {
-    assert(thief.getPhysDamage == 51)
-    assert(thief.getPysCritDamage == 160)
+    assert(thief.calculatePhysDamage == 51)
+    assert(thief.calculatePysCritDamage == 160)
 
-    assert(thief.getSpeed == 9)
-    assert(thief.getCritChance == 46)
+    assert(thief.calculateSpeed == 9)
+    assert(thief.calculateCritChance == 46)
 
-    assert(thief.getMagDefence == 22)
+    assert(thief.calculateMagDefence == 22)
     assert(thief.maxMP == 110)
 
-    assert(thief.getMagDamage == 4)
-    assert(thief.getMagicCritDamage == 150)
+    assert(thief.calculateMagDamage == 4)
+    assert(thief.calculateMagicCritDamage == 150)
 
     assert(thief.maxHP == 405)
-    assert(thief.getPhysDefence == 27)
+    assert(thief.calculatePhysDefence == 27)
   }
 }

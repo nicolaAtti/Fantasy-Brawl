@@ -23,10 +23,14 @@ class AfflictionTest extends FunSuite {
   }
 
   test("A poisoned character should lose hp each of his turns"){
-    assert(warrior.currHP == 540)
-    warrior.addAffliction(poisoned)
-    warrior.newTurnCountdown()
-    assert(warrior.currHP == 405)
+    assert(warrior.status.currHP == 540)
+    warrior.status.addAffliction(poisoned)
+    warrior.status.newTurnCountdown()
+    assert(warrior.status.currHP == 405)
+  }
+  test("Applying an existing affliction should do nothing"){
+    warrior.status.addAffliction(stunned)
+    assert(warrior.status.afflictions.filter(affl => affl.afflictionType equals "Stunned").length != 2)
   }
 
   //Add test for all the other afflictions (need moves implementation)
