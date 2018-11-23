@@ -14,7 +14,7 @@ object Main extends App {
 
   final val Log = true
   final val LogMessage = "Received a new login request"
-  final val DetailsPrefix = "Details: "
+  final val LogDetailsPrefix = "Details: "
 
   val rabbitControl = ActorSystem().actorOf(Props[RabbitControl])
   implicit val recoveryStrategy = RecoveryStrategy.nack(false)
@@ -39,7 +39,8 @@ object Main extends App {
             if (Log) {
               println(LogMessage)
               request.details match {
-                case Some(d) => println(DetailsPrefix + d)
+                case Some(d) => println(LogDetailsPrefix + d)
+                case _       => Unit
               }
             }
 
