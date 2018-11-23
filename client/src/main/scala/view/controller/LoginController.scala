@@ -8,10 +8,10 @@ import javafx.fxml.{FXML, Initializable}
 import play.api.libs.json._
 import com.spingo.op_rabbit.{Message, PlayJsonSupport}
 import com.spingo.op_rabbit.properties.ReplyTo
-import view.DataLoginRequestMessage
+import messages._
 
 class LoginController extends Initializable with ViewController {
-  implicit val dataFormat = Json.format[DataLoginRequestMessage]
+  implicit val dataFormat = Json.format[LoginGuestRequest]
 
   @FXML def handleLoginAsGuest(event: ActionEvent) {
     println("Pressed login as a guest")
@@ -19,9 +19,9 @@ class LoginController extends Initializable with ViewController {
     import main.LoginManager
     import PlayJsonSupport._
     LoginManager.rabbitControl ! Message(
-      DataLoginRequestMessage(0),
+      messages.LoginGuestRequest(None),
       LoginManager.publisher,
-      Seq(ReplyTo(LoginManager.loginResponseQueue.queueName))
+      Seq(ReplyTo(LoginManager.loginGuestResponseQueue.queueName))
     )
   }
 

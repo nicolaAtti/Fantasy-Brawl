@@ -4,6 +4,7 @@ import javafx.application.Platform
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.stage.Stage
+import controller._
 
 object ApplicationView {
   private var stage: Stage = new Stage()
@@ -15,7 +16,6 @@ object ApplicationView {
   type ViewSelector = viewSelector.Value
 
   import viewSelector._
-  import controller._
 
   def changeView(view: ViewSelector): Unit = view match {
     case LOGIN =>
