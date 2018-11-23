@@ -40,19 +40,6 @@ object LoginManager {
             case _ =>
           }
           ack
-        /*case LoginGuestResponse(Some(id), None) => {
-            println("Login as guest" + id)
-            ApplicationView changeView TEAM
-            ack
-          }
-          case LoginGuestResponse(None, Some(details)) => {
-            println("ERROR: " + details)
-            ack
-          }
-          case _ => {
-            println("Message syntax error: accepted only (id,None) or (None,error).")
-            ack
-          }*/
         }
       }
     }
