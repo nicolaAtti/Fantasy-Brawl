@@ -1,4 +1,5 @@
 package view
 
-case class DataLoginRequestMessage()
-case class DataLoginResponseMessage()
+case class DataLoginRequestMessage(id: Int)
+
+case class DataLoginResponseMessage(id: Int)
