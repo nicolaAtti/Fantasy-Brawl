@@ -1,3 +1,3 @@
-package view.controller
+package controller
 
 trait ViewController {}

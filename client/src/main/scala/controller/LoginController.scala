@@ -1,4 +1,4 @@
-package view.controller
+package controller
 
 import java.net.URL
 import java.util.ResourceBundle
@@ -38,6 +38,7 @@ class LoginController extends Initializable with ViewController {
 }
 
 object LoginController {
+
   def apply(): LoginController =
     new LoginController
 }
