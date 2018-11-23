@@ -15,6 +15,7 @@ trait Character {
   var charName: String
   var stats: Statistics
   var classMods: StatModifiers
+
   var afflictions: MutableList[Affliction] = MutableList()
   var statMods: MutableList[Modifier] = MutableList()
 
@@ -45,26 +46,30 @@ trait Character {
   var currMP: Int = getMaxMP
 
   //Passagli la funzione della mossa, sia essa speciale, attacco base o passare il turno   STRATEGY
+  //Forse conviene mettere qui il controllo per le afflizzioni che limitano le mosse tipo: if stunnato passa solo, if ghiacciato no mosse meelee etc
+
   def doMove = ???
 
   def addModifier(newMod: Modifier): Unit = {
-    var newStatMods = statMods.filter(mod => !(mod.modId equals (newMod.modId)))
+    var newStatMods = statMods.filter(mod => !(mod.modId equals newMod.modId))
     newStatMods += newMod
     statMods = newStatMods
   }
 
   def addAffliction(newAffl: Affliction): Unit = {
-    if (!afflictions.exists(affl => affl.afflictionType equals (newAffl.afflictionType))) {
+    if (!afflictions.exists(affl => affl.afflictionType equals newAffl.afflictionType)) {
       afflictions += newAffl
     }
   }
 
-  def newTurnCountdown(listName: String): Unit = listName match {
-    case "Modifiers" => statMods foreach (modifier => modifier.decreaseDuration())
-    case "Afflictions" => if (afflictions.exists(affl => affl.afflictionType equals ("Poisoned"))) {
+  def newTurnCountdown(listName: String): Unit = {
+    statMods foreach (modifier => modifier.decreaseDuration())
+      statMods = statMods.filter(mod => mod.turnDuration <= 0)
+    if (afflictions.exists(affl => affl.afflictionType equals "Poisoned")) {
       changeCurrHPMP("HP", sub, getMaxHP / 4)
     }
-      afflictions foreach (affliction => affliction.decreaseDuration())
+    afflictions foreach (affliction => affliction.decreaseDuration())
+    afflictions = afflictions.filter(affl => affl.turnDuration <= 0)
   }
 
   def getModifierValues(affectedStat: String): Int = {
