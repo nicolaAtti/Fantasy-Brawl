@@ -12,6 +12,7 @@ class MainApplication extends Application {
 }
 
 object MainApplication {
+
   def main(args: Array[String]): Unit = {
     Application.launch(classOf[MainApplication], args: _*)
   }
