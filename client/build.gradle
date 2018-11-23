@@ -4,7 +4,8 @@ plugins{
     id 'application'
 }
 
-mainClassName = 'main'
+mainClassName = 'MainApplication'
 
 dependencies {
+    
 }

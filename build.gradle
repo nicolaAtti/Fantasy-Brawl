@@ -12,14 +12,13 @@ allprojects {
         implementation 'org.scala-lang:scala-library:2.12.7'
         testImplementation 'junit:junit:4.12'
         testImplementation 'org.scalatest:scalatest_2.12:3.0.5'
-
+        
         testRuntime 'org.scala-lang.modules:scala-xml_2.11:1.0.6'
-
+        
         // op-rabbit
         implementation 'com.spingo:op-rabbit-core_2.12:2.1.0'
         implementation 'com.spingo:op-rabbit-play-json_2.12:2.1.0'
         implementation 'com.typesafe.akka:akka-slf4j_2.12:2.5.17'
         implementation 'ch.qos.logback:logback-classic:1.1.7'
-        
     }
 }
