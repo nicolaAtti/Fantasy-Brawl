@@ -36,18 +36,18 @@ class CharacterTest extends FunSuite {
     assert(warrior.getCritChance == 16)
 
     assert(warrior.getMagDefence == 13)
-    assert(warrior.getMaxMP == 65)
+    assert(warrior.maxMP == 65)
 
     assert(warrior.getMagDamage == 2)
     assert(warrior.getMagicCritDamage == 150)
 
-    assert(warrior.getMaxHP == 540)
+    assert(warrior.maxHP == 540)
     assert(warrior.getPhysDefence == 40)
   }
   test(
     "The initial health and mp should be equal to it's maximum value when created") {
-    assert(warrior.currHP == warrior.getMaxHP) //540
-    assert(warrior.currMP == warrior.getMaxMP) //65
+    assert(warrior.currHP == warrior.maxHP) //540
+    assert(warrior.currMP == warrior.maxMP) //65
   }
   test(
     "Adding and removing health or mp shouldn't exceede the maximum value or the minimum value(0)") {
@@ -74,12 +74,12 @@ class CharacterTest extends FunSuite {
     assert(thief.getCritChance == 46)
 
     assert(thief.getMagDefence == 22)
-    assert(thief.getMaxMP == 110)
+    assert(thief.maxMP == 110)
 
     assert(thief.getMagDamage == 4)
     assert(thief.getMagicCritDamage == 150)
 
-    assert(thief.getMaxHP == 405)
+    assert(thief.maxHP == 405)
     assert(thief.getPhysDefence == 27)
   }
 }
