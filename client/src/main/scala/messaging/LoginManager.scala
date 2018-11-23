@@ -40,7 +40,7 @@ object LoginManager {
             case _ =>
           }
           ack
-          /*case LoginGuestResponse(Some(id), None) => {
+        /*case LoginGuestResponse(Some(id), None) => {
             println("Login as guest" + id)
             ApplicationView changeView TEAM
             ack

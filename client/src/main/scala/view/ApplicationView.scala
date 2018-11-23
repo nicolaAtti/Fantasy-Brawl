@@ -19,14 +19,15 @@ object ApplicationView {
 
   def changeView(view: ViewSelector): Unit = view match {
     case LOGIN =>
-      setupScene(title = ViewConfiguration.LoginTitle, form = ViewConfiguration.LoginForm, controller =
-        Some(LoginController()))
+      setupScene(title = ViewConfiguration.LoginTitle,
+                 form = ViewConfiguration.LoginForm,
+                 controller = Some(LoginController()))
     case TEAM =>
-      setupScene(title = ViewConfiguration.TeamSelectionTitle, form = ViewConfiguration.TeamSelectionForm, controller
-        = Some(TeamSelectionController()))
+      setupScene(title = ViewConfiguration.TeamSelectionTitle,
+                 form = ViewConfiguration.TeamSelectionForm,
+                 controller = Some(TeamSelectionController()))
     case WAITING =>
-      setupScene(title = ViewConfiguration.WaitingTitle, form = ViewConfiguration.WaitingForm, controller
-        = None)
+      setupScene(title = ViewConfiguration.WaitingTitle, form = ViewConfiguration.WaitingForm, controller = None)
     case _ => hideView()
   }
 
@@ -36,26 +37,26 @@ object ApplicationView {
     stage setWidth width
     stage setResizable false
     stage setOnCloseRequest (_ => {
-      Platform exit()
+      Platform exit ()
       System exit 0
     })
   }
 
   def showView(): Unit =
     Platform runLater (() => {
-      stage show()
+      stage show ()
     })
 
   def hideView(): Unit =
     Platform runLater (() => {
-      stage hide()
+      stage hide ()
     })
 
   private def setupScene(title: String, form: String, controller: Option[ViewController]) {
     val loader: FXMLLoader = new FXMLLoader(getClass getResource form)
     controller match {
       case Some(c) => loader setController c
-      case _ => Unit
+      case _       => Unit
     }
     val scene: Scene = new Scene(loader.load())
     Platform runLater (() => {

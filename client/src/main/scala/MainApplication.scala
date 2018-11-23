@@ -5,9 +5,9 @@ import view.ApplicationView.viewSelector._
 class MainApplication extends Application {
   override def start(primaryStage: Stage): Unit = {
     import view._
-    ApplicationView setupStage(primaryStage, 648.0, 1152.0)
+    ApplicationView setupStage (primaryStage, 648.0, 1152.0)
     ApplicationView changeView LOGIN
-    ApplicationView showView()
+    ApplicationView showView ()
   }
 }
 

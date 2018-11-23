@@ -14,7 +14,8 @@ import ApplicationView.viewSelector._
 import messaging.LoginManager
 
 class LoginController extends Initializable with ViewController {
-  implicit val dataFormat = Json.format[LoginGuestRequest]
+  implicit val dataFormat =
+    Json.format[LoginGuestRequest]
 
   @FXML def handleLoginAsGuest(event: ActionEvent) {
     println("Login as a guest pressed")
@@ -22,7 +23,8 @@ class LoginController extends Initializable with ViewController {
     import messaging.LoginManager
     import PlayJsonSupport._
     LoginManager.rabbitControl ! Message(
-      messages.LoginGuestRequest(None),
+      messages
+        .LoginGuestRequest(None),
       LoginManager.publisher,
       Seq(ReplyTo(LoginManager.loginGuestResponseQueue.queueName))
     )
@@ -36,5 +38,6 @@ class LoginController extends Initializable with ViewController {
 }
 
 object LoginController {
-  def apply(): LoginController = new LoginController
+  def apply(): LoginController =
+    new LoginController
 }
