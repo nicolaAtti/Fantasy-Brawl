@@ -11,7 +11,7 @@ import com.spingo.op_rabbit.properties.ReplyTo
 import messages._
 import view._
 import ApplicationView.viewSelector._
-import main.LoginManager
+import messaging.LoginManager
 
 class LoginController extends Initializable with ViewController {
   implicit val dataFormat = Json.format[LoginGuestRequest]
@@ -19,7 +19,7 @@ class LoginController extends Initializable with ViewController {
   @FXML def handleLoginAsGuest(event: ActionEvent) {
     println("Pressed login as a guest")
 
-    import main.LoginManager
+    import messaging.LoginManager
     import PlayJsonSupport._
     LoginManager.rabbitControl ! Message(
       messages.LoginGuestRequest(None),

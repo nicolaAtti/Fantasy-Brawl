@@ -1,4 +1,4 @@
-package main
+package messaging
 
 import akka.actor.{ActorRef, ActorSystem, Props}
 import com.spingo.op_rabbit._
