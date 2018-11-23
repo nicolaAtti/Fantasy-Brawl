@@ -16,11 +16,16 @@ object LoginManager {
   val rabbitControl: ActorRef = actorSystem.actorOf(Props[RabbitControl])
   implicit val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(false)
 
-  val loginGuestRequestQueue = Queue(Queues.LoginGuestRequestQueue, durable = false, autoDelete = true)
-  val loginGuestResponseQueue = Queue(Queues.LoginGuestResponseQueue, durable = false, autoDelete = true)
+  val loginGuestRequestQueue =
+    Queue(Queues.LoginGuestRequestQueue, durable = false, autoDelete = true)
+
+  val loginGuestResponseQueue =
+    Queue(Queues.LoginGuestResponseQueue, durable = false, autoDelete = true)
   val publisher: Publisher = Publisher.queue(loginGuestRequestQueue)
 
-  implicit val dataFormat: OFormat[LoginGuestResponse] = Json.format[LoginGuestResponse]
+  implicit val dataFormat: OFormat[LoginGuestResponse] =
+    Json.format[LoginGuestResponse]
+
   val subscription: SubscriptionRef = Subscription.run(rabbitControl) {
     import Directives._
     channel(qos = 3) {
