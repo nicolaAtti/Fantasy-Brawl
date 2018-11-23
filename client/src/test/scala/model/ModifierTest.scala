@@ -10,7 +10,7 @@ class ModifierTest extends FunSuite{
   val anotherModifier = Modifier("gargantuan_rage","PHYS_DAMAGE",2,40)
 
   test("Test the correct creation of the modifier"){
-    assert(newModifier.affectedStat equals("PHYS_DAMAGE"))
+    assert(newModifier.affectedStat equals "PHYS_DAMAGE")
     assert(newModifier.turnDuration == 3)
     assert(newModifier.modValue == 20)
   }
@@ -33,7 +33,13 @@ class ModifierTest extends FunSuite{
   test("The adding of an existing modifier should 'reset' the timer of the previous one") {
     val newNewModifier = Modifier("battle_prowess","PHYS_DAMAGE",3,20)
     warrior.addModifier(newNewModifier)
-    assert(warrior.statMods.filter(mod => mod.modId equals (newModifier.modId)).head.turnDuration == 3)
+    assert(warrior.statMods.filter(mod => mod.modId equals newModifier.modId).head.turnDuration == 3)
     assert(warrior.getPhysDamage == 162)
   }
+
+  test("A modifiers that reaches 0 in turnDuration should be removed from the list"){
+    warrior.newTurnCountdown("Modifiers")
+    assert(anotherModifier.turnDuration == 0)
+    assert(warrior.getPhysDamage == 122)
   }
+}
