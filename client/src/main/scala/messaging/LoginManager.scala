@@ -10,10 +10,8 @@ import ApplicationView.viewSelector._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object LoginManager {
-  implicit val actorSystem: ActorSystem = ActorSystem("login")
-
-  val rabbitControl: ActorRef = actorSystem.actorOf(Props[RabbitControl])
+class LoginManager {
+  val rabbitControl: ActorRef = ActorSystem().actorOf(Props[RabbitControl])
   implicit val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(false)
 
   val loginGuestRequestQueue =
