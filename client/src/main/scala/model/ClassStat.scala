@@ -11,9 +11,4 @@ package model
   * @param hpMod the class modifier impacting maximum HP values
   * @author Nicola Atti
   */
-case class StatModifiers(strMod: Double,
-                         agiMod: Double,
-                         spiMod: Double,
-                         intMod: Double,
-                         resMod: Double,
-                         hpMod: Double) {}
+case class ClassStat(strMod: Double, agiMod: Double, spiMod: Double, intMod: Double, resMod: Double, hpMod: Double)
