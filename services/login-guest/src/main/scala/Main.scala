@@ -8,7 +8,8 @@ import PlayJsonSupport._
 
 /** Entry point of the service that handles the login for guests users.
   *
-  * It reads and update (incrementing by one) a counter that acts as unique guest identifier.
+  * It reads and updates (incrementing by one) a counter that acts as unique guest identifier.
+  * @author Marco Canducci
   */
 object Main extends App {
 
@@ -17,7 +18,7 @@ object Main extends App {
   final val LogDetailsPrefix = "Details: "
 
   val rabbitControl = ActorSystem().actorOf(Props[RabbitControl])
-  implicit val recoveryStrategy = RecoveryStrategy.nack(false)
+  implicit val recoveryStrategy = RecoveryStrategy.nack(requeue = false)
 
   import messages._
 
@@ -33,9 +34,8 @@ object Main extends App {
     import Directives._
     channel(qos = 3) {
       consume(requestQueue) {
-        (body(as[LoginGuestRequest]) & optionalProperty(ReplyTo)) {
-
-          (request, replyTo) => {
+        (body(as[LoginGuestRequest]) & optionalProperty(ReplyTo)) { (request, replyTo) =>
+          {
             if (Log) {
               println(LogMessage)
               request.details match {

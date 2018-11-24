@@ -3,10 +3,14 @@ package model
 import utilities.Utility._
 import scala.collection.mutable._
 
-case class Status(var currHP: Int, var currMP: Int, var modifiers: MutableList[Modifier], var afflictions: MutableList[Affliction]) {
+case class Status(var currHP: Int,
+                  var currMP: Int,
+                  var modifiers: MutableList[Modifier],
+                  var afflictions: MutableList[Affliction]) {
 
   val maxHP = currHP
   val maxMP = currMP
+
   /**
     * Adds a new modifier to the character, if the same modifier is already present refresh it's duration to the new one
     * @param newMod the new modifier
@@ -14,11 +18,13 @@ case class Status(var currHP: Int, var currMP: Int, var modifiers: MutableList[M
     */
   def addModifier(newMod: Modifier): Unit = {
     modifiers.foreach(maaa => println(maaa.modId))
-    println("New  "+newMod.modId)
-    if(! modifiers.exists(mod => mod.modId equals newMod.modId)){
+    println("New  " + newMod.modId)
+    if (!modifiers.exists(mod => mod.modId equals newMod.modId)) {
       modifiers += newMod
-    }else{
-      modifiers.filter(_.modId equals newMod.modId).foreach(matchingMod => matchingMod.resetDuration(newMod.turnDuration))
+    } else {
+      modifiers
+        .filter(_.modId equals newMod.modId)
+        .foreach(matchingMod => matchingMod.resetDuration(newMod.turnDuration))
     }
   }
 
@@ -56,9 +62,7 @@ case class Status(var currHP: Int, var currMP: Int, var modifiers: MutableList[M
     * @param value the value to add or subtract
     * @author Nicola Atti
     */
-  def changeCurrHPMP(stat: String,
-                     function: (Int, Int) => Int,
-                     value: Int): Unit = stat.toUpperCase match {
+  def changeCurrHPMP(stat: String, function: (Int, Int) => Int, value: Int): Unit = stat.toUpperCase match {
     case "HP" =>
       if (function(currHP, value) > maxHP) {
         currHP = maxHP
