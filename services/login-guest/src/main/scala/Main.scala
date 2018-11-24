@@ -18,7 +18,7 @@ object Main extends App {
   final val LogDetailsPrefix = "Details: "
 
   val rabbitControl = ActorSystem().actorOf(Props[RabbitControl])
-  implicit val recoveryStrategy = RecoveryStrategy.nack(false)
+  implicit val recoveryStrategy = RecoveryStrategy.nack(requeue = false)
 
   import messages._
 
