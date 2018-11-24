@@ -32,8 +32,7 @@ trait Timed {
   * @param turnDuration determines the duration in turns of the affliction, when it reaches 0 it no longer has an effect
   * @author Nicola Atti
   */
-case class Affliction(var afflictionType: String, override var turnDuration: Int) extends Timed {
-}
+case class Affliction(var afflictionType: String, override var turnDuration: Int) extends Timed
 
 /**
   * Class implementing modifiers
@@ -43,5 +42,5 @@ case class Affliction(var afflictionType: String, override var turnDuration: Int
   * @param modValue
   * @author Nicola Atti
   */
-case class Modifier(var modId: String, var affectedStat: String, override var turnDuration: Int, var modValue: Int) extends Timed {
-}
+case class Modifier(var modId: String, var affectedStat: String, override var turnDuration: Int, var modValue: Int)
+    extends Timed

@@ -44,13 +44,11 @@ class CharacterTest extends FunSuite {
     assert(warrior.maxHP == 540)
     assert(warrior.calculatePhysDefence == 40)
   }
-  test(
-    "The initial health and mp should be equal to it's maximum value when created") {
+  test("The initial health and mp should be equal to it's maximum value when created") {
     assert(warrior.status.currHP == warrior.maxHP) //540
     assert(warrior.status.currMP == warrior.maxMP) //65
   }
-  test(
-    "Adding and removing health or mp shouldn't exceede the maximum value or the minimum value(0)") {
+  test("Adding and removing health or mp shouldn't exceede the maximum value or the minimum value(0)") {
     warrior.status.changeCurrHPMP("HP", sub, 40)
     warrior.status.changeCurrHPMP("MP", sub, 25)
 

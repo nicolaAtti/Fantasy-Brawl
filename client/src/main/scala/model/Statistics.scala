@@ -10,8 +10,4 @@ package model
   * @param resistance   dictates how much a character is tough
   * @author Nicola Atti
   */
-case class Statistics(strength: Int,
-                      agility: Int,
-                      spirit: Int,
-                      intelligence: Int,
-                      resistance: Int) {}
+case class Statistics(strength: Int, agility: Int, spirit: Int, intelligence: Int, resistance: Int)
