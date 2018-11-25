@@ -11,7 +11,56 @@ script:
 deploy:
   provider: releases
   api_key:
-    secure : HO3HYy6dXlrPZShyrV7erMD5sW8HXiKMnxj/GK/uExuvSK53XW4OkfDRW1u5UUbIgSbJd4HfYqIJmTcUuJHhSuffzzSAmPFPFl4aEtoEDaozdlgZnioILpXSaekrEB8qoUDEfmzUG7jSfsHtuERlVgGrQPKXycby0pRo9rmb17w8WsBxM9OAtLXhkrpeAcg2NAHRboTB4gHJXiExyIsb093TWIBpdBxCSaTrsQwBs5ypXc3m16dcJffabzilD7ZRAVaRtc1RsOc6ucStiNdhl8ziHb/BfAeKfK+PmSbKsvi//65HZ9nE9LPI9ruc/57JYIKEEIL/urT9lGeLR/Kg0ZzJNv97zSsI8fcVSLbAUOMkCz8rNBbwgtiJXSPS+eIGpvcNQ8GnWEizx2bbgSUYQtD0yTsaTow5C7kgvTSFFklWkEpK2ue52BJn9Q7XW5OOIJ0KyXjC6rksMILOUJfp49kXUgR2zwUeTEtkEsKXZo4WXZJzf+0gfAx1yRJ4wINtRa3HgipT24VO2SSrITtHgt1e0OwkEHPqVEcOxOGdZVRira4UX7i9yDaLplQoOYSunVUNMaobygQGD4BvWR25LW9643zj+a6+MFJzoSkBM5WGj2VpQU7Maq4doXttDl4I2O7Y27jjgdcYRYmSX1VDzdduFqiB84ICgIteeLq3B9c=
+    secure :
+      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
   skip_cleanup: true
   file: client/build/libs/client-0.2
   file_glob: true
