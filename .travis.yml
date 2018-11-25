@@ -17,4 +17,3 @@ deploy:
   file_glob: true
   on:
     repo: nicolaAtti/pps-17-fb
-    tags: true
