@@ -11,6 +11,7 @@ import javafx.scene.control.Label
 
 class TeamSelectionController extends Initializable with ViewController {
   @FXML var idLabel: Label = _
+  var username: String = "guest"
 
   @FXML def handleLogout(event: ActionEvent) {
     println("Logout pressed")
@@ -19,7 +20,7 @@ class TeamSelectionController extends Initializable with ViewController {
   }
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
-    idLabel setText ("guest")
+    idLabel setText username
   }
 }
 

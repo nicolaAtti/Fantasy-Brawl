@@ -32,7 +32,9 @@ class LoginManager {
           response.guestId match {
             case Some(id) => {
               println("Login as guest" + id)
-              ApplicationView changeView TEAM
+              val teamController: controller.TeamSelectionController = controller.TeamSelectionController()
+              teamController username = "guest" + id
+              ApplicationView changeView (TEAM, Some(teamController))
             }
             case _ => println("Login error")
           }
