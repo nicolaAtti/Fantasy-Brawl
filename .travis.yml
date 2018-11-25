@@ -63,6 +63,6 @@ deploy:
       t533tsugdPmolx+FigUQ5CxsAt8Co3ehLTrzfGJp9liG4HF2hBxURAZXeA==
   skip_cleanup: true
   file: client/build/libs/client-0.2
-  file_glob: true
   on:
     repo: nicolaAtti/pps-17-fb
+    branch: develop
