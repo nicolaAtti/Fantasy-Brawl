@@ -16,24 +16,24 @@ import messaging.LoginManager
 class LoginController extends Initializable with ViewController {
   implicit val dataFormat =
     Json.format[LoginGuestRequest]
+  var loginManager: LoginManager = null
 
   @FXML def handleLoginAsGuest(event: ActionEvent) {
     println("Login as a guest pressed")
 
-    import messaging.LoginManager
     import PlayJsonSupport._
-    LoginManager.rabbitControl ! Message(
+    loginManager.rabbitControl ! Message(
       messages
         .LoginGuestRequest(None),
-      LoginManager.publisher,
-      Seq(ReplyTo(LoginManager.loginGuestResponseQueue.queueName))
+      loginManager.publisher,
+      Seq(ReplyTo(loginManager.loginGuestResponseQueue.queueName))
     )
 
     ApplicationView changeView WAITING
   }
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
-    LoginManager
+    loginManager = new LoginManager
   }
 }
 
