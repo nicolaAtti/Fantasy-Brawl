@@ -20,7 +20,7 @@ object ApplicationView {
 
   def changeView(view: ViewSelector, controller: Option[ViewController] = None): Unit = view match {
     case LOGIN if controller.isEmpty =>
-      setupScene(LoginTitle, LoginForm, Some(LoginController()))
+      setupScene(LoginTitle, LoginForm, Some(LoginController.controller))
     case LOGIN =>
       setupScene(LoginTitle, LoginForm, controller)
     case TEAM if controller.isEmpty =>

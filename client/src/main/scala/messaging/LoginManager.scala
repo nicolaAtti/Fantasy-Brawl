@@ -7,24 +7,22 @@ import PlayJsonSupport._
 import view._
 import messages._
 import ApplicationView.viewSelector._
-
+import com.spingo.op_rabbit.properties.ReplyTo
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class LoginManager {
-  val rabbitControl: ActorRef = ActorSystem().actorOf(Props[RabbitControl])
-  implicit val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(false)
+object LoginManager {
+  private val rabbitControl: ActorRef = ActorSystem().actorOf(Props[RabbitControl])
+  implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(false)
 
-  val loginGuestRequestQueue =
-    Queue(Queues.LoginGuestRequestQueue, durable = false, autoDelete = true)
+  private val loginGuestRequestQueue = Queue(Queues.LoginGuestRequestQueue, durable = false, autoDelete = true)
+  private val loginGuestResponseQueue = Queue(Queues.LoginGuestResponseQueue, durable = false, autoDelete = true)
 
-  val loginGuestResponseQueue =
-    Queue(Queues.LoginGuestResponseQueue, durable = false, autoDelete = true)
-  val publisher: Publisher = Publisher.queue(loginGuestRequestQueue)
+  implicit private val RequestFormat: OFormat[LoginGuestRequest] = Json.format[LoginGuestRequest]
+  implicit private val ResponseFormat: OFormat[LoginGuestResponse] = Json.format[LoginGuestResponse]
 
-  implicit val dataFormat: OFormat[LoginGuestResponse] =
-    Json.format[LoginGuestResponse]
+  private val publisher: Publisher = Publisher.queue(loginGuestRequestQueue)
 
-  val subscription: SubscriptionRef = Subscription.run(rabbitControl) {
+  Subscription.run(rabbitControl) {
     import Directives._
     channel(qos = 3) {
       consume(loginGuestResponseQueue) {
@@ -33,7 +31,7 @@ class LoginManager {
             case Some(id) => {
               println("Login as guest" + id)
               val teamController: controller.TeamSelectionController = controller.TeamSelectionController()
-              teamController username = "guest" + id
+              teamController.username = "guest" + id
               ApplicationView changeView (TEAM, Some(teamController))
             }
             case _ => println("Login error")
@@ -48,5 +46,10 @@ class LoginManager {
         }
       }
     }
+  }
+
+  def loginRequest(): Unit = {
+    import PlayJsonSupport._
+    rabbitControl ! Message(LoginGuestRequest(None), publisher, Seq(ReplyTo(loginGuestResponseQueue.queueName)))
   }
 }
