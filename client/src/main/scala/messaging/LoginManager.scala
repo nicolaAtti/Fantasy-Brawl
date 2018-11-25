@@ -30,9 +30,9 @@ object LoginManager {
           response.guestId match {
             case Some(id) => {
               println("Login as guest" + id)
-              val teamController: controller.TeamSelectionController = controller.TeamSelectionController()
-              teamController.username = "guest" + id
-              ApplicationView changeView (TEAM, Some(teamController))
+
+              controller.TeamSelectionController.username = "guest" + id
+              ApplicationView changeView TEAM
             }
             case _ => println("Login error")
           }
@@ -48,7 +48,7 @@ object LoginManager {
     }
   }
 
-  def loginRequest(): Unit = {
+  def loginAsGuestRequest(): Unit = {
     import PlayJsonSupport._
     rabbitControl ! Message(LoginGuestRequest(None), publisher, Seq(ReplyTo(loginGuestResponseQueue.queueName)))
   }

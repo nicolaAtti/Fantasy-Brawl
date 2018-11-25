@@ -16,7 +16,7 @@ object LoginController extends Initializable with ViewController {
 
     ApplicationView changeView WAITING
 
-    LoginManager.loginRequest()
+    LoginManager.loginAsGuestRequest()
   }
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {}

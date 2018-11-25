@@ -18,17 +18,13 @@ object ApplicationView {
 
   import viewSelector._
 
-  def changeView(view: ViewSelector, controller: Option[ViewController] = None): Unit = view match {
-    case LOGIN if controller.isEmpty =>
-      setupScene(LoginTitle, LoginForm, Some(LoginController.controller))
+  def changeView(view: ViewSelector): Unit = view match {
     case LOGIN =>
-      setupScene(LoginTitle, LoginForm, controller)
-    case TEAM if controller.isEmpty =>
-      setupScene(TeamSelectionTitle, TeamSelectionForm, Some(TeamSelectionController()))
+      setupScene(LoginTitle, LoginForm, Some(LoginController.controller))
     case TEAM =>
-      setupScene(TeamSelectionTitle, TeamSelectionForm, controller)
+      setupScene(TeamSelectionTitle, TeamSelectionForm, Some(TeamSelectionController.controller))
     case WAITING =>
-      setupScene(WaitingTitle, WaitingForm, controller)
+      setupScene(WaitingTitle, WaitingForm, None)
     case _ => hideView()
   }
 
