@@ -31,7 +31,7 @@ object LoginManager {
             case Some(id) => {
               println("Login as guest" + id)
 
-              controller.TeamSelectionController.username = "guest" + id
+              controller.TeamSelectionController.username = "guest#" + id
               ApplicationView changeView TEAM
             }
             case _ => println("Login error")
