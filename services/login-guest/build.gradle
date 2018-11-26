@@ -1,10 +1,6 @@
 plugins{
     id 'scala'
-    id 'java'
     id 'application'
 }
 
-mainClassName = 'main'
-
-dependencies {
-}
+mainClassName = 'Main'
