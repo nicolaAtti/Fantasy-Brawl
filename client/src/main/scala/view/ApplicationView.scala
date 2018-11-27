@@ -7,17 +7,28 @@ import javafx.stage.Stage
 import controller._
 import ViewConfiguration._
 
+/**
+  * Manages the graphical interface.
+  *
+  * @author Daniele Schiavi
+  */
 object ApplicationView {
   private var stage: Stage = new Stage()
 
+  /**
+    * Defines the acceptable views.
+    */
   object viewSelector extends Enumeration {
     val LOGIN, TEAM, WAITING = Value
   }
-
-  type ViewSelector = viewSelector.Value
+  private type ViewSelector = viewSelector.Value
 
   import viewSelector._
 
+  /**
+    * Changes the current view to the required view.
+    * @param view the view to show
+    */
   def changeView(view: ViewSelector): Unit = view match {
     case LOGIN   => setupScene(LoginTitle, LoginForm, Some(LoginController.controller))
     case TEAM    => setupScene(TeamSelectionTitle, TeamSelectionForm, Some(TeamSelectionController.controller))
@@ -25,6 +36,12 @@ object ApplicationView {
     case _       => hideView()
   }
 
+  /**
+    * Setup of the graphical window.
+    * @param stage the current window
+    * @param height the height of the window
+    * @param width the width of the window
+    */
   def setupStage(stage: Stage, height: Double, width: Double): Unit = {
     this.stage = stage
     stage setHeight height
@@ -36,11 +53,17 @@ object ApplicationView {
     })
   }
 
+  /**
+    * Shows the current view.
+    */
   def showView(): Unit =
     Platform runLater (() => {
       stage show ()
     })
 
+  /**
+    * Hides the current view.
+    */
   def hideView(): Unit =
     Platform runLater (() => {
       stage hide ()
