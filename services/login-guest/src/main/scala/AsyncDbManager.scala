@@ -5,7 +5,9 @@ import org.mongodb.scala._
 import org.mongodb.scala.model.Filters
 import org.mongodb.scala.model.Updates._
 
-/** Useful constants and a function to manage the asynch communication with a mongo database
+/** Provides a function and a set of constants to manage the asynchronous
+  * communication with a nosql database.
+  *
   * @author Marco Canducci
   */
 object AsyncDbManager {
@@ -19,11 +21,16 @@ object AsyncDbManager {
   val filter = Filters.equal("_id", value = documentId)
   val incrementByOne = inc(field, number = 1)
 
+  /** Atomically returns and updates (increasing it by one) a counter inside
+    * a remote nosql database.
+    *
+    * @return a Future containing the unique guest number
+    */
   def nextGuestNumber: Future[Int] = {
     collection
       .findOneAndUpdate(filter, incrementByOne)
       .map(oldDocument => oldDocument(field).asInt32().getValue)
-      .head() // Returns the head of the Observable in a Future
+      .head() // returns the Observable's head in a Future
   }
 
 }
