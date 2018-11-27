@@ -1,16 +1,14 @@
+import scala.util.{Failure, Success}
+import scala.concurrent._
+import ExecutionContext.Implicits.global
+
 import akka.actor.{ActorSystem, Props}
 import com.spingo.op_rabbit._
 import com.spingo.op_rabbit.properties.ReplyTo
 import play.api.libs.json._
 import PlayJsonSupport._
 
-import scala.util.{Failure, Success}
-import scala.concurrent._
-import ExecutionContext.Implicits.global
-
 /** Entry point of the service that handles the login for guests users.
-  *
-  * It reads and updates (incrementing by one) a counter that acts as unique guest identifier.
   * @author Marco Canducci
   */
 object Main extends App {
@@ -44,12 +42,8 @@ object Main extends App {
             }
 
             AsyncDbManager.nextGuestNumber.onComplete {
-              case Success(optN: Option[Int]) =>
-                optN match {
-                  case Some(n) => sendGuestNumber(n, clientQueue = replyTo.get)
-                  case None    => println("Cannot find the next guest number")
-                }
-              case Failure(exc) => println(s"Failure... Caught: $exc")
+              case Success(n: Int) => sendGuestNumber(n, clientQueue = replyTo.get)
+              case Failure(e)      => println(s"Failure... Caught: $e")
             }
           }
           ack
