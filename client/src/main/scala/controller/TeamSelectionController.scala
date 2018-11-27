@@ -9,6 +9,7 @@ import view.ApplicationView
 import ApplicationView.viewSelector._
 import javafx.geometry.Insets
 import javafx.scene.control.{Label, TextArea}
+import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout._
 import javafx.scene.paint.Paint
@@ -21,6 +22,7 @@ object TeamSelectionController extends Initializable with ViewController {
   @FXML var characterDescription: TextArea = _
   @FXML var selectedCharacter00: StackPane = _
   @FXML var chosenCharacter0: StackPane = _
+  @FXML var hbox: HBox = _
   @FXML var grid: GridPane = _
 
   var selectedCharacter: StackPane = new StackPane()
@@ -40,8 +42,11 @@ object TeamSelectionController extends Initializable with ViewController {
     selectedCharacter = characterPressed
     selectedCharacter.setBackground(
       new Background(new BackgroundFill(Paint.valueOf("BLUE"), CornerRadii.EMPTY, Insets.EMPTY)))
+    chosenCharacter.getChildren
+      .get(0)
+      .asInstanceOf[ImageView]
+      .setImage(selectedCharacter.getChildren.get(0).asInstanceOf[ImageView].getImage)
     characterDescription.setText(characterPressed.getId)
-
   }
 
   @FXML def handleCharacterChosenPressed(mouseEvent: MouseEvent) {
@@ -58,6 +63,11 @@ object TeamSelectionController extends Initializable with ViewController {
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
     idLabel setText username
     grid.getChildren.forEach(pane => {
+      pane
+        .asInstanceOf[StackPane]
+        .setBackground(new Background(new BackgroundFill(Paint.valueOf("WHITE"), CornerRadii.EMPTY, Insets.EMPTY)))
+    })
+    hbox.getChildren.forEach(pane => {
       pane
         .asInstanceOf[StackPane]
         .setBackground(new Background(new BackgroundFill(Paint.valueOf("WHITE"), CornerRadii.EMPTY, Insets.EMPTY)))

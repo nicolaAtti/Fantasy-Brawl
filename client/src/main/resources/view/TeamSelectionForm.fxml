@@ -16,46 +16,42 @@
    <children>
       <Button layoutX="1084.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
       <Label fx:id="idLabel" layoutX="14.0" layoutY="22.0" prefHeight="17.0" prefWidth="724.0" text="Guest" />
-      <Label layoutX="14.0" layoutY="79.0" prefHeight="17.0" prefWidth="71.0" text="Your Team:" />
+      <Label layoutX="14.0" layoutY="85.0" prefHeight="17.0" prefWidth="71.0" text="Your Team:" />
       <Button layoutX="888.0" layoutY="58.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="250.0" text="Join casual match" />
       <Button layoutX="889.0" layoutY="88.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="250.0" text="Join ranked match" />
-      <TextArea fx:id="characterDescription" layoutX="360.0" layoutY="212.0" prefHeight="232.0" prefWidth="417.0" text="DESCRIPTION" />
-      <HBox layoutX="85.0" layoutY="53.0" prefHeight="69.0" prefWidth="266.0">
+      <TextArea fx:id="characterDescription" layoutX="487.0" layoutY="197.0" prefHeight="414.0" prefWidth="651.0" text="DESCRIPTION" />
+      <HBox fx:id="hbox" alignment="CENTER" layoutX="88.0" layoutY="41.0" prefHeight="90.0" prefWidth="360.0">
          <children>
-            <StackPane fx:id="chosenCharacter0" onMouseClicked="#handleCharacterChosenPressed" prefHeight="65.0"
-                       prefWidth="65.0">
+            <StackPane fx:id="chosenCharacter0" onMouseClicked="#handleCharacterChosenPressed" prefHeight="85.0" prefWidth="85.0">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="chosenCharacter1" layoutX="10.0" layoutY="10.0"
-                       onMouseClicked="#handleCharacterChosenPressed" prefHeight="65.0" prefWidth="65.0">
+            <StackPane fx:id="chosenCharacter1" onMouseClicked="#handleCharacterChosenPressed" prefHeight="85.0" prefWidth="85.0">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../../faccia.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane fx:id="chosenCharacter2" onMouseClicked="#handleCharacterChosenPressed" prefHeight="85.0" prefWidth="85.0">
+               <children>
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="chosenCharacter2" layoutX="10.0" layoutY="10.0"
-                       onMouseClicked="#handleCharacterChosenPressed" prefHeight="65.0" prefWidth="65.0">
+            <StackPane fx:id="chosenCharacter3" onMouseClicked="#handleCharacterChosenPressed" prefHeight="85.0" prefWidth="85.0">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../../omino.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </StackPane>
-            <StackPane fx:id="chosenCharacter3" layoutX="234.0" layoutY="10.0"
-                       onMouseClicked="#handleCharacterChosenPressed" prefHeight="65.0" prefWidth="65.0">
-               <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
@@ -66,156 +62,156 @@
       </HBox>
       <GridPane fx:id="grid" layoutX="43.0" layoutY="198.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="65.0" prefWidth="65.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="65.0" prefWidth="65.0" />
-           <ColumnConstraints hgrow="SOMETIMES" minWidth="65.0" prefWidth="65.0" />
-           <ColumnConstraints hgrow="SOMETIMES" minWidth="65.0" prefWidth="65.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="90.0" prefWidth="90.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="90.0" prefWidth="90.0" />
+           <ColumnConstraints hgrow="SOMETIMES" minWidth="90.0" prefWidth="90.0" />
+           <ColumnConstraints hgrow="SOMETIMES" minWidth="90.0" prefWidth="90.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="65.0" prefHeight="65.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="65.0" prefHeight="65.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="65.0" prefHeight="65.0" vgrow="SOMETIMES" />
-           <RowConstraints minHeight="65.0" prefHeight="65.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="90.0" prefHeight="90.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="90.0" prefHeight="90.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="90.0" prefHeight="90.0" vgrow="SOMETIMES" />
+           <RowConstraints minHeight="90.0" prefHeight="90.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <StackPane fx:id="selectedCharacter00" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="65.0" prefWidth="65.0">
+            <StackPane fx:id="selectedCharacter00" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../../faccia.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane fx:id="selectedCharacter01" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="1">
+               <children>
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../../Prototipo%20Sprite%20Personaggio.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane fx:id="selectedCharacter02" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="2">
+               <children>
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter01" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="65.0" prefWidth="65.0" GridPane.columnIndex="1">
+            <StackPane fx:id="selectedCharacter03" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="3">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter02" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="65.0" prefWidth="65.0" GridPane.columnIndex="2">
+            <StackPane fx:id="selectedCharacter10" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.rowIndex="1">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter03" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="65.0" prefWidth="65.0" GridPane.columnIndex="3">
+            <StackPane fx:id="selectedCharacter11" layoutX="75.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter10" onMouseClicked="#handleCharacterToChoosePressed" layoutX="10.0" layoutY="10.0" prefHeight="65.0" prefWidth="65.0" GridPane.rowIndex="1">
+            <StackPane fx:id="selectedCharacter12" layoutX="140.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter11" onMouseClicked="#handleCharacterToChoosePressed" layoutX="75.0" layoutY="10.0" prefHeight="65.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <StackPane fx:id="selectedCharacter13" layoutX="205.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter12" onMouseClicked="#handleCharacterToChoosePressed" layoutX="140.0" layoutY="10.0" prefHeight="65.0" prefWidth="65.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <StackPane fx:id="selectedCharacter20" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.rowIndex="2">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter13" onMouseClicked="#handleCharacterToChoosePressed" layoutX="205.0" layoutY="10.0" prefHeight="65.0" prefWidth="65.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+            <StackPane fx:id="selectedCharacter21" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter20" onMouseClicked="#handleCharacterToChoosePressed" layoutX="10.0" layoutY="10.0" prefHeight="65.0" prefWidth="65.0" GridPane.rowIndex="2">
+            <StackPane fx:id="selectedCharacter22" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter21" onMouseClicked="#handleCharacterToChoosePressed" layoutX="10.0" layoutY="10.0" prefHeight="65.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <StackPane fx:id="selectedCharacter23" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter22" onMouseClicked="#handleCharacterToChoosePressed" layoutX="10.0" layoutY="10.0" prefHeight="65.0" prefWidth="65.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <StackPane fx:id="selectedCharacter30" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.rowIndex="3">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter23" onMouseClicked="#handleCharacterToChoosePressed" layoutX="10.0" layoutY="10.0" prefHeight="65.0" prefWidth="65.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+            <StackPane fx:id="selectedCharacter31" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter30" onMouseClicked="#handleCharacterToChoosePressed" layoutX="10.0" layoutY="10.0" prefHeight="65.0" prefWidth="65.0" GridPane.rowIndex="3">
+            <StackPane fx:id="selectedCharacter32" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter31" onMouseClicked="#handleCharacterToChoosePressed" layoutX="10.0" layoutY="10.0" prefHeight="65.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <StackPane fx:id="selectedCharacter33" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../../omino.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </StackPane>
-            <StackPane fx:id="selectedCharacter32" onMouseClicked="#handleCharacterToChoosePressed" layoutX="10.0" layoutY="10.0" prefHeight="65.0" prefWidth="65.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
-               <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../../omino.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </StackPane>
-            <StackPane fx:id="selectedCharacter33" onMouseClicked="#handleCharacterToChoosePressed" layoutX="10.0" layoutY="10.0" prefHeight="65.0" prefWidth="65.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
-               <children>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../omino.png" />
                      </image>
