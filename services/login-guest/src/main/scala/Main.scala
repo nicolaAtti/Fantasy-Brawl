@@ -1,14 +1,14 @@
-import akka.actor.{ActorSystem, Props}
-import com.spingo.op_rabbit.properties.ReplyTo
-import com.spingo.op_rabbit._
+import scala.util.{Failure, Success}
+import scala.concurrent._
+import ExecutionContext.Implicits.global
 
-import scala.concurrent.ExecutionContext
+import akka.actor.{ActorSystem, Props}
+import com.spingo.op_rabbit._
+import com.spingo.op_rabbit.properties.ReplyTo
 import play.api.libs.json._
 import PlayJsonSupport._
 
 /** Entry point of the service that handles the login for guests users.
-  *
-  * It reads and updates (incrementing by one) a counter that acts as unique guest identifier.
   * @author Marco Canducci
   */
 object Main extends App {
@@ -21,14 +21,11 @@ object Main extends App {
   implicit val recoveryStrategy = RecoveryStrategy.nack(requeue = false)
 
   import messages._
-
   implicit val requestFormat = Json.format[LoginGuestRequest]
   implicit val responseFormat = Json.format[LoginGuestResponse]
 
   import Queues._
   val requestQueue = Queue(LoginGuestRequestQueue, durable = false, autoDelete = true)
-
-  import ExecutionContext.Implicits.global
 
   val subscription = Subscription.run(rabbitControl) {
     import Directives._
@@ -44,19 +41,19 @@ object Main extends App {
               }
             }
 
-            val response = LoginGuestResponse(guestId = Some(getAndUpdateFromDb), details = None)
-            rabbitControl ! Message.queue(response, queue = replyTo.get)
-            ack
+            AsyncDbManager.nextGuestNumber.onComplete {
+              case Success(n: Int) => sendGuestNumber(n, clientQueue = replyTo.get)
+              case Failure(e)      => println(s"Failure... Caught: $e")
+            }
           }
-
+          ack
         }
       }
     }
   }
 
-  // Temporary mockup function
-  def getAndUpdateFromDb: Int = {
-    scala.util.Random.nextInt()
+  def sendGuestNumber(number: Int, clientQueue: String): Unit = {
+    val response = LoginGuestResponse(guestId = Some(number), details = None)
+    rabbitControl ! Message.queue(response, clientQueue)
   }
-
 }
