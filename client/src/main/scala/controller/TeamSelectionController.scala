@@ -14,6 +14,11 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout._
 import javafx.scene.paint.Paint
 
+/**
+  * Controller of the team selection view.
+  *
+  * @author Daniele Schiavi
+  */
 object TeamSelectionController extends Initializable with ViewController {
   val controller: ViewController = this
   var username: String = "guest"
@@ -22,18 +27,24 @@ object TeamSelectionController extends Initializable with ViewController {
   @FXML var characterDescription: TextArea = _
   @FXML var selectedCharacter00: StackPane = _
   @FXML var chosenCharacter0: StackPane = _
-  @FXML var hbox: HBox = _
-  @FXML var grid: GridPane = _
+  @FXML var gridChosen: GridPane = _
+  @FXML var gridToChoose: GridPane = _
 
-  var selectedCharacter: StackPane = new StackPane()
-  var chosenCharacter: StackPane = new StackPane()
+  private var selectedCharacter: StackPane = new StackPane()
+  private var chosenCharacter: StackPane = new StackPane()
 
+  /**
+    * Pressure handler of the "Logout" button.
+    */
   @FXML def handleLogout(event: ActionEvent) {
     println("Logout pressed")
 
     ApplicationView changeView LOGIN
   }
 
+  /**
+    * Pressure handler of the characters to choose from.
+    */
   @FXML def handleCharacterToChoosePressed(mouseEvent: MouseEvent) {
     val characterPressed: StackPane = mouseEvent.getSource.asInstanceOf[StackPane]
     println(characterPressed.getId + " pressed")
@@ -49,6 +60,9 @@ object TeamSelectionController extends Initializable with ViewController {
     characterDescription.setText(characterPressed.getId)
   }
 
+  /**
+    * Pressure handler of the chosen characters.
+    */
   @FXML def handleCharacterChosenPressed(mouseEvent: MouseEvent) {
     val characterPressed: StackPane = mouseEvent.getSource.asInstanceOf[StackPane]
     println(characterPressed.getId + " pressed")
@@ -62,12 +76,12 @@ object TeamSelectionController extends Initializable with ViewController {
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
     idLabel setText username
-    grid.getChildren.forEach(pane => {
+    gridChosen.getChildren.forEach(pane => {
       pane
         .asInstanceOf[StackPane]
         .setBackground(new Background(new BackgroundFill(Paint.valueOf("WHITE"), CornerRadii.EMPTY, Insets.EMPTY)))
     })
-    hbox.getChildren.forEach(pane => {
+    gridToChoose.getChildren.forEach(pane => {
       pane
         .asInstanceOf[StackPane]
         .setBackground(new Background(new BackgroundFill(Paint.valueOf("WHITE"), CornerRadii.EMPTY, Insets.EMPTY)))

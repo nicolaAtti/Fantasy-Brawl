@@ -10,6 +10,11 @@ import ApplicationView.viewSelector._
 import com.spingo.op_rabbit.properties.ReplyTo
 import scala.concurrent.ExecutionContext.Implicits.global
 
+/**
+  * Manages login as a guest request and response messages.
+  *
+  * @author Daniele Schiavi
+  */
 object LoginManager {
   private val rabbitControl: ActorRef = ActorSystem().actorOf(Props[RabbitControl])
   implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(false)
@@ -22,6 +27,9 @@ object LoginManager {
 
   private val publisher: Publisher = Publisher.queue(loginGuestRequestQueue)
 
+  /**
+    * Manages login as a guest response messages.
+    */
   Subscription.run(rabbitControl) {
     import Directives._
     channel(qos = 3) {
@@ -48,6 +56,9 @@ object LoginManager {
     }
   }
 
+  /**
+    * Send a login as a guest request message.
+    */
   def loginAsGuestRequest(): Unit = {
     import PlayJsonSupport._
     rabbitControl ! Message(LoginGuestRequest(None), publisher, Seq(ReplyTo(loginGuestResponseQueue.queueName)))
