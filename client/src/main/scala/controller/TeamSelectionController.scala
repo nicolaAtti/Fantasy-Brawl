@@ -48,11 +48,7 @@ object TeamSelectionController extends Initializable with ViewController {
   @FXML def handleCharacterToChoosePressed(mouseEvent: MouseEvent) {
     val characterPressed: StackPane = mouseEvent.getSource.asInstanceOf[StackPane]
     println(characterPressed.getId + " pressed")
-    selectedCharacter.setBackground(
-      new Background(new BackgroundFill(Paint.valueOf("WHITE"), CornerRadii.EMPTY, Insets.EMPTY)))
-    selectedCharacter = characterPressed
-    selectedCharacter.setBackground(
-      new Background(new BackgroundFill(Paint.valueOf("BLUE"), CornerRadii.EMPTY, Insets.EMPTY)))
+    changeSelectedCharacter(selectedCharacter, characterPressed)
     chosenCharacter.getChildren
       .get(0)
       .asInstanceOf[ImageView]
@@ -66,31 +62,40 @@ object TeamSelectionController extends Initializable with ViewController {
   @FXML def handleCharacterChosenPressed(mouseEvent: MouseEvent) {
     val characterPressed: StackPane = mouseEvent.getSource.asInstanceOf[StackPane]
     println(characterPressed.getId + " pressed")
-    chosenCharacter.setBackground(
-      new Background(new BackgroundFill(Paint.valueOf("WHITE"), CornerRadii.EMPTY, Insets.EMPTY)))
-    chosenCharacter = characterPressed
-    chosenCharacter.setBackground(
-      new Background(new BackgroundFill(Paint.valueOf("BLUE"), CornerRadii.EMPTY, Insets.EMPTY)))
+    changeSelectedCharacter(chosenCharacter, characterPressed)
     characterDescription.setText(characterPressed.getId)
   }
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
     idLabel setText username
-    gridChosen.getChildren.forEach(pane => {
-      pane
-        .asInstanceOf[StackPane]
-        .setBackground(new Background(new BackgroundFill(Paint.valueOf("WHITE"), CornerRadii.EMPTY, Insets.EMPTY)))
-    })
-    gridToChoose.getChildren.forEach(pane => {
-      pane
-        .asInstanceOf[StackPane]
-        .setBackground(new Background(new BackgroundFill(Paint.valueOf("WHITE"), CornerRadii.EMPTY, Insets.EMPTY)))
-    })
+    deselectAllCharacters(gridChosen)
+    deselectAllCharacters(gridToChoose)
     selectedCharacter = selectedCharacter00
     chosenCharacter = chosenCharacter0
-    selectedCharacter.setBackground(
-      new Background(new BackgroundFill(Paint.valueOf("BLUE"), CornerRadii.EMPTY, Insets.EMPTY)))
-    chosenCharacter.setBackground(
-      new Background(new BackgroundFill(Paint.valueOf("BLUE"), CornerRadii.EMPTY, Insets.EMPTY)))
+    selectCharacter(selectedCharacter)
+    selectCharacter(chosenCharacter)
+  }
+
+  private def deselectAllCharacters(gridPane: GridPane): Unit = {
+    gridPane.getChildren.forEach(pane => {
+      deselectCharacter(pane.asInstanceOf[StackPane])
+    })
+  }
+
+  private def changeSelectedCharacter(previous: StackPane, next: StackPane): Unit = {
+    deselectCharacter(previous)
+    selectCharacter(next)
+    if (previous == chosenCharacter)
+      chosenCharacter = next
+    else
+      selectedCharacter = next
+  }
+
+  private def selectCharacter(stackPane: StackPane): Unit = {
+    stackPane.setBackground(new Background(new BackgroundFill(Paint.valueOf("BLUE"), CornerRadii.EMPTY, Insets.EMPTY)))
+  }
+
+  private def deselectCharacter(stackPane: StackPane): Unit = {
+    stackPane.setBackground(new Background(new BackgroundFill(Paint.valueOf("WHITE"), CornerRadii.EMPTY, Insets.EMPTY)))
   }
 }
