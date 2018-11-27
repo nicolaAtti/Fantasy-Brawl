@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.stage.Stage
 import controller._
+import ViewConfiguration._
 
 object ApplicationView {
   private var stage: Stage = new Stage()
@@ -18,17 +19,10 @@ object ApplicationView {
   import viewSelector._
 
   def changeView(view: ViewSelector): Unit = view match {
-    case LOGIN =>
-      setupScene(title = ViewConfiguration.LoginTitle,
-                 form = ViewConfiguration.LoginForm,
-                 controller = Some(LoginController()))
-    case TEAM =>
-      setupScene(title = ViewConfiguration.TeamSelectionTitle,
-                 form = ViewConfiguration.TeamSelectionForm,
-                 controller = Some(TeamSelectionController()))
-    case WAITING =>
-      setupScene(title = ViewConfiguration.WaitingTitle, form = ViewConfiguration.WaitingForm, controller = None)
-    case _ => hideView()
+    case LOGIN   => setupScene(LoginTitle, LoginForm, Some(LoginController.controller))
+    case TEAM    => setupScene(TeamSelectionTitle, TeamSelectionForm, Some(TeamSelectionController.controller))
+    case WAITING => setupScene(WaitingTitle, WaitingForm, None)
+    case _       => hideView()
   }
 
   def setupStage(stage: Stage, height: Double, width: Double): Unit = {
