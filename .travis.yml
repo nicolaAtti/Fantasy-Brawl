@@ -1,20 +1,17 @@
 language: scala
 scala:
-  - 2.12.7
-
+- 2.12.7
 jdk:
-  - oraclejdk8
-
-script: 
-  - './gradlew clean build' 
-
+- oraclejdk8
+script:
+- "./gradlew clean build"
 deploy:
   provider: releases
   api_key:
-    secure : HO3HYy6dXlrPZShyrV7erMD5sW8HXiKMnxj/GK/uExuvSK53XW4OkfDRW1u5UUbIgSbJd4HfYqIJmTcUuJHhSuffzzSAmPFPFl4aEtoEDaozdlgZnioILpXSaekrEB8qoUDEfmzUG7jSfsHtuERlVgGrQPKXycby0pRo9rmb17w8WsBxM9OAtLXhkrpeAcg2NAHRboTB4gHJXiExyIsb093TWIBpdBxCSaTrsQwBs5ypXc3m16dcJffabzilD7ZRAVaRtc1RsOc6ucStiNdhl8ziHb/BfAeKfK+PmSbKsvi//65HZ9nE9LPI9ruc/57JYIKEEIL/urT9lGeLR/Kg0ZzJNv97zSsI8fcVSLbAUOMkCz8rNBbwgtiJXSPS+eIGpvcNQ8GnWEizx2bbgSUYQtD0yTsaTow5C7kgvTSFFklWkEpK2ue52BJn9Q7XW5OOIJ0KyXjC6rksMILOUJfp49kXUgR2zwUeTEtkEsKXZo4WXZJzf+0gfAx1yRJ4wINtRa3HgipT24VO2SSrITtHgt1e0OwkEHPqVEcOxOGdZVRira4UX7i9yDaLplQoOYSunVUNMaobygQGD4BvWR25LW9643zj+a6+MFJzoSkBM5WGj2VpQU7Maq4doXttDl4I2O7Y27jjgdcYRYmSX1VDzdduFqiB84ICgIteeLq3B9c=
-  skip_cleanup: true
-  file: client/build/libs/client-0.2
+    secure: OG4PU4CZm2N5MpLpO0x1LlLgdjEUpUOl1JF0gQRdPvAdTDNKGjSIKz2YP57tfJ4vrXWk8icKi6tcUrpKxGRQX61ZRdPG36E7+3gqxaWvB0ssn8HyT20gNddO8c09x6IVoa4agO64Q6nzWw1MJMVOmWzJ6OFSCvjftXzfo9+bkGjdn5HuPQU58MNnwG4cliaD56TYbKRTSJj9uHDbe4I8iMeirrSv9GAi50YCJ3Uipa9XC903oZEx3veuDM/pfiqM/MZ/zzWqz2q+mk4qOyhAnU5XYitL9D09jyZbzqcLqM3QnnVjwSBtGIbi/ZCnZ/mlIrkU1rwsoPF1mhN+Z14n1RGpZY5rMeLFPyZvgA4um2pW+89p/HZENbSGxLfRr7lnbCaxdZfFQIy2cevunaNL6Nnnpkab2OAz8WzntJrlPUEQ7y7e7dXUFc2P5Yvicw5ip8Z0rwpK+8PL+EZfcI/kouE2NSeNlC5lQ7SajQ/I5emwaOkOTIFT3kn1LMQoXhjNrkLV9t9JffCa7cmXZ5k3Vg+4ea8SmTQC7SX+FmJ0c6gtzGm94agdTXipLql2Kl6bPlLYRA3dY5PlihtMpGVQq6D6QjRqEcTg1jOccF3WtNhfZExTB54ufQghxjFQx19Dx8vnb5GQt6e4LC6k04DYjZ3NmrmQCxDKfBcCB85dSLo=
+  file: productions/*
   file_glob: true
+  skip_cleanup: true
   on:
     repo: nicolaAtti/pps-17-fb
-    tags: true
+    branch: develop

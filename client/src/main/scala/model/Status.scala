@@ -17,8 +17,6 @@ case class Status(var currHP: Int,
     * @author Nicola Atti
     */
   def addModifier(newMod: Modifier): Unit = {
-    modifiers.foreach(maaa => println(maaa.modId))
-    println("New  " + newMod.modId)
     if (!modifiers.exists(mod => mod.modId equals newMod.modId)) {
       modifiers += newMod
     } else {
