@@ -11,8 +11,8 @@ object ScalaProlog {
   implicit def termToInt(term: Term): scala.Int = term.toString.toInt
   implicit def termToList(term: Term): List[String] = term.toString.replace("'","").replace("[","").replace("]","").split(",").toList
 
-  val characterContents = Source.fromFile("C:\\Users\\UTENTE\\IdeaProjects\\pps-17-fb\\client\\src\\main\\resources\\model\\PrologCharacters.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
-  val moveContents = Source.fromFile("C:\\Users\\UTENTE\\IdeaProjects\\pps-17-fb\\client\\src\\main\\resources\\model\\PrologMoves.pl").getLines.reduce((line1,line2) => line1 + "\n" + line2)
+  val characterContents = Source.fromResource("model/PrologCharacters.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
+  val moveContents = Source.fromResource("model/PrologMoves.pl").getLines.reduce((line1,line2) => line1 + "\n" + line2)
 
   def setNewTheory(clauses: String*): Unit =
     engine.setTheory(new Theory(clauses mkString " "))
