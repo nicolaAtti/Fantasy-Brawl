@@ -4,7 +4,7 @@
 %
 % Author: Nicola Atti
 
-spec_move('Lay On Hands','Mag_Damage,None','Heal',50,15,[],[],1).
+spec_move('Lay On Hands','Mag_Damage','None','Heal',50,15,[],[],1).
 spec_move('Censure','None','None','Spell',0,30,[],['Silenced'],1).
 spec_move('Holy Smite','Phys_Damage','Phys_Defence','Melee',30,25,[],[],1).
 spec_move('Bolster Faith','None','None','Spell',0,40,['Bolstered Faith'],[],4).
