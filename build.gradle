@@ -23,6 +23,10 @@ allprojects {
 
         // mongodb
         implementation 'org.mongodb.scala:mongo-scala-driver_2.12:2.5.0'
+
+        if (project.name != 'shared')
+            implementation project(':shared')
+
     }
 }
 
