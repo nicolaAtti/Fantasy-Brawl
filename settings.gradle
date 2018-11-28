@@ -1,4 +1,5 @@
 rootProject.name = 'pp-17-fb'
 
 include 'client',
-        'services:login-guest'
+        'services:login-guest',
+        'shared'

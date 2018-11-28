@@ -1,4 +1,4 @@
-package messages
+package communication
 
 /** The request message that clients must send if they want to login as guests.
   *

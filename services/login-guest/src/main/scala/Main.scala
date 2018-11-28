@@ -20,7 +20,7 @@ object Main extends App {
   val rabbitControl = ActorSystem().actorOf(Props[RabbitControl])
   implicit val recoveryStrategy = RecoveryStrategy.nack(requeue = false)
 
-  import messages._
+  import communication._
   implicit val requestFormat = Json.format[LoginGuestRequest]
   implicit val responseFormat = Json.format[LoginGuestResponse]
 
