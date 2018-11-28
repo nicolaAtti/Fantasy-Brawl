@@ -1,4 +1,4 @@
-package messages
+package communication
 
 /** All the queues that connect the services to themselves and to the client. */
 object Queues {

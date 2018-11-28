@@ -1,4 +1,4 @@
-package messages
+package communication
 
 /** The response message that the client will receive after a LoginGuestRequest.
   *
