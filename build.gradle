@@ -10,6 +10,7 @@ allprojects {
 
     dependencies {
         implementation 'org.scala-lang:scala-library:2.12.7'
+        compile group: 'it.unibo.alice.tuprolog', name: 'tuprolog', version: '2.1.1'
         testImplementation 'junit:junit:4.12'
         testImplementation 'org.scalatest:scalatest_2.12:3.0.5'
         
