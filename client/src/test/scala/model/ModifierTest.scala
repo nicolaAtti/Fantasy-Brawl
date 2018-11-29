@@ -13,7 +13,7 @@ class ModifierTest extends FunSuite {
   val newModifier = Modifier("battle_prowess", "PHYS_DAMAGE", 3, 20)
   val anotherModifier = Modifier("gargantuan_rage", "PHYS_DAMAGE", 2, 40)
 
-  test("Test the correct creation of the modifier") {
+  /*test("Test the correct creation of the modifier") {
     assert(newModifier.affectedStat equals "PHYS_DAMAGE")
     assert(newModifier.turnDuration == 3)
     assert(newModifier.modValue == 20)
@@ -45,5 +45,5 @@ class ModifierTest extends FunSuite {
     warrior.status.newTurnCountdown()
     assert(anotherModifier.turnDuration == 0)
     assert(warrior.calculatePhysDamage == 122)
-  }
+  }*/
 }
