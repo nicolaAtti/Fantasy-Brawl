@@ -20,7 +20,7 @@ class ScalaPrologTest extends FunSuite {
   test("Extract an Int from a prolog fact"){
     try {
       assert(extractInt(getMove("Skullcrack"),"BaseValue") == 30)
-      assert(extractInt(getCharacter("Jacob"),"Strength") == 57)
+      assert(extractInt(getCharacter("Jacob"),"Strength") == 51)
     } catch {
       case ex: NoMoreSolutionException =>
     }
