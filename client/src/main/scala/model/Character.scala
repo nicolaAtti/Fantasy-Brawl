@@ -26,6 +26,7 @@ trait Character {
   private def calculateMaxManaPoints(): Int = {
     roundDown((this.statistics.spirit * this.classMultipliers.spiMod) * 5)
   }
+  
 
   /**
     * Calculates the character's physical damage

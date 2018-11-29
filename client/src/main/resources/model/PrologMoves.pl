@@ -34,7 +34,7 @@ affliction('Berserk',3).
 affliction('Silenced',2).
 
 %modifier --- Defines the duration,power and the interested attribute for every existing modifier
-%modifier(+ModId,-Attribute,-TurnDuration,-Value)
+%modifier(+ModId,-SubStatistic,-TurnDuration,-Value)
 %
 % Author: Nicola Atti
 
