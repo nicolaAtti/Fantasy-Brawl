@@ -14,7 +14,8 @@ case class SpecialMove(name: String,
                        baseDamage: Int,
                        moveType: MoveType,
                        causesAfflictions: Set[Affliction],
-                       causesModifiers: Set[Modifier])
+                       causesModifiers: Set[Modifier],
+                       nTargets: Int)
   extends Move
 
 object Move {
