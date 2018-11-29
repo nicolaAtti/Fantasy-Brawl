@@ -5,17 +5,17 @@ trait Character {
   /**
     * The character's name
     */
-  var characterName: String
+  val characterName: String
 
   /**
     * The character's base statistics
     */
-  var statistics: Statistics
+  val statistics: Statistics
 
   /**
     * The character's class multipliers
     */
-  var classMultipliers: ClassStat
+  val classMultipliers: ClassStat
 
   import utilities.Utility._
 
@@ -120,31 +120,31 @@ trait Character {
   * @param classMultipliers the class statistic modifier, this will vary from Character implementation
   * @author Nicola Atti
   */
-private class Warrior(override var characterName: String,
-                           override var statistics: Statistics,
-                           override var classMultipliers: ClassStat = ClassStat(2, 1, 1, 0.5, 1.5, 2))
+private case class Warrior(override val characterName: String,
+                           override val statistics: Statistics,
+                           override val classMultipliers: ClassStat = ClassStat(2, 1, 1, 0.5, 1.5, 2))
     extends Character {}
 
-private case class Thief(override var characterName: String,
-                         override var statistics: Statistics,
-                         override var classMultipliers: ClassStat = ClassStat(1.5, 2, 1, 0.5, 1, 1.5))
+private case class Thief(override val characterName: String,
+                         override val statistics: Statistics,
+                         override val classMultipliers: ClassStat = ClassStat(1.5, 2, 1, 0.5, 1, 1.5))
     extends Character {}
 
-private case class Wizard(override var characterName: String,
-                          override var statistics: Statistics,
-                          override var classMultipliers: ClassStat = ClassStat(1, 1, 1.5, 2, 0.5, 1.5))
+private case class Wizard(override val characterName: String,
+                          override val statistics: Statistics,
+                          override val classMultipliers: ClassStat = ClassStat(1, 1, 1.5, 2, 0.5, 1.5))
     extends Character {}
 
-private case class Healer(override var characterName: String,
-                          override var statistics: Statistics,
-                          override var classMultipliers: ClassStat = ClassStat(1.5, 0.5, 1, 2, 1, 1.5))
+private case class Healer(override val characterName: String,
+                          override val statistics: Statistics,
+                          override val classMultipliers: ClassStat = ClassStat(1.5, 0.5, 1, 2, 1, 1.5))
     extends Character {}
 
 object Character {
 
   def apply(role: String, characterName: String, statistics: Statistics): Character =
     role match {
-      case "Warrior" => new Warrior(characterName, statistics)
+      case "Warrior" => Warrior(characterName, statistics)
       case "Thief"   => Thief(characterName, statistics)
       case "Wizard"  => Wizard(characterName, statistics)
       case "Healer"  => Healer(characterName, statistics)
