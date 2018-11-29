@@ -5,7 +5,7 @@ import utilities.Utility._
 trait Character {
   val characterName: String
   val statistics: Statistics
-  val classMultipliers: ClassStat
+  val classMultipliers: ClassMultipliers
 
   /**
     * Contains the character's status, depending on current HP and MP values and existing modifiers and afflictions
@@ -20,11 +20,11 @@ trait Character {
   )
 
   private def calculateMaxHealthPoints(): Int = {
-    roundDown((this.statistics.resistance * this.classMultipliers.hpMod) * 10)
+    roundDown((this.statistics.resistance * this.classMultipliers.healthPoints) * 10)
   }
 
   private def calculateMaxManaPoints(): Int = {
-    roundDown((this.statistics.spirit * this.classMultipliers.spiritMod) * 5)
+    roundDown((this.statistics.spirit * this.classMultipliers.spirit) * 5)
   }
 
   import SubStatistic._
@@ -34,14 +34,14 @@ trait Character {
     * @return
     */
   def physicalDamage: Int =
-    roundDown(statistics.strength * classMultipliers.strengthMod) + getModifierValues(PhysicalDamage)
+    roundDown(statistics.strength * classMultipliers.strength) + getModifierValues(PhysicalDamage)
 
   /**
     * Calculates the character's bonus physical critical strike damage
     * @return
     */
   def pysicalCriticalDamage: Int =
-    roundDown((statistics.strength * classMultipliers.strengthMod) / 5 + 150) + getModifierValues(
+    roundDown((statistics.strength * classMultipliers.strength) / 5 + 150) + getModifierValues(
       PhysicalCriticalDamage)
 
   /**
@@ -49,35 +49,35 @@ trait Character {
     * @return
     */
   def speed: Int =
-    roundDown((statistics.agility * classMultipliers.agilityMod) / 10) + getModifierValues(Speed)
+    roundDown((statistics.agility * classMultipliers.agility) / 10) + getModifierValues(Speed)
 
   /**
     * Calculates the character's critical strike chance
     * @return
     */
   def criticalChance: Int =
-    roundDown((statistics.agility * classMultipliers.agilityMod) / 2) + getModifierValues(CriticalChance)
+    roundDown((statistics.agility * classMultipliers.agility) / 2) + getModifierValues(CriticalChance)
 
   /**
     * Calculates the character's magical defence
     * @return
     */
   def magicalDefence: Int =
-    roundDown(statistics.spirit * classMultipliers.spiritMod) + getModifierValues(MagicalDefence)
+    roundDown(statistics.spirit * classMultipliers.spirit) + getModifierValues(MagicalDefence)
 
   /**
     * Calculates the character's magical damage
     * @return
     */
   def magicalDamage: Int =
-    roundDown(statistics.intelligence * classMultipliers.intelligenceMod) + getModifierValues(MagicalDamage)
+    roundDown(statistics.intelligence * classMultipliers.intelligence) + getModifierValues(MagicalDamage)
 
   /**
     * Calculates the character's bonus magical critical strike damage
     * @return
     */
   def magicalCriticalDamage: Int =
-    roundDown((statistics.intelligence * classMultipliers.intelligenceMod) / 10 + 150) + getModifierValues(
+    roundDown((statistics.intelligence * classMultipliers.intelligence) / 10 + 150) + getModifierValues(
       MagicalCriticalDamage)
 
   /**
@@ -85,7 +85,7 @@ trait Character {
     * @return
     */
   def physicalDefence: Int =
-    roundDown(statistics.resistance * classMultipliers.resistanceMod) + getModifierValues(PhysicalDefence)
+    roundDown(statistics.resistance * classMultipliers.resistance) + getModifierValues(PhysicalDefence)
 
   /**
     * Cycles all the character's modifiers for a given sub-statistic and calculates the bonus/malus value
@@ -107,32 +107,32 @@ trait Character {
 
 private case class Warrior(characterName: String,
                            statistics: Statistics,
-                           classMultipliers: ClassStat = ClassStat(2, 1, 1, 0.5, 1.5, 2))
+                           classMultipliers: ClassMultipliers = ClassMultipliers(2, 1, 1, 0.5, 1.5, 2))
     extends Character {}
 
 private case class Thief(characterName: String,
                          statistics: Statistics,
-                         classMultipliers: ClassStat = ClassStat(1.5, 2, 1, 0.5, 1, 1.5))
+                         classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 2, 1, 0.5, 1, 1.5))
     extends Character {}
 
 private case class Wizard(characterName: String,
                           statistics: Statistics,
-                          classMultipliers: ClassStat = ClassStat(1, 1, 1.5, 2, 0.5, 1.5))
+                          classMultipliers: ClassMultipliers = ClassMultipliers(1, 1, 1.5, 2, 0.5, 1.5))
     extends Character {}
 
 private case class Healer(characterName: String,
                           statistics: Statistics,
-                          classMultipliers: ClassStat = ClassStat(1.5, 0.5, 1, 2, 1, 1.5))
+                          classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 0.5, 1, 2, 1, 1.5))
     extends Character {}
 
 object Character {
 
-  def apply(role: String, charName: String, stats: Statistics): Character =
+  def apply(role: String, characterName: String, statistics: Statistics): Character =
     role match {
-      case "Warrior" => Warrior(charName, stats)
-      case "Thief"   => Thief(charName, stats)
-      case "Wizard"  => Wizard(charName, stats)
-      case "Healer"  => Healer(charName, stats)
+      case "Warrior" => Warrior(characterName, statistics)
+      case "Thief"   => Thief(characterName, statistics)
+      case "Wizard"  => Wizard(characterName, statistics)
+      case "Healer"  => Healer(characterName, statistics)
     }
 
 }
