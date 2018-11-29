@@ -112,6 +112,8 @@ trait Character {
 
 }
 
+
+
 /**
   * Default implementation of a game Character
   *
