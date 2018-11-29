@@ -1,5 +1,10 @@
 package view
 
+/**
+  * Contains the configuration used for the views.
+  *
+  * @author Daniele Schiavi
+  */
 object ViewConfiguration {
   val LoginTitle: String = "Fantasy Brawl - Login"
   val LoginForm: String = "LoginForm.fxml"

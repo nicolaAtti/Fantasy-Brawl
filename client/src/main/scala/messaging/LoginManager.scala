@@ -5,23 +5,33 @@ import com.spingo.op_rabbit._
 import play.api.libs.json.{Json, OFormat}
 import PlayJsonSupport._
 import view._
-import messages._
+import communication._
 import ApplicationView.viewSelector._
 import com.spingo.op_rabbit.properties.ReplyTo
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
+/**
+  * Manages login as a guest request and response messages.
+  *
+  * @author Daniele Schiavi
+  */
 object LoginManager {
   private val rabbitControl: ActorRef = ActorSystem().actorOf(Props[RabbitControl])
   implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(false)
 
-  private val loginGuestRequestQueue = Queue(Queues.LoginGuestRequestQueue, durable = false, autoDelete = true)
-  private val loginGuestResponseQueue = Queue(Queues.LoginGuestResponseQueue, durable = false, autoDelete = true)
+  import Queues._
+  private val loginGuestRequestQueue = Queue(LoginGuestRequestQueue, durable = false, autoDelete = true)
+  private val loginGuestResponseQueue = Queue(LoginGuestResponseQueue, durable = false, autoDelete = true)
 
   implicit private val RequestFormat: OFormat[LoginGuestRequest] = Json.format[LoginGuestRequest]
   implicit private val ResponseFormat: OFormat[LoginGuestResponse] = Json.format[LoginGuestResponse]
 
   private val publisher: Publisher = Publisher.queue(loginGuestRequestQueue)
 
+  /**
+    * Manages login as a guest response messages.
+    */
   Subscription.run(rabbitControl) {
     import Directives._
     channel(qos = 3) {
@@ -48,6 +58,9 @@ object LoginManager {
     }
   }
 
+  /**
+    * Send a login as a guest request message.
+    */
   def loginAsGuestRequest(): Unit = {
     import PlayJsonSupport._
     rabbitControl ! Message(LoginGuestRequest(None), publisher, Seq(ReplyTo(loginGuestResponseQueue.queueName)))
