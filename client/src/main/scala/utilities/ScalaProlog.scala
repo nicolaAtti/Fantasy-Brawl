@@ -44,6 +44,6 @@ object ScalaProlog {
 
   def getMove(moveName: String): SolveInfo = {
     setNewTheory(moveContents)
-    engine.solve("spec_move('"+moveName+"',OffStat,DefStat,Type,BaseValue,MPCost,Mods,Affls,NTargets).")
+    engine.solve("spec_move('"+moveName+"',Type,BaseValue,MPCost,Mods,Affls,NTargets).")
   }
 }
