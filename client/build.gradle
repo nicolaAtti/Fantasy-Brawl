@@ -14,8 +14,9 @@ plugins{
 mainClassName = 'MainApplication'
 
 shadowJar {
-	baseName = "client"
-	version = 0.2
-	classifier = null
+	baseName = rootProject.name
+	//version = 0.2
+	classifier = project.name
+    
 	mergeServiceFiles('reference.conf')
 }

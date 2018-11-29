@@ -3,13 +3,13 @@ package model
 import utilities.Utility._
 import scala.collection.mutable._
 
-case class Status(var currHP: Int,
-                  var currMP: Int,
+case class Status(var currentHP: Int,
+                  var currentMP: Int,
                   var modifiers: MutableList[Modifier],
                   var afflictions: MutableList[Affliction]) {
 
-  val maxHP = currHP
-  val maxMP = currMP
+  val maxHP = currentHP
+  val maxMP = currentMP
 
   /**
     * Adds a new modifier to the character, if the same modifier is already present refresh it's duration to the new one
@@ -17,11 +17,11 @@ case class Status(var currHP: Int,
     * @author Nicola Atti
     */
   def addModifier(newMod: Modifier): Unit = {
-    if (!modifiers.exists(mod => mod.modId equals newMod.modId)) {
+    if (!modifiers.exists(mod => mod.modifierId equals newMod.modifierId)) {
       modifiers += newMod
     } else {
       modifiers
-        .filter(_.modId equals newMod.modId)
+        .filter(_.modifierId equals newMod.modifierId)
         .foreach(matchingMod => matchingMod.resetDuration(newMod.turnDuration))
     }
   }
@@ -47,7 +47,7 @@ case class Status(var currHP: Int,
     modifiers = modifiers.filterNot(mod => mod.turnDuration == 0)
 
     if (afflictions.exists(affl => affl.afflictionType equals "Poisoned")) {
-      changeCurrHPMP("HP", sub, currHP / 4)
+      changeCurrHPMP("HP", sub, currentHP / 4)
     }
     afflictions foreach (affliction => affliction.decreaseDuration())
     afflictions = afflictions.filterNot(affl => affl.turnDuration == 0)
@@ -62,20 +62,20 @@ case class Status(var currHP: Int,
     */
   def changeCurrHPMP(stat: String, function: (Int, Int) => Int, value: Int): Unit = stat.toUpperCase match {
     case "HP" =>
-      if (function(currHP, value) > maxHP) {
-        currHP = maxHP
-      } else if (function(currHP, value) < 0) {
-        currHP = 0
+      if (function(currentHP, value) > maxHP) {
+        currentHP = maxHP
+      } else if (function(currentHP, value) < 0) {
+        currentHP = 0
       } else {
-        currHP = function(currHP, value)
+        currentHP = function(currentHP, value)
       }
     case "MP" =>
-      if (function(currMP, value) > maxMP) {
-        currMP = maxMP
-      } else if (function(currMP, value) < 0) {
-        currMP = 0
+      if (function(currentMP, value) > maxMP) {
+        currentMP = maxMP
+      } else if (function(currentMP, value) < 0) {
+        currentMP = 0
       } else {
-        currMP = function(currMP, value)
+        currentMP = function(currentMP, value)
       }
   }
 }
