@@ -36,11 +36,11 @@ case class Affliction(var afflictionType: String, override var turnDuration: Int
 
 /**
   * Class implementing modifiers
-  * @param modId  modifier unique name to prevent stacking
-  * @param affectedStat
+  * @param modifierId  modifier unique name to prevent stacking
+  * @param affectedStatistic
   * @param turnDuration
-  * @param modValue
+  * @param modifierValue
   * @author Nicola Atti
   */
-case class Modifier(var modId: String, var affectedStat: String, override var turnDuration: Int, var modValue: Int)
+case class Modifier(var modifierId: String, var affectedStatistic: String, override var turnDuration: Int, var modifierValue: Int)
     extends Timed
