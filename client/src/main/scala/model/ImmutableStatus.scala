@@ -4,17 +4,21 @@ case class ImmutableStatus(healthPoints: Int,
                            manaPoints: Int,
                            maxHealthPoints: Int,
                            maxManaPoints: Int,
-                           modifiers: List[ImmutableModifier],
-                           afflictions: List[ImmutableAffliction])
+                           modifiers: Map[String, ImmutableModifier],
+                           afflictions: Map[ImmutableAffliction, Int])
 
 object ImmutableStatus {
 
-  def afterRound(status: ImmutableStatus): ImmutableStatus =
-    status.copy(modifiers = ImmutableModifier.ticked(status.modifiers),
-                afflictions = ImmutableAffliction.ticked(status.afflictions))
+  def nextRound(s: ImmutableStatus): ImmutableStatus =
+    s.copy(
+      modifiers = s.modifiers
+        .mapValues(v => v.copy(roundsDuration = v.roundsDuration - 1))
+        .filter(kv => kv._2.roundsDuration > 0),
+      afflictions = s.afflictions.mapValues(v => v - 1).filter(kv => kv._2 > 0)
+    )
 
-  def consumingMana(status: ImmutableStatus, mp: Int): ImmutableStatus =
-    status.copy(manaPoints = status.manaPoints - mp)
+  def consumingMana(s: ImmutableStatus, mp: Int): ImmutableStatus =
+    s.copy(manaPoints = s.manaPoints - mp)
 
   def +++(status: Status, moveEffect: MoveEffect): Status = ???
 

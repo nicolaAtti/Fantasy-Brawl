@@ -1,11 +1,12 @@
 package model
 
-case class ImmutableAffliction(afflictionType: String, turnDuration: Int)
-
+sealed trait ImmutableAffliction
 object ImmutableAffliction {
-
-  def ticked(a: ImmutableAffliction): ImmutableAffliction = a.copy(turnDuration = a.turnDuration - 1)
-
-  def ticked(al: List[ImmutableAffliction]): List[ImmutableAffliction] = al.map(ticked).filter(_.turnDuration > 0)
-
+  case object Stunned extends ImmutableAffliction
+  case object Poisoned extends ImmutableAffliction
+  case object Berserk extends ImmutableAffliction
+  case object Silenced extends ImmutableAffliction
+  case object Frozen extends ImmutableAffliction
+  case object Asleep extends ImmutableAffliction
+  case object Blinded extends ImmutableAffliction
 }

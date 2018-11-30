@@ -1,6 +1,6 @@
 package model
 
-import alice.tuprolog.{NoMoreSolutionException}
+import alice.tuprolog.NoMoreSolutionException
 import org.scalatest.FunSuite
 import utilities.ScalaProlog._
 
@@ -20,6 +20,7 @@ class ScalaPrologTest extends FunSuite {
   test("Extract an Int from a prolog fact"){
     try {
       assert(extractInt(getMove("Skullcrack"),"BaseValue") == 30)
+      assert(extractInt(getCharacter("Jacob"),"Strength") == 51)
     } catch {
       case ex: NoMoreSolutionException =>
     }

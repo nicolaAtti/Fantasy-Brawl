@@ -1,145 +1,128 @@
 package model
 
+import utilities.Utility._
+
 trait Character {
-
-  /**
-    * The character's name
-    */
   val characterName: String
-
-  /**
-    * The character's base statistics
-    */
   val statistics: Statistics
-
-  /**
-    * The character's class multipliers
-    */
-  val classMultipliers: ClassStat
-
-  import utilities.Utility._
-
-  /**
-    * The character's maximum HP
-    */
-  val maxHP: Int = roundDown((statistics.resistance * classMultipliers.hpMod) * 10)
-
-  /**
-    * The character's maximum MP
-    */
-  val maxMP: Int = roundDown((statistics.spirit * classMultipliers.spiritMod) * 5)
-
-  import scala.collection.mutable._
+  val classMultipliers: ClassMultipliers
 
   /**
     * Contains the character's status, depending on current HP and MP values and existing modifiers and afflictions
     */
-  var status: Status = Status(maxHP, maxMP, MutableList(), MutableList())
+  var status: ImmutableStatus = ImmutableStatus(
+    healthPoints = calculateMaxHealthPoints(),
+    manaPoints = calculateMaxManaPoints(),
+    maxHealthPoints = calculateMaxHealthPoints(),
+    maxManaPoints = calculateMaxManaPoints(),
+    Map(),
+    Map()
+  )
+
+  private def calculateMaxHealthPoints(): Int = {
+    roundDown((this.statistics.resistance * this.classMultipliers.healthPoints) * 10)
+  }
+
+  private def calculateMaxManaPoints(): Int = {
+    roundDown((this.statistics.spirit * this.classMultipliers.spirit) * 5)
+  }
+
+  import SubStatistic._
 
   /**
     * Calculates the character's physical damage
     * @return
     */
-  def calculatePhysicalDamage: Int = roundDown(statistics.strength * classMultipliers.strengthMod) + getModifierValues("PHYS_DAMAGE")
+  def physicalDamage: Int =
+    roundDown(statistics.strength * classMultipliers.strength) + getModifierValues(PhysicalDamage)
 
   /**
     * Calculates the character's bonus physical critical strike damage
     * @return
     */
-  def calculatePysicalCriticalDamage: Int =
-    roundDown((statistics.strength * classMultipliers.strengthMod) / 5 + 150) + getModifierValues("PHYS_DAMAGE")
+  def pysicalCriticalDamage: Int =
+    roundDown((statistics.strength * classMultipliers.strength) / 5 + 150) + getModifierValues(
+      PhysicalCriticalDamage)
 
   /**
     * Calculates the character's speed
     * @return
     */
-  def calculateSpeed: Int = roundDown((statistics.agility * classMultipliers.agilityMod) / 10) + getModifierValues("PHYS_DAMAGE")
+  def speed: Int =
+    roundDown((statistics.agility * classMultipliers.agility) / 10) + getModifierValues(Speed)
 
   /**
     * Calculates the character's critical strike chance
     * @return
     */
-  def calculateCriticalChance: Int = roundDown((statistics.agility * classMultipliers.agilityMod) / 2) + getModifierValues("PHYS_DAMAGE")
+  def criticalChance: Int =
+    roundDown((statistics.agility * classMultipliers.agility) / 2) + getModifierValues(CriticalChance)
 
   /**
     * Calculates the character's magical defence
     * @return
     */
-  def calculateMagicalDefence: Int = roundDown(statistics.spirit * classMultipliers.spiritMod) + getModifierValues("PHYS_DAMAGE")
+  def magicalDefence: Int =
+    roundDown(statistics.spirit * classMultipliers.spirit) + getModifierValues(MagicalDefence)
 
   /**
     * Calculates the character's magical damage
     * @return
     */
-  def calculateMagicalDamage: Int = roundDown(statistics.intelligence * classMultipliers.intelligenceMod) + getModifierValues("PHYS_DAMAGE")
+  def magicalDamage: Int =
+    roundDown(statistics.intelligence * classMultipliers.intelligence) + getModifierValues(MagicalDamage)
 
   /**
     * Calculates the character's bonus magical critical strike damage
     * @return
     */
-  def calculateMagicalCriticalDamage: Int =
-    roundDown((statistics.intelligence * classMultipliers.intelligenceMod) / 10 + 150) + getModifierValues("PHYS_DAMAGE")
+  def magicalCriticalDamage: Int =
+    roundDown((statistics.intelligence * classMultipliers.intelligence) / 10 + 150) + getModifierValues(
+      MagicalCriticalDamage)
 
   /**
     * Calculates the character's physical defence
     * @return
     */
-  def calculatePhysicalDefence: Int = roundDown(statistics.resistance * classMultipliers.resistanceMod) + getModifierValues("PHYS_DAMAGE")
-
-  //Passagli la funzione della mossa, sia essa speciale, attacco base o passare il turno   STRATEGY
-  //Forse conviene mettere qui il controllo per le afflizzioni che limitano le mosse tipo: if stunnato passa solo, if ghiacciato no mosse meelee etc
-  /// TODO:
-  def doMove = ???
-
-  /**
-    * Resets the status of the character to the original values
-    */
-  def setStatus(newStatus: Status): Unit = {
-    status = newStatus
-  }
+  def physicalDefence: Int =
+    roundDown(statistics.resistance * classMultipliers.resistance) + getModifierValues(PhysicalDefence)
 
   /**
     * Cycles all the character's modifiers for a given sub-statistic and calculates the bonus/malus value
-    * @param affectedStat the sub-statistic to search for
+    * @param subStatistic the sub-statistic to search for
     * @return the total bonus/malus to the sub-statistic
     * @author Nicola Atti
     */
-  def getModifierValues(affectedStat: String): Int = {
-    var allModsValue = 0
-    status.modifiers foreach (modifier => allModsValue = add(allModsValue, modifier.modifierValue))
-    allModsValue
+  private def getModifierValues(subStatistic: SubStatistic): Int = {
+//    var allModsValue = 0
+//    status.modifiers foreach (modifier => allModsValue = add(allModsValue, modifier._2.value))
+//    allModsValue
+    status.modifiers
+      .filter(kv => kv._2.affectsSubStatistic == subStatistic)
+      .map(kv => kv._2.delta)
+      .sum
   }
 
 }
 
-
-
-/**
-  * Default implementation of a game Character
-  *
-  * @param characterName  the name of the Character
-  * @param statistics     the statistics of the Character
-  * @param classMultipliers the class statistic modifier, this will vary from Character implementation
-  * @author Nicola Atti
-  */
-private case class Warrior(override val characterName: String,
-                           override val statistics: Statistics,
-                           override val classMultipliers: ClassStat = ClassStat(2, 1, 1, 0.5, 1.5, 2))
+private case class Warrior(characterName: String,
+                           statistics: Statistics,
+                           classMultipliers: ClassMultipliers = ClassMultipliers(2, 1, 1, 0.5, 1.5, 2))
     extends Character {}
 
-private case class Thief(override val characterName: String,
-                         override val statistics: Statistics,
-                         override val classMultipliers: ClassStat = ClassStat(1.5, 2, 1, 0.5, 1, 1.5))
+private case class Thief(characterName: String,
+                         statistics: Statistics,
+                         classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 2, 1, 0.5, 1, 1.5))
     extends Character {}
 
-private case class Wizard(override val characterName: String,
-                          override val statistics: Statistics,
-                          override val classMultipliers: ClassStat = ClassStat(1, 1, 1.5, 2, 0.5, 1.5))
+private case class Wizard(characterName: String,
+                          statistics: Statistics,
+                          classMultipliers: ClassMultipliers = ClassMultipliers(1, 1, 1.5, 2, 0.5, 1.5))
     extends Character {}
 
-private case class Healer(override val characterName: String,
-                          override val statistics: Statistics,
-                          override val classMultipliers: ClassStat = ClassStat(1.5, 0.5, 1, 2, 1, 1.5))
+private case class Healer(characterName: String,
+                          statistics: Statistics,
+                          classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 0.5, 1, 2, 1, 1.5))
     extends Character {}
 
 object Character {

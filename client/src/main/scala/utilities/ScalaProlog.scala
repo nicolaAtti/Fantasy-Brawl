@@ -1,7 +1,7 @@
 package utilities
 
-import alice.tuprolog._
 import scala.io.Source
+import alice.tuprolog._
 
 
 object ScalaProlog {
