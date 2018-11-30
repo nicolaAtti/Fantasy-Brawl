@@ -1,4 +1,4 @@
-rootProject.name = 'pp-17-fb'
+rootProject.name = 'pps-17-fb'
 
 include 'client',
         'services:login-guest',

@@ -7,17 +7,22 @@ allprojects {
         jcenter()
         mavenCentral()
     }
+}
+
+subprojects {
+    version = '0.3'
 
     dependencies {
         implementation 'org.scala-lang:scala-library:2.12.7'
-        compile group: 'it.unibo.alice.tuprolog', name: 'tuprolog', version: '2.1.1'
         testImplementation 'junit:junit:4.12'
         testImplementation 'org.scalatest:scalatest_2.12:3.0.5'
         
         testRuntime 'org.scala-lang.modules:scala-xml_2.11:1.0.6'
 
-        // tuProlog
-        compile 'it.unibo.alice.tuprolog:tuprolog:3.3.0'
+        if (project.name != 'shared') {
+            // tuProlog
+            implementation 'it.unibo.alice.tuprolog:tuprolog:3.3.0'
+        }
         
         // op-rabbit
         implementation 'com.spingo:op-rabbit-core_2.12:2.1.0'
@@ -33,4 +38,3 @@ allprojects {
 
     }
 }
-
