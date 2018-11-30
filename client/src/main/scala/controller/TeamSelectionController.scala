@@ -15,6 +15,8 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout._
 import javafx.scene.paint.Paint
 
+import scala.collection.immutable.HashMap
+
 /**
   * Controller of the team selection view.
   *
@@ -33,6 +35,7 @@ object TeamSelectionController extends Initializable with ViewController {
 
   private var selectedCharacter: StackPane = new StackPane()
   private var chosenCharacter: StackPane = new StackPane()
+  private var team: Map[String, String] = Map()
 
   /**
     * Pressure handler of the "Logout" button.
@@ -90,27 +93,32 @@ object TeamSelectionController extends Initializable with ViewController {
   }
 
   private def deselectAllCharacters(gridPanes: GridPane*): Unit = {
-    gridPanes.foreach(gridPane => gridPane.getChildren.forEach(pane => {
-      deselectCharacter(pane.asInstanceOf[StackPane])
-    }))
+    gridPanes.foreach(gridPane =>
+      gridPane.getChildren.forEach(pane => {
+        deselectCharacter(pane.asInstanceOf[StackPane])
+      }))
   }
 
   private def changeCharacterToChoose(previous: StackPane, next: StackPane): Unit = {
-    changeCharacter(previous, next)
+    val characterName: String = next.getId
+    changeSelectedCharacter(previous, next)
     selectedCharacter = next
-    chosenCharacter.getChildren
-      .get(0)
-      .asInstanceOf[ImageView]
-      .setImage(selectedCharacter.getChildren.get(0).asInstanceOf[ImageView].getImage)
-    setDescription(selectedCharacter.getId)
+    setDescription(characterName)
+    if (!team.exists(_._2 equals characterName)) {
+      chosenCharacter.getChildren
+        .get(0)
+        .asInstanceOf[ImageView]
+        .setImage(selectedCharacter.getChildren.get(0).asInstanceOf[ImageView].getImage)
+      team += (chosenCharacter.getId -> characterName)
+    }
   }
 
   private def changeCharacterChosen(previous: StackPane, next: StackPane): Unit = {
-    changeCharacter(previous, next)
+    changeSelectedCharacter(previous, next)
     chosenCharacter = next
   }
 
-  private def changeCharacter(previous: StackPane, next: StackPane): Unit = {
+  private def changeSelectedCharacter(previous: StackPane, next: StackPane): Unit = {
     deselectCharacter(previous)
     selectCharacter(next)
   }

@@ -19,7 +19,7 @@
       <Label layoutX="352.0" layoutY="27.0" prefHeight="17.0" prefWidth="71.0" text="Your Team:" />
       <Button layoutX="578.0" layoutY="55.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" text="Join casual match" />
       <Button layoutX="578.0" layoutY="89.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" text="Join ranked match" />
-      <TextArea fx:id="characterDescription" layoutX="391.0" layoutY="140.0" prefHeight="360.0" prefWidth="555.0" text="DESCRIPTION">
+      <TextArea fx:id="characterDescription" editable="false" focusTraversable="false" layoutX="391.0" layoutY="140.0" prefHeight="360.0" prefWidth="555.0" text="DESCRIPTION">
          <font>
             <Font name="Yu Gothic UI Semibold" size="16.0" />
          </font></TextArea>
@@ -95,8 +95,7 @@
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="Annabelle" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0"
-                       prefWidth="85.0" GridPane.columnIndex="1">
+            <StackPane fx:id="Annabelle" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="1">
                <children>
                   <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -105,8 +104,7 @@
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="Albert" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0"
-                       prefWidth="85.0" GridPane.columnIndex="2">
+            <StackPane fx:id="Albert" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="2">
                <children>
                   <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -115,8 +113,7 @@
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="Lidya" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0"
-                       prefWidth="85.0" GridPane.columnIndex="3">
+            <StackPane fx:id="Lidya" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="3">
                <children>
                   <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
