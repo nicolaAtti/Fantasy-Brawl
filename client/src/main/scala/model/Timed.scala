@@ -42,5 +42,8 @@ case class Affliction(var afflictionType: String, override var turnDuration: Int
   * @param modifierValue
   * @author Nicola Atti
   */
-case class Modifier(var modifierId: String, var affectedStatistic: String, override var turnDuration: Int, var modifierValue: Int)
+case class Modifier(var modifierId: String,
+                    var affectedStatistic: String,
+                    override var turnDuration: Int,
+                    var modifierValue: Int)
     extends Timed

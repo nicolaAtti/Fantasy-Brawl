@@ -15,8 +15,6 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout._
 import javafx.scene.paint.Paint
 
-import scala.collection.immutable.HashMap
-
 /**
   * Controller of the team selection view.
   *

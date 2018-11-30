@@ -4,10 +4,15 @@ allprojects {
     apply plugin: 'idea'
     apply plugin: 'scala'
     apply plugin: 'java'
+    apply plugin: 'scalafmt'
 
     repositories {
         jcenter()
         mavenCentral()
+    }
+
+    scalafmt {
+        configFilePath = ".scalafmt.conf"
     }
 }
 
@@ -58,5 +63,8 @@ buildscript {
     dependencies {
         // shadow jar
         classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.3'
+
+        // scalafmt
+        classpath 'cz.alenkacz:gradle-scalafmt:1.7.0'
     }
 }
