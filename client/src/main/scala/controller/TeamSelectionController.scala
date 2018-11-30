@@ -93,9 +93,6 @@ object TeamSelectionController extends Initializable with ViewController {
     gridPanes.foreach(gridPane => gridPane.getChildren.forEach(pane => {
       deselectCharacter(pane.asInstanceOf[StackPane])
     }))
-    /*gridPane.getChildren.forEach(pane => {
-      deselectCharacter(pane.asInstanceOf[StackPane])
-    })*/
   }
 
   private def changeCharacterToChoose(previous: StackPane, next: StackPane): Unit = {
