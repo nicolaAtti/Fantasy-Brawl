@@ -1,6 +1,7 @@
 package model
 
 sealed trait ImmutableAffliction
+
 object ImmutableAffliction {
   case object Stunned extends ImmutableAffliction
   case object Poisoned extends ImmutableAffliction

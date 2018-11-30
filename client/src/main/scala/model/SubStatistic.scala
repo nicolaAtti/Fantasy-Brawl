@@ -12,4 +12,3 @@ object SubStatistic {
   case object CriticalChance extends SubStatistic
   case object Speed extends SubStatistic
 }
-
