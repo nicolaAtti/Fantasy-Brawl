@@ -1,10 +1,12 @@
-def productionPath = rootDir.path+"/production"
+def productionPath = rootDir.path + jarsFolder
 
 allprojects {
     apply plugin: 'idea'
     apply plugin: 'scala'
     apply plugin: 'java'
     apply plugin: 'scalafmt'
+
+    sourceCompatibility = jdkVersion
 
     repositories {
         jcenter()
@@ -17,6 +19,7 @@ allprojects {
 }
 
 subprojects {
+    scaladoc.destinationDir = file(scaladocFolder)
 
     dependencies {
         implementation 'org.scala-lang:scala-library:2.12.7'
@@ -47,12 +50,16 @@ subprojects {
         apply plugin: 'com.github.johnrengelman.shadow'
         shadowJar {
             baseName = rootProject.name
-            version = 0.3
+            version = projectVersion
             classifier = project.name
 
             destinationDir = file(productionPath)
             mergeServiceFiles('reference.conf')
         }
+    }
+
+    clean {
+        delete(file(productionPath))
     }
 }
 
@@ -68,3 +75,5 @@ buildscript {
         classpath 'cz.alenkacz:gradle-scalafmt:1.7.0'
     }
 }
+
+defaultTasks 'clean', 'build', 'checkScalafmt', 'scaladoc'
