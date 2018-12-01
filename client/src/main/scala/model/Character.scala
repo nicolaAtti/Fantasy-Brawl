@@ -41,8 +41,7 @@ trait Character {
     * @return
     */
   def pysicalCriticalDamage: Int =
-    roundDown((statistics.strength * classMultipliers.strength) / 5 + 150) + getModifierValues(
-      PhysicalCriticalDamage)
+    roundDown((statistics.strength * classMultipliers.strength) / 5 + 150) + getModifierValues(PhysicalCriticalDamage)
 
   /**
     * Calculates the character's speed

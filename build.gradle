@@ -1,23 +1,40 @@
+def productionPath = rootDir.path + jarsFolder
+
 allprojects {
     apply plugin: 'idea'
     apply plugin: 'scala'
     apply plugin: 'java'
+    apply plugin: 'scalafmt'
+
+    sourceCompatibility = jdkVersion
 
     repositories {
         jcenter()
         mavenCentral()
     }
 
+    scalafmt {
+        configFilePath = ".scalafmt.conf"
+    }
+
     dependencies {
         implementation 'org.scala-lang:scala-library:2.12.7'
-        compile group: 'it.unibo.alice.tuprolog', name: 'tuprolog', version: '2.1.1'
+    }
+}
+
+subprojects {
+    scaladoc.destinationDir = file(scaladocFolder)
+
+    dependencies {
         testImplementation 'junit:junit:4.12'
         testImplementation 'org.scalatest:scalatest_2.12:3.0.5'
         
         testRuntime 'org.scala-lang.modules:scala-xml_2.11:1.0.6'
 
-        // tuProlog
-        compile 'it.unibo.alice.tuprolog:tuprolog:3.3.0'
+        if (project.name == 'shared' || project.name == 'client') {
+            // tuProlog
+            implementation 'it.unibo.alice.tuprolog:tuprolog:3.3.0'
+        }
         
         // op-rabbit
         implementation 'com.spingo:op-rabbit-core_2.12:2.1.0'
@@ -30,7 +47,36 @@ allprojects {
 
         if (project.name != 'shared')
             implementation project(':shared')
+    }
 
+    if (project.name == 'client' || project.name == 'login-guest') {
+        apply plugin: 'com.github.johnrengelman.shadow'
+        shadowJar {
+            baseName = rootProject.name
+            version = projectVersion
+            classifier = project.name
+
+            destinationDir = file(productionPath)
+            mergeServiceFiles('reference.conf')
+        }
+    }
+
+    clean {
+        delete(file(productionPath))
     }
 }
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        // shadow jar
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.3'
+
+        // scalafmt
+        classpath 'cz.alenkacz:gradle-scalafmt:1.7.0'
+    }
+}
+
+defaultTasks 'clean', 'build', 'checkScalafmt', 'scaladoc'
