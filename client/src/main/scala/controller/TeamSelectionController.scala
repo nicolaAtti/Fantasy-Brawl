@@ -122,7 +122,7 @@ object TeamSelectionController extends Initializable with ViewController {
       if (character._1 equals chosenCharacter.getId) {
         character._2 setOpacity 1
       } else {
-        character._2 setOpacity 0.4
+        character._2 setOpacity 0.2
       }
     })
   }
