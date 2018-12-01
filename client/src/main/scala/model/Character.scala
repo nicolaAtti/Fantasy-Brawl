@@ -10,7 +10,7 @@ trait Character {
   /**
     * Contains the character's status, depending on current HP and MP values and existing modifiers and afflictions
     */
-  var status: ImmutableStatus = ImmutableStatus(
+  var status: Status = Status(
     healthPoints = calculateMaxHealthPoints(),
     manaPoints = calculateMaxManaPoints(),
     maxHealthPoints = calculateMaxHealthPoints(),
