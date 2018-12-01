@@ -9,7 +9,7 @@ import view.ApplicationView
 import ApplicationView.viewSelector._
 import alice.tuprolog.SolveInfo
 import javafx.geometry.Insets
-import javafx.scene.control.{Label, TextArea}
+import javafx.scene.control.{Button, Label, TextArea}
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout._
@@ -30,6 +30,7 @@ object TeamSelectionController extends Initializable with ViewController {
   @FXML var chosenCharacter0: StackPane = _
   @FXML var gridChosen: GridPane = _
   @FXML var gridToChoose: GridPane = _
+  @FXML var joinCasualMatch: Button = _
 
   private var selectedCharacter: StackPane = new StackPane()
   private var chosenCharacter: StackPane = new StackPane()
@@ -108,6 +109,8 @@ object TeamSelectionController extends Initializable with ViewController {
         .asInstanceOf[ImageView]
         .setImage(selectedCharacter.getChildren.get(0).asInstanceOf[ImageView].getImage)
       team += (chosenCharacter.getId -> characterName)
+      if(team.size == 4)
+        joinCasualMatch.setDisable(false)
     }
   }
 

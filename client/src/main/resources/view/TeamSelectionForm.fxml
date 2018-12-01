@@ -17,8 +17,8 @@
       <Button layoutX="578.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="25.0" prefWidth="170.0" text="Logout" />
       <Label fx:id="idLabel" layoutX="352.0" layoutY="7.0" prefHeight="17.0" prefWidth="199.0" text="Guest" />
       <Label layoutX="352.0" layoutY="27.0" prefHeight="17.0" prefWidth="71.0" text="Your Team:" />
-      <Button layoutX="578.0" layoutY="55.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" text="Join casual match" />
-      <Button layoutX="578.0" layoutY="89.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" text="Join ranked match" />
+      <Button fx:id="joinCasualMatch" disable="true" layoutX="578.0" layoutY="55.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" text="Join casual match" />
+      <Button disable="true" layoutX="578.0" layoutY="89.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" text="Join ranked match" />
       <TextArea fx:id="characterDescription" editable="false" focusTraversable="false" layoutX="294.0" layoutY="140.0" prefHeight="360.0" prefWidth="652.0" text="DESCRIPTION">
          <font>
             <Font name="Yu Gothic UI Semibold" size="16.0" />
