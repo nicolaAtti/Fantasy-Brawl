@@ -99,11 +99,10 @@ object TeamSelectionController extends Initializable with ViewController {
   }
 
   private def changeCharacterToChoose(previous: StackPane, next: StackPane): Unit = {
-    val characterName: String = next.getId
     changeSelectedCharacter(previous, next)
     selectedCharacter = next
-    setDescription(characterName)
-    if (!team.exists(_._2.getId equals characterName)) {
+    setDescription(next.getId)
+    if (!team.exists(_._2 equals next)) {
       chosenCharacter.getChildren
         .get(0)
         .asInstanceOf[ImageView]
