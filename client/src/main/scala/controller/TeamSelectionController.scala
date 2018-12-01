@@ -34,7 +34,7 @@ object TeamSelectionController extends Initializable with ViewController {
 
   private var selectedCharacter: StackPane = new StackPane()
   private var chosenCharacter: StackPane = new StackPane()
-  private var team: Map[String, String] = Map()
+  private var team: Map[String, StackPane] = Map()
 
   /**
     * Pressure handler of the "Logout" button.
@@ -103,13 +103,13 @@ object TeamSelectionController extends Initializable with ViewController {
     changeSelectedCharacter(previous, next)
     selectedCharacter = next
     setDescription(characterName)
-    if (!team.exists(_._2 equals characterName)) {
+    if (!team.exists(_._2.getId equals characterName)) {
       chosenCharacter.getChildren
         .get(0)
         .asInstanceOf[ImageView]
         .setImage(selectedCharacter.getChildren.get(0).asInstanceOf[ImageView].getImage)
-      team += (chosenCharacter.getId -> characterName)
-      if(team.size == 4)
+      team += (chosenCharacter.getId -> next)
+      if (team.size == 4)
         joinCasualMatch.setDisable(false)
     }
   }
@@ -117,6 +117,14 @@ object TeamSelectionController extends Initializable with ViewController {
   private def changeCharacterChosen(previous: StackPane, next: StackPane): Unit = {
     changeSelectedCharacter(previous, next)
     chosenCharacter = next
+
+    team.foreach(character => {
+      if (character._1 equals chosenCharacter.getId) {
+        character._2 setOpacity 1
+      } else {
+        character._2 setOpacity 0.4
+      }
+    })
   }
 
   private def changeSelectedCharacter(previous: StackPane, next: StackPane): Unit = {
