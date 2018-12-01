@@ -73,14 +73,14 @@ object TeamSelectionController extends Initializable with ViewController {
   private def setDescription(characterName: String): Unit = {
     import utilities.ScalaProlog._
     val solveInfo: SolveInfo = getCharacter(characterName)
-    var description: String = "Character name: " + characterName + "\n" +
-      "Character class: " + extractString(solveInfo, "Class") + "\n" +
+    var description: String = "Character name: " + characterName + "\n\n" +
+      "Character class: " + extractString(solveInfo, "Class") + "\n\n" +
       "  Strength: " + extractInt(solveInfo, "Strength") + "\n" +
       "  Agility: " + extractInt(solveInfo, "Agility") + "\n" +
       "  Spirit: " + extractInt(solveInfo, "Spirit") + "\n" +
       "  Intelligence: " + extractInt(solveInfo, "Intelligence") + "\n" +
-      "  Resistence: " + extractInt(solveInfo, "Resistence") + "\n" +
-      "  MoveList: \n"
+      "  Resistance: " + extractInt(solveInfo, "Resistence") + "\n\n" +
+      "  MoveList: \n\n"
     extractList(solveInfo, "MoveList").foreach(move => {
       description += "    " + move +
         " -> Type: " + extractString(getMove(move), "Type") +
