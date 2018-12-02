@@ -3,46 +3,46 @@ package model
 import MoveType._
 
 sealed trait Move {
-  def baseDamage: Int
   def moveType: MoveType
+  def statusAlteration: StatusAlteration
 }
 
-case class PhysicalAttack(baseDamage: Int) extends Move {
-  override val moveType = Melee
+case class PhysicalAttack(moveType: MoveType, statusAlteration: StatusAlteration) extends Move
+
+object PhysicalAttack {
+
+  def apply(baseDamage: Int): PhysicalAttack =
+    new PhysicalAttack(
+      moveType = Melee,
+      statusAlteration = StatusAlteration(healthPoints = (hp: Int) => hp - baseDamage,
+                                          manaPoints = (mp: Int) => mp,
+                                          newModifiers = Map(),
+                                          newAfflictions = Map())
+    )
 }
 
 case class SpecialMove(name: String,
-                       manaCost: Int,
-                       baseDamage: Int,
                        moveType: MoveType,
-                       causesAfflictions: Set[Affliction],
-                       causesModifiers: Set[Modifier],
+                       manaCost: Int,
+                       statusAlteration: StatusAlteration,
                        nTargets: Int)
     extends Move
 
 object Move {
 
-//  def canMakeMove(whoWantsToMakeIt: Character, move: Move): Boolean = whoWantsToMakeIt hasEnoughManaPoints move
+  def canMakeMove(c: Character, m: Move): Boolean = hasEnoughMana(c, m) && !isIncapacitated(c, m)
 
-  def makeMove(move: Move, whoMakesIt: Character, Targets: List[Character]): MoveEffect = ???
-
-  private def hasEnoughManaPoints(character: Character, move: Move): Boolean = move match {
-    case PhysicalAttack(_)                       => true
-    case SpecialMove(_, manaCost, _, _, _, _, _) => manaCost <= character.status.manaPoints
-    case _                                       => false
+  private def hasEnoughMana(character: Character, move: Move): Boolean = move match {
+    case PhysicalAttack(_, _)              => true
+    case SpecialMove(_, _, manaCost, _, _) => character.status.manaPoints >= manaCost
+    case _                                 => false
   }
 
-  import Affliction._
-//  private def incapacitate(afflictions: Set[Affliction], move: Move): Boolean =
-//    afflictions.contains(Stunned) || afflictions.contains(Asleep) ||
-//      (move match {
-//        case PhysicalAttack(_)                       => true
-//        case SpecialMove(_, _, _, moveType, _, _, _) => if (afflictions.contains(Berserk)) false else moveType match {
-//          case Melee => !afflictions.contains(Frozen)
-//          case Ranged => !afflictions.contains(Blinded)
-//          case Spell => !afflictions.contains(Silenced)
-//
-//        }
-//      })
+  private def isIncapacitated(character: Character, move: Move): Boolean =
+    character.status.afflictions
+      .map(kv => kv._1.inhibits(move))
+      .fold(false)(_ || _)
+
+  def makeMove(move: Move, whoMakesIt: Character, Targets: List[Character]): StatusAlteration = ???
 
 }

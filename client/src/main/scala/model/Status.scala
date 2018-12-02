@@ -9,7 +9,14 @@ case class Status(healthPoints: Int,
 
 object Status {
 
-  def nextRound(s: Status): Status =
+  def afterAlteration(status: Status, alteration: StatusAlteration): Status = ???
+
+  def afterManaConsumption(status: Status, manaPoints: Int): Status =
+    status.copy(manaPoints = status.manaPoints - manaPoints)
+
+  def afterRound(status: Status): Status = tick(afterAfflictionsAlteration(status))
+
+  private def tick(s: Status): Status =
     s.copy(
       modifiers = s.modifiers
         .mapValues(v => v.copy(roundsDuration = v.roundsDuration - 1))
@@ -17,8 +24,6 @@ object Status {
       afflictions = s.afflictions.mapValues(v => v - 1).filter(kv => kv._2 > 0)
     )
 
-  def consumingMana(s: Status, mp: Int): Status = s.copy(manaPoints = s.manaPoints - mp)
-
-  def afterEffect(s: Status, me: MoveEffect): Status = ???
+  private def afterAfflictionsAlteration(status: Status): Status = ???
 
 }

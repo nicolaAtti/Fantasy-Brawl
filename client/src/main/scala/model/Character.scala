@@ -40,7 +40,7 @@ trait Character {
     * Calculates the character's bonus physical critical strike damage
     * @return
     */
-  def pysicalCriticalDamage: Int =
+  def physicalCriticalDamage: Int =
     roundDown((statistics.strength * classMultipliers.strength) / 5 + 150) + getModifierValues(PhysicalCriticalDamage)
 
   /**
