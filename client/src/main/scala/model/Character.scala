@@ -10,7 +10,7 @@ trait Character {
   /**
     * Contains the character's status, depending on current HP and MP values and existing modifiers and afflictions
     */
-  var status: ImmutableStatus = ImmutableStatus(
+  var status: Status = Status(
     healthPoints = calculateMaxHealthPoints(),
     manaPoints = calculateMaxManaPoints(),
     maxHealthPoints = calculateMaxHealthPoints(),
@@ -40,7 +40,7 @@ trait Character {
     * Calculates the character's bonus physical critical strike damage
     * @return
     */
-  def pysicalCriticalDamage: Int =
+  def physicalCriticalDamage: Int =
     roundDown((statistics.strength * classMultipliers.strength) / 5 + 150) + getModifierValues(PhysicalCriticalDamage)
 
   /**
