@@ -18,7 +18,8 @@ object Affliction {
 
   case object Poisoned extends Affliction {
     override def inhibits(move: Move): Boolean = false
-    override val endingRoundAlteration = Some(StatusAlteration(hp => Math.round(hp * 0.25f), mp => mp, Map(), Map()))
+    override val endingRoundAlteration = Some(
+      StatusAlteration(hp => Math.ceil(hp * 0.25f).toInt, mp => mp, Map(), Map()))  // cannot die from poisoning
   }
 
   case object Berserk extends Affliction {
