@@ -10,6 +10,15 @@ object ViewConfiguration {
   val LoginForm: String = "LoginForm.fxml"
   val TeamSelectionTitle: String = "Fantasy Brawl - Team Selection"
   val TeamSelectionForm: String = "TeamSelectionForm.fxml"
-  val WaitingTitle: String = "Fantasy Brawl - Login"
-  val WaitingForm: String = "WaitingForm.fxml"
+  val WaitingToLoginTitle: String = "Fantasy Brawl - Login"
+  val WaitingToLoginForm: String = "WaitingToLoginForm.fxml"
+  val WaitingOpponentTitle: String = "Fantasy Brawl - In matchmaking queue"
+  val WaitingOpponentForm: String = "WaitingOpponentForm.fxml"
+
+  /**
+    * Defines the acceptable views.
+    */
+  object viewSelector extends Enumeration {
+    val LOGIN, TEAM, WAITING_TO_LOGIN, WAITING_OPPONENT = Value
+  }
 }

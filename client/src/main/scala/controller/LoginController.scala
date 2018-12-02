@@ -5,7 +5,7 @@ import java.util.ResourceBundle
 import javafx.event.ActionEvent
 import javafx.fxml.{FXML, Initializable}
 import view._
-import ApplicationView.viewSelector._
+import ViewConfiguration.viewSelector._
 import messaging.LoginManager
 
 /**
@@ -26,7 +26,7 @@ object LoginController extends Initializable with ViewController {
   @FXML def handleLoginAsGuest(event: ActionEvent) {
     println("Login as a guest pressed")
 
-    ApplicationView changeView WAITING
+    ApplicationView changeView WAITING_TO_LOGIN
 
     LoginManager.loginAsGuestRequest()
   }

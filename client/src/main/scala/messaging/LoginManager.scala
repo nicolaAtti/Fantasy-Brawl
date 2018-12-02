@@ -6,7 +6,7 @@ import play.api.libs.json.{Json, OFormat}
 import PlayJsonSupport._
 import view._
 import communication._
-import ApplicationView.viewSelector._
+import ViewConfiguration.viewSelector._
 import com.spingo.op_rabbit.properties.ReplyTo
 
 import scala.concurrent.ExecutionContext.Implicits.global
