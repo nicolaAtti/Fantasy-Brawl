@@ -10,6 +10,7 @@ import ApplicationView.viewSelector._
 import alice.tuprolog.SolveInfo
 import javafx.geometry.Insets
 import javafx.scene.control.{Button, Label, TextArea}
+import javafx.scene.effect.ColorAdjust
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout._
@@ -35,6 +36,10 @@ object TeamSelectionController extends Initializable with ViewController {
   private var selectedCharacter: StackPane = new StackPane()
   private var chosenCharacter: StackPane = new StackPane()
   private var team: Map[String, StackPane] = Map()
+  private val NotChosenSaturation: Double = 0
+  private val NotChosenBrightness: Double = 0
+  private val ChosenSaturation: Double = -1
+  private val ChosenBrightness: Double = 0.7
 
   /**
     * Pressure handler of the "Logout" button.
@@ -73,17 +78,17 @@ object TeamSelectionController extends Initializable with ViewController {
   private def setDescription(characterName: String): Unit = {
     import utilities.ScalaProlog._
     val solveInfo: SolveInfo = getCharacter(characterName)
-    var description: String = "Character name: " + characterName + "\n\n" +
+    var description: String = "Character name: " + characterName + "\n" +
       "Character class: " + extractString(solveInfo, "Class") + "\n\n" +
-      "  Strength: " + extractInt(solveInfo, "Strength") + "\n" +
-      "  Agility: " + extractInt(solveInfo, "Agility") + "\n" +
-      "  Spirit: " + extractInt(solveInfo, "Spirit") + "\n" +
-      "  Intelligence: " + extractInt(solveInfo, "Intelligence") + "\n" +
-      "  Resistance: " + extractInt(solveInfo, "Resistence") + "\n\n" +
-      "  MoveList: \n\n"
+      "Strength: " + extractInt(solveInfo, "Strength") + "\n" +
+      "Agility: " + extractInt(solveInfo, "Agility") + "\n" +
+      "Spirit: " + extractInt(solveInfo, "Spirit") + "\n" +
+      "Intelligence: " + extractInt(solveInfo, "Intelligence") + "\n" +
+      "Resistance: " + extractInt(solveInfo, "Resistence") + "\n\n" +
+      "MoveList: \n"
     extractList(solveInfo, "MoveList").foreach(move => {
       description += "    " + move +
-        " -> Type: " + extractString(getMove(move), "Type") +
+        "     -> Type: " + extractString(getMove(move), "Type") +
         ", Base damage: " + extractInt(getMove(move), "BaseValue") +
         ", Mana cost: " + extractInt(getMove(move), "MPCost") +
         "\n"
@@ -118,11 +123,16 @@ object TeamSelectionController extends Initializable with ViewController {
     chosenCharacter = next
 
     team.foreach(character => {
+      val effect: ColorAdjust = new ColorAdjust()
       if (character._1 equals chosenCharacter.getId) {
-        character._2 setOpacity 1
+        effect setSaturation NotChosenSaturation
+        effect setBrightness NotChosenBrightness
+        changeCharacterToChoose(selectedCharacter, character._2)
       } else {
-        character._2 setOpacity 0.2
+        effect setSaturation ChosenSaturation
+        effect setBrightness ChosenBrightness
       }
+      character._2.getChildren.get(0).asInstanceOf[ImageView] setEffect effect
     })
   }
 
