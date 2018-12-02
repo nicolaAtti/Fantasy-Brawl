@@ -26,7 +26,7 @@ class CharacterTest extends FunSuite {
   }
   test("test the right calculation of sub-statistics") {
     assert(jacob.physicalDamage == 102)
-    assert(jacob.pysicalCriticalDamage == 170)
+    assert(jacob.physicalCriticalDamage == 170)
 
     assert(jacob.speed == 3)
     assert(jacob.criticalChance == 16)
@@ -52,7 +52,7 @@ class CharacterTest extends FunSuite {
 
   test("Other classes should have the right statistics") {
     assert(annabelle.physicalDamage == 51)
-    assert(annabelle.pysicalCriticalDamage == 160)
+    assert(annabelle.physicalCriticalDamage == 160)
 
     assert(annabelle.speed == 9)
     assert(annabelle.criticalChance == 46)

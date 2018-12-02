@@ -7,13 +7,13 @@ import org.scalatest.FunSuite
   * @author Nicola Atti
   */
 class ModifierTest extends FunSuite {
-  val jacobStats = Statistics(51, 33, 13, 5, 27)
+  /*val jacobStats = Statistics(51, 33, 13, 5, 27)
   val warrior = Character("Warrior", "Jacob", jacobStats)
 
   val newModifier = Modifier("battle_prowess", "PHYS_DAMAGE", 3, 20)
   val anotherModifier = Modifier("gargantuan_rage", "PHYS_DAMAGE", 2, 40)
 
-  /*test("Test the correct creation of the modifier") {
+    test("Test the correct creation of the modifier") {
     assert(newModifier.affectedStat equals "PHYS_DAMAGE")
     assert(newModifier.turnDuration == 3)
     assert(newModifier.modValue == 20)
