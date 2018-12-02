@@ -15,14 +15,7 @@ import ViewConfiguration._
 object ApplicationView {
   private var stage: Stage = new Stage()
 
-  /**
-    * Defines the acceptable views.
-    */
-  object viewSelector extends Enumeration {
-    val LOGIN, TEAM, WAITING = Value
-  }
   private type ViewSelector = viewSelector.Value
-
   import viewSelector._
 
   /**
@@ -30,10 +23,11 @@ object ApplicationView {
     * @param view the view to show
     */
   def changeView(view: ViewSelector): Unit = view match {
-    case LOGIN   => setupScene(LoginTitle, LoginForm, Some(LoginController.controller))
-    case TEAM    => setupScene(TeamSelectionTitle, TeamSelectionForm, Some(TeamSelectionController.controller))
-    case WAITING => setupScene(WaitingTitle, WaitingForm, None)
-    case _       => hideView()
+    case LOGIN            => setupScene(LoginTitle, LoginForm, Some(LoginController.controller))
+    case TEAM             => setupScene(TeamSelectionTitle, TeamSelectionForm, Some(TeamSelectionController.controller))
+    case WAITING_TO_LOGIN => setupScene(WaitingToLoginTitle, WaitingToLoginForm, None)
+    case WAITING_OPPONENT => setupScene(WaitingOpponentTitle, WaitingOpponentForm, None)
+    case _                => hideView()
   }
 
   /**

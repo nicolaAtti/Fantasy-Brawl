@@ -6,7 +6,7 @@ import java.util.ResourceBundle
 import javafx.event.ActionEvent
 import javafx.fxml.{FXML, Initializable}
 import view.ApplicationView
-import ApplicationView.viewSelector._
+import view.ViewConfiguration.viewSelector._
 import alice.tuprolog.SolveInfo
 import javafx.geometry.Insets
 import javafx.scene.control.{Button, Label, TextArea}
@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout._
 import javafx.scene.paint.Paint
+import messaging.MatchmakingManager
 
 /**
   * Controller of the team selection view.
@@ -48,6 +49,18 @@ object TeamSelectionController extends Initializable with ViewController {
     println("Logout pressed")
 
     ApplicationView changeView LOGIN
+  }
+
+  @FXML def handleJoinCasualQueue(event: ActionEvent) {
+    println("Join Casual Queue pressed")
+
+    ApplicationView changeView WAITING_OPPONENT
+
+    var teamName: Map[String, String] = Map()
+    team.foreach(character => {
+      teamName += (character._1 -> character._2.getId)
+    })
+    MatchmakingManager.joinCasualQueueRequest(username, teamName)
   }
 
   /**

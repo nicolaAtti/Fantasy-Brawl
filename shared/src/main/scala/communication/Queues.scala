@@ -6,4 +6,6 @@ object Queues {
 
   val LoginGuestRequestQueue = "login-guest-request"
   val LoginGuestResponseQueue = uuid
+  val JoinCasualMatchmakingRequestQueue = "casual-mm-request"
+  val JoinCasualMatchmakingResponseQueue = uuid
 }
