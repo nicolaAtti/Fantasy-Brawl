@@ -1,8 +1,8 @@
 package communication
 
-/** The request message that clients must send if they want to login as guests.
+/** The request message that clients must send if they want to join a casual queue in the matchmaking system.
   *
-  * @param details possible details that the client could want to attach.
-  * @author Marco Canducci
+  * @param playerName username of the player that wants to join.
+  * @param team team with which the player wants to fight.
   */
 case class JoinCasualQueueRequest(playerName: String, team: Map[String, String])
