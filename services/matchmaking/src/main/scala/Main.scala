@@ -57,8 +57,8 @@ object Main extends App {
   }*/
 
   def sendBattleDataToBoth(data: PlayerData, data1: PlayerData): Unit = {
-    println("Player 1 : "+data._1+"  "+data._2.toString()+"   "+data._3)
-    println("Player 2 : "+data1._1+"  "+data1._2.toString()+"   "+data1._3)
+    println("Player 1 : " + data._1 + "  " + data._2.toString() + "   " + data._3)
+    println("Player 2 : " + data1._1 + "  " + data1._2.toString() + "   " + data1._3)
   }
 
 }

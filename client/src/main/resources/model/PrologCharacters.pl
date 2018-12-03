@@ -9,4 +9,6 @@ character('Annabelle','Thief',34,46,22,8,27,['Poison Vial','Flash Grenade','Prep
 character('Albert','Healer',19,11,33,54,27,['Lay On Hands','Holy Smite','Censure','Bolster Faith']).
 character('Lidya','Wizard',7,22,34,58,23,['Flamestrike','Hypnosis','Freezing Wind','Concentration']).
 
+character('Cassandra','Warrior',35,20,25,9,35,['Shield Bash',''])
+
 % Other characters will be added in the future
