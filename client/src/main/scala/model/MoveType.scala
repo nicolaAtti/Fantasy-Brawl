@@ -15,9 +15,9 @@ object MoveType {
   }
 
   case object Ranged extends MoveType {
-    override def attackingBonus(character: Character): Int = ???
-    override def attackingCriticalBonus(character: Character): Int = ???
-    override def defendingBonus(character: Character): Int = ???
+    override def attackingBonus(character: Character): Int = character.physicalDamage
+    override def attackingCriticalBonus(character: Character): Int = character.physicalCriticalDamage
+    override def defendingBonus(character: Character): Int = character.physicalDefence
   }
 
   case object Spell extends MoveType {
