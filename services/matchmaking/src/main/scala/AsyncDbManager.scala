@@ -1,3 +1,4 @@
+
 import scala.concurrent.Future
 import org.mongodb.scala._
 import org.mongodb.scala.model.Filters
@@ -11,8 +12,14 @@ object AsyncDbManager {
 
   val filter = Filters.equal("_id", value = documentId)
 
-  def findPlayerInQueue: Future[Document] = {
-    collection.findOneAndDelete(filter).head()
+
+
+  def findPlayerInQueue: Future[(String,Seq[String],String)] = {
+    val arr = Array[String]()
+    collection.findOneAndDelete(Document()).map(document => (document("playerName").asString().toString,
+      document("teamMembers").asArray().toArray[String](arr).toSeq,
+      document("replyToQueue").asString().toString))
+      .head()
   }
 
   def putPlayerInQueue(playerName: String,teamMembers: Seq[String],replyTo: String): Unit = {

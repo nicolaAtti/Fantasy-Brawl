@@ -47,7 +47,8 @@ object MatchmakingManager {
     */
   def joinCasualQueueRequest(playerName: String, team: Map[String, String]): Unit = {
     import PlayJsonSupport._
-    rabbitControl ! Message(JoinCasualQueueRequest(playerName, team),
+    val teamSeq = team.map(map => map._1).toSeq
+    rabbitControl ! Message(JoinCasualQueueRequest(playerName, teamSeq),
                             publisher,
                             Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
   }
