@@ -9,21 +9,21 @@ case class Status(healthPoints: Int,
 
 object Status {
 
-  def afterAlteration(status: Status, alteration: StatusAlteration): Status = ???
+  type NewStatus = Status
 
-  def afterManaConsumption(status: Status, manaPoints: Int): Status =
-    status.copy(manaPoints = status.manaPoints - manaPoints)
+  def afterAfflictionsAlterations(status: Status): NewStatus =
+    status.afflictions
+      .map(kv => kv._1.beginTurnAlteration)
+      .filter(_.isDefined)
+      .map(_.get)
+      .foldLeft(status)((s, alteration) => alteration(s))
 
-  def afterRound(status: Status): Status = tick(afterAfflictionsAlteration(status))
-
-  private def tick(s: Status): Status =
-    s.copy(
-      modifiers = s.modifiers
+  def afterRoundEnding(status: Status): NewStatus =
+    status.copy(
+      modifiers = status.modifiers
         .mapValues(v => v.copy(roundsDuration = v.roundsDuration - 1))
         .filter(kv => kv._2.roundsDuration > 0),
-      afflictions = s.afflictions.mapValues(v => v - 1).filter(kv => kv._2 > 0)
+      afflictions = status.afflictions.mapValues(v => v - 1).filter(kv => kv._2 > 0)
     )
-
-  private def afterAfflictionsAlteration(status: Status): Status = ???
 
 }
