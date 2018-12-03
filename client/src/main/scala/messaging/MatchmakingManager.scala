@@ -34,7 +34,6 @@ object MatchmakingManager {
     channel(qos = 3) {
       consume(joinCasualMatchmakingResponseQueue) {
         body(as[JoinCasualQueueRequest]) { response =>
-
           ???
 
           ack
