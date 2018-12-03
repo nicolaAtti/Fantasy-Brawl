@@ -6,15 +6,10 @@ import com.spingo.op_rabbit._
 import com.spingo.op_rabbit.properties.ReplyTo
 import communication._
 import play.api.libs.json.{Json, OFormat}
-import view.ViewConfiguration.viewSelector._
-import view._
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
-  * Manages login as a guest request and response messages.
-  *
-  * @author Daniele Schiavi
+  * Manages casual matchmaking request and response messages.
   */
 object MatchmakingManager {
   private val rabbitControl: ActorRef = ActorSystem().actorOf(Props[RabbitControl])
@@ -32,13 +27,16 @@ object MatchmakingManager {
   private val publisher: Publisher = Publisher.queue(joinCasualMatchmakingRequestQueue)
 
   /**
-    * Manages login as a guest response messages.
+    * Manages casual matchmaking response messages.
     */
   Subscription.run(rabbitControl) {
     import Directives._
     channel(qos = 3) {
       consume(joinCasualMatchmakingResponseQueue) {
         body(as[JoinCasualQueueRequest]) { response =>
+
+          ???
+
           ack
         }
       }
@@ -46,7 +44,7 @@ object MatchmakingManager {
   }
 
   /**
-    * Send a login as a guest request message.
+    * Send a casual matchmaking request message.
     */
   def joinCasualQueueRequest(playerName: String, team: Map[String, String]): Unit = {
     import PlayJsonSupport._
