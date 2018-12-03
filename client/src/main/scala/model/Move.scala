@@ -47,6 +47,6 @@ object Move {
       .map(kv => kv._1.inhibits(move))
       .fold(false)(_ || _)
 
-  def makeMove(move: Move, attacker: Character, Targets: Set[Character]): Map[Character, Status] = ???
+  def makeMove(move: Move, attacker: Character, targets: Set[Character]): Map[Character, Status] = ???
 
 }
