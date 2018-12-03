@@ -38,7 +38,7 @@ object Move {
   def canMakeMove(c: Character, m: Move): Boolean = hasEnoughMana(c, m) && !isIncapacitated(c, m)
 
   private def hasEnoughMana(character: Character, move: Move): Boolean = move match {
-    case PhysicalAttack => true
+    case PhysicalAttack                 => true
     case SpecialMove(_, manaCost, _, _) => character.status.manaPoints >= manaCost
   }
 
