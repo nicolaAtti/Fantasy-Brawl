@@ -39,8 +39,6 @@ object LoginManager {
         body(as[LoginGuestResponse]) { response =>
           response.guestId match {
             case Some(id) => {
-              println("Login as guest" + id)
-
               controller.TeamSelectionController.username = "guest#" + id
               ApplicationView changeView TEAM
             }

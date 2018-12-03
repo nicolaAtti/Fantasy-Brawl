@@ -46,20 +46,15 @@ object TeamSelectionController extends Initializable with ViewController {
     * Pressure handler of the "Logout" button.
     */
   @FXML def handleLogout(event: ActionEvent) {
-    println("Logout pressed")
-
     ApplicationView changeView LOGIN
   }
 
+  /**
+    * Pressure handler of the "Join Casual Queue" button.
+    */
   @FXML def handleJoinCasualQueue(event: ActionEvent) {
-    println("Join Casual Queue pressed")
-
     ApplicationView changeView WAITING_OPPONENT
-
-    var teamName: Map[String, String] = Map()
-    team.foreach(character => {
-      teamName += (character._1 -> character._2.getId)
-    })
+    val teamName: Map[String, String] = team.map(character => character._1 -> character._2.getId)
     MatchmakingManager.joinCasualQueueRequest(username, teamName)
   }
 
@@ -68,7 +63,7 @@ object TeamSelectionController extends Initializable with ViewController {
     */
   @FXML def handleCharacterToChoosePressed(mouseEvent: MouseEvent) {
     val characterPressed: StackPane = mouseEvent.getSource.asInstanceOf[StackPane]
-    changeCharacterToChoose(selectedCharacter, characterPressed)
+    changeCharacterToChoose(characterPressed)
   }
 
   /**
@@ -76,7 +71,7 @@ object TeamSelectionController extends Initializable with ViewController {
     */
   @FXML def handleCharacterChosenPressed(mouseEvent: MouseEvent) {
     val characterPressed: StackPane = mouseEvent.getSource.asInstanceOf[StackPane]
-    changeCharacterChosen(chosenCharacter, characterPressed)
+    changeCharacterChosen(characterPressed)
   }
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
@@ -85,7 +80,7 @@ object TeamSelectionController extends Initializable with ViewController {
     chosenCharacter = chosenCharacter0
     selectedCharacter = Jacob
     selectCharacter(chosenCharacter)
-    changeCharacterToChoose(selectedCharacter, Jacob)
+    changeCharacterToChoose(Jacob)
   }
 
   private def setDescription(characterName: String): Unit = {
@@ -116,8 +111,8 @@ object TeamSelectionController extends Initializable with ViewController {
       }))
   }
 
-  private def changeCharacterToChoose(previous: StackPane, next: StackPane): Unit = {
-    changeSelectedCharacter(previous, next)
+  private def changeCharacterToChoose(next: StackPane): Unit = {
+    changeSelectedCharacter(selectedCharacter, next)
     selectedCharacter = next
     setDescription(next.getId)
     if (!team.exists(_._2 equals next)) {
@@ -131,16 +126,15 @@ object TeamSelectionController extends Initializable with ViewController {
     }
   }
 
-  private def changeCharacterChosen(previous: StackPane, next: StackPane): Unit = {
-    changeSelectedCharacter(previous, next)
+  private def changeCharacterChosen(next: StackPane): Unit = {
+    changeSelectedCharacter(chosenCharacter, next)
     chosenCharacter = next
-
     team.foreach(character => {
       val effect: ColorAdjust = new ColorAdjust()
       if (character._1 equals chosenCharacter.getId) {
         effect setSaturation NotChosenSaturation
         effect setBrightness NotChosenBrightness
-        changeCharacterToChoose(selectedCharacter, character._2)
+        changeCharacterToChoose(character._2)
       } else {
         effect setSaturation ChosenSaturation
         effect setBrightness ChosenBrightness

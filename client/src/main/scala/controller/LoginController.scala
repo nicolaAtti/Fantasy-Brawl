@@ -24,10 +24,7 @@ object LoginController extends Initializable with ViewController {
     * Pressure handler of the "Login as a guest" button.
     */
   @FXML def handleLoginAsGuest(event: ActionEvent) {
-    println("Login as a guest pressed")
-
     ApplicationView changeView WAITING_TO_LOGIN
-
     LoginManager.loginAsGuestRequest()
   }
 
