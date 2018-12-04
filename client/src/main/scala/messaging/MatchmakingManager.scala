@@ -1,11 +1,11 @@
 package messaging
 
 import akka.actor.{ActorRef, ActorSystem, Props}
-import com.spingo.op_rabbit.PlayJsonSupport._
 import com.spingo.op_rabbit._
 import com.spingo.op_rabbit.properties.ReplyTo
+import communication.MessageFormat.MyFormat
 import communication._
-import play.api.libs.json.{Json, OFormat}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /** Manages casual matchmaking request and response messages. */
@@ -19,8 +19,8 @@ object MatchmakingManager {
   private val joinCasualMatchmakingResponseQueue =
     Queue(JoinCasualMatchmakingResponseQueue, durable = false, autoDelete = true)
 
-  implicit private val RequestFormat: OFormat[JoinCasualQueueRequest] = Json.format[JoinCasualQueueRequest]
-  implicit private val ResponseFormat: OFormat[JoinCasualQueueResponse] = Json.format[JoinCasualQueueResponse]
+  implicit private val RequestFormat: MyFormat[JoinCasualQueueRequest] = MessageFormat.format[JoinCasualQueueRequest]
+  implicit private val ResponseFormat: MyFormat[JoinCasualQueueResponse] = MessageFormat.format[JoinCasualQueueResponse]
 
   private val publisher: Publisher = Publisher.queue(joinCasualMatchmakingRequestQueue)
 
@@ -44,7 +44,6 @@ object MatchmakingManager {
     * @param team team with which the player wants to fight.
     */
   def joinCasualQueueRequest(playerName: String, team: Map[String, String]): Unit = {
-    import PlayJsonSupport._
     rabbitControl ! Message(JoinCasualQueueRequest(playerName, team),
                             publisher,
                             Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
