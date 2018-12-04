@@ -115,7 +115,7 @@ object TeamSelectionController extends Initializable with ViewController {
     changeSelectedCharacter(selectedCharacter, next)
     selectedCharacter = next
     setDescription(next.getId)
-    if (!team.exists(_._2 equals next)) {
+    if (!team.values.exists(_ equals next)) {
       chosenCharacter.getChildren
         .get(0)
         .asInstanceOf[ImageView]
