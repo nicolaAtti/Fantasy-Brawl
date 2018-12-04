@@ -14,11 +14,10 @@ object MessageFormat {
     protected val contentEncoding = Some("UTF-8")
     def marshall(value: A): Array[Byte] = serialize(value)
 
-    def unmarshall(value: Array[Byte], contentType: Option[String], charset: Option[String]): A =
-      deserialize(value).asInstanceOf[A]
+    def unmarshall(value: Array[Byte], contentType: Option[String], charset: Option[String]): A = deserialize(value)
   }
 
-  private def serialize(value: Any): Array[Byte] = {
+  private def serialize[A](value: A): Array[Byte] = {
     val stream: ByteArrayOutputStream = new ByteArrayOutputStream()
     val oos = new ObjectOutputStream(stream)
     oos.writeObject(value)
@@ -26,10 +25,10 @@ object MessageFormat {
     stream.toByteArray
   }
 
-  private def deserialize(bytes: Array[Byte]): Any = {
+  private def deserialize[A](bytes: Array[Byte]): A = {
     val ois = new ObjectInputStream(new ByteArrayInputStream(bytes))
     val value = ois.readObject
     ois.close()
-    value
+    value.asInstanceOf[A]
   }
 }

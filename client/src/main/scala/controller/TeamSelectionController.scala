@@ -52,7 +52,7 @@ object TeamSelectionController extends Initializable with ViewController {
   /** Pressure handler of the "Join Casual Queue" button. */
   @FXML def handleJoinCasualQueue(event: ActionEvent) {
     ApplicationView changeView WAITING_OPPONENT
-    val teamName: Map[String, String] = team.map(character => character._1 -> character._2.getId)
+    val teamName: Map[String, String] = team.map { case (position, characterPane) => position -> characterPane.getId }
     MatchmakingManager.joinCasualQueueRequest(username, teamName)
   }
 
@@ -109,7 +109,7 @@ object TeamSelectionController extends Initializable with ViewController {
     changeSelectedCharacter(selectedCharacter, next)
     selectedCharacter = next
     setDescription(next.getId)
-    if (!team.values.exists(_ equals next)) {
+    if (!team.exists { case (_, characterPane) => characterPane equals next }) {
       chosenCharacter.getChildren
         .get(0)
         .asInstanceOf[ImageView]
@@ -123,18 +123,19 @@ object TeamSelectionController extends Initializable with ViewController {
   private def changeCharacterChosen(next: StackPane): Unit = {
     changeSelectedCharacter(chosenCharacter, next)
     chosenCharacter = next
-    team.foreach(character => {
-      val effect: ColorAdjust = new ColorAdjust()
-      if (character._1 equals chosenCharacter.getId) {
-        effect setSaturation NotChosenSaturation
-        effect setBrightness NotChosenBrightness
-        changeCharacterToChoose(character._2)
-      } else {
-        effect setSaturation ChosenSaturation
-        effect setBrightness ChosenBrightness
-      }
-      character._2.getChildren.get(0).asInstanceOf[ImageView] setEffect effect
-    })
+    team.foreach {
+      case (position, characterPane) =>
+        val effect: ColorAdjust = new ColorAdjust()
+        if (position equals chosenCharacter.getId) {
+          effect setSaturation NotChosenSaturation
+          effect setBrightness NotChosenBrightness
+          changeCharacterToChoose(characterPane)
+        } else {
+          effect setSaturation ChosenSaturation
+          effect setBrightness ChosenBrightness
+        }
+        characterPane.getChildren.get(0).asInstanceOf[ImageView] setEffect effect
+    }
   }
 
   private def changeSelectedCharacter(previous: StackPane, next: StackPane): Unit = {

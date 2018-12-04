@@ -44,8 +44,7 @@ object MatchmakingManager {
     * @param team team with which the player wants to fight.
     */
   def joinCasualQueueRequest(playerName: String, team: Map[String, String]): Unit = {
-    val teamSeq = team.map(member => member._2).toSeq
-    rabbitControl ! Message(JoinCasualQueueRequest(playerName, teamSeq),
+    rabbitControl ! Message(JoinCasualQueueRequest(playerName, team),
                             publisher,
                             Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
   }
