@@ -8,9 +8,7 @@ import communication._
 import play.api.libs.json.{Json, OFormat}
 import scala.concurrent.ExecutionContext.Implicits.global
 
-/**
-  * Manages casual matchmaking request and response messages.
-  */
+/** Manages casual matchmaking request and response messages. */
 object MatchmakingManager {
   private val rabbitControl: ActorRef = ActorSystem().actorOf(Props[RabbitControl])
   implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(false)
@@ -26,9 +24,7 @@ object MatchmakingManager {
 
   private val publisher: Publisher = Publisher.queue(joinCasualMatchmakingRequestQueue)
 
-  /**
-    * Manages casual matchmaking response messages.
-    */
+  /** Manages casual matchmaking response messages. */
   Subscription.run(rabbitControl) {
     import Directives._
     channel(qos = 3) {
@@ -42,8 +38,10 @@ object MatchmakingManager {
     }
   }
 
-  /**
-    * Send a casual matchmaking request message.
+  /** Send a casual matchmaking request message.
+    *
+    * @param playerName username of the player that wants to join.
+    * @param team team with which the player wants to fight.
     */
   def joinCasualQueueRequest(playerName: String, team: Map[String, String]): Unit = {
     import PlayJsonSupport._

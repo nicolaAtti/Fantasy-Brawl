@@ -4,9 +4,7 @@ import view.ViewConfiguration.viewSelector._
 
 class MainApplication extends Application {
 
-  /**
-    * Create and show the login view.
-    */
+  /** Create and show the login view. */
   override def start(primaryStage: Stage): Unit = {
     import view._
     ApplicationView setupStage (primaryStage, 540, 960)
@@ -15,8 +13,7 @@ class MainApplication extends Application {
   }
 }
 
-/**
-  * Starting point of the client application.
+/** Starting point of the client application.
   *
   * @author Daniele Schiavi
   */

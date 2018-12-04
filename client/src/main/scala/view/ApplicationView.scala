@@ -7,8 +7,7 @@ import javafx.stage.Stage
 import controller._
 import ViewConfiguration._
 
-/**
-  * Manages the graphical interface.
+/** Manages the graphical interface.
   *
   * @author Daniele Schiavi
   */
@@ -18,8 +17,8 @@ object ApplicationView {
   private type ViewSelector = viewSelector.Value
   import viewSelector._
 
-  /**
-    * Changes the current view to the required view.
+  /** Changes the current view to the required view.
+    *
     * @param view the view to show
     */
   def changeView(view: ViewSelector): Unit = view match {
@@ -30,8 +29,8 @@ object ApplicationView {
     case _                => hideView()
   }
 
-  /**
-    * Setup of the graphical window.
+  /** Setup of the graphical window.
+    *
     * @param stage the current window
     * @param height the height of the window
     * @param width the width of the window
@@ -47,17 +46,13 @@ object ApplicationView {
     })
   }
 
-  /**
-    * Shows the current view.
-    */
+  /** Shows the current view. */
   def showView(): Unit =
     Platform runLater (() => {
       stage show ()
     })
 
-  /**
-    * Hides the current view.
-    */
+  /** Hides the current view. */
   def hideView(): Unit =
     Platform runLater (() => {
       stage hide ()

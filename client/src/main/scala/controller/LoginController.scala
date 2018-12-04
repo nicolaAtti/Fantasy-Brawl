@@ -8,21 +8,16 @@ import view._
 import ViewConfiguration.viewSelector._
 import messaging.LoginManager
 
-/**
-  * Controller of the login view.
+/** Controller of the login view.
   *
   * @author Daniele Schiavi
   */
 object LoginController extends Initializable with ViewController {
 
-  /**
-    * @return the LoginController
-    */
+  /** Return the LoginController. */
   val controller: ViewController = this
 
-  /**
-    * Pressure handler of the "Login as a guest" button.
-    */
+  /** Pressure handler of the "Login as a guest" button. */
   @FXML def handleLoginAsGuest(event: ActionEvent) {
     ApplicationView changeView WAITING_TO_LOGIN
     LoginManager.loginAsGuestRequest()
