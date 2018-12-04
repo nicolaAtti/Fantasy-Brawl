@@ -5,8 +5,6 @@ import ExecutionContext.Implicits.global
 import akka.actor.{ActorSystem, Props}
 import com.spingo.op_rabbit._
 import com.spingo.op_rabbit.properties.ReplyTo
-import play.api.libs.json._
-import PlayJsonSupport._
 
 object Main extends App {
 
@@ -20,8 +18,8 @@ object Main extends App {
   implicit val recoveryStrategy = RecoveryStrategy.nack(requeue = false)
 
   import communication._
-  implicit val requestFormat = Json.format[JoinCasualQueueRequest]
-  implicit val responseFormat = Json.format[JoinCasualQueueResponse]
+  implicit val requestFormat = MessageFormat.format[JoinCasualQueueRequest]
+  implicit val responseFormat = MessageFormat.format[JoinCasualQueueResponse]
 
   import Queues._
   val requestQueue = Queue(JoinCasualMatchmakingRequestQueue, durable = false, autoDelete = true)
@@ -36,12 +34,13 @@ object Main extends App {
               println(LogMessage)
             }
             AsyncDbManager.findPlayerInQueue.onComplete {
-              case Success(opponentData: PlayerData) =>
+             case Success(opponentData: PlayerData) =>
+               println("critssss")
                 val reqPlayerData = (request.playerName, request.team, replyTo.get)
                 sendBattleDataToBoth(reqPlayerData, opponentData)
-
               case Failure(e) =>
                 println(s"Failure... Caught: $e")
+             case _ =>
                 AsyncDbManager.putPlayerInQueue(request.playerName, request.team, replyTo.get)
             }
           }
@@ -50,11 +49,6 @@ object Main extends App {
       }
     }
   }
-
-  /*def sendGuestNumber(number: Int, clientQueue: String): Unit = {
-    val response = LoginGuestResponse(guestId = Some(number), details = None)
-    rabbitControl ! Message.queue(response, clientQueue)
-  }*/
 
   def sendBattleDataToBoth(data: PlayerData, data1: PlayerData): Unit = {
     println("Player 1 : " + data._1 + "  " + data._2.toString() + "   " + data._3)

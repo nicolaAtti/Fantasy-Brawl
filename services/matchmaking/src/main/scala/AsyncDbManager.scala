@@ -14,7 +14,7 @@ object AsyncDbManager {
   def findPlayerInQueue: Future[(String, Seq[String], String)] = {
     val arr = Array[String]()
     collection
-      .findOneAndDelete(Document())
+      .findOneAndDelete(filter)
       .map(
         document =>
           (document("playerName").asString().toString,
@@ -23,9 +23,10 @@ object AsyncDbManager {
       .head()
   }
 
-  def putPlayerInQueue(playerName: String, teamMembers: Seq[String], replyTo: String): Unit = {
+  def putPlayerInQueue(playerName: String, teamMembers: Seq[String], replyTo: String): SingleObservable[Completed] = {
+    println("poroo")
     collection.insertOne(
-      Document("_id" -> "casual-queue",
+      Document("_id" -> documentId,
                "playerName" -> playerName,
                "teamMembers" -> teamMembers,
                "replytoQueue" -> replyTo))
