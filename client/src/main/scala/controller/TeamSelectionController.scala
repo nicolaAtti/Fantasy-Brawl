@@ -23,7 +23,13 @@ import messaging.MatchmakingManager
   * @author Daniele Schiavi
   */
 object TeamSelectionController extends Initializable with ViewController {
+  /**
+    * @return the TeamSelectionController
+    */
   val controller: ViewController = this
+  /**
+    * @return the username
+    */
   var username: String = "guest"
 
   @FXML var idLabel: Label = _

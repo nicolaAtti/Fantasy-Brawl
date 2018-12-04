@@ -16,7 +16,7 @@ import messaging.LoginManager
 object LoginController extends Initializable with ViewController {
 
   /**
-    * @return the controller
+    * @return the LoginController
     */
   val controller: ViewController = this
 
