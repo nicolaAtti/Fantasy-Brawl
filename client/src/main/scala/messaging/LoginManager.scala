@@ -8,7 +8,8 @@ import view._
 import communication._
 import ViewConfiguration.viewSelector._
 import com.spingo.op_rabbit.properties.ReplyTo
-
+import javafx.application.Platform
+import javafx.scene.control.Alert
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /** Manages login as a guest request and response messages.
@@ -39,13 +40,18 @@ object LoginManager {
               controller.TeamSelectionController.username = "guest#" + id
               ApplicationView changeView TEAM
             }
-            case _ => println("Login error")
-          }
-          response.details match {
-            case Some(details) => {
-              println(details)
+            case _ => {
+              Platform runLater (() => {
+                val alert: Alert = new Alert(Alert.AlertType.ERROR)
+                alert setTitle "Error"
+                if (response.details.isDefined)
+                  alert setHeaderText response.details.get
+                else
+                  alert setHeaderText "Unspecified error."
+                alert showAndWait ()
+                ApplicationView changeView LOGIN
+              })
             }
-            case _ =>
           }
           ack
         }
