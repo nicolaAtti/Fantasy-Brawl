@@ -28,7 +28,7 @@ object TeamSelectionController extends Initializable with ViewController {
     */
   val controller: ViewController = this
   /**
-    * @return the username
+    * The username of the player.
     */
   var username: String = "guest"
 
