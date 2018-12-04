@@ -2,7 +2,6 @@ package controller
 
 import java.net.URL
 import java.util.ResourceBundle
-
 import javafx.event.ActionEvent
 import javafx.fxml.{FXML, Initializable}
 import view.ApplicationView
@@ -17,13 +16,16 @@ import javafx.scene.layout._
 import javafx.scene.paint.Paint
 import messaging.MatchmakingManager
 
-/**
-  * Controller of the team selection view.
+/** Controller of the team selection view.
   *
   * @author Daniele Schiavi
   */
 object TeamSelectionController extends Initializable with ViewController {
+
+  /** Return the TeamSelectionController. */
   val controller: ViewController = this
+
+  /** The username of the player. */
   var username: String = "guest"
 
   @FXML var idLabel: Label = _
@@ -42,33 +44,25 @@ object TeamSelectionController extends Initializable with ViewController {
   private val ChosenSaturation: Double = -1
   private val ChosenBrightness: Double = 0.7
 
-  /**
-    * Pressure handler of the "Logout" button.
-    */
+  /** Pressure handler of the "Logout" button. */
   @FXML def handleLogout(event: ActionEvent) {
     ApplicationView changeView LOGIN
   }
 
-  /**
-    * Pressure handler of the "Join Casual Queue" button.
-    */
+  /** Pressure handler of the "Join Casual Queue" button. */
   @FXML def handleJoinCasualQueue(event: ActionEvent) {
     ApplicationView changeView WAITING_OPPONENT
     val teamName: Map[String, String] = team.map(character => character._1 -> character._2.getId)
     MatchmakingManager.joinCasualQueueRequest(username, teamName)
   }
 
-  /**
-    * Pressure handler of the characters to choose from.
-    */
+  /** Pressure handler of the characters to choose from. */
   @FXML def handleCharacterToChoosePressed(mouseEvent: MouseEvent) {
     val characterPressed: StackPane = mouseEvent.getSource.asInstanceOf[StackPane]
     changeCharacterToChoose(characterPressed)
   }
 
-  /**
-    * Pressure handler of the chosen characters.
-    */
+  /** Pressure handler of the chosen characters. */
   @FXML def handleCharacterChosenPressed(mouseEvent: MouseEvent) {
     val characterPressed: StackPane = mouseEvent.getSource.asInstanceOf[StackPane]
     changeCharacterChosen(characterPressed)
@@ -115,7 +109,7 @@ object TeamSelectionController extends Initializable with ViewController {
     changeSelectedCharacter(selectedCharacter, next)
     selectedCharacter = next
     setDescription(next.getId)
-    if (!team.exists(_._2 equals next)) {
+    if (!team.values.exists(_ equals next)) {
       chosenCharacter.getChildren
         .get(0)
         .asInstanceOf[ImageView]
