@@ -1,7 +1,6 @@
 package view
 
-/**
-  * Contains the configuration used for the views.
+/** Contains the configuration used for the views.
   *
   * @author Daniele Schiavi
   */
@@ -15,9 +14,7 @@ object ViewConfiguration {
   val WaitingOpponentTitle: String = "Fantasy Brawl - In matchmaking queue"
   val WaitingOpponentForm: String = "WaitingOpponentForm.fxml"
 
-  /**
-    * Defines the acceptable views.
-    */
+  /** Defines the acceptable views. */
   object viewSelector extends Enumeration {
     val LOGIN, TEAM, WAITING_TO_LOGIN, WAITING_OPPONENT = Value
   }
