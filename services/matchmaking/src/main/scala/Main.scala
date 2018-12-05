@@ -31,19 +31,29 @@ object Main extends App {
             if (Log) {
               println(LogMessage)
             }
-            AsyncDbManager.findPlayerInQueue.onComplete {
-             case Success(opponentData: (String,Seq[String],String)) =>
-               println("critssss")
-                val reqPlayerData = (request.playerName, request.team, replyTo.get)
-                sendBattleDataToBoth(reqPlayerData, opponentData)
-              case Failure(e) =>
-                println(s"Failure... Caught: $e")
-             case _ =>
-                AsyncDbManager.putPlayerInQueue(request.playerName.toString, request.team, replyTo.get.toString).onComplete {
-                  case Success(value) => println("Db aggiornato con successo")
-                  case Failure(exception) =>  println(s"Failure... Caught: $exception")
+            request.operation match {
+              case "Add" =>
+                AsyncDbManager.findPlayerInQueue.onComplete {
+                  case Success(opponentData: (String, Seq[String], String)) =>
+                    val reqPlayerData = (request.playerName, request.team, replyTo.get)
+                    sendBattleDataToBoth(reqPlayerData, opponentData)
+                  case Failure(e) =>
+                    println(s"Failure... Caught: $e")
+                  case _ =>
+                    AsyncDbManager
+                      .putPlayerInQueue(request.playerName.toString, request.team, replyTo.get.toString)
+                      .onComplete {
+                        case Success(value)     => println("Db aggiornato con successo")
+                        case Failure(exception) => println(s"Failure... Caught: $exception")
+                      }
+                }
+              case "Remove" =>
+                AsyncDbManager.removeQueuedPlayer(request.playerName).onComplete {
+                  case Success(_)         => println("Client rimosso con successo")
+                  case Failure(exception) => println(s"Failure... Caught: $exception")
                 }
             }
+
           }
           ack
         }
@@ -51,9 +61,10 @@ object Main extends App {
     }
   }
 
-  def sendBattleDataToBoth(dataReqPlayer: (String,Seq[String],String), dataQueuedPlayer: (String,Seq[String],String)): Unit = {
-    val responseForRequester = JoinCasualQueueResponse(Right((dataQueuedPlayer._1,dataQueuedPlayer._2)))
-    val responseForQueued = JoinCasualQueueResponse(Right((dataReqPlayer._1,dataReqPlayer._2)))
+  def sendBattleDataToBoth(dataReqPlayer: (String, Seq[String], String),
+                           dataQueuedPlayer: (String, Seq[String], String)): Unit = {
+    val responseForRequester = JoinCasualQueueResponse(Right((dataQueuedPlayer._1, dataQueuedPlayer._2)))
+    val responseForQueued = JoinCasualQueueResponse(Right((dataReqPlayer._1, dataReqPlayer._2)))
     rabbitControl ! Message.queue(responseForRequester, dataReqPlayer._3)
     rabbitControl ! Message.queue(responseForQueued, dataQueuedPlayer._3)
   }

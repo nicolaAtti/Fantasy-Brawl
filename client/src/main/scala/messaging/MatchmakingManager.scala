@@ -31,7 +31,7 @@ object MatchmakingManager {
       consume(joinCasualMatchmakingResponseQueue) {
         body(as[JoinCasualQueueResponse]) { response =>
           response.opponentData match {
-            case Right((opponentName,opponentTeam)) =>
+            case Right((opponentName, opponentTeam)) =>
               println(opponentName)
               opponentTeam.foreach(println(_))
             case Left(details) => Unit
@@ -49,7 +49,13 @@ object MatchmakingManager {
     */
   def joinCasualQueueRequest(playerName: String, team: Map[String, String]): Unit = {
     val teamSeq = team.map(member => member._2).toSeq
-    rabbitControl ! Message(JoinCasualQueueRequest(playerName, teamSeq),
+    rabbitControl ! Message(JoinCasualQueueRequest(playerName, teamSeq, "Add"),
+                            publisher,
+                            Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
+  }
+
+  def leaveCasualQueueRequest(playerName: String): Unit = {
+    rabbitControl ! Message(JoinCasualQueueRequest(playerName, Seq(), "Remove"),
                             publisher,
                             Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
   }
