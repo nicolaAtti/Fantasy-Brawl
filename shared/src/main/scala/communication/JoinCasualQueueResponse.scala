@@ -4,4 +4,4 @@ package communication
   *
   * @param enemyTeam team with which the opponent player wants to fight.
   */
-case class JoinCasualQueueResponse(opponentData: Either[(String,Seq[String]),Int])
+case class JoinCasualQueueResponse(opponentData: Either[String,(String,Seq[String])])

@@ -8,8 +8,6 @@ import com.spingo.op_rabbit.properties.ReplyTo
 
 object Main extends App {
 
-  type PlayerData = (String, Seq[String], String)
-
   final val Log = true
   final val LogMessage = "Received a new casual queue join request"
   final val LogDetailsPrefix = "Details: "
@@ -34,14 +32,17 @@ object Main extends App {
               println(LogMessage)
             }
             AsyncDbManager.findPlayerInQueue.onComplete {
-             case Success(opponentData: PlayerData) =>
+             case Success(opponentData: (String,Seq[String],String)) =>
                println("critssss")
                 val reqPlayerData = (request.playerName, request.team, replyTo.get)
                 sendBattleDataToBoth(reqPlayerData, opponentData)
               case Failure(e) =>
                 println(s"Failure... Caught: $e")
              case _ =>
-                AsyncDbManager.putPlayerInQueue(request.playerName, request.team, replyTo.get)
+                AsyncDbManager.putPlayerInQueue(request.playerName.toString, request.team, replyTo.get.toString).onComplete {
+                  case Success(value) => println("Db aggiornato con successo")
+                  case Failure(exception) =>  println(s"Failure... Caught: $exception")
+                }
             }
           }
           ack
@@ -50,9 +51,11 @@ object Main extends App {
     }
   }
 
-  def sendBattleDataToBoth(data: PlayerData, data1: PlayerData): Unit = {
-    println("Player 1 : " + data._1 + "  " + data._2.toString() + "   " + data._3)
-    println("Player 2 : " + data1._1 + "  " + data1._2.toString() + "   " + data1._3)
+  def sendBattleDataToBoth(dataReqPlayer: (String,Seq[String],String), dataQueuedPlayer: (String,Seq[String],String)): Unit = {
+    val responseForRequester = JoinCasualQueueResponse(Right((dataQueuedPlayer._1,dataQueuedPlayer._2)))
+    val responseForQueued = JoinCasualQueueResponse(Right((dataReqPlayer._1,dataReqPlayer._2)))
+    rabbitControl ! Message.queue(responseForRequester, dataReqPlayer._3)
+    rabbitControl ! Message.queue(responseForQueued, dataQueuedPlayer._3)
   }
 
 }

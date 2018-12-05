@@ -1,5 +1,6 @@
 import scala.concurrent.Future
 import org.mongodb.scala._
+import org.mongodb.scala.bson.BsonValue
 import org.mongodb.scala.model.Filters
 
 object AsyncDbManager {
@@ -12,24 +13,23 @@ object AsyncDbManager {
   val filter = Filters.equal("_id", value = documentId)
 
   def findPlayerInQueue: Future[(String, Seq[String], String)] = {
-    val arr = Array[String]()
     collection
       .findOneAndDelete(filter)
       .map(
         document =>
-          (document("playerName").asString().toString,
-           document("teamMembers").asArray().toArray[String](arr).toSeq,
-           document("replyToQueue").asString().toString))
+          (document("playerName").asString().getValue,
+           document("teamMembers").asArray().toArray.toSeq.collect{case str: BsonValue => str.asString().getValue},
+           document("replyToQueue").asString().getValue))
       .head()
   }
 
-  def putPlayerInQueue(playerName: String, teamMembers: Seq[String], replyTo: String): SingleObservable[Completed] = {
+  def putPlayerInQueue(playerName: String, teamMembers: Seq[String], replyTo: String): Future[Completed] = {
     println("poroo")
     collection.insertOne(
       Document("_id" -> documentId,
                "playerName" -> playerName,
                "teamMembers" -> teamMembers,
-               "replytoQueue" -> replyTo))
+               "replyToQueue" -> replyTo)).head()
   }
 
 }

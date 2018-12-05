@@ -29,9 +29,13 @@ object MatchmakingManager {
     import Directives._
     channel(qos = 3) {
       consume(joinCasualMatchmakingResponseQueue) {
-        body(as[JoinCasualQueueRequest]) { response =>
-          ???
-
+        body(as[JoinCasualQueueResponse]) { response =>
+          response.opponentData match {
+            case Right((opponentName,opponentTeam)) =>
+              println(opponentName)
+              opponentTeam.foreach(println(_))
+            case Left(details) => Unit
+          }
           ack
         }
       }
