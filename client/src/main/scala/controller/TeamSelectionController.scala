@@ -28,6 +28,17 @@ object TeamSelectionController extends Initializable with ViewController {
   /** The username of the player. */
   var username: String = "guest"
 
+  /** Team chosen by the player. */
+  var team: Map[String, StackPane] = Map()
+
+  /** Visual properties of not chosen characters. */
+  val NotChosenSaturation: Double = 0
+  val NotChosenBrightness: Double = 0
+
+  /** Visual properties of chosen characters. */
+  val ChosenSaturation: Double = -1
+  val ChosenBrightness: Double = 0.7
+
   @FXML var idLabel: Label = _
   @FXML var characterDescription: TextArea = _
   @FXML var Jacob: StackPane = _
@@ -38,11 +49,6 @@ object TeamSelectionController extends Initializable with ViewController {
 
   private var selectedCharacter: StackPane = new StackPane()
   private var chosenCharacter: StackPane = new StackPane()
-  private var team: Map[String, StackPane] = Map()
-  private val NotChosenSaturation: Double = 0
-  private val NotChosenBrightness: Double = 0
-  private val ChosenSaturation: Double = -1
-  private val ChosenBrightness: Double = 0.7
 
   /** Pressure handler of the "Logout" button. */
   @FXML def handleLogout(event: ActionEvent) {
