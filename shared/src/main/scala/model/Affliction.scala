@@ -27,7 +27,7 @@ object Affliction {
     override val beginTurnAlteration = None
   }
 
-  import model.MoveType._
+  import MoveType._
 
   case object Silenced extends Affliction {
     override def inhibits(move: Move): Boolean = move.moveType == Spell
