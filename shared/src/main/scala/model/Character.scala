@@ -65,17 +65,17 @@ trait Character {
     roundDown(statistics.spirit * classMultipliers.spirit) + getModifierValues(MagicalDefence)
 
   /**
-    * Calculates the character's magical damage
+    * Calculates the character's magical power
     * @return
     */
-  def magicalDamage: Int =
+  def magicalPower: Int =
     roundDown(statistics.intelligence * classMultipliers.intelligence) + getModifierValues(MagicalDamage)
 
   /**
-    * Calculates the character's bonus magical critical strike damage
+    * Calculates the character's bonus magical critical strike power
     * @return
     */
-  def magicalCriticalDamage: Int =
+  def magicalCriticalPower: Int =
     roundDown((statistics.intelligence * classMultipliers.intelligence) / 10 + 150) + getModifierValues(
       MagicalCriticalDamage)
 
@@ -93,12 +93,9 @@ trait Character {
     * @author Nicola Atti
     */
   private def getModifierValues(subStatistic: SubStatistic): Int = {
-//    var allModsValue = 0
-//    status.modifiers foreach (modifier => allModsValue = add(allModsValue, modifier._2.value))
-//    allModsValue
     status.modifiers
-      .filter(kv => kv._2.affectsSubStatistic == subStatistic)
-      .map(kv => kv._2.delta)
+      .filter{ case (_, modifier) => modifier.affectsSubStatistic == subStatistic }
+      .map{ case (_, modifier) => modifier.delta }
       .sum
   }
 
