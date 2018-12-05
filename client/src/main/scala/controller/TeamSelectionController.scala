@@ -22,6 +22,8 @@ import messaging.MatchmakingManager
   */
 object TeamSelectionController extends Initializable with ViewController {
 
+  import SelectionHelpers._
+
   /** Return the TeamSelectionController. */
   val controller: ViewController = this
 
@@ -83,77 +85,82 @@ object TeamSelectionController extends Initializable with ViewController {
     changeCharacterToChoose(Jacob)
   }
 
-  private def setDescription(characterName: String): Unit = {
-    import utilities.ScalaProlog._
-    val solveInfo: SolveInfo = getCharacter(characterName)
-    var description: String = "Character name: " + characterName + "\n" +
-      "Character class: " + extractString(solveInfo, "Class") + "\n\n" +
-      "Strength: " + extractInt(solveInfo, "Strength") + "\n" +
-      "Agility: " + extractInt(solveInfo, "Agility") + "\n" +
-      "Spirit: " + extractInt(solveInfo, "Spirit") + "\n" +
-      "Intelligence: " + extractInt(solveInfo, "Intelligence") + "\n" +
-      "Resistance: " + extractInt(solveInfo, "Resistence") + "\n\n" +
-      "MoveList: \n"
-    extractList(solveInfo, "MoveList").foreach(move => {
-      description += "    " + move +
-        "     -> Type: " + extractString(getMove(move), "Type") +
-        ", Base damage: " + extractInt(getMove(move), "BaseValue") +
-        ", Mana cost: " + extractInt(getMove(move), "MPCost") +
-        "\n"
-    })
-    characterDescription.setText(description)
-  }
+  private object SelectionHelpers {
 
-  private def deselectAllCharacters(gridPanes: GridPane*): Unit = {
-    gridPanes.foreach(gridPane =>
-      gridPane.getChildren.forEach(pane => {
-        deselectCharacter(pane.asInstanceOf[StackPane])
-      }))
-  }
-
-  private def changeCharacterToChoose(next: StackPane): Unit = {
-    changeSelectedCharacter(selectedCharacter, next)
-    selectedCharacter = next
-    setDescription(next.getId)
-    if (!team.exists { case (_, characterPane) => characterPane equals next }) {
-      chosenCharacter.getChildren
-        .get(0)
-        .asInstanceOf[ImageView]
-        .setImage(selectedCharacter.getChildren.get(0).asInstanceOf[ImageView].getImage)
-      team += (chosenCharacter.getId -> next)
-      if (team.size == 4)
-        joinCasualMatch.setDisable(false)
+    def setDescription(characterName: String): Unit = {
+      import utilities.ScalaProlog._
+      val solveInfo: SolveInfo = getCharacter(characterName)
+      var description: String = "Character name: " + characterName + "\n" +
+        "Character class: " + extractString(solveInfo, "Class") + "\n\n" +
+        "Strength: " + extractInt(solveInfo, "Strength") + "\n" +
+        "Agility: " + extractInt(solveInfo, "Agility") + "\n" +
+        "Spirit: " + extractInt(solveInfo, "Spirit") + "\n" +
+        "Intelligence: " + extractInt(solveInfo, "Intelligence") + "\n" +
+        "Resistance: " + extractInt(solveInfo, "Resistence") + "\n\n" +
+        "MoveList: \n"
+      extractList(solveInfo, "MoveList").foreach(move => {
+        description += "    " + move +
+          "     -> Type: " + extractString(getMove(move), "Type") +
+          ", Base damage: " + extractInt(getMove(move), "BaseValue") +
+          ", Mana cost: " + extractInt(getMove(move), "MPCost") +
+          "\n"
+      })
+      characterDescription.setText(description)
     }
-  }
 
-  private def changeCharacterChosen(next: StackPane): Unit = {
-    changeSelectedCharacter(chosenCharacter, next)
-    chosenCharacter = next
-    team.foreach {
-      case (position, characterPane) =>
-        val effect: ColorAdjust = new ColorAdjust()
-        if (position equals chosenCharacter.getId) {
-          effect setSaturation NotChosenSaturation
-          effect setBrightness NotChosenBrightness
-          changeCharacterToChoose(characterPane)
-        } else {
-          effect setSaturation ChosenSaturation
-          effect setBrightness ChosenBrightness
-        }
-        characterPane.getChildren.get(0).asInstanceOf[ImageView] setEffect effect
+    def deselectAllCharacters(gridPanes: GridPane*): Unit = {
+      gridPanes.foreach(gridPane =>
+        gridPane.getChildren.forEach(pane => {
+          deselectCharacter(pane.asInstanceOf[StackPane])
+        }))
     }
-  }
 
-  private def changeSelectedCharacter(previous: StackPane, next: StackPane): Unit = {
-    deselectCharacter(previous)
-    selectCharacter(next)
-  }
+    def changeCharacterToChoose(next: StackPane): Unit = {
+      changeSelectedCharacter(selectedCharacter, next)
+      selectedCharacter = next
+      setDescription(next.getId)
+      if (!team.exists { case (_, characterPane) => characterPane equals next }) {
+        chosenCharacter.getChildren
+          .get(0)
+          .asInstanceOf[ImageView]
+          .setImage(selectedCharacter.getChildren.get(0).asInstanceOf[ImageView].getImage)
+        team += (chosenCharacter.getId -> next)
+        if (team.size == 4)
+          joinCasualMatch.setDisable(false)
+      }
+    }
 
-  private def selectCharacter(stackPane: StackPane): Unit = {
-    stackPane.setBackground(new Background(new BackgroundFill(Paint.valueOf("BLUE"), CornerRadii.EMPTY, Insets.EMPTY)))
-  }
+    def changeCharacterChosen(next: StackPane): Unit = {
+      changeSelectedCharacter(chosenCharacter, next)
+      chosenCharacter = next
+      team.foreach {
+        case (position, characterPane) =>
+          val effect: ColorAdjust = new ColorAdjust()
+          if (position equals chosenCharacter.getId) {
+            effect setSaturation NotChosenSaturation
+            effect setBrightness NotChosenBrightness
+            changeCharacterToChoose(characterPane)
+          } else {
+            effect setSaturation ChosenSaturation
+            effect setBrightness ChosenBrightness
+          }
+          characterPane.getChildren.get(0).asInstanceOf[ImageView] setEffect effect
+      }
+    }
 
-  private def deselectCharacter(stackPane: StackPane): Unit = {
-    stackPane.setBackground(new Background(new BackgroundFill(Paint.valueOf("WHITE"), CornerRadii.EMPTY, Insets.EMPTY)))
+    def changeSelectedCharacter(previous: StackPane, next: StackPane): Unit = {
+      deselectCharacter(previous)
+      selectCharacter(next)
+    }
+
+    def selectCharacter(stackPane: StackPane): Unit = {
+      stackPane.setBackground(
+        new Background(new BackgroundFill(Paint.valueOf("BLUE"), CornerRadii.EMPTY, Insets.EMPTY)))
+    }
+
+    def deselectCharacter(stackPane: StackPane): Unit = {
+      stackPane.setBackground(
+        new Background(new BackgroundFill(Paint.valueOf("WHITE"), CornerRadii.EMPTY, Insets.EMPTY)))
+    }
   }
 }

@@ -14,7 +14,7 @@ import ViewConfiguration._
 object ApplicationView {
   private var stage: Stage = new Stage()
 
-  private type ViewSelector = viewSelector.Value
+  type ViewSelector = viewSelector.Value
   import viewSelector._
 
   /** Changes the current view to the required view.
