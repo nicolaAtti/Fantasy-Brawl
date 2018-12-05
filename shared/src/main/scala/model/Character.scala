@@ -94,8 +94,8 @@ trait Character {
     */
   private def getModifierValues(subStatistic: SubStatistic): Int = {
     status.modifiers
-      .filter{ case (_, modifier) => modifier.affectsSubStatistic == subStatistic }
-      .map{ case (_, modifier) => modifier.delta }
+      .filter { case (_, modifier) => modifier.affectsSubStatistic == subStatistic }
+      .map { case (_, modifier) => modifier.delta }
       .sum
   }
 
