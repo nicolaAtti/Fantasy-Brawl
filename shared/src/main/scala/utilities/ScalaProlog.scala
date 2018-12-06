@@ -1,7 +1,6 @@
 package utilities
 
 import scala.io.Source
-import model.{Modifier, SubStatistic}
 import alice.tuprolog._
 
 object ScalaProlog {
@@ -12,11 +11,11 @@ object ScalaProlog {
   implicit def termToList(term: Term): List[String] =
     term.toString.replace("'", "").replace("[", "").replace("]", "").split(",").toList
 
-  implicit def solutionTupleToModifierTuple(solution: (String, SolveInfo)): (String, Modifier) =
+  implicit def solutionTupleToModifierValues(solution: (String, SolveInfo)): (String, String, scala.Int, scala.Int) =
     (solution._1,
-     Modifier(SubStatistic(extractString(solution._2, "Statistic")),
-              extractInt(solution._2, "Value"),
-              extractInt(solution._2, "Duration")))
+     extractString(solution._2, "Statistic"),
+     extractInt(solution._2, "Value"),
+     extractInt(solution._2, "Duration"))
 
   val characterContents =
     Source.fromResource("model/PrologCharacters.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
