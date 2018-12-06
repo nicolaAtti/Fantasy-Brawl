@@ -11,6 +11,9 @@ object Status {
 
   type NewStatus = Status
 
+  def afterManaConsumption(status: Status, move: Move): NewStatus =
+    status.copy(manaPoints = status.manaPoints - move.manaCost)
+
   def afterAfflictionsAlterations(status: Status): NewStatus =
     status.alterations
       .map { case (alteration, _) => alteration.beginTurnStatusVariation }
