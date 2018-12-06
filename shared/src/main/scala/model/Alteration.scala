@@ -63,4 +63,15 @@ object Alteration {
     override val beginTurnStatusVariation = None
   }
 
+  def apply(name: String): Alteration = name match {
+    case "Stunned"      => Stunned
+    case "Asleep"       => Asleep
+    case "Poisoned"     => Poisoned
+    case "Regeneration" => Regeneration
+    case "Berserk"      => Berserk
+    case "Silenced"     => Silenced
+    case "Frozen"       => Frozen
+    case "Blinded"      => Blinded
+  }
+
 }
