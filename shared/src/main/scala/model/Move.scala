@@ -68,14 +68,43 @@ object Move {
       .map(a => (a, a.turnDuration))
       .toMap
 
+  implicit def listStrToAlterationsSet(listStr: List[String]): Set[Alteration] =
+    listStr
+      .map(a => Alteration(a))
+      .toSet
+
   implicit def listTupleToModifiersMap(listTuple: List[(String, String, Int, Int)]): Map[String, Modifier] =
     listTuple.map {
       case (modifierName, subStatisticName, delta, duration) =>
         (modifierName, Modifier(SubStatistic(subStatisticName), delta, duration))
     }.toMap
 
-//  def apply(damageType: String, moveType: MoveType, ): Move = damageType match {
-//    case "PhysicalAttack" => PhysicalAttack
-//    case ""
-//  }
+  def apply(damageType: String,
+            moveType: MoveType,
+            baseValue: Int,
+            addModifiers: Map[String, Modifier],
+            addAlterations: Map[Alteration, Int],
+            removeAlterations: Set[Alteration],
+            manaCost: Int,
+            maxTargets: Int): Move = damageType match {
+
+    case "PhysicalAttack" => PhysicalAttack
+
+    case "StandardDamage" =>
+      val moveEffect = standardDamageEffect(moveType, baseValue, addModifiers, addAlterations, removeAlterations)
+      SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+
+    case "StandardHeal" =>
+      val moveEffect = standardHealEffect(baseValue, addModifiers, addAlterations, removeAlterations)
+      SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+
+    case "Percentage" =>
+      val moveEffect = percentageEffect(baseValue, addModifiers, addAlterations, removeAlterations)
+      SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+
+    case "BuffDebuff" =>
+      val moveEffect = buffDebuffEffect(addModifiers, addAlterations, removeAlterations)
+      SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+  }
+
 }
