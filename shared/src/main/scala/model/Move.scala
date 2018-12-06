@@ -91,19 +91,23 @@ object Move {
     case "PhysicalAttack" => PhysicalAttack
 
     case "StandardDamage" =>
-      val moveEffect = standardDamageEffect(moveType, baseValue, addModifiers, addAlterations, removeAlterations)
+      val moveEffect: (Character, Character) => Status =
+        standardDamageEffect(moveType, baseValue, addModifiers, addAlterations, removeAlterations)
       SpecialMove(moveType, moveEffect, manaCost, maxTargets)
 
     case "StandardHeal" =>
-      val moveEffect = standardHealEffect(baseValue, addModifiers, addAlterations, removeAlterations)
+      val moveEffect: (Character, Character) => Status =
+        standardHealEffect(baseValue, addModifiers, addAlterations, removeAlterations)
       SpecialMove(moveType, moveEffect, manaCost, maxTargets)
 
     case "Percentage" =>
-      val moveEffect = percentageEffect(baseValue, addModifiers, addAlterations, removeAlterations)
+      val moveEffect: (Character, Character) => Status =
+        percentageEffect(baseValue, addModifiers, addAlterations, removeAlterations)
       SpecialMove(moveType, moveEffect, manaCost, maxTargets)
 
     case "BuffDebuff" =>
-      val moveEffect = buffDebuffEffect(addModifiers, addAlterations, removeAlterations)
+      val moveEffect: (Character, Character) => Status =
+        buffDebuffEffect(addModifiers, addAlterations, removeAlterations)
       SpecialMove(moveType, moveEffect, manaCost, maxTargets)
   }
 
