@@ -2,6 +2,7 @@ package model
 
 import MoveType._
 import MoveEffects._
+import model.Alteration._
 
 sealed trait Move {
   def moveType: MoveType
@@ -17,7 +18,7 @@ case object PhysicalAttack extends Move {
     baseDamage = 0,
     addModifiers = Map.empty[String, Modifier],
     addAlterations = Map.empty[Alteration, Int],
-    removeAlterations = Set.empty[Alteration]
+    removeAlterations = Set[Alteration](Asleep)
   )
   override val manaCost = 0
   override val maxTargets = 1
@@ -56,5 +57,58 @@ object Move {
   }
 
   private def adjust[A, B](m: Map[A, B], k: A)(f: B => B): Map[A, B] = m.updated(k, f(m(k)))
+
+  // Move Factory
+
+  implicit def strToMoveType(str: String): MoveType = MoveType(str)
+
+  implicit def listStrToAlterationsMap(listStr: List[String]): Map[Alteration, Int] =
+    listStr
+      .map(a => Alteration(a))
+      .map(a => (a, a.turnDuration))
+      .toMap
+
+  implicit def listStrToAlterationsSet(listStr: List[String]): Set[Alteration] =
+    listStr
+      .map(a => Alteration(a))
+      .toSet
+
+  implicit def listTupleToModifiersMap(listTuple: List[(String, String, Int, Int)]): Map[String, Modifier] =
+    listTuple.map {
+      case (modifierName, subStatisticName, delta, duration) =>
+        (modifierName, Modifier(SubStatistic(subStatisticName), delta, duration))
+    }.toMap
+
+  def apply(damageType: String,
+            moveType: MoveType,
+            baseValue: Int,
+            addModifiers: Map[String, Modifier],
+            addAlterations: Map[Alteration, Int],
+            removeAlterations: Set[Alteration],
+            manaCost: Int,
+            maxTargets: Int): Move = damageType match {
+
+    case "PhysicalAttack" => PhysicalAttack
+
+    case "StandardDamage" =>
+      val moveEffect: (Character, Character) => Status =
+        standardDamageEffect(moveType, baseValue, addModifiers, addAlterations, removeAlterations)
+      SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+
+    case "StandardHeal" =>
+      val moveEffect: (Character, Character) => Status =
+        standardHealEffect(baseValue, addModifiers, addAlterations, removeAlterations)
+      SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+
+    case "Percentage" =>
+      val moveEffect: (Character, Character) => Status =
+        percentageEffect(baseValue, addModifiers, addAlterations, removeAlterations)
+      SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+
+    case "BuffDebuff" =>
+      val moveEffect: (Character, Character) => Status =
+        buffDebuffEffect(addModifiers, addAlterations, removeAlterations)
+      SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+  }
 
 }
