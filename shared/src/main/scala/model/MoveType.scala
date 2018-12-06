@@ -21,8 +21,8 @@ object MoveType {
   }
 
   case object Spell extends MoveType {
-    override def attackingBonus(character: Character): Int = character.magicalDamage
-    override def attackingCriticalBonus(character: Character): Int = character.magicalCriticalDamage
+    override def attackingBonus(character: Character): Int = character.magicalPower
+    override def attackingCriticalBonus(character: Character): Int = character.magicalCriticalPower
     override def defendingBonus(character: Character): Int = character.magicalDefence
   }
 

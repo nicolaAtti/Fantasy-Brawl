@@ -2,7 +2,7 @@ package model
 
 import org.scalatest.FunSuite
 
-class AfflictionTest extends FunSuite {
+class AlterationTest extends FunSuite {
   val jacobStats = Statistics(51, 33, 13, 5, 27)
   val jacob = Character("Warrior", "Jacob", jacobStats)
 
