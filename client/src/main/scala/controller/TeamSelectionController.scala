@@ -88,12 +88,28 @@ object TeamSelectionController extends Initializable with ViewController {
       "Intelligence: " + extractInt(solveInfo, "Intelligence") + "\n" +
       "Resistance: " + extractInt(solveInfo, "Resistence") + "\n\n" +
       "MoveList: \n"
-    extractList(solveInfo, "MoveList").foreach(move => {
-      description += "    " + move +
+    extractList(solveInfo,"MoveList").foreach(move => extractString(getMove(move),"DamageType") match {
+      case "PhysicalAttack" => description += "    " + move + "\n"
+      case "StandardDamage" => description += "    " + move +
         "     -> Type: " + extractString(getMove(move), "Type") +
         ", Base damage: " + extractInt(getMove(move), "BaseValue") +
         ", Mana cost: " + extractInt(getMove(move), "MPCost") +
         "\n"
+      case "StandardHeal" => description += "    " + move +
+        "     -> Type: " + extractString(getMove(move), "Type") +
+        ", Base heal: " + extractInt(getMove(move), "BaseValue") +
+        ", Mana cost: " + extractInt(getMove(move), "MPCost") +
+        "\n"
+      case "Percentage" => description += "    " + move +
+        "     -> Type: " + extractString(getMove(move), "Type") +
+        ", Percentage value: " + extractInt(getMove(move), "BaseValue") +
+        ", Mana cost: " + extractInt(getMove(move), "MPCost") +
+        "\n"
+      case "BuffDebuff" => description += "    " + move +
+        "     -> Type: " + extractString(getMove(move), "Type") +
+        ", Mana cost: " + extractInt(getMove(move), "MPCost") +
+        "\n"
+
     })
     characterDescription.setText(description)
   }

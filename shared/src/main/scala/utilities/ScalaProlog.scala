@@ -1,15 +1,18 @@
 package utilities
 
 import scala.io.Source
+import model.{Modifier,SubStatistic}
 import alice.tuprolog._
 
 object ScalaProlog {
   val engine = new Prolog
 
+
   implicit def termToString(term: Term): String = term.toString.replace("'", "")
   implicit def termToInt(term: Term): scala.Int = term.toString.toInt
   implicit def termToList(term: Term): List[String] =
     term.toString.replace("'", "").replace("[", "").replace("]", "").split(",").toList
+  implicit def solutionToModifier(solution: SolveInfo): Modifier = Modifier(SubStatistic(extractString(solution,"Statistic")),extractInt(solution,"Value"),extractInt(solution,"Duration"))
 
   val characterContents =
     Source.fromResource("model/PrologCharacters.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
@@ -47,7 +50,7 @@ object ScalaProlog {
   def getMove(moveName: String): SolveInfo = {
     setNewTheory(moveContents)
     engine.solve(
-      "spec_move('" + moveName + "',Type,DamageType,BaseValue,MPCost,Mods,Affls,RemovedAfflictions,NTargets).")
+      "move('" + moveName + "',DamageType,Type,BaseValue,Mods,Affls,RemovedAfflictions,MPCost,NTargets).")
   }
 
   def getAffliction(afflictionName: String): SolveInfo = {
