@@ -46,6 +46,17 @@ object ScalaProlog {
 
   def getMove(moveName: String): SolveInfo = {
     setNewTheory(moveContents)
-    engine.solve("spec_move('" + moveName + "',Type,BaseValue,MPCost,Mods,Affls,NTargets).")
+    engine.solve(
+      "spec_move('" + moveName + "',Type,DamageType,BaseValue,MPCost,Mods,Affls,RemovedAfflictions,NTargets).")
+  }
+
+  def getAffliction(afflictionName: String): SolveInfo = {
+    setNewTheory(moveContents)
+    engine.solve("affliction('" + afflictionName + "',Duration).")
+  }
+
+  def getModifier(modifierName: String): SolveInfo = {
+    setNewTheory(moveContents)
+    engine.solve("modifier('" + modifierName + "',Statistic,Duration,Value).")
   }
 }
