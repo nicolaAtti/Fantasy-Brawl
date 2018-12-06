@@ -5,4 +5,4 @@ package communication
   * @param playerName username of the player that wants to join.
   * @param team team with which the player wants to fight.
   */
-case class JoinCasualQueueRequest(playerName: String, team: Map[String, String])
+case class JoinCasualQueueRequest(playerName: String, team: Seq[String], operation: String)

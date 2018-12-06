@@ -6,6 +6,7 @@ import javafx.scene.Scene
 import javafx.stage.Stage
 import controller._
 import ViewConfiguration._
+import messaging.MatchmakingManager
 
 /** Manages the graphical interface.
   *
@@ -41,6 +42,9 @@ object ApplicationView {
     stage setWidth width
     stage setResizable false
     stage setOnCloseRequest (_ => {
+      if (stage.getTitle equals WaitingOpponentTitle) {
+        MatchmakingManager.leaveCasualQueueRequest(TeamSelectionController.username)
+      }
       Platform exit ()
       System exit 0
     })

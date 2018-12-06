@@ -47,7 +47,7 @@ subprojects {
             implementation project(':shared')
     }
 
-    if (project.name == 'client' || project.name == 'login-guest') {
+    if (project.name == 'client' || project.name == 'login-guest' || project.name == 'matchmaking') {
         apply plugin: 'com.github.johnrengelman.shadow'
         shadowJar {
             baseName = rootProject.name

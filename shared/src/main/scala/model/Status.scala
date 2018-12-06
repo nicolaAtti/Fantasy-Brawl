@@ -5,25 +5,27 @@ case class Status(healthPoints: Int,
                   maxHealthPoints: Int,
                   maxManaPoints: Int,
                   modifiers: Map[String, Modifier],
-                  afflictions: Map[Affliction, Int])
+                  alterations: Map[Alteration, Int])
 
 object Status {
 
   type NewStatus = Status
 
   def afterAfflictionsAlterations(status: Status): NewStatus =
-    status.afflictions
-      .map(kv => kv._1.beginTurnAlteration)
+    status.alterations
+      .map { case (alteration, _) => alteration.beginTurnStatusVariation }
       .filter(_.isDefined)
       .map(_.get)
-      .foldLeft(status)((s, alteration) => alteration(s))
+      .foldLeft(status)((s, beginTurnVariation) => beginTurnVariation(s))
 
   def afterRoundEnding(status: Status): NewStatus =
     status.copy(
       modifiers = status.modifiers
         .mapValues(v => v.copy(roundsDuration = v.roundsDuration - 1))
-        .filter(kv => kv._2.roundsDuration > 0),
-      afflictions = status.afflictions.mapValues(v => v - 1).filter(kv => kv._2 > 0)
+        .filter { case (_, modifier) => modifier.roundsDuration > 0 },
+      alterations = status.alterations
+        .mapValues(v => v - 1)
+        .filter { case (_, countDown) => countDown > 0 }
     )
 
 }

@@ -34,8 +34,8 @@ class CharacterTest extends FunSuite {
     assert(jacob.magicalDefence == 13)
     assert(jacob.status.maxManaPoints == 65)
 
-    assert(jacob.magicalDamage == 2)
-    assert(jacob.magicalCriticalDamage == 150)
+    assert(jacob.magicalPower == 2)
+    assert(jacob.magicalCriticalPower == 150)
 
     assert(jacob.status.maxHealthPoints == 540)
     assert(jacob.physicalDefence == 40)
@@ -60,8 +60,8 @@ class CharacterTest extends FunSuite {
     assert(annabelle.magicalDefence == 22)
     assert(annabelle.status.maxManaPoints == 110)
 
-    assert(annabelle.magicalDamage == 4)
-    assert(annabelle.magicalCriticalDamage == 150)
+    assert(annabelle.magicalPower == 4)
+    assert(annabelle.magicalCriticalPower == 150)
 
     assert(annabelle.status.maxHealthPoints == 405)
     assert(annabelle.physicalDefence == 27)

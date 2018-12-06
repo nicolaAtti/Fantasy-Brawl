@@ -29,9 +29,13 @@ object MatchmakingManager {
     import Directives._
     channel(qos = 3) {
       consume(joinCasualMatchmakingResponseQueue) {
-        body(as[JoinCasualQueueRequest]) { response =>
-          ???
-
+        body(as[JoinCasualQueueResponse]) { response =>
+          response.opponentData match {
+            case Right((opponentName, opponentTeam)) =>
+              println(opponentName)
+              opponentTeam.foreach(println(_))
+            case Left(details) => Unit
+          }
           ack
         }
       }
@@ -44,7 +48,14 @@ object MatchmakingManager {
     * @param team team with which the player wants to fight.
     */
   def joinCasualQueueRequest(playerName: String, team: Map[String, String]): Unit = {
-    rabbitControl ! Message(JoinCasualQueueRequest(playerName, team),
+    val teamSeq = team.map(member => member._2).toSeq
+    rabbitControl ! Message(JoinCasualQueueRequest(playerName, teamSeq, "Add"),
+                            publisher,
+                            Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
+  }
+
+  def leaveCasualQueueRequest(playerName: String): Unit = {
+    rabbitControl ! Message(JoinCasualQueueRequest(playerName, Seq(), "Remove"),
                             publisher,
                             Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
   }
