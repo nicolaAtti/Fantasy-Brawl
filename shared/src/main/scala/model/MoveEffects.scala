@@ -54,7 +54,7 @@ object MoveEffects {
     )
   }
 
-  def BuffDebuffEffect(addModifiers: Map[String, Modifier],
+  def buffDebuffEffect(addModifiers: Map[String, Modifier],
                        addAlterations: Map[Alteration, Int],
                        removeAlterations: Set[Alteration])(attacker: Character, target: Character): Status = {
     updatedStatus(
