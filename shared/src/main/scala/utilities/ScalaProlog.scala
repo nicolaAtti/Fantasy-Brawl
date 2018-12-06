@@ -11,6 +11,12 @@ object ScalaProlog {
   implicit def termToList(term: Term): List[String] =
     term.toString.replace("'", "").replace("[", "").replace("]", "").split(",").toList
 
+  implicit def solutionTupleToModifierValues(solution: (String, SolveInfo)): (String, String, scala.Int, scala.Int) =
+    (solution._1,
+     extractString(solution._2, "Statistic"),
+     extractInt(solution._2, "Value"),
+     extractInt(solution._2, "Duration"))
+
   val characterContents =
     Source.fromResource("model/PrologCharacters.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
   val moveContents = Source.fromResource("model/PrologMoves.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
@@ -46,17 +52,11 @@ object ScalaProlog {
 
   def getMove(moveName: String): SolveInfo = {
     setNewTheory(moveContents)
-    engine.solve(
-      "spec_move('" + moveName + "',Type,DamageType,BaseValue,MPCost,Mods,Affls,RemovedAfflictions,NTargets).")
+    engine.solve("move('" + moveName + "',DamageType,Type,BaseValue,Mods,Affls,RemovedAfflictions,MPCost,NTargets).")
   }
 
-  def getAffliction(afflictionName: String): SolveInfo = {
+  def getModifier(modifierName: String): (String, SolveInfo) = {
     setNewTheory(moveContents)
-    engine.solve("affliction('" + afflictionName + "',Duration).")
-  }
-
-  def getModifier(modifierName: String): SolveInfo = {
-    setNewTheory(moveContents)
-    engine.solve("modifier('" + modifierName + "',Statistic,Duration,Value).")
+    (modifierName, engine.solve("modifier('" + modifierName + "',Statistic,Duration,Value)."))
   }
 }
