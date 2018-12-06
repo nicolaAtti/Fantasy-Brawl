@@ -11,4 +11,16 @@ object SubStatistic {
   case object MagicalDefence extends SubStatistic
   case object CriticalChance extends SubStatistic
   case object Speed extends SubStatistic
+
+  def apply(name: String): SubStatistic = name match {
+    case "PhysicalDamage"         => PhysicalDamage
+    case "MagicalDamage"          => MagicalDamage
+    case "PhysicalCriticalDamage" => PhysicalCriticalDamage
+    case "MagicalCriticalDamage"  => MagicalCriticalDamage
+    case "PhysicalDefence"        => PhysicalDefence
+    case "MagicalDefence"         => MagicalDefence
+    case "CriticalChance"         => CriticalChance
+    case "Speed"                  => Speed
+  }
+
 }
