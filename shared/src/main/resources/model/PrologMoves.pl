@@ -5,7 +5,6 @@
 
 move('Physical Attack','PhysicalAttack','Melee',0,[],[],['Asleep'],0,1). %For scala apply
 
-
 move('Lay On Hands','StandardHeal','Spell',50,[],[],[],15,1).
 move('Censure','BuffDebuff','Spell',0,[],['Silenced'],[],30,1).
 move('Holy Smite','StandardDamage','Melee',30,[],[],['Asleep'],25,1).
