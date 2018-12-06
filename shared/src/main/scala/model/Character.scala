@@ -48,7 +48,7 @@ trait Character {
     * @return
     */
   def speed: Int =
-    roundDown((statistics.agility * classMultipliers.agility) / 10) + getModifierValues(Speed)
+    roundUp((statistics.agility * classMultipliers.agility) / 10) + getModifierValues(Speed)
 
   /**
     * Calculates the character's critical strike chance
