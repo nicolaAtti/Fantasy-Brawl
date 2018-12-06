@@ -47,14 +47,14 @@ move('Pummel','StandardDamage','Melee',10,[],['Silenced'],['Asleep'],15,1).
 %
 % Author: Nicola Atti
 
-affliction('Poisoned',3).
-affliction('Stunned',1).
-affliction('Frozen',2).
-affliction('Asleep',3).
-affliction('Blinded',2).
-affliction('Berserk',3).
-affliction('Silenced',2).
-affliction('Regeneration',2).
+% affliction('Poisoned',3).
+% affliction('Stunned',1).
+% affliction('Frozen',2).
+% affliction('Asleep',3).
+% affliction('Blinded',2).
+% affliction('Berserk',3).
+% affliction('Silenced',2).
+% affliction('Regeneration',2).
 
 %modifier --- Defines the duration,power and the interested attribute for every existing modifier
 %modifier(+ModId,-SubStatistic,-TurnDuration,-Value)
