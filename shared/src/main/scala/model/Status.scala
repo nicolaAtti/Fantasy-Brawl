@@ -12,7 +12,7 @@ object Status {
   type NewStatus = Status
 
   def afterManaConsumption(status: Status, move: Move): NewStatus =
-    status.copy(manaPoints = status.manaPoints - move.manaCost)
+    status.copy(manaPoints = 0 max (status.manaPoints - move.manaCost))
 
   def afterAfflictionsAlterations(status: Status): NewStatus =
     status.alterations
