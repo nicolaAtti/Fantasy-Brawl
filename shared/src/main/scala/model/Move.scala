@@ -65,33 +65,33 @@ object SpecialMove {
       case "StandardDamage" =>
         val moveEffect: (Character, Character) => Status =
           standardDamageEffect(moveType = moveType,
-            baseDamage = baseValue,
-            addModifiers = addModifiers,
-            addAlterations = addAlterations,
-            removeAlterations = removeAlterations)
+                               baseDamage = baseValue,
+                               addModifiers = addModifiers,
+                               addAlterations = addAlterations,
+                               removeAlterations = removeAlterations)
         SpecialMove(moveType, moveEffect, manaCost, maxTargets)
 
       case "StandardHeal" =>
         val moveEffect: (Character, Character) => Status =
           standardHealEffect(baseHeal = baseValue,
-            addModifiers = addModifiers,
-            addAlterations = addAlterations,
-            removeAlterations = removeAlterations)
+                             addModifiers = addModifiers,
+                             addAlterations = addAlterations,
+                             removeAlterations = removeAlterations)
         SpecialMove(moveType, moveEffect, manaCost, maxTargets)
 
       case "Percentage" =>
         val moveEffect: (Character, Character) => Status =
           percentageEffect(percentage = baseValue,
-            addModifiers = addModifiers,
-            addAlterations = addAlterations,
-            removeAlterations = removeAlterations)
+                           addModifiers = addModifiers,
+                           addAlterations = addAlterations,
+                           removeAlterations = removeAlterations)
         SpecialMove(moveType, moveEffect, manaCost, maxTargets)
 
       case "BuffDebuff" =>
         val moveEffect: (Character, Character) => Status =
           buffDebuffEffect(addModifiers = addModifiers,
-            addAlterations = addAlterations,
-            removeAlterations = removeAlterations)
+                           addAlterations = addAlterations,
+                           removeAlterations = removeAlterations)
         SpecialMove(moveType, moveEffect, manaCost, maxTargets)
 
       case _ => throw new IllegalArgumentException(s"Unknown move damage type: $moveEffectType")
