@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -21,7 +22,6 @@
                   <Image url="@Albert1-clean.png" />
                </image>
             </ImageView>
-            <HBox layoutX="333.0" prefHeight="63.0" prefWidth="240.0" />
             <ImageView fitHeight="180.0" fitWidth="150.0" layoutX="190.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Annabelle1-clean.png" />
@@ -50,24 +50,97 @@
                <image>
                   <Image url="@Albert2-clean.png" />
                </image></ImageView>
+            <Pane layoutX="319.0" prefHeight="45.0" prefWidth="232.0">
+               <children>
+                  <Label layoutX="117.0" prefHeight="45.0" prefWidth="63.0" text="Time:">
+                     <font>
+                        <Font name="AR JULIAN" size="24.0" />
+                     </font>
+                     <effect>
+                        <InnerShadow />
+                     </effect>
+                  </Label>
+                  <Label layoutX="86.0" prefHeight="45.0" prefWidth="19.0" text="1">
+                     <font>
+                        <Font name="AR JULIAN" size="24.0" />
+                     </font>
+                     <effect>
+                        <InnerShadow />
+                     </effect>
+                  </Label>
+                  <Label layoutY="-9.0" prefHeight="63.0" prefWidth="79.0" text="Round:">
+                     <font>
+                        <Font name="AR JULIAN" size="24.0" />
+                     </font>
+                     <effect>
+                        <InnerShadow />
+                     </effect>
+                  </Label>
+                  <Label layoutX="184.0" layoutY="-9.0" prefHeight="63.0" prefWidth="55.0" text="60">
+                     <font>
+                        <Font name="AR JULIAN" size="24.0" />
+                     </font>
+                     <effect>
+                        <InnerShadow />
+                     </effect>
+                  </Label>
+               </children>
+            </Pane>
          </children>
       </Pane>
       <AnchorPane layoutY="390.0" prefHeight="150.0" prefWidth="960.0">
          <children>
             <Pane layoutX="1.0" prefHeight="150.0" prefWidth="960.0">
                <children>
-                  <Label layoutX="246.0" layoutY="2.0" text="Status" />
-                  <Label layoutX="128.0" layoutY="4.0" text="HP" />
-                  <Label layoutX="194.0" layoutY="2.0" text="MP" />
-                  <Label layoutX="107.0" layoutY="27.0" text="300 / 400" />
-                  <Label layoutX="188.0" layoutY="90.0" text="Label" />
-                  <Label layoutX="188.0" layoutY="69.0" text="Label" />
-                  <Label layoutX="187.0" layoutY="48.0" text="Label" />
-                  <Label layoutX="120.0" layoutY="48.0" text="Label" />
-                  <Label layoutX="120.0" layoutY="90.0" text="Label" />
-                  <Label layoutX="120.0" layoutY="69.0" text="Label" />
-                  <Label layoutX="187.0" layoutY="27.0" text="Label" />
-                  <Label layoutX="14.0" layoutY="2.0" text="Character" />
+                  <Pane prefHeight="150.0" prefWidth="308.0">
+                     <children>
+                        <Label layoutX="238.0" text="Status" />
+                        <Label layoutX="107.0" text="HP" />
+                        <Label layoutX="182.0" text="MP" />
+                        <Label layoutX="85.0" layoutY="30.0" text="300 / 400" />
+                        <Label layoutX="175.0" layoutY="93.0" text="Label" />
+                        <Label layoutX="175.0" layoutY="72.0" text="Label" />
+                        <Label layoutX="99.0" layoutY="72.0" text="Label" />
+                        <Label layoutX="175.0" layoutY="30.0" text="Label" />
+                        <Label layoutX="175.0" layoutY="51.0" text="Label" />
+                        <Label layoutX="99.0" layoutY="93.0" text="Label" />
+                        <Label layoutX="99.0" layoutY="51.0" text="Label" />
+                        <Label layoutX="2.0" text="Character" />
+                        <Label layoutX="241.0" layoutY="30.0" text="Label" />
+                        <Label layoutX="241.0" layoutY="51.0" text="Label" />
+                        <Label layoutX="241.0" layoutY="72.0" text="Label" />
+                        <Label layoutX="241.0" layoutY="93.0" text="Label" />
+                        <Label layoutX="16.0" layoutY="30.0" text="Label" />
+                        <Label layoutX="16.0" layoutY="51.0" text="Label" />
+                        <Label layoutX="16.0" layoutY="72.0" text="Label" />
+                        <Label layoutX="16.0" layoutY="93.0" text="Label" />
+                     </children>
+                  </Pane>
+                  <Pane layoutX="652.0" prefHeight="150.0" prefWidth="308.0">
+                     <children>
+                        <Label layoutX="238.0" text="Status" />
+                        <Label layoutX="107.0" text="HP" />
+                        <Label layoutX="182.0" text="MP" />
+                        <Label layoutX="85.0" layoutY="30.0" text="300 / 400" />
+                        <Label layoutX="175.0" layoutY="93.0" text="Label" />
+                        <Label layoutX="175.0" layoutY="72.0" text="Label" />
+                        <Label layoutX="99.0" layoutY="72.0" text="Label" />
+                        <Label layoutX="175.0" layoutY="30.0" text="Label" />
+                        <Label layoutX="175.0" layoutY="51.0" text="Label" />
+                        <Label layoutX="99.0" layoutY="93.0" text="Label" />
+                        <Label layoutX="99.0" layoutY="51.0" text="Label" />
+                        <Label layoutX="2.0" text="Character" />
+                        <Label layoutX="241.0" layoutY="30.0" text="Label" />
+                        <Label layoutX="241.0" layoutY="51.0" text="Label" />
+                        <Label layoutX="241.0" layoutY="72.0" text="Label" />
+                        <Label layoutX="241.0" layoutY="93.0" text="Label" />
+                        <Label layoutX="16.0" layoutY="30.0" text="Label" />
+                        <Label layoutX="16.0" layoutY="51.0" text="Label" />
+                        <Label layoutX="16.0" layoutY="72.0" text="Label" />
+                        <Label layoutX="16.0" layoutY="93.0" text="Label" />
+                     </children>
+                  </Pane>
+                  <Pane layoutX="308.0" prefHeight="150.0" prefWidth="341.0" />
                </children>
             </Pane>
          </children>
