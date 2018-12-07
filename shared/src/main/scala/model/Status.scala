@@ -16,9 +16,7 @@ object Status {
 
   def afterAfflictionsAlterations(status: Status): NewStatus =
     status.alterations
-      .map { case (alteration, _) => alteration.beginTurnStatusVariation }
-      .filter(_.isDefined)
-      .map(_.get)
+      .flatMap { case (alteration, _) => alteration.beginTurnStatusVariation } // 'flatten' takes out the Option and discard None values
       .foldLeft(status)((s, beginTurnVariation) => beginTurnVariation(s))
 
   def afterRoundEnding(status: Status): NewStatus =
