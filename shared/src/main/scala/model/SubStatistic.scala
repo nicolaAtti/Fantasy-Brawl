@@ -21,6 +21,7 @@ object SubStatistic {
     case "MagicalDefence"         => MagicalDefence
     case "CriticalChance"         => CriticalChance
     case "Speed"                  => Speed
+    case _                        => throw new IllegalArgumentException(s"Unknown sub-statistic name: $name")
   }
 
 }
