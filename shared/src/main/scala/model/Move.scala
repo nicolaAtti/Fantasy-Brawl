@@ -27,35 +27,7 @@ case object PhysicalAttack extends Move {
 case class SpecialMove(moveType: MoveType, moveEffect: (Character, Character) => Status, manaCost: Int, maxTargets: Int)
     extends Move
 
-object Move {
-
-  def canMakeMove(c: Character, m: Move): Boolean = hasEnoughMana(c, m) && !isIncapacitated(c, m)
-
-  private def hasEnoughMana(character: Character, move: Move): Boolean = character.status.manaPoints >= move.manaCost
-
-  private def isIncapacitated(character: Character, move: Move): Boolean =
-    character.status.alterations
-      .map { case (alteration, _) => alteration.inhibits(move) }
-      .fold(false)(_ || _)
-
-  def makeMove(move: Move, attacker: Character, targets: Set[Character]): Map[Character, Status] = {
-    require(canMakeMove(attacker, move) && targets.size <= move.maxTargets)
-
-    val results: Map[Character, Status] =
-      targets
-        .map(target => (target, move.moveEffect(attacker, target)))
-        .toMap
-
-    import Status._
-    if (results contains attacker)
-      adjust(results, attacker)(afterManaConsumption(_, move))
-    else
-      results + (attacker -> afterManaConsumption(attacker.status, move))
-  }
-
-  private def adjust[A, B](m: Map[A, B], k: A)(f: B => B): Map[A, B] = m.updated(k, f(m(k)))
-
-  // Move Factory
+object SpecialMove {
 
   implicit def strToMoveType(str: String): MoveType = MoveType(str)
 
@@ -93,38 +65,67 @@ object Move {
       case "StandardDamage" =>
         val moveEffect: (Character, Character) => Status =
           standardDamageEffect(moveType = moveType,
-                               baseDamage = baseValue,
-                               addModifiers = addModifiers,
-                               addAlterations = addAlterations,
-                               removeAlterations = removeAlterations)
+            baseDamage = baseValue,
+            addModifiers = addModifiers,
+            addAlterations = addAlterations,
+            removeAlterations = removeAlterations)
         SpecialMove(moveType, moveEffect, manaCost, maxTargets)
 
       case "StandardHeal" =>
         val moveEffect: (Character, Character) => Status =
           standardHealEffect(baseHeal = baseValue,
-                             addModifiers = addModifiers,
-                             addAlterations = addAlterations,
-                             removeAlterations = removeAlterations)
+            addModifiers = addModifiers,
+            addAlterations = addAlterations,
+            removeAlterations = removeAlterations)
         SpecialMove(moveType, moveEffect, manaCost, maxTargets)
 
       case "Percentage" =>
         val moveEffect: (Character, Character) => Status =
           percentageEffect(percentage = baseValue,
-                           addModifiers = addModifiers,
-                           addAlterations = addAlterations,
-                           removeAlterations = removeAlterations)
+            addModifiers = addModifiers,
+            addAlterations = addAlterations,
+            removeAlterations = removeAlterations)
         SpecialMove(moveType, moveEffect, manaCost, maxTargets)
 
       case "BuffDebuff" =>
         val moveEffect: (Character, Character) => Status =
           buffDebuffEffect(addModifiers = addModifiers,
-                           addAlterations = addAlterations,
-                           removeAlterations = removeAlterations)
+            addAlterations = addAlterations,
+            removeAlterations = removeAlterations)
         SpecialMove(moveType, moveEffect, manaCost, maxTargets)
 
       case _ => throw new IllegalArgumentException(s"Unknown move damage type: $moveEffectType")
-
     }
   }
+
+}
+
+object Move {
+
+  def canMakeMove(c: Character, m: Move): Boolean = hasEnoughMana(c, m) && !isIncapacitated(c, m)
+
+  private def hasEnoughMana(character: Character, move: Move): Boolean = character.status.manaPoints >= move.manaCost
+
+  private def isIncapacitated(character: Character, move: Move): Boolean =
+    character.status.alterations
+      .map { case (alteration, _) => alteration.inhibits(move) }
+      .fold(false)(_ || _)
+
+  def makeMove(move: Move, attacker: Character, targets: Set[Character]): Map[Character, Status] = {
+    require(canMakeMove(attacker, move) && targets.size <= move.maxTargets)
+
+    val results: Map[Character, Status] =
+      targets
+        .map(target => (target, move.moveEffect(attacker, target)))
+        .toMap
+
+    import Status._
+    if (results contains attacker)
+      adjust(results, attacker)(afterManaConsumption(_, move))
+    else
+      results + (attacker -> afterManaConsumption(attacker.status, move))
+  }
+
+  private def adjust[A, B](m: Map[A, B], k: A)(f: B => B): Map[A, B] = m.updated(k, f(m(k)))
 
 }
