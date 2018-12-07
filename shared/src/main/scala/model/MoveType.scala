@@ -26,4 +26,10 @@ object MoveType {
     override def defendingBonus(character: Character): Int = character.magicalDefence
   }
 
+  def apply(name: String) = name match {
+    case "Melee"  => Melee
+    case "Ranged" => Ranged
+    case "Spell"  => Spell
+  }
+
 }
