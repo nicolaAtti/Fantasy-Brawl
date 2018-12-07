@@ -1,5 +1,7 @@
 package model
 
+import java.lang.IllegalArgumentException
+
 import utilities.Utility._
 
 trait Character {
@@ -129,6 +131,7 @@ object Character {
       case "Thief"   => Thief(characterName, statistics)
       case "Wizard"  => Wizard(characterName, statistics)
       case "Healer"  => Healer(characterName, statistics)
+      case _         => throw new IllegalArgumentException(s"Unknown character role: $role")
     }
 
 }
