@@ -86,29 +86,51 @@ object Move {
             addAlterations: Map[Alteration, Int],
             removeAlterations: Set[Alteration],
             manaCost: Int,
-            maxTargets: Int): Move = damageType match {
+            maxTargets: Int): Move = {
 
-    case "PhysicalAttack" => PhysicalAttack
+    require(manaCost >= 0, "The mana cost cannot be negative")
+    require(baseValue >= 0, "The base value cannot be negative")
+    require(maxTargets > 0, "The number of maximum targets must be at least one")
 
-    case "StandardDamage" =>
-      val moveEffect: (Character, Character) => Status =
-        standardDamageEffect(moveType, baseValue, addModifiers, addAlterations, removeAlterations)
-      SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+    damageType match {
 
-    case "StandardHeal" =>
-      val moveEffect: (Character, Character) => Status =
-        standardHealEffect(baseValue, addModifiers, addAlterations, removeAlterations)
-      SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+      case "PhysicalAttack" => PhysicalAttack
 
-    case "Percentage" =>
-      val moveEffect: (Character, Character) => Status =
-        percentageEffect(baseValue, addModifiers, addAlterations, removeAlterations)
-      SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+      case "StandardDamage" =>
+        val moveEffect: (Character, Character) => Status =
+          standardDamageEffect(moveType = moveType,
+                               baseDamage = baseValue,
+                               addModifiers = addModifiers,
+                               addAlterations = addAlterations,
+                               removeAlterations = removeAlterations)
+        SpecialMove(moveType, moveEffect, manaCost, maxTargets)
 
-    case "BuffDebuff" =>
-      val moveEffect: (Character, Character) => Status =
-        buffDebuffEffect(addModifiers, addAlterations, removeAlterations)
-      SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+      case "StandardHeal" =>
+        val moveEffect: (Character, Character) => Status =
+          standardHealEffect(baseHeal = baseValue,
+                             addModifiers = addModifiers,
+                             addAlterations = addAlterations,
+                             removeAlterations = removeAlterations)
+        SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+
+      case "Percentage" =>
+        val moveEffect: (Character, Character) => Status =
+          percentageEffect(percentage = baseValue,
+                           addModifiers = addModifiers,
+                           addAlterations = addAlterations,
+                           removeAlterations = removeAlterations)
+        SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+
+      case "BuffDebuff" =>
+        val moveEffect: (Character, Character) => Status =
+          buffDebuffEffect(addModifiers = addModifiers,
+                           addAlterations = addAlterations,
+                           removeAlterations = removeAlterations)
+        SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+
+      case _ => throw new IllegalArgumentException(s"Unknown move damage type: $damageType")
+
+    }
   }
 
 }

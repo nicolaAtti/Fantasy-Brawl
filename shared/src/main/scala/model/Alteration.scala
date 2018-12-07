@@ -72,6 +72,7 @@ object Alteration {
     case "Silenced"     => Silenced
     case "Frozen"       => Frozen
     case "Blinded"      => Blinded
+    case _              => throw new IllegalArgumentException(s"Unknown alteration: $name")
   }
 
 }

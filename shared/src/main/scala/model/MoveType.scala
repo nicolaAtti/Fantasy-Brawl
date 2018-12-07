@@ -30,6 +30,7 @@ object MoveType {
     case "Melee"  => Melee
     case "Ranged" => Ranged
     case "Spell"  => Spell
+    case _        => throw new IllegalArgumentException(s"Unknown move type: $name")
   }
 
 }

@@ -12,13 +12,11 @@ object Status {
   type NewStatus = Status
 
   def afterManaConsumption(status: Status, move: Move): NewStatus =
-    status.copy(manaPoints = status.manaPoints - move.manaCost)
+    status.copy(manaPoints = 0 max (status.manaPoints - move.manaCost))
 
   def afterAfflictionsAlterations(status: Status): NewStatus =
     status.alterations
-      .map { case (alteration, _) => alteration.beginTurnStatusVariation }
-      .filter(_.isDefined)
-      .map(_.get)
+      .flatMap { case (alteration, _) => alteration.beginTurnStatusVariation } // 'flatten' takes out the Option and discard None values
       .foldLeft(status)((s, beginTurnVariation) => beginTurnVariation(s))
 
   def afterRoundEnding(status: Status): NewStatus =
