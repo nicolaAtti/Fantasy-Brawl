@@ -24,10 +24,7 @@ case object PhysicalAttack extends Move {
   override val maxTargets = 1
 }
 
-case class SpecialMove(override val moveType: MoveType,
-                       override val moveEffect: (Character, Character) => Status,
-                       manaCost: Int,
-                       maxTargets: Int)
+case class SpecialMove(moveType: MoveType, moveEffect: (Character, Character) => Status, manaCost: Int, maxTargets: Int)
     extends Move
 
 object Move {
@@ -64,8 +61,7 @@ object Move {
 
   implicit def listStrToAlterationsMap(listStr: List[String]): Map[Alteration, Int] =
     listStr
-      .map(a => Alteration(a))
-      .map(a => (a, a.turnDuration))
+      .map(a => (Alteration(a), Alteration(a).turnDuration))
       .toMap
 
   implicit def listStrToAlterationsSet(listStr: List[String]): Set[Alteration] =
@@ -79,7 +75,7 @@ object Move {
         (modifierName, Modifier(SubStatistic(subStatisticName), delta, duration))
     }.toMap
 
-  def apply(damageType: String,
+  def apply(moveEffectType: String,
             moveType: MoveType,
             baseValue: Int,
             addModifiers: Map[String, Modifier],
@@ -92,9 +88,7 @@ object Move {
     require(baseValue >= 0, "The base value cannot be negative")
     require(maxTargets > 0, "The number of maximum targets must be at least one")
 
-    damageType match {
-
-      case "PhysicalAttack" => PhysicalAttack
+    moveEffectType match {
 
       case "StandardDamage" =>
         val moveEffect: (Character, Character) => Status =
@@ -128,7 +122,7 @@ object Move {
                            removeAlterations = removeAlterations)
         SpecialMove(moveType, moveEffect, manaCost, maxTargets)
 
-      case _ => throw new IllegalArgumentException(s"Unknown move damage type: $damageType")
+      case _ => throw new IllegalArgumentException(s"Unknown move damage type: $moveEffectType")
 
     }
   }
