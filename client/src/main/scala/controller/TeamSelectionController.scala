@@ -87,32 +87,31 @@ object TeamSelectionController extends Initializable with ViewController {
       "Spirit: " + extractInt(solveInfo, "Spirit") + "\n" +
       "Intelligence: " + extractInt(solveInfo, "Intelligence") + "\n" +
       "Resistance: " + extractInt(solveInfo, "Resistence") + "\n\n" +
-      "MoveList: \n"
+      "Special moves: \n"
     extractList(solveInfo, "MoveList").foreach(move =>
-      extractString(getMove(move), "DamageType") match {
-        case "PhysicalAttack" => description += "    " + move + "\n"
+      extractString(getSpecialMove(move), "DamageType") match {
         case "StandardDamage" =>
           description += "    " + move +
-            "     -> Type: " + extractString(getMove(move), "Type") +
-            ", Base damage: " + extractInt(getMove(move), "BaseValue") +
-            ", Mana cost: " + extractInt(getMove(move), "MPCost") +
+            "     -> Type: " + extractString(getSpecialMove(move), "Type") +
+            ", Base damage: " + extractInt(getSpecialMove(move), "BaseValue") +
+            ", Mana cost: " + extractInt(getSpecialMove(move), "MPCost") +
             "\n"
         case "StandardHeal" =>
           description += "    " + move +
-            "     -> Type: " + extractString(getMove(move), "Type") +
-            ", Base heal: " + extractInt(getMove(move), "BaseValue") +
-            ", Mana cost: " + extractInt(getMove(move), "MPCost") +
+            "     -> Type: " + extractString(getSpecialMove(move), "Type") +
+            ", Base heal: " + extractInt(getSpecialMove(move), "BaseValue") +
+            ", Mana cost: " + extractInt(getSpecialMove(move), "MPCost") +
             "\n"
         case "Percentage" =>
           description += "    " + move +
-            "     -> Type: " + extractString(getMove(move), "Type") +
-            ", Percentage value: " + extractInt(getMove(move), "BaseValue") +
-            ", Mana cost: " + extractInt(getMove(move), "MPCost") +
+            "     -> Type: " + extractString(getSpecialMove(move), "Type") +
+            ", Percentage value: " + extractInt(getSpecialMove(move), "BaseValue") +
+            ", Mana cost: " + extractInt(getSpecialMove(move), "MPCost") +
             "\n"
         case "BuffDebuff" =>
           description += "    " + move +
-            "     -> Type: " + extractString(getMove(move), "Type") +
-            ", Mana cost: " + extractInt(getMove(move), "MPCost") +
+            "     -> Type: " + extractString(getSpecialMove(move), "Type") +
+            ", Mana cost: " + extractInt(getSpecialMove(move), "MPCost") +
             "\n"
 
     })

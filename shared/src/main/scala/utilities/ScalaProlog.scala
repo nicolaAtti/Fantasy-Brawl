@@ -50,9 +50,10 @@ object ScalaProlog {
     engine.solve("character('" + characterName + "',Class,Strength,Agility,Spirit,Intelligence,Resistence,MoveList).")
   }
 
-  def getMove(moveName: String): SolveInfo = {
+  def getSpecialMove(moveName: String): SolveInfo = {
     setNewTheory(moveContents)
-    engine.solve("move('" + moveName + "',DamageType,Type,BaseValue,Mods,Affls,RemovedAfflictions,MPCost,NTargets).")
+    engine.solve(
+      "spec_move('" + moveName + "',DamageType,Type,BaseValue,Mods,Affls,RemovedAfflictions,MPCost,NTargets).")
   }
 
   def getModifier(modifierName: String): (String, SolveInfo) = {
