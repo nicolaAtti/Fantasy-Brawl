@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -14,7 +16,7 @@
          <children>
             <ImageView fitHeight="389.0" fitWidth="960.0" layoutY="-3.0" pickOnBounds="true" smooth="false">
                <image>
-                  <Image url="@../../../../../../../Desktop/Backdrop1.png" />
+                  <Image url="@Backdrop1.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="180.0" fitWidth="150.0" layoutX="71.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" style="-fx-background-color: transparent;">
@@ -52,37 +54,69 @@
                </image></ImageView>
             <Pane layoutX="319.0" prefHeight="45.0" prefWidth="232.0">
                <children>
-                  <Label layoutX="117.0" prefHeight="45.0" prefWidth="63.0" text="Time:">
+                  <Label fx:id="Timer" layoutX="117.0" prefHeight="45.0" prefWidth="63.0" text="Time:">
+                     <effect>
+                        <Bloom threshold="0.0">
+                           <input>
+                              <Glow level="0.56">
+                                 <input>
+                                    <InnerShadow color="RED" />
+                                 </input>
+                              </Glow>
+                           </input>
+                        </Bloom>
+                     </effect>
                      <font>
-                        <Font name="AR JULIAN" size="24.0" />
+                        <Font name="Harrington" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="RoundCount" layoutX="86.0" prefHeight="45.0" prefWidth="19.0" text="1">
+                     <effect>
+                        <Bloom threshold="0.56">
+                           <input>
+                              <Glow>
+                                 <input>
+                                    <InnerShadow color="RED" />
+                                 </input>
+                              </Glow>
+                           </input>
+                        </Bloom>
+                     </effect>
+                     <font>
+                        <Font name="Harrington" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="Round" layoutY="-9.0" prefHeight="63.0" prefWidth="79.0" text="Round:" textFill="#030303">
+                     <font>
+                        <Font name="Harrington" size="24.0" />
                      </font>
                      <effect>
-                        <InnerShadow />
+                        <Bloom threshold="0.0">
+                           <input>
+                              <Glow level="0.56">
+                                 <input>
+                                    <InnerShadow blurType="GAUSSIAN" color="RED" />
+                                 </input>
+                              </Glow>
+                           </input>
+                        </Bloom>
                      </effect>
                   </Label>
-                  <Label layoutX="86.0" prefHeight="45.0" prefWidth="19.0" text="1">
-                     <font>
-                        <Font name="AR JULIAN" size="24.0" />
-                     </font>
+                  <Label fx:id="TimerCount" layoutX="184.0" layoutY="-9.0" prefHeight="63.0" prefWidth="55.0" text="60">
                      <effect>
-                        <InnerShadow />
+                        <Bloom threshold="0.56">
+                           <input>
+                              <Glow>
+                                 <input>
+                                    <InnerShadow color="RED" />
+                                 </input>
+                              </Glow>
+                           </input>
+                        </Bloom>
                      </effect>
-                  </Label>
-                  <Label layoutY="-9.0" prefHeight="63.0" prefWidth="79.0" text="Round:">
                      <font>
-                        <Font name="AR JULIAN" size="24.0" />
+                        <Font name="Harrington" size="24.0" />
                      </font>
-                     <effect>
-                        <InnerShadow />
-                     </effect>
-                  </Label>
-                  <Label layoutX="184.0" layoutY="-9.0" prefHeight="63.0" prefWidth="55.0" text="60">
-                     <font>
-                        <Font name="AR JULIAN" size="24.0" />
-                     </font>
-                     <effect>
-                        <InnerShadow />
-                     </effect>
                   </Label>
                </children>
             </Pane>
