@@ -77,4 +77,4 @@ buildscript {
     }
 }
 
-defaultTasks 'clean', 'build', 'checkScalafmt', 'scaladoc'
+defaultTasks 'clean', 'build', 'scalafmt', 'scaladoc'
