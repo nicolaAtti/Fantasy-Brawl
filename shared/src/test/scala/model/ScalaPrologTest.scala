@@ -19,9 +19,18 @@ class ScalaPrologTest extends FunSuite {
                                              "Concentration",
                                              "Flamestrike")
 
+  import scala.collection.mutable.ListBuffer
+  import alice.tuprolog.SolveInfo
+  import alice.tuprolog.NoMoreSolutionException
+  val charactersList: ListBuffer[SolveInfo] = ListBuffer()
+  try {
+    getAllCharacters().foreach(v => charactersList += v)
+  } catch {
+    case ex: NoMoreSolutionException => Unit
+  }
   test("Get all facts and extract a String from each of them") {
     assert(
-      getAllCharacters()
+      charactersList
         .map(character => extractString(character, "Name"))
         .toList == charList)
   }
@@ -35,16 +44,23 @@ class ScalaPrologTest extends FunSuite {
   test("Extract a List from a prolog fact") {
     assert(extractList(getCharacter("Jacob"), "MoveList") == jacobMoveList)
   }
-  test("Get all possible results given a custom goal and extract a value") {
-    setNewTheory(moveContents)
-    val allMoves = solveN("move(MoveName,DamageType,Type,BaseValue,Mods,Affls,RemovedAfflictions,MPCost,NTargets).")
-      .map(move => extractString(move, "MoveName"))
-      .toList
+  setNewTheory(moveContents)
+  val movesList: ListBuffer[SolveInfo] = ListBuffer()
+  try {
+    solveN("move(MoveName,DamageType,Type,BaseValue,Mods,Affls,RemovedAfflictions,MPCost,NTargets).").foreach(v =>
+      movesList += v)
+  } catch {
+    case ex: NoMoreSolutionException => Unit
+  }
+
+  val allMoves: List[String] = movesList
+    .map(move => extractString(move, "MoveName"))
+    .toList
+  test("Get all possible results given a custom goal and extract a value") { //da rifare
     assert(
       spellList
         .map(moveName => allMoves contains moveName)
         .forall(_ == true))
-
   }
 
 }
