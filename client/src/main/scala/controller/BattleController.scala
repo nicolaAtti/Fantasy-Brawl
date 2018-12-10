@@ -1,13 +1,12 @@
 package controller
 
-import java.awt.{Button, Label}
 import java.io.File
 import java.net.URL
 import java.util.ResourceBundle
 
 import utilities.ScalaProlog._
 import javafx.fxml.{FXML, Initializable}
-import javafx.scene.control.ListView
+import javafx.scene.control.{Label, ListView}
 import javafx.scene.image.{Image, ImageView}
 import javafx.scene.layout.VBox
 import model.{Character, Move}
@@ -64,11 +63,10 @@ object BattleController extends Initializable with ViewController {
     setupTeam(opponentTeam, "Opponent")
   }
 
-  def setTeams(player: Seq[String],opponent: Seq[String]): Unit ={
+  def setTeams(player: Seq[String], opponent: Seq[String]): Unit = {
     playerTeam = player
     opponentTeam = opponent
   }
-
 
   /**
     * Populates the player's team map
@@ -80,13 +78,14 @@ object BattleController extends Initializable with ViewController {
     case "Player" =>
       myTeamMembers = team.map(charName => (charName, createCharacter(charName))).toMap
       prepareImages(player)
-      //setupLabels(player)
+      setupLabels(player)
     case "Opponent" =>
       opponentTeamMembers = team.map(charName => (charName, createCharacter(charName))).toMap
       prepareImages(player)
-      //setupLabels(player)
+      setupLabels(player)
   }
 
+  //Should go in model
   def createCharacter(charName: String): Character = {
     val charInfo = getCharacter(charName)
     Character(
@@ -98,44 +97,30 @@ object BattleController extends Initializable with ViewController {
 
   def prepareImages(player: String): Unit = player match {
     case "Player" =>
-      (myTeamMembers.keys zip myImages).foreach(member => member._2.setImage(new Image("view/"+member._1 + "1-" + "clean.png")))/*(new File(member._1 + "1-" + "clean.png")*/
+      (myTeamMembers.keys zip myImages).foreach(member =>
+        member._2
+          .setImage(new Image("view/" + member._1 + "1-" + "clean.png"))) /*(new File(member._1 + "1-" + "clean.png")*/
     case "Opponent" =>
       (opponentTeamMembers.keys zip opponentImages).foreach(member =>
-        member._2.setImage(new Image("view/"+member._1 + "2-" + "clean.png")))/*(new File(member._1 + "1-" + "clean.png")*/
+        member._2
+          .setImage(new Image("view/" + member._1 + "2-" + "clean.png"))) /*(new File(member._1 + "1-" + "clean.png")*/
   }
 
   def setupLabels(player: String): Unit = player match {
     case "Player" =>
-      println(playerCharNames)
-      println(playerCharNames.getChildren)
-      println(playerCharNames.getChildren.toArray)
       (myTeamMembers.keys zip playerCharNames.getChildren.toArray) foreach (couple =>
-        couple._2 match {
-          case label: Label => label.setText(couple._1)
-        })
+        couple._2.asInstanceOf[Label].setText(couple._1))
       (myTeamMembers.values zip playerHps.getChildren.toArray) foreach (couple =>
-        couple._2 match {
-          case label: Label => label.setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints)
-        })
+        couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
       (myTeamMembers.values zip playerMps.getChildren.toArray) foreach (couple =>
-        couple._2 match {
-          case label: Label => label.setText(couple._1.status.manaPoints + "/" + couple._1.status.maxManaPoints)
-        })
+        couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints + "/" + couple._1.status.maxManaPoints))
     case "Opponent" =>
-      opponentCharNames.getChildren.toArray.foreach(println(_))
-      opponentTeamMembers.foreach(println(_))
       (opponentTeamMembers.keys zip opponentCharNames.getChildren.toArray) foreach (couple =>
-        couple._2 match {
-          case label: Label => label.setText(couple._1)
-        })
+        couple._2.asInstanceOf[Label].setText(couple._1))
       (opponentTeamMembers.values zip opponentHps.getChildren.toArray) foreach (couple =>
-        couple._2 match {
-          case label: Label => label.setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints)
-        })
+        couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
       (opponentTeamMembers.values zip opponentMps.getChildren.toArray) foreach (couple =>
-        couple._2 match {
-          case label: Label => label.setText(couple._1.status.manaPoints + "/" + couple._1.status.maxManaPoints)
-        })
+        couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints + "/" + couple._1.status.maxManaPoints))
   }
 
   /**

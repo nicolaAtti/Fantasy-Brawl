@@ -181,7 +181,7 @@
                         <Label alignment="CENTER" layoutX="10.0" text="Character" />
                         <VBox fx:id="playerCharNames" alignment="CENTER" layoutY="21.0" prefHeight="96.0" prefWidth="84.0">
                            <children>
-                              <Label fx:id="myChar1Id" alignment="CENTER" text="Label" textFill="#00ff33" />
+                              <Label fx:id="myChar1Id" alignment="CENTER" text="Label" />
                               <Label fx:id="myChar2Id" alignment="CENTER" text="Label" />
                               <Label fx:id="myChar3Id" alignment="CENTER" text="Label" />
                               <Label fx:id="myChar4Id" alignment="CENTER" text="Label" />
@@ -205,10 +205,10 @@
                         </VBox>
                         <VBox fx:id="playerAlterations" alignment="CENTER" layoutX="220.0" layoutY="21.0" prefHeight="96.0" prefWidth="84.0">
                            <children>
-                              <Label fx:id="myChar1Alterations" alignment="CENTER" text="Fr/Slp/Stn" textAlignment="CENTER" />
-                              <Label fx:id="myChar2Alterations" alignment="CENTER" text="Label" textAlignment="CENTER" />
-                              <Label fx:id="myChar3Alterations" alignment="CENTER" text="Label" textAlignment="CENTER" />
-                              <Label fx:id="myChar4Alterations" alignment="CENTER" text="Label" textAlignment="CENTER" />
+                              <Label fx:id="myChar1Alterations" alignment="CENTER" textAlignment="CENTER" />
+                              <Label fx:id="myChar2Alterations" alignment="CENTER" textAlignment="CENTER" />
+                              <Label fx:id="myChar3Alterations" alignment="CENTER" textAlignment="CENTER" />
+                              <Label fx:id="myChar4Alterations" alignment="CENTER" textAlignment="CENTER" />
                            </children></VBox>
                      </children>
                   </Pane>
@@ -220,7 +220,7 @@
                         <Label alignment="CENTER" layoutX="10.0" text="Character" />
                         <VBox fx:id="opponentCharNames" alignment="CENTER" layoutY="21.0" prefHeight="96.0" prefWidth="84.0">
                            <children>
-                              <Label fx:id="opponentChar1Id" alignment="CENTER" text="Label" textFill="RED" />
+                              <Label fx:id="opponentChar1Id" alignment="CENTER" text="Label" />
                               <Label fx:id="opponentChar2Id" alignment="CENTER" text="Label" />
                               <Label fx:id="opponentChar3Id" alignment="CENTER" text="Label" />
                               <Label fx:id="opponentChar4Id" alignment="CENTER" text="Label" />
@@ -244,10 +244,10 @@
                         </VBox>
                         <VBox fx:id="opponentAlterations" alignment="CENTER" layoutX="226.0" layoutY="21.0" prefHeight="96.0" prefWidth="84.0">
                            <children>
-                              <Label fx:id="opponentChar1Alterations" alignment="CENTER" text="Label" />
-                              <Label fx:id="opponentChar2Alterations" alignment="CENTER" text="Label" />
-                              <Label fx:id="opponentChar3Alterations" alignment="CENTER" text="Label" />
-                              <Label fx:id="opponentChar4Alterations" alignment="CENTER" text="Label" />
+                              <Label fx:id="opponentChar1Alterations" alignment="CENTER" />
+                              <Label fx:id="opponentChar2Alterations" alignment="CENTER" />
+                              <Label fx:id="opponentChar3Alterations" alignment="CENTER" />
+                              <Label fx:id="opponentChar4Alterations" alignment="CENTER" />
                            </children>
                         </VBox>
                      </children>
@@ -255,7 +255,7 @@
                   <Pane layoutX="310.0" prefHeight="150.0" prefWidth="325.0">
                      <children>
                         <Button layoutX="263.0" layoutY="42.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="55.0" text="Act" />
-                        <ListView layoutX="8.0" layoutY="8.0" prefHeight="107.0" prefWidth="248.0" />
+                        <ListView layoutX="14.0" layoutY="11.0" prefHeight="89.0" prefWidth="233.0" />
                         <Separator layoutX="318.0" orientation="VERTICAL" prefHeight="150.0" prefWidth="15.0" />
                         <Separator layoutX="-7.0" orientation="VERTICAL" prefHeight="150.0" prefWidth="15.0" />
                      </children></Pane>
