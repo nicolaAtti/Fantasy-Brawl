@@ -86,7 +86,7 @@ object TeamSelectionController extends Initializable with ViewController {
       "Agility: " + extractInt(solveInfo, "Agility") + "\n" +
       "Spirit: " + extractInt(solveInfo, "Spirit") + "\n" +
       "Intelligence: " + extractInt(solveInfo, "Intelligence") + "\n" +
-      "Resistance: " + extractInt(solveInfo, "Resistence") + "\n\n" +
+      "Resistance: " + extractInt(solveInfo, "Resistance") + "\n\n" +
       "MoveList: \n"
     extractList(solveInfo, "MoveList").foreach(move =>
       extractString(getMove(move), "DamageType") match {

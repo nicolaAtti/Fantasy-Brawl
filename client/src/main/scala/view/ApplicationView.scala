@@ -27,7 +27,7 @@ object ApplicationView {
     case TEAM             => setupScene(TeamSelectionTitle, TeamSelectionForm, Some(TeamSelectionController.controller))
     case WAITING_TO_LOGIN => setupScene(WaitingToLoginTitle, WaitingToLoginForm, None)
     case WAITING_OPPONENT => setupScene(WaitingOpponentTitle, WaitingOpponentForm, None)
-    case BATTLE           => setupScene(BattleTitle, BattleForm, None)
+    case BATTLE           => setupScene(BattleTitle, BattleForm, Some(BattleController.controller))
     case _                => hideView()
   }
 

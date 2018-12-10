@@ -2,6 +2,7 @@ package utilities
 
 import scala.io.Source
 import alice.tuprolog._
+import model.Statistics
 
 object ScalaProlog {
   val engine = new Prolog
@@ -16,6 +17,15 @@ object ScalaProlog {
      extractString(solution._2, "Statistic"),
      extractInt(solution._2, "Value"),
      extractInt(solution._2, "Duration"))
+  implicit def solutionToStatistics(solution: SolveInfo): Statistics = {
+    Statistics(
+      extractInt(solution, "Strength"),
+      extractInt(solution, "Agility"),
+      extractInt(solution, "Spirit"),
+      extractInt(solution, "Intelligence"),
+      extractInt(solution, "Resistance")
+    )
+  }
 
   val characterContents =
     Source.fromResource("model/PrologCharacters.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
@@ -42,12 +52,12 @@ object ScalaProlog {
 
   def getAllCharacters(): Stream[SolveInfo] = {
     setNewTheory(characterContents)
-    solveN("character(Name,Class,Strength,Agility,Spirit,Intelligence,Resistence,MoveList).")
+    solveN("character(Name,Class,Strength,Agility,Spirit,Intelligence,Resistance,MoveList).")
   }
 
   def getCharacter(characterName: String): SolveInfo = {
     setNewTheory(characterContents)
-    engine.solve("character('" + characterName + "',Class,Strength,Agility,Spirit,Intelligence,Resistence,MoveList).")
+    engine.solve("character('" + characterName + "',Class,Strength,Agility,Spirit,Intelligence,Resistance,MoveList).")
   }
 
   def getMove(moveName: String): SolveInfo = {

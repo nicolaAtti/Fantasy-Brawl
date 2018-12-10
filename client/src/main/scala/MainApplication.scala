@@ -8,7 +8,7 @@ class MainApplication extends Application {
   override def start(primaryStage: Stage): Unit = {
     import view._
     ApplicationView setupStage (primaryStage, 540, 960)
-    ApplicationView changeView BATTLE
+    ApplicationView changeView LOGIN
     ApplicationView showView ()
   }
 }

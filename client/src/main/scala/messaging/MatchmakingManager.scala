@@ -2,9 +2,12 @@ package messaging
 
 import akka.actor.{ActorRef, ActorSystem, Props}
 import com.spingo.op_rabbit._
-import com.spingo.op_rabbit.properties.ReplyTo
-import communication.MessageFormat.MyFormat
+import properties.ReplyTo
 import communication._
+import MessageFormat.MyFormat
+import view._
+import ViewConfiguration.viewSelector._
+import controller.BattleController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -22,6 +25,8 @@ object MatchmakingManager {
   implicit private val RequestFormat: MyFormat[JoinCasualQueueRequest] = MessageFormat.format[JoinCasualQueueRequest]
   implicit private val ResponseFormat: MyFormat[JoinCasualQueueResponse] = MessageFormat.format[JoinCasualQueueResponse]
 
+  private var myTeam: Seq[String] = Seq()
+
   private val publisher: Publisher = Publisher.queue(joinCasualMatchmakingRequestQueue)
 
   /** Manages casual matchmaking response messages. */
@@ -34,6 +39,8 @@ object MatchmakingManager {
             case Right((opponentName, opponentTeam)) =>
               println(opponentName)
               opponentTeam.foreach(println(_))
+              BattleController.setTeams(myTeam,opponentTeam)
+              ApplicationView changeView BATTLE
             case Left(details) => Unit
           }
           ack
@@ -48,8 +55,8 @@ object MatchmakingManager {
     * @param team team with which the player wants to fight.
     */
   def joinCasualQueueRequest(playerName: String, team: Map[String, String]): Unit = {
-    val teamSeq = team.map(member => member._2).toSeq
-    rabbitControl ! Message(JoinCasualQueueRequest(playerName, teamSeq, "Add"),
+    myTeam = team.map(member => member._2).toSeq
+    rabbitControl ! Message(JoinCasualQueueRequest(playerName, myTeam, "Add"),
                             publisher,
                             Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
   }
