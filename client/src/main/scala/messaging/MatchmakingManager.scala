@@ -39,7 +39,7 @@ object MatchmakingManager {
             case Right((opponentName, opponentTeam)) =>
               println(opponentName)
               opponentTeam.foreach(println(_))
-              BattleController.setTeams(myTeam,opponentTeam)
+              BattleController.setTeams(myTeam, opponentTeam)
               ApplicationView changeView BATTLE
             case Left(details) => Unit
           }

@@ -1,15 +1,22 @@
 package controller
 
-import java.io.File
 import java.net.URL
 import java.util.ResourceBundle
 
+import javafx.animation.{KeyFrame, Timeline}
+import javafx.event.ActionEvent
 import utilities.ScalaProlog._
 import javafx.fxml.{FXML, Initializable}
 import javafx.scene.control.{Label, ListView}
+import javafx.scene.effect.{Effect, InnerShadow}
 import javafx.scene.image.{Image, ImageView}
+import javafx.scene.input.MouseEvent
 import javafx.scene.layout.VBox
+import javafx.scene.paint.Color
+import javafx.util.Duration
 import model.{Character, Move}
+
+import scala.collection.mutable
 
 object BattleController extends Initializable with ViewController {
 
@@ -35,22 +42,38 @@ object BattleController extends Initializable with ViewController {
   @FXML var opponentChar3Image: ImageView = _
   @FXML var opponentChar4Image: ImageView = _
 
+  @FXML var timerCounter: Label = _
+  @FXML var roundCounter: Label = _
+
+  @FXML var moveListView: ListView[String] = _
+
   var myImages: List[ImageView] = List()
   var opponentImages: List[ImageView] = List()
 
   private var playerTeam: Seq[String] = Seq()
   private var opponentTeam: Seq[String] = Seq()
 
+  var targets: mutable.MutableList[ImageView] = mutable.MutableList()
+
   var myTeamMoves: Map[String, Seq[Move]] = Map()
   var myTeamMembers: Map[String, Character] = Map()
   var opponentTeamMembers: Map[String, Character] = Map()
+  val selectedEffect: InnerShadow = new InnerShadow(14.5, Color.BLUE)
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
-    println(playerCharNames)
-    println(playerCharNames.getChildren)
-    println(playerCharNames.getChildren.toArray)
+    selectedEffect.setHeight(30)
+    selectedEffect.setWidth(30)
     myImages = List(playerChar1Image, playerChar2Image, playerChar3Image, playerChar4Image)
     opponentImages = List(opponentChar1Image, opponentChar2Image, opponentChar3Image, opponentChar4Image)
+    var timeSeconds: Int = 60
+    val timeline: Timeline = new Timeline()
+    timeline.setCycleCount(60)
+    timeline.getKeyFrames.add(new KeyFrame(Duration.seconds(1), (_: ActionEvent) => {
+      timeSeconds = timeSeconds - 1
+      timerCounter.setText(timeSeconds.toString)
+      if (timeSeconds <= 0) timeline.stop()
+    }))
+    timeline.play()
     setBattlefield()
   }
 
@@ -132,6 +155,13 @@ object BattleController extends Initializable with ViewController {
 
   def handleActButtonPress(): Unit = ???
 
-  def handleCharacterSelection(): Unit = ???
+  @FXML def handleCharacterToTargetPressed(mouseEvent: MouseEvent) {
+    val characterPressed: ImageView = mouseEvent.getSource.asInstanceOf[ImageView]
+    setCharacterSelected(characterPressed)
+  }
+
+  def setCharacterSelected(charImage: ImageView): Unit = {
+    charImage.setEffect(selectedEffect)
+  }
 
 }

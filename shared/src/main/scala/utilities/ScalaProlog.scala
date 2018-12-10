@@ -19,13 +19,13 @@ object ScalaProlog {
      extractInt(solution._2, "Duration"))
 
   implicit def solutionToStatistics(solution: SolveInfo): Statistics = {
-      Statistics(
-        extractInt(solution, "Strength"),
-        extractInt(solution, "Agility"),
-        extractInt(solution, "Spirit"),
-        extractInt(solution, "Intelligence"),
-        extractInt(solution, "Resistance")
-      )
+    Statistics(
+      extractInt(solution, "Strength"),
+      extractInt(solution, "Agility"),
+      extractInt(solution, "Spirit"),
+      extractInt(solution, "Intelligence"),
+      extractInt(solution, "Resistance")
+    )
   }
 
   val characterContents =
