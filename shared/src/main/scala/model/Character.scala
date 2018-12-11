@@ -128,13 +128,13 @@ private case class Healer(characterName: String,
 
 object Character {
 
-  def apply(role: String, characterName: String, statistics: Statistics, specialMoves: Map[String, SpecialMove]): Character =
-    role match {
+  def apply(characterClass: String, characterName: String, statistics: Statistics, specialMoves: Map[String, SpecialMove]): Character =
+    characterClass match {
       case "Warrior" => Warrior(characterName, statistics, specialMoves)
       case "Thief"   => Thief(characterName, statistics, specialMoves)
       case "Wizard"  => Wizard(characterName, statistics, specialMoves)
       case "Healer"  => Healer(characterName, statistics, specialMoves)
-      case _         => throw new IllegalArgumentException(s"Unknown character role: $role")
+      case _         => throw new IllegalArgumentException(s"Unknown character role: $characterClass")
     }
 
 }
