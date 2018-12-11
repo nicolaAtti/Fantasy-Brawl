@@ -60,7 +60,7 @@ spec_move('Pummel','StandardDamage','Melee',10,[],['Silenced'],['Asleep'],15,1).
 
 modifier('Concentrated','MagicalDamage',1,30).
 modifier('Prepared','CriticalChance',1,25).
-modifier('Bolstered Faith','MagDefence',1,20).
+modifier('Bolstered Faith','MagicalDefence',1,20).
 modifier('Sundered Defences','PhysicalDefence',2,-20).
 modifier('Slowed','Speed',1,-1).
 modifier('Will Of Iron','MagicalDefence',2,10).
