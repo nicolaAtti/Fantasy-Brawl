@@ -8,10 +8,9 @@ import org.scalatest.FunSuite
   * @author Nicola Atti
   */
 class CharacterTest extends FunSuite {
-  val jacobStats = Statistics(51, 33, 13, 5, 27) //This will be taken by a prolog file
-  val annabelleStats = Statistics(34, 46, 22, 8, 27)
-  private val jacob = Character("Warrior", "Jacob", jacobStats)
-  private val annabelle = Character("Thief", "Annabelle", annabelleStats)
+  import utilities.ScalaProlog._
+  private val jacob = getCharacter("Jacob")
+  private val annabelle = getCharacter("Annabelle")
 
   test("New character should have his name and statistics at the creation") {
     assert(
@@ -22,6 +21,7 @@ class CharacterTest extends FunSuite {
         jacob.statistics.intelligence == 5 &&
         jacob.statistics.resistance == 27)
   }
+
   test("New character should have the right sub-statistics") {
     assert(
       jacob.physicalDamage == 102 &&
@@ -34,6 +34,13 @@ class CharacterTest extends FunSuite {
         jacob.magicalCriticalPower == 150 &&
         jacob.status.maxHealthPoints == 540 &&
         jacob.physicalDefence == 40)
+  }
+
+  test("New character should have his special moves") {
+    val jacobSpecialMovesName = List("Skullcrack", "Sismic Slam", "Berserker Rage", "Second Wind")
+    assert(jacob.specialMoves
+      .map{ case (specialMoveName, _) => jacobSpecialMovesName.contains(specialMoveName)}
+      .forall(_ == true))
   }
 
   test("New character should not have modifiers or alterations") {
