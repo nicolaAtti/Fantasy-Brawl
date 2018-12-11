@@ -24,37 +24,24 @@ case object PhysicalAttack extends Move {
   override val maxTargets = 1
 }
 
-case class SpecialMove(moveType: MoveType, moveEffect: (Character, Character) => Status, manaCost: Int, maxTargets: Int)
+case class SpecialMove(name: String,
+                       moveType: MoveType,
+                       moveEffect: (Character, Character) => Status,
+                       manaCost: Int,
+                       maxTargets: Int)
     extends Move
 
 object SpecialMove {
 
-  implicit def strToMoveType(str: String): MoveType = MoveType(str)
-
-  implicit def listStrToAlterationsMap(listStr: List[String]): Map[Alteration, Int] =
-    listStr
-      .map(a => (Alteration(a), Alteration(a).turnDuration))
-      .toMap
-
-  implicit def listStrToAlterationsSet(listStr: List[String]): Set[Alteration] =
-    listStr
-      .map(a => Alteration(a))
-      .toSet
-
-  implicit def listTupleToModifiersMap(listTuple: List[(String, String, Int, Int)]): Map[String, Modifier] =
-    listTuple.map {
-      case (modifierName, subStatisticName, delta, duration) =>
-        (modifierName, Modifier(SubStatistic(subStatisticName), delta, duration))
-    }.toMap
-
-  def apply(moveEffectType: String,
+  def apply(name: String,
+            moveEffectType: String,
             moveType: MoveType,
             baseValue: Int,
             addModifiers: Map[String, Modifier],
             addAlterations: Map[Alteration, Int],
             removeAlterations: Set[Alteration],
             manaCost: Int,
-            maxTargets: Int): Move = {
+            maxTargets: Int): SpecialMove = {
 
     require(manaCost >= 0, "The mana cost cannot be negative")
     require(baseValue >= 0, "The base value cannot be negative")
@@ -69,7 +56,7 @@ object SpecialMove {
                                addModifiers = addModifiers,
                                addAlterations = addAlterations,
                                removeAlterations = removeAlterations)
-        SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+        SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
 
       case "StandardHeal" =>
         val moveEffect: (Character, Character) => Status =
@@ -77,7 +64,7 @@ object SpecialMove {
                              addModifiers = addModifiers,
                              addAlterations = addAlterations,
                              removeAlterations = removeAlterations)
-        SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+        SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
 
       case "Percentage" =>
         val moveEffect: (Character, Character) => Status =
@@ -85,14 +72,14 @@ object SpecialMove {
                            addModifiers = addModifiers,
                            addAlterations = addAlterations,
                            removeAlterations = removeAlterations)
-        SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+        SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
 
       case "BuffDebuff" =>
         val moveEffect: (Character, Character) => Status =
           buffDebuffEffect(addModifiers = addModifiers,
                            addAlterations = addAlterations,
                            removeAlterations = removeAlterations)
-        SpecialMove(moveType, moveEffect, manaCost, maxTargets)
+        SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
 
       case _ => throw new IllegalArgumentException(s"Unknown move damage type: $moveEffectType")
     }
