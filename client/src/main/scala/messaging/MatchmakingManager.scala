@@ -8,6 +8,8 @@ import MessageFormat.MyFormat
 import view._
 import ViewConfiguration.viewSelector._
 import controller.BattleController
+import javafx.application.Platform
+import javafx.scene.control.Alert
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -37,11 +39,17 @@ object MatchmakingManager {
         body(as[JoinCasualQueueResponse]) { response =>
           response.opponentData match {
             case Right((opponentName, opponentTeam)) =>
-              println(opponentName)
-              opponentTeam.foreach(println(_))
+
               BattleController.setTeams(myTeam, opponentTeam)
               ApplicationView changeView BATTLE
-            case Left(details) => Unit
+            case Left(details) => Platform runLater (() =>{
+              val alert: Alert = new Alert(Alert.AlertType.ERROR)
+              alert setTitle "Error"
+              alert setHeaderText details
+              alert showAndWait ()
+              ApplicationView changeView TEAM
+            })
+            case _ => Unit
           }
           ack
         }
