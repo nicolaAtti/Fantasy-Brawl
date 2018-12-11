@@ -3,6 +3,7 @@ package controller
 import java.net.URL
 import java.util.ResourceBundle
 
+import game.Battle
 import javafx.animation.{KeyFrame, Timeline}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.event.ActionEvent
@@ -53,13 +54,8 @@ object BattleController extends Initializable with ViewController {
   var myImages: List[ImageView] = List()
   var opponentImages: List[ImageView] = List()
 
-  private var playerTeam: Seq[String] = Seq()
-  private var opponentTeam: Seq[String] = Seq()
-
   //Could go in battle
   var myTeamMoves: Map[String, Seq[Move]] = Map()
-  var myTeamMembers: Map[String, Character] = Map()
-  var opponentTeamMembers: Map[String, Character] = Map()
   var targets: ListBuffer[ImageView] = ListBuffer()
   var moveList: ObservableList[String] = FXCollections.observableArrayList()
 
@@ -91,13 +87,8 @@ object BattleController extends Initializable with ViewController {
     *
     **/
   def setBattlefield(): Unit = {
-    setupTeam(playerTeam, "Player")
-    setupTeam(opponentTeam, "Opponent")
-  }
-
-  def setTeams(player: Seq[String], opponent: Seq[String]): Unit = {
-    playerTeam = player
-    opponentTeam = opponent
+    setupTeam(Battle.playerTeam, "Player")
+    setupTeam(Battle.opponentTeam, "Opponent")
   }
 
   /**
@@ -106,14 +97,12 @@ object BattleController extends Initializable with ViewController {
     * @param team
     * @param player
     */
-  def setupTeam(team: Seq[String], player: String): Unit = player match {
+  def setupTeam(team: Map[String, Character], player: String): Unit = player match {
     case "Player" =>
-      myTeamMembers = team.map(charName => (charName, createCharacter(charName))).toMap
-      setupCharacterMoves(myTeamMembers("Jacob"))
+      //setupCharacterMoves(myTeamMembers("Jacob"))
       prepareImages(player)
       setupLabels(player)
     case "Opponent" =>
-      opponentTeamMembers = team.map(charName => (charName, createCharacter(charName))).toMap
       prepareImages(player)
       setupLabels(player)
   }
@@ -125,12 +114,12 @@ object BattleController extends Initializable with ViewController {
 
   def prepareImages(player: String): Unit = player match {
     case "Player" =>
-      (myTeamMembers.keys zip myImages).foreach(
+      (Battle.playerTeam.keys zip myImages).foreach(
         member =>
           member._2
             .setImage(new Image("view/" + member._1 + "1-" + "clean.png")))
     case "Opponent" =>
-      (opponentTeamMembers.keys zip opponentImages).foreach(
+      (Battle.opponentTeam.keys zip opponentImages).foreach(
         member =>
           member._2
             .setImage(new Image("view/" + member._1 + "2-" + "clean.png")))
@@ -138,27 +127,31 @@ object BattleController extends Initializable with ViewController {
 
   def setupLabels(player: String): Unit = player match {
     case "Player" =>
-      (myTeamMembers.keys zip playerCharNames.getChildren.toArray) foreach (couple =>
+      (Battle.playerTeam.keys zip playerCharNames.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1))
-      (myTeamMembers.values zip playerHps.getChildren.toArray) foreach (couple =>
+      (Battle.playerTeam.values zip playerHps.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
-      (myTeamMembers.values zip playerMps.getChildren.toArray) foreach (couple =>
+      (Battle.playerTeam.values zip playerMps.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints + "/" + couple._1.status.maxManaPoints))
-      (myTeamMembers.values zip playerAlterations.getChildren.toArray) foreach (couple =>
-        couple._2.asInstanceOf[Label].setText(getAfflictionAcronyms(couple._1.status.alterations.keySet)))
+      (Battle.playerTeam.values zip playerAlterations.getChildren.toArray) foreach (couple =>
+        couple._2
+          .asInstanceOf[Label]
+          .setText(couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + "/" + _).dropRight(1)))
 
     case "Opponent" =>
-      (opponentTeamMembers.keys zip opponentCharNames.getChildren.toArray) foreach (couple =>
+      (Battle.opponentTeam.keys zip opponentCharNames.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1))
-      (opponentTeamMembers.values zip opponentHps.getChildren.toArray) foreach (couple =>
+      (Battle.opponentTeam.values zip opponentHps.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
-      (opponentTeamMembers.values zip opponentMps.getChildren.toArray) foreach (couple =>
+      (Battle.opponentTeam.values zip opponentMps.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints + "/" + couple._1.status.maxManaPoints))
-      (opponentTeamMembers.values zip opponentAlterations.getChildren.toArray) foreach (couple =>
-        couple._2.asInstanceOf[Label].setText(getAfflictionAcronyms(couple._1.status.alterations.keySet)))
+      (Battle.opponentTeam.values zip opponentAlterations.getChildren.toArray) foreach (couple =>
+        couple._2
+          .asInstanceOf[Label]
+          .setText(couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + "/" + _).dropRight(1)))
   }
 
-  private def getAfflictionAcronyms(alterations: Set[Alteration]): String = {
+  /*private def getAfflictionAcronyms(alterations: Set[Alteration]): String = {
     val labelText: String = "/"
     if (alterations.nonEmpty) {
       alterations.foreach(alt =>
@@ -174,12 +167,12 @@ object BattleController extends Initializable with ViewController {
       })
     }
     labelText
-  }
+  }*/
 
   //TODO
   //Link with turn management
   def setActiveCharacter(characterName: String): Unit = {
-    activeCharacter = myTeamMembers("Jacob")
+    activeCharacter = Battle.playerTeam("Jacob")
   }
 
   /**
