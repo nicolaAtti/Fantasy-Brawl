@@ -7,7 +7,7 @@ import communication._
 import MessageFormat.MyFormat
 import view._
 import ViewConfiguration.viewSelector._
-import controller.BattleController
+import game.Battle
 import javafx.application.Platform
 import javafx.scene.control.Alert
 
@@ -28,6 +28,7 @@ object MatchmakingManager {
   implicit private val ResponseFormat: MyFormat[JoinCasualQueueResponse] = MessageFormat.format[JoinCasualQueueResponse]
 
   private var myTeam: Seq[String] = Seq()
+  private var myName: String = _
 
   private val publisher: Publisher = Publisher.queue(joinCasualMatchmakingRequestQueue)
 
@@ -39,8 +40,7 @@ object MatchmakingManager {
         body(as[JoinCasualQueueResponse]) { response =>
           response.opponentData match {
             case Right((opponentName, opponentTeam)) =>
-              BattleController.setTeams(myTeam, opponentTeam)
-              ApplicationView changeView BATTLE
+              Battle.start((myName, myTeam), (opponentName, opponentTeam))
             case Left(details) =>
               Platform runLater (() => {
                 val alert: Alert = new Alert(Alert.AlertType.ERROR)
@@ -63,7 +63,8 @@ object MatchmakingManager {
     * @param team team with which the player wants to fight.
     */
   def joinCasualQueueRequest(playerName: String, team: Map[String, String]): Unit = {
-    myTeam = team.map(member => member._2).toSeq
+    myTeam = team.values.toSeq
+    myName = playerName
     rabbitControl ! Message(JoinCasualQueueRequest(playerName, myTeam, "Add"),
                             publisher,
                             Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))

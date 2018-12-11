@@ -2,6 +2,8 @@ package game
 
 import messaging.RoundManager
 import model._
+import view.ApplicationView
+import view.ViewConfiguration.viewSelector._
 
 object Round {
   var id: Int = 0
@@ -17,11 +19,13 @@ object Round {
     id = turnInformation._2
     turn = turnInformation._1.map {
       case (owner, characterName) =>
-        if (owner equals Battle.playerName)
+        if (owner == Battle.playerName)
           (owner, Battle.playerTeam(characterName))
         else
           (owner, Battle.opponentTeam(characterName))
     }
+    if (id == 1)
+      ApplicationView changeView BATTLE
   }
   def endRound(): Unit = {}
 }
