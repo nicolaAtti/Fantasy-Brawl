@@ -6,7 +6,6 @@ import model._
 
 object ScalaProlog {
   import ScalaPrologHelper._
-  val engine = new Prolog
 
   implicit def termToString(term: Term): String = term.toString.replace("'", "")
   implicit def termToInt(term: Term): scala.Int = term.toString.toInt
@@ -61,9 +60,14 @@ object ScalaProlog {
   }
 
   private object ScalaPrologHelper {
+
+    val engine = new Prolog
+
     val characterContents =
       Source.fromResource("model/PrologCharacters.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
-    val moveContents = Source.fromResource("model/PrologMoves.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
+
+    val moveContents =
+      Source.fromResource("model/PrologMoves.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
 
     def setNewTheory(clauses: String*): Unit =
       engine.setTheory(new Theory(clauses mkString " "))
