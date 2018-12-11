@@ -1,3 +1,3 @@
 package model
 
-case class Modifier(affectsSubStatistic: SubStatistic, delta: Int, roundsDuration: Int)
+case class Modifier(name: String, affectsSubStatistic: SubStatistic, delta: Int, roundsDuration: Int)

@@ -1,13 +1,12 @@
 package model
 
-import java.lang.IllegalArgumentException
-
 import utilities.Utility._
 
 trait Character {
   val characterName: String
   val statistics: Statistics
   val classMultipliers: ClassMultipliers
+  val specialMoves: Map[String, SpecialMove]
 
   /**
     * Contains the character's status, depending on current HP and MP values and existing modifiers and afflictions
@@ -105,33 +104,40 @@ trait Character {
 
 private case class Warrior(characterName: String,
                            statistics: Statistics,
+                           specialMoves: Map[String, SpecialMove],
                            classMultipliers: ClassMultipliers = ClassMultipliers(2, 1, 1, 0.5, 1.5, 2))
     extends Character {}
 
 private case class Thief(characterName: String,
                          statistics: Statistics,
+                         specialMoves: Map[String, SpecialMove],
                          classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 2, 1, 0.5, 1, 1.5))
     extends Character {}
 
 private case class Wizard(characterName: String,
                           statistics: Statistics,
+                          specialMoves: Map[String, SpecialMove],
                           classMultipliers: ClassMultipliers = ClassMultipliers(1, 1, 1.5, 2, 0.5, 1.5))
     extends Character {}
 
 private case class Healer(characterName: String,
                           statistics: Statistics,
+                          specialMoves: Map[String, SpecialMove],
                           classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 0.5, 1, 2, 1, 1.5))
     extends Character {}
 
 object Character {
 
-  def apply(role: String, characterName: String, statistics: Statistics): Character =
-    role match {
-      case "Warrior" => Warrior(characterName, statistics)
-      case "Thief"   => Thief(characterName, statistics)
-      case "Wizard"  => Wizard(characterName, statistics)
-      case "Healer"  => Healer(characterName, statistics)
-      case _         => throw new IllegalArgumentException(s"Unknown character role: $role")
+  def apply(characterClass: String,
+            characterName: String,
+            statistics: Statistics,
+            specialMoves: Map[String, SpecialMove]): Character =
+    characterClass match {
+      case "Warrior" => Warrior(characterName, statistics, specialMoves)
+      case "Thief"   => Thief(characterName, statistics, specialMoves)
+      case "Wizard"  => Wizard(characterName, statistics, specialMoves)
+      case "Healer"  => Healer(characterName, statistics, specialMoves)
+      case _         => throw new IllegalArgumentException(s"Unknown character role: $characterClass")
     }
 
 }
