@@ -49,7 +49,7 @@ class CharacterTest extends FunSuite {
         jacob.status.alterations.isEmpty)
   }
 
-  test("The initial health and mp should be equal to it's maximum value when created") {
+  test("The initial health and mp should be equal to its maximum value when created") {
     assert(
       jacob.status.healthPoints == jacob.status.maxHealthPoints && //540
         jacob.status.manaPoints == jacob.status.maxManaPoints) //65
