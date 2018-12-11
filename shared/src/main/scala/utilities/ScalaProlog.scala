@@ -6,6 +6,10 @@ import model._
 
 object ScalaProlog {
   val engine = new Prolog
+  val myEngine = new Prolog
+
+  def setNewTheoryInMyEngine(clauses: String*): Unit =
+    myEngine.setTheory(new Theory(clauses mkString " "))
 
   implicit def termToString(term: Term): String = term.toString.replace("'", "")
   implicit def termToInt(term: Term): scala.Int = term.toString.toInt
@@ -32,12 +36,13 @@ object ScalaProlog {
   }
 
   def solveN(query: String): Stream[SolveInfo] = {
-    engine.solve(query) #:: Stream.continually(engine.solveNext())
+    myEngine.solve(query) #:: Stream.continually(myEngine.solveNext())
   }
 
-  def getAllCharacters(): Stream[SolveInfo] = {
-    setNewTheory(characterContents)
-    solveN("character(Name,Class,Strength,Agility,Spirit,Intelligence,Resistance,SpecialMoves).")
+  def getAllCharacters(): Stream[Character] = {
+    setNewTheoryInMyEngine(characterContents)
+    solveN("character(CharacterName,CharacterClass,Strength,Agility,Spirit,Intelligence,Resistance,SpecialMoves).")
+      .map(solveInfo => getCharacter(extractString(solveInfo, "CharacterName")))
   }
 
   def getCharacter(characterName: String): Character = {

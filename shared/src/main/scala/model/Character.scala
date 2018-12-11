@@ -128,7 +128,10 @@ private case class Healer(characterName: String,
 
 object Character {
 
-  def apply(characterClass: String, characterName: String, statistics: Statistics, specialMoves: Map[String, SpecialMove]): Character =
+  def apply(characterClass: String,
+            characterName: String,
+            statistics: Statistics,
+            specialMoves: Map[String, SpecialMove]): Character =
     characterClass match {
       case "Warrior" => Warrior(characterName, statistics, specialMoves)
       case "Thief"   => Thief(characterName, statistics, specialMoves)
