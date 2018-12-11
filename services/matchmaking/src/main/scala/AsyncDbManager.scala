@@ -8,13 +8,14 @@ object AsyncDbManager {
 
   val mongoClient = MongoClient("mongodb://login-guest-service:pps-17-fb@ds039291.mlab.com:39291/heroku_3bppsqjk")
   val database = mongoClient.getDatabase("heroku_3bppsqjk")
-  val collection = database.getCollection("casual-queue")
+  val queueCollection = database.getCollection("casual-queue")
+  val battleCollection = database.getCollection("active-battles")
   val documentId = "casual-queue"
 
   val filter = Filters.equal("_id", value = documentId)
 
   def findPlayerInQueue: Future[(String, Seq[String], String)] = {
-    collection
+    queueCollection
       .findOneAndDelete(filter)
       .map(document =>
         (document("playerName").asString().getValue, document("teamMembers").asArray().toArray.toSeq.collect {
@@ -24,8 +25,7 @@ object AsyncDbManager {
   }
 
   def putPlayerInQueue(playerName: String, teamMembers: Seq[String], replyTo: String): Future[Completed] = {
-    println("poroo")
-    collection
+    queueCollection
       .insertOne(
         Document("_id" -> documentId,
                  "playerName" -> playerName,
@@ -34,8 +34,14 @@ object AsyncDbManager {
       .head()
   }
 
+  def createBattleInstance(player1Name: String, player2Name: String): Future[Completed] = {
+    battleCollection
+      .insertOne(Document("player1" -> player1Name, "player2" -> player2Name))
+      .head()
+  }
+
   def removeQueuedPlayer(playerName: String): Future[DeleteResult] = {
-    collection.deleteOne(Filters.equal("playerName", playerName)).head()
+    queueCollection.deleteOne(Filters.equal("playerName", playerName)).head()
   }
 
 }
