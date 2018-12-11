@@ -2,6 +2,7 @@ package controller
 
 import java.net.URL
 import java.util.ResourceBundle
+
 import javafx.event.ActionEvent
 import javafx.fxml.{FXML, Initializable}
 import view.ApplicationView
@@ -15,6 +16,7 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout._
 import javafx.scene.paint.Paint
 import messaging.MatchmakingManager
+import model.SpecialMove
 
 /** Controller of the team selection view.
   *
@@ -89,42 +91,23 @@ object TeamSelectionController extends Initializable with ViewController {
 
     def setDescription(characterName: String): Unit = {
       import utilities.ScalaProlog._
-      val solveInfo: SolveInfo = getCharacter(characterName)
+      val character = getCharacter(characterName)
       var description: String = "Character name: " + characterName + "\n" +
-        "Character class: " + extractString(solveInfo, "Class") + "\n\n" +
-        "Strength: " + extractInt(solveInfo, "Strength") + "\n" +
-        "Agility: " + extractInt(solveInfo, "Agility") + "\n" +
-        "Spirit: " + extractInt(solveInfo, "Spirit") + "\n" +
-        "Intelligence: " + extractInt(solveInfo, "Intelligence") + "\n" +
-        "Resistance: " + extractInt(solveInfo, "Resistence") + "\n\n" +
+        "Character class: " + character.getClass.getName + "\n\n" +
+        "Strength: " + character.statistics.strength + "\n" +
+        "Agility: " + character.statistics.agility + "\n" +
+        "Spirit: " + character.statistics.spirit + "\n" +
+        "Intelligence: " + character.statistics.intelligence + "\n" +
+        "Resistance: " + character.statistics.resistance + "\n\n" +
         "Special moves: \n"
-      extractList(solveInfo, "MoveList").foreach(move =>
-        extractString(getSpecialMove(move), "DamageType") match {
-          case "StandardDamage" =>
-            description += "    " + move +
-              "     -> Type: " + extractString(getSpecialMove(move), "Type") +
-              ", Base damage: " + extractInt(getSpecialMove(move), "BaseValue") +
-              ", Mana cost: " + extractInt(getSpecialMove(move), "MPCost") +
-              "\n"
-          case "StandardHeal" =>
-            description += "    " + move +
-              "     -> Type: " + extractString(getSpecialMove(move), "Type") +
-              ", Base heal: " + extractInt(getSpecialMove(move), "BaseValue") +
-              ", Mana cost: " + extractInt(getSpecialMove(move), "MPCost") +
-              "\n"
-          case "Percentage" =>
-            description += "    " + move +
-              "     -> Type: " + extractString(getSpecialMove(move), "Type") +
-              ", Percentage value: " + extractInt(getSpecialMove(move), "BaseValue") +
-              ", Mana cost: " + extractInt(getSpecialMove(move), "MPCost") +
-              "\n"
-          case "BuffDebuff" =>
-            description += "    " + move +
-              "     -> Type: " + extractString(getSpecialMove(move), "Type") +
-              ", Mana cost: " + extractInt(getSpecialMove(move), "MPCost") +
-              "\n"
-
-      })
+      character.specialMoves.foreach {
+        case (_, move) => {
+          description += "    " + move.name +
+            "     -> Type: " + move.moveType +
+            ", Mana cost: " + move.manaCost +
+            "\n"
+        }
+      }
       characterDescription.setText(description)
     }
 
