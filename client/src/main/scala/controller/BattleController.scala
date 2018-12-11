@@ -59,8 +59,6 @@ object BattleController extends Initializable with ViewController {
   var opponentTeamMembers: Map[String, Character] = Map()
   var targets: ListBuffer[ImageView] = ListBuffer()
 
-
-
   final val SelectedEffect: InnerShadow = new InnerShadow(14.5, Color.BLUE)
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
@@ -113,12 +111,7 @@ object BattleController extends Initializable with ViewController {
 
   //Should go in model
   def createCharacter(charName: String): Character = {
-    val charInfo = getCharacter(charName)
-    Character(
-      extractString(charInfo, "Class"),
-      charName,
-      charInfo
-    )
+    getCharacter(charName)
   }
 
   def prepareImages(player: String): Unit = player match {
@@ -159,15 +152,16 @@ object BattleController extends Initializable with ViewController {
   private def getAfflictionAcronyms(alterations: Set[Alteration]): String = {
     val labelText: String = "/"
     if (alterations.nonEmpty) {
-      alterations.foreach(alt => alt.getClass.getCanonicalName match {
-        case "Stunned" => labelText.concat("Stn/")
-        case "Frozen" => labelText.concat("Frz/")
-        case "Blinded" => labelText.concat("Bln/")
-        case "Asleep" => labelText.concat("Slp/")
-        case "Regeneration" => labelText.concat("Reg/")
-        case "Berserk" => labelText.concat("Brk/")
-        case "Silenced" => labelText.concat("Sil/")
-        case "Poisoned" => labelText.concat("Psn/")
+      alterations.foreach(alt =>
+        alt.getClass.getCanonicalName match {
+          case "Stunned"      => labelText.concat("Stn/")
+          case "Frozen"       => labelText.concat("Frz/")
+          case "Blinded"      => labelText.concat("Bln/")
+          case "Asleep"       => labelText.concat("Slp/")
+          case "Regeneration" => labelText.concat("Reg/")
+          case "Berserk"      => labelText.concat("Brk/")
+          case "Silenced"     => labelText.concat("Sil/")
+          case "Poisoned"     => labelText.concat("Psn/")
       })
     }
     labelText
