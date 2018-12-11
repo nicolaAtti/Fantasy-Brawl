@@ -8,15 +8,14 @@ import javafx.event.ActionEvent
 import utilities.ScalaProlog._
 import javafx.fxml.{FXML, Initializable}
 import javafx.scene.control.{Label, ListView}
-import javafx.scene.effect.{Effect, InnerShadow}
+import javafx.scene.effect.InnerShadow
 import javafx.scene.image.{Image, ImageView}
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.util.Duration
-import model.{Character, Move}
+import model.{Alteration, Character, Move}
 
-import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 object BattleController extends Initializable with ViewController {
@@ -26,12 +25,12 @@ object BattleController extends Initializable with ViewController {
   @FXML var playerCharNames: VBox = _
   @FXML var playerHps: VBox = _
   @FXML var playerMps: VBox = _
-  @FXML var playerAfflictions: VBox = _
+  @FXML var playerAlterations: VBox = _
 
   @FXML var opponentCharNames: VBox = _
   @FXML var opponentHps: VBox = _
   @FXML var opponentMps: VBox = _
-  @FXML var opponentAfflictions: VBox = _
+  @FXML var opponentAlterations: VBox = _
 
   @FXML var playerChar1Image: ImageView = _
   @FXML var playerChar2Image: ImageView = _
@@ -54,16 +53,19 @@ object BattleController extends Initializable with ViewController {
   private var playerTeam: Seq[String] = Seq()
   private var opponentTeam: Seq[String] = Seq()
 
-  var targets: ListBuffer[ImageView] = ListBuffer()
-
+  //Could go in battle
   var myTeamMoves: Map[String, Seq[Move]] = Map()
   var myTeamMembers: Map[String, Character] = Map()
   var opponentTeamMembers: Map[String, Character] = Map()
-  val selectedEffect: InnerShadow = new InnerShadow(14.5, Color.BLUE)
+  var targets: ListBuffer[ImageView] = ListBuffer()
+
+
+
+  final val SelectedEffect: InnerShadow = new InnerShadow(14.5, Color.BLUE)
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
-    selectedEffect.setHeight(30)
-    selectedEffect.setWidth(30)
+    SelectedEffect.setHeight(30)
+    SelectedEffect.setWidth(30)
     myImages = List(playerChar1Image, playerChar2Image, playerChar3Image, playerChar4Image)
     opponentImages = List(opponentChar1Image, opponentChar2Image, opponentChar3Image, opponentChar4Image)
     var timeSeconds: Int = 60
@@ -121,13 +123,15 @@ object BattleController extends Initializable with ViewController {
 
   def prepareImages(player: String): Unit = player match {
     case "Player" =>
-      (myTeamMembers.keys zip myImages).foreach(member =>
-        member._2
-          .setImage(new Image("view/" + member._1 + "1-" + "clean.png"))) /*(new File(member._1 + "1-" + "clean.png")*/
+      (myTeamMembers.keys zip myImages).foreach(
+        member =>
+          member._2
+            .setImage(new Image("view/" + member._1 + "1-" + "clean.png")))
     case "Opponent" =>
-      (opponentTeamMembers.keys zip opponentImages).foreach(member =>
-        member._2
-          .setImage(new Image("view/" + member._1 + "2-" + "clean.png"))) /*(new File(member._1 + "1-" + "clean.png")*/
+      (opponentTeamMembers.keys zip opponentImages).foreach(
+        member =>
+          member._2
+            .setImage(new Image("view/" + member._1 + "2-" + "clean.png")))
   }
 
   def setupLabels(player: String): Unit = player match {
@@ -138,6 +142,9 @@ object BattleController extends Initializable with ViewController {
         couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
       (myTeamMembers.values zip playerMps.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints + "/" + couple._1.status.maxManaPoints))
+      (myTeamMembers.values zip playerAlterations.getChildren.toArray) foreach (couple =>
+        couple._2.asInstanceOf[Label].setText(getAfflictionAcronyms(couple._1.status.alterations.keySet)))
+
     case "Opponent" =>
       (opponentTeamMembers.keys zip opponentCharNames.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1))
@@ -145,6 +152,25 @@ object BattleController extends Initializable with ViewController {
         couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
       (opponentTeamMembers.values zip opponentMps.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints + "/" + couple._1.status.maxManaPoints))
+      (opponentTeamMembers.values zip opponentAlterations.getChildren.toArray) foreach (couple =>
+        couple._2.asInstanceOf[Label].setText(getAfflictionAcronyms(couple._1.status.alterations.keySet)))
+  }
+
+  private def getAfflictionAcronyms(alterations: Set[Alteration]): String = {
+    val labelText: String = "/"
+    if (alterations.nonEmpty) {
+      alterations.foreach(alt => alt.getClass.getCanonicalName match {
+        case "Stunned" => labelText.concat("Stn/")
+        case "Frozen" => labelText.concat("Frz/")
+        case "Blinded" => labelText.concat("Bln/")
+        case "Asleep" => labelText.concat("Slp/")
+        case "Regeneration" => labelText.concat("Reg/")
+        case "Berserk" => labelText.concat("Brk/")
+        case "Silenced" => labelText.concat("Sil/")
+        case "Poisoned" => labelText.concat("Psn/")
+      })
+    }
+    labelText
   }
 
   /**
@@ -152,30 +178,35 @@ object BattleController extends Initializable with ViewController {
     *
     * @param characterName
     */
-  def setupCharacterMoves(characterName: String): Unit = ???
+  def setupCharacterMoves(characterName: String): Unit = {
+    //Get the character's moves (if it's mine) that can act in the current turn
+  }
 
   def handleActButtonPress(): Unit = ???
 
   @FXML def handleCharacterToTargetPressed(mouseEvent: MouseEvent) {
     var characterPressed: ImageView = mouseEvent.getSource.asInstanceOf[ImageView]
     targets.foreach(img => println(img.getId))
-    if(targets.contains(characterPressed)){
+    if (targets.contains(characterPressed)) {
       targets -= characterPressed
       targets.foreach(img => println(img.getId))
       setCharacterUnselected(characterPressed)
-    }else{
+    } else {
       targets += characterPressed
       targets.foreach(img => println(img.getId))
       setCharacterSelected(characterPressed)
     }
-
   }
 
-  def setCharacterSelected(charImage: ImageView): Unit = {
-    charImage.setEffect(selectedEffect)
+  def addAlteration(): Unit = ???
+
+  private def canAct(): Boolean = ???
+
+  private def setCharacterSelected(charImage: ImageView): Unit = {
+    charImage.setEffect(SelectedEffect)
   }
-  def setCharacterUnselected(charImage: ImageView): Unit = {
-    println("ugachaca")
+
+  private def setCharacterUnselected(charImage: ImageView): Unit = {
     charImage.setEffect(null)
   }
 
