@@ -1,10 +1,8 @@
 package model
 
 import org.scalatest.FunSuite
-import utilities.ScalaProlog.getCharacter
 
 class AlterationTest extends FunSuite {
-
   val stunned = Alteration("Stunned")
   test("The stunned alteration should inhibit all moves") {
     assert(
