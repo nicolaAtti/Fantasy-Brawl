@@ -254,8 +254,8 @@
                   </Pane>
                   <Pane layoutX="310.0" prefHeight="150.0" prefWidth="325.0">
                      <children>
-                        <Button fx:id="actButton" layoutX="263.0" layoutY="42.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="55.0" text="Act" />
-                        <ListView fx:id="moveListView" layoutX="14.0" layoutY="11.0" prefHeight="89.0" prefWidth="233.0" />
+                        <Button fx:id="actButton" disable="true" layoutX="263.0" layoutY="42.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="55.0" text="Act" />
+                        <ListView fx:id="moveListView" layoutX="14.0" layoutY="3.0" onMouseClicked="#handleMoveSelection" pickOnBounds="false" prefHeight="110.0" prefWidth="233.0" style="-fx-font-size: 0.85em;" />
                         <Separator layoutX="318.0" orientation="VERTICAL" prefHeight="150.0" prefWidth="15.0" />
                         <Separator layoutX="-7.0" orientation="VERTICAL" prefHeight="150.0" prefWidth="15.0" />
                      </children></Pane>

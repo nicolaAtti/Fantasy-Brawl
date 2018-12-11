@@ -4,10 +4,11 @@ import java.net.URL
 import java.util.ResourceBundle
 
 import javafx.animation.{KeyFrame, Timeline}
+import javafx.collections.{FXCollections, ObservableList}
 import javafx.event.ActionEvent
 import utilities.ScalaProlog._
 import javafx.fxml.{FXML, Initializable}
-import javafx.scene.control.{Label, ListView}
+import javafx.scene.control.{Button, Label, ListView}
 import javafx.scene.effect.InnerShadow
 import javafx.scene.image.{Image, ImageView}
 import javafx.scene.input.MouseEvent
@@ -47,6 +48,8 @@ object BattleController extends Initializable with ViewController {
 
   @FXML var moveListView: ListView[String] = _
 
+  @FXML var actButton: Button = _
+
   var myImages: List[ImageView] = List()
   var opponentImages: List[ImageView] = List()
 
@@ -58,6 +61,9 @@ object BattleController extends Initializable with ViewController {
   var myTeamMembers: Map[String, Character] = Map()
   var opponentTeamMembers: Map[String, Character] = Map()
   var targets: ListBuffer[ImageView] = ListBuffer()
+  var moveList: ObservableList[String] = FXCollections.observableArrayList()
+
+  var activeCharacter: Character = _
 
   final val SelectedEffect: InnerShadow = new InnerShadow(14.5, Color.BLUE)
 
@@ -76,6 +82,8 @@ object BattleController extends Initializable with ViewController {
     }))
     timeline.play()
     setBattlefield()
+
+    setActiveCharacter("Jacob")
   }
 
   /**
@@ -101,6 +109,7 @@ object BattleController extends Initializable with ViewController {
   def setupTeam(team: Seq[String], player: String): Unit = player match {
     case "Player" =>
       myTeamMembers = team.map(charName => (charName, createCharacter(charName))).toMap
+      setupCharacterMoves(myTeamMembers("Jacob"))
       prepareImages(player)
       setupLabels(player)
     case "Opponent" =>
@@ -167,34 +176,67 @@ object BattleController extends Initializable with ViewController {
     labelText
   }
 
+  //TODO
+  //Link with turn management
+  def setActiveCharacter(characterName: String): Unit = {
+    activeCharacter = myTeamMembers("Jacob")
+  }
+
   /**
     * Adds the character's moves to the map
     *
     * @param characterName
     */
-  def setupCharacterMoves(characterName: String): Unit = {
+  def setupCharacterMoves(character: Character): Unit = {
     //Get the character's moves (if it's mine) that can act in the current turn
+    moveList.add("Physical Attack")
+    character.specialMoves.keySet.foreach(moveName => moveList.add(moveName))
+    moveListView.setItems(moveList)
   }
 
-  def handleActButtonPress(): Unit = ???
+  @FXML def handleActButtonPress(): Unit = ???
+
+  @FXML def handleMoveSelection(mouseEvent: MouseEvent) {
+    actButtonActivation()
+  }
 
   @FXML def handleCharacterToTargetPressed(mouseEvent: MouseEvent) {
     var characterPressed: ImageView = mouseEvent.getSource.asInstanceOf[ImageView]
-    targets.foreach(img => println(img.getId))
     if (targets.contains(characterPressed)) {
       targets -= characterPressed
-      targets.foreach(img => println(img.getId))
       setCharacterUnselected(characterPressed)
     } else {
       targets += characterPressed
-      targets.foreach(img => println(img.getId))
       setCharacterSelected(characterPressed)
+    }
+    actButtonActivation()
+  }
+  //TODO
+  //Link with turn manager
+  def addAlteration(): Unit = ???
+
+  private def actButtonActivation(): Unit = {
+    if (!cannotAct) {
+      actButton.setDisable(false)
+    } else {
+      actButton.setDisable(true)
     }
   }
 
-  def addAlteration(): Unit = ???
-
-  private def canAct(): Boolean = ???
+  private def cannotAct: Boolean = {
+    if (!moveListView.getSelectionModel.getSelectedItems.isEmpty) {
+      val moveName = moveListView.getSelectionModel.getSelectedItem
+      var moveMaxTargets = 1
+      moveName match {
+        case "Physical Attack" => targets.size > moveMaxTargets
+        case _ =>
+          moveMaxTargets = activeCharacter.specialMoves(moveName).maxTargets
+          targets.size > moveMaxTargets
+      }
+    } else {
+      true
+    }
+  }
 
   private def setCharacterSelected(charImage: ImageView): Unit = {
     charImage.setEffect(SelectedEffect)
