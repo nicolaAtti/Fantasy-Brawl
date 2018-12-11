@@ -39,16 +39,16 @@ object MatchmakingManager {
         body(as[JoinCasualQueueResponse]) { response =>
           response.opponentData match {
             case Right((opponentName, opponentTeam)) =>
-
               BattleController.setTeams(myTeam, opponentTeam)
               ApplicationView changeView BATTLE
-            case Left(details) => Platform runLater (() =>{
-              val alert: Alert = new Alert(Alert.AlertType.ERROR)
-              alert setTitle "Error"
-              alert setHeaderText details
-              alert showAndWait ()
-              ApplicationView changeView TEAM
-            })
+            case Left(details) =>
+              Platform runLater (() => {
+                val alert: Alert = new Alert(Alert.AlertType.ERROR)
+                alert setTitle "Error"
+                alert setHeaderText details
+                alert showAndWait ()
+                ApplicationView changeView TEAM
+              })
             case _ => Unit
           }
           ack

@@ -1,10 +1,10 @@
 import scala.util.{Failure, Success}
 import scala.concurrent._
 import ExecutionContext.Implicits.global
-
 import akka.actor.{ActorSystem, Props}
 import com.spingo.op_rabbit._
 import com.spingo.op_rabbit.properties.ReplyTo
+import communication.MessageFormat.MyFormat
 
 object Main extends App {
 
@@ -37,7 +37,7 @@ object Main extends App {
                   case Success(opponentData: (String, Seq[String], String)) =>
                     val reqPlayerData = (request.playerName, request.team, replyTo.get)
                     AsyncDbManager.createBattleInstance(request.playerName, opponentData._1).onComplete {
-                      case Success(s) => sendBattleDataToBoth(reqPlayerData, opponentData)
+                      case Success(_) => sendBattleDataToBoth(reqPlayerData, opponentData)
                       case Failure(e) => println(s"Failure... Caught: $e")
                     }
 
@@ -47,13 +47,13 @@ object Main extends App {
                     AsyncDbManager
                       .putPlayerInQueue(request.playerName.toString, request.team, replyTo.get.toString)
                       .onComplete {
-                        case Success(value)     => println("Db aggiornato con successo")
+                        case Success(_)         => println("Database updated successfully")
                         case Failure(exception) => println(s"Failure... Caught: $exception")
                       }
                 }
               case "Remove" =>
                 AsyncDbManager.removeQueuedPlayer(request.playerName).onComplete {
-                  case Success(_)         => println("Client rimosso con successo")
+                  case Success(_)         => println("Client removed successfully")
                   case Failure(exception) => println(s"Failure... Caught: $exception")
                 }
             }
