@@ -7,6 +7,7 @@ import com.spingo.op_rabbit.{RabbitMarshaller, RabbitUnmarshaller}
 object MessageFormat {
 
   type MyFormat[A] = RabbitMarshaller[A] with RabbitUnmarshaller[A]
+  import Serializer._
 
   /** Provides Marshaller and Unmarshaller to messages. */
   def format[A]: MyFormat[A] = new RabbitMarshaller[A] with RabbitUnmarshaller[A] {
@@ -17,18 +18,21 @@ object MessageFormat {
     def unmarshall(value: Array[Byte], contentType: Option[String], charset: Option[String]): A = deserialize(value)
   }
 
-  private def serialize[A](value: A): Array[Byte] = {
-    val stream: ByteArrayOutputStream = new ByteArrayOutputStream()
-    val oos = new ObjectOutputStream(stream)
-    oos.writeObject(value)
-    oos.close()
-    stream.toByteArray
-  }
+  private object Serializer {
 
-  private def deserialize[A](bytes: Array[Byte]): A = {
-    val ois = new ObjectInputStream(new ByteArrayInputStream(bytes))
-    val value = ois.readObject
-    ois.close()
-    value.asInstanceOf[A]
+    def serialize[A](value: A): Array[Byte] = {
+      val stream: ByteArrayOutputStream = new ByteArrayOutputStream()
+      val oos = new ObjectOutputStream(stream)
+      oos.writeObject(value)
+      oos.close()
+      stream.toByteArray
+    }
+
+    def deserialize[A](bytes: Array[Byte]): A = {
+      val ois = new ObjectInputStream(new ByteArrayInputStream(bytes))
+      val value = ois.readObject
+      ois.close()
+      value.asInstanceOf[A]
+    }
   }
 }

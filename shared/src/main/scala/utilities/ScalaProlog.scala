@@ -2,31 +2,19 @@ package utilities
 
 import scala.io.Source
 import alice.tuprolog._
-import model.Statistics
+import model._
 
 object ScalaProlog {
   val engine = new Prolog
+  val myEngine = new Prolog
+
+  def setNewTheoryInMyEngine(clauses: String*): Unit =
+    myEngine.setTheory(new Theory(clauses mkString " "))
 
   implicit def termToString(term: Term): String = term.toString.replace("'", "")
   implicit def termToInt(term: Term): scala.Int = term.toString.toInt
   implicit def termToList(term: Term): List[String] =
-    term.toString.replace("'", "").replace("[", "").replace("]", "").split(",").toList
-
-  implicit def solutionTupleToModifierValues(solution: (String, SolveInfo)): (String, String, scala.Int, scala.Int) =
-    (solution._1,
-     extractString(solution._2, "Statistic"),
-     extractInt(solution._2, "Value"),
-     extractInt(solution._2, "Duration"))
-
-  implicit def solutionToStatistics(solution: SolveInfo): Statistics = {
-    Statistics(
-      extractInt(solution, "Strength"),
-      extractInt(solution, "Agility"),
-      extractInt(solution, "Spirit"),
-      extractInt(solution, "Intelligence"),
-      extractInt(solution, "Resistance")
-    )
-  }
+    term.toString.replace("'", "").replace("[", "").replace("]", "").split(",").filter(s => s != "").toList
 
   val characterContents =
     Source.fromResource("model/PrologCharacters.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
@@ -48,26 +36,59 @@ object ScalaProlog {
   }
 
   def solveN(query: String): Stream[SolveInfo] = {
-    engine.solve(query) #:: Stream.continually(engine.solveNext())
+    myEngine.solve(query) #:: Stream.continually(myEngine.solveNext())
   }
 
-  def getAllCharacters(): Stream[SolveInfo] = {
+  def getAllCharacters(): Stream[Character] = {
+    setNewTheoryInMyEngine(characterContents)
+    solveN("character(CharacterName,CharacterClass,Strength,Agility,Spirit,Intelligence,Resistance,SpecialMoves).")
+      .map(solveInfo => getCharacter(extractString(solveInfo, "CharacterName")))
+  }
+
+  def getCharacter(characterName: String): Character = {
     setNewTheory(characterContents)
-    solveN("character(Name,Class,Strength,Agility,Spirit,Intelligence,Resistance,MoveList).")
+    val solveInfo = engine.solve(
+      "character('" + characterName + "',CharacterClass,Strength,Agility,Spirit,Intelligence,Resistance,SpecialMoves).")
+    Character(
+      characterClass = extractString(solveInfo, "CharacterClass"),
+      characterName = characterName,
+      statistics = Statistics(
+        extractInt(solveInfo, "Strength"),
+        extractInt(solveInfo, "Agility"),
+        extractInt(solveInfo, "Spirit"),
+        extractInt(solveInfo, "Intelligence"),
+        extractInt(solveInfo, "Resistance")
+      ),
+      specialMoves = extractList(solveInfo, "SpecialMoves").map(moveName => moveName -> getSpecialMove(moveName)).toMap
+    )
   }
 
-  def getCharacter(characterName: String): SolveInfo = {
-    setNewTheory(characterContents)
-    engine.solve("character('" + characterName + "',Class,Strength,Agility,Spirit,Intelligence,Resistance,MoveList).")
-  }
-
-  def getMove(moveName: String): SolveInfo = {
+  def getSpecialMove(moveName: String): SpecialMove = {
     setNewTheory(moveContents)
-    engine.solve("move('" + moveName + "',DamageType,Type,BaseValue,Mods,Affls,RemovedAfflictions,MPCost,NTargets).")
+    val solveInfo = engine.solve(
+      "spec_move('" + moveName + "',MoveEffectType,MoveType,BaseValue,AddModifiers,AddAlterations,RemoveAlterations,ManaCost,MaxTargets).")
+    SpecialMove(
+      name = moveName,
+      moveEffectType = extractString(solveInfo, "MoveEffectType"),
+      moveType = MoveType(extractString(solveInfo, "MoveType")),
+      baseValue = extractInt(solveInfo, "BaseValue"),
+      addModifiers =
+        extractList(solveInfo, "AddModifiers").map(modifierName => modifierName -> getModifier(modifierName)).toMap,
+      addAlterations = extractList(solveInfo, "AddAlterations")
+        .map(alteration => Alteration(alteration) -> Alteration(alteration).turnDuration)
+        .toMap,
+      removeAlterations = extractList(solveInfo, "RemoveAlterations").map(alteration => Alteration(alteration)).toSet,
+      manaCost = extractInt(solveInfo, "ManaCost"),
+      maxTargets = extractInt(solveInfo, "MaxTargets")
+    )
   }
 
-  def getModifier(modifierName: String): (String, SolveInfo) = {
+  def getModifier(modifierName: String): Modifier = {
     setNewTheory(moveContents)
-    (modifierName, engine.solve("modifier('" + modifierName + "',Statistic,Duration,Value)."))
+    val solveInfo = engine.solve("modifier('" + modifierName + "',SubStatistic,RoundsDuration,Delta).")
+    Modifier(modifierName,
+             SubStatistic(extractString(solveInfo, "SubStatistic")),
+             extractInt(solveInfo, "Delta"),
+             extractInt(solveInfo, "RoundsDuration"))
   }
 }
