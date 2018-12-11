@@ -17,6 +17,7 @@ import javafx.util.Duration
 import model.{Character, Move}
 
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 
 object BattleController extends Initializable with ViewController {
 
@@ -53,7 +54,7 @@ object BattleController extends Initializable with ViewController {
   private var playerTeam: Seq[String] = Seq()
   private var opponentTeam: Seq[String] = Seq()
 
-  var targets: mutable.MutableList[ImageView] = mutable.MutableList()
+  var targets: ListBuffer[ImageView] = ListBuffer()
 
   var myTeamMoves: Map[String, Seq[Move]] = Map()
   var myTeamMembers: Map[String, Character] = Map()
@@ -156,12 +157,30 @@ object BattleController extends Initializable with ViewController {
   def handleActButtonPress(): Unit = ???
 
   @FXML def handleCharacterToTargetPressed(mouseEvent: MouseEvent) {
-    val characterPressed: ImageView = mouseEvent.getSource.asInstanceOf[ImageView]
-    setCharacterSelected(characterPressed)
+    var characterPressed: ImageView = mouseEvent.getSource.asInstanceOf[ImageView]
+    var pressedId: String = characterPressed.getId
+    println("fuori dall'if")
+    targets.foreach(img => println(img.getId))
+    if(targets.contains(characterPressed)){
+      println("dentro all'if")
+      targets -= characterPressed
+      targets.foreach(img => println(img.getId))
+      setCharacterUnselected(characterPressed)
+    }else{
+      targets += characterPressed
+      println("l'else")
+      targets.foreach(img => println(img.getId))
+      setCharacterSelected(characterPressed)
+    }
+
   }
 
   def setCharacterSelected(charImage: ImageView): Unit = {
     charImage.setEffect(selectedEffect)
+  }
+  def setCharacterUnselected(charImage: ImageView): Unit = {
+    println("ugachaca")
+    charImage.setEffect(null)
   }
 
 }
