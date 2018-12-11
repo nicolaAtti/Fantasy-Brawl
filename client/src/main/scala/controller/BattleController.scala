@@ -158,17 +158,13 @@ object BattleController extends Initializable with ViewController {
 
   @FXML def handleCharacterToTargetPressed(mouseEvent: MouseEvent) {
     var characterPressed: ImageView = mouseEvent.getSource.asInstanceOf[ImageView]
-    var pressedId: String = characterPressed.getId
-    println("fuori dall'if")
     targets.foreach(img => println(img.getId))
     if(targets.contains(characterPressed)){
-      println("dentro all'if")
       targets -= characterPressed
       targets.foreach(img => println(img.getId))
       setCharacterUnselected(characterPressed)
     }else{
       targets += characterPressed
-      println("l'else")
       targets.foreach(img => println(img.getId))
       setCharacterSelected(characterPressed)
     }
