@@ -36,7 +36,11 @@ object Main extends App {
                 AsyncDbManager.findPlayerInQueue.onComplete {
                   case Success(opponentData: (String, Seq[String], String)) =>
                     val reqPlayerData = (request.playerName, request.team, replyTo.get)
-                    sendBattleDataToBoth(reqPlayerData, opponentData)
+                    AsyncDbManager.createBattleInstance(request.playerName, opponentData._1).onComplete {
+                      case Success(s) => sendBattleDataToBoth(reqPlayerData, opponentData)
+                      case Failure(e) => println(s"Failure... Caught: $e")
+                    }
+
                   case Failure(e) =>
                     println(s"Failure... Caught: $e")
                   case _ =>
@@ -53,7 +57,6 @@ object Main extends App {
                   case Failure(exception) => println(s"Failure... Caught: $exception")
                 }
             }
-
           }
           ack
         }
