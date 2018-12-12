@@ -224,7 +224,7 @@ object BattleController extends Initializable with ViewController {
   }
 
   private def cannotAct: Boolean = {
-    if (!moveListView.getSelectionModel.getSelectedItems.isEmpty) {
+    if (!moveListView.getSelectionModel.getSelectedItems.isEmpty && targets.nonEmpty) {
       val moveName = moveListView.getSelectionModel.getSelectedItem
       var moveMaxTargets = 1
       moveName match {
