@@ -7,7 +7,6 @@ import game.Battle
 import javafx.animation.{KeyFrame, Timeline}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.event.ActionEvent
-import utilities.ScalaProlog._
 import javafx.fxml.{FXML, Initializable}
 import javafx.scene.control.{Button, Label, ListView}
 import javafx.scene.effect.InnerShadow
@@ -16,13 +15,15 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.util.Duration
-import model.{Alteration, Character, Move}
+import model.Character
 
 import scala.collection.mutable.ListBuffer
 
 object BattleController extends Initializable with ViewController {
 
   val controller: ViewController = this
+
+  final val SelectedEffect: InnerShadow = new InnerShadow(14.5, Color.BLUE)
 
   @FXML var playerCharNames: VBox = _
   @FXML var playerHps: VBox = _
@@ -54,15 +55,16 @@ object BattleController extends Initializable with ViewController {
   var myImages: List[ImageView] = List()
   var opponentImages: List[ImageView] = List()
 
-  //Could go in battle
-  var myTeamMoves: Map[String, Seq[Move]] = Map()
   var targets: ListBuffer[ImageView] = ListBuffer()
   var moveList: ObservableList[String] = FXCollections.observableArrayList()
-
   var activeCharacter: Character = _
 
-  final val SelectedEffect: InnerShadow = new InnerShadow(14.5, Color.BLUE)
-
+  /**
+    * Initializes the elements composing the Battle GUI
+    *
+    * @param location
+    * @param resources
+    */
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
     SelectedEffect.setHeight(30)
     SelectedEffect.setWidth(30)
@@ -83,7 +85,7 @@ object BattleController extends Initializable with ViewController {
   }
 
   /**
-    * Setups the GUI depending on the characters chosen by each player (Should call submethods)
+    * Setups the GUI for both teams
     *
     **/
   def setBattlefield(): Unit = {
@@ -92,10 +94,10 @@ object BattleController extends Initializable with ViewController {
   }
 
   /**
-    * Populates the player's team map
+    * Sets the player's team images and status description labels
     *
-    * @param team
-    * @param player
+    * @param team  the team to setup
+    * @param player the player owning the team
     */
   def setupTeam(team: Map[String, Character], player: String): Unit = player match {
     case "Player" =>
@@ -107,12 +109,12 @@ object BattleController extends Initializable with ViewController {
       setupLabels(player)
   }
 
-  //Should go in model
-  def createCharacter(charName: String): Character = {
-    getCharacter(charName)
-  }
-
-  def prepareImages(player: String): Unit = player match {
+  /**
+    * Assigns to each character it's battle image, orientation depends on the player
+    *
+    * @param player the player which structure is iterated
+    */
+  private def prepareImages(player: String): Unit = player match {
     case "Player" =>
       (Battle.playerTeam.keys zip myImages).foreach(
         member =>
@@ -125,6 +127,11 @@ object BattleController extends Initializable with ViewController {
             .setImage(new Image("view/" + member._1 + "2-" + "clean.png")))
   }
 
+  /**
+    * Writes all the team's labels to display names, health and mana values and possible alterations for each character
+    *
+    * @param player the player which structure is iterated
+    */
   def setupLabels(player: String): Unit = player match {
     case "Player" =>
       (Battle.playerTeam.keys zip playerCharNames.getChildren.toArray) foreach (couple =>
@@ -151,24 +158,6 @@ object BattleController extends Initializable with ViewController {
           .setText(couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + "/" + _).dropRight(1)))
   }
 
-  /*private def getAfflictionAcronyms(alterations: Set[Alteration]): String = {
-    val labelText: String = "/"
-    if (alterations.nonEmpty) {
-      alterations.foreach(alt =>
-        alt.getClass.getCanonicalName match {
-          case "Stunned"      => labelText.concat("Stn/")
-          case "Frozen"       => labelText.concat("Frz/")
-          case "Blinded"      => labelText.concat("Bln/")
-          case "Asleep"       => labelText.concat("Slp/")
-          case "Regeneration" => labelText.concat("Reg/")
-          case "Berserk"      => labelText.concat("Brk/")
-          case "Silenced"     => labelText.concat("Sil/")
-          case "Poisoned"     => labelText.concat("Psn/")
-      })
-    }
-    labelText
-  }*/
-
   //TODO
   //Link with turn management
   def setActiveCharacter(characterName: String): Unit = {
@@ -176,9 +165,9 @@ object BattleController extends Initializable with ViewController {
   }
 
   /**
-    * Adds the character's moves to the map
+    * Adds the active character's moves to the listView
     *
-    * @param characterName
+    * @param character the character who's turn is
     */
   def setupCharacterMoves(character: Character): Unit = {
     //Get the character's moves (if it's mine) that can act in the current turn
@@ -187,12 +176,26 @@ object BattleController extends Initializable with ViewController {
     moveListView.setItems(moveList)
   }
 
+  /**
+    * Handles the press of the act button
+    *
+    */
   @FXML def handleActButtonPress(): Unit = ???
 
+  /**
+    * Checks if the act button is to be activated after the selection of a different move
+    *
+    * @param mouseEvent
+    */
   @FXML def handleMoveSelection(mouseEvent: MouseEvent) {
     actButtonActivation()
   }
 
+  /**
+    * Adds/Removes the pressed character to/from the target's list, and checks if the act button is to be activated
+    *
+    * @param mouseEvent
+    */
   @FXML def handleCharacterToTargetPressed(mouseEvent: MouseEvent) {
     var characterPressed: ImageView = mouseEvent.getSource.asInstanceOf[ImageView]
     if (targets.contains(characterPressed)) {
@@ -204,10 +207,14 @@ object BattleController extends Initializable with ViewController {
     }
     actButtonActivation()
   }
+
   //TODO
   //Link with turn manager
   def addAlteration(): Unit = ???
 
+  /**
+    * Activates/Deactivates the act button
+    */
   private def actButtonActivation(): Unit = {
     if (!cannotAct) {
       actButton.setDisable(false)
@@ -216,6 +223,10 @@ object BattleController extends Initializable with ViewController {
     }
   }
 
+  /**
+    * Checks if the act button should be active
+    * @return if the act button should be active or not
+    */
   private def cannotAct: Boolean = {
     if (!moveListView.getSelectionModel.getSelectedItems.isEmpty && targets.nonEmpty) {
       val moveName = moveListView.getSelectionModel.getSelectedItem
@@ -231,10 +242,18 @@ object BattleController extends Initializable with ViewController {
     }
   }
 
+  /**
+    * Applies the selection effect to the targeted character's image
+    * @param charImage the character's image
+    */
   private def setCharacterSelected(charImage: ImageView): Unit = {
     charImage.setEffect(SelectedEffect)
   }
 
+  /**
+    * Removes the selection effect to the deselected character's image
+    * @param charImage the character's image
+    */
   private def setCharacterUnselected(charImage: ImageView): Unit = {
     charImage.setEffect(null)
   }
