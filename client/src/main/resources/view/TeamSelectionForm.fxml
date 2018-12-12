@@ -149,56 +149,56 @@
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter20" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.rowIndex="2">
+            <StackPane fx:id="Linn" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.rowIndex="2">
                <children>
                   <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@placeholder.png" />
+                        <Image url="@linnface.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter21" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <StackPane fx:id="Aster" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
                   <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@placeholder.png" />
+                        <Image url="@asterface.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter22" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <StackPane fx:id="Norman" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <children>
                   <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@placeholder.png" />
+                        <Image url="@normanface.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter30" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.rowIndex="3">
+            <StackPane fx:id="Fernando" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.rowIndex="3">
                <children>
                   <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@placeholder.png" />
+                        <Image url="@fernandoface.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter31" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <StackPane fx:id="Rikh" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
                   <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@placeholder.png" />
+                        <Image url="@rikhface.png" />
                      </image>
                   </ImageView>
                </children>
             </StackPane>
-            <StackPane fx:id="selectedCharacter32" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+            <StackPane fx:id="Nora" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleCharacterToChoosePressed" prefHeight="85.0" prefWidth="85.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <children>
                   <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@placeholder.png" />
+                        <Image url="@noraface.png" />
                      </image>
                   </ImageView>
                </children>

@@ -4,6 +4,7 @@ import utilities.Utility._
 
 trait Character {
   val characterName: String
+  val role: String
   val statistics: Statistics
   val classMultipliers: ClassMultipliers
   val specialMoves: Map[String, SpecialMove]
@@ -106,25 +107,27 @@ private case class Warrior(characterName: String,
                            statistics: Statistics,
                            specialMoves: Map[String, SpecialMove],
                            classMultipliers: ClassMultipliers = ClassMultipliers(2, 1, 1, 0.5, 1.5, 2))
-    extends Character {}
+    extends Character { override val role: String = "Warrior" }
 
 private case class Thief(characterName: String,
                          statistics: Statistics,
                          specialMoves: Map[String, SpecialMove],
                          classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 2, 1, 0.5, 1, 1.5))
-    extends Character {}
+    extends Character { override val role: String = "Thief" }
 
 private case class Wizard(characterName: String,
                           statistics: Statistics,
                           specialMoves: Map[String, SpecialMove],
                           classMultipliers: ClassMultipliers = ClassMultipliers(1, 1, 1.5, 2, 0.5, 1.5))
-    extends Character {}
+    extends Character { override val role: String = "Wizard" }
 
 private case class Healer(characterName: String,
                           statistics: Statistics,
                           specialMoves: Map[String, SpecialMove],
                           classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 0.5, 1, 2, 1, 1.5))
-    extends Character {}
+    extends Character {
+  override val role: String = "Healer"
+}
 
 object Character {
 
