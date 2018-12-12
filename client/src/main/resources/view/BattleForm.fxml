@@ -175,86 +175,209 @@
                <children>
                   <Pane prefHeight="150.0" prefWidth="310.0">
                      <children>
-                        <Label alignment="CENTER" layoutX="226.0" text="Alterations" />
-                        <Label alignment="CENTER" layoutX="107.0" text="HP" />
-                        <Label alignment="CENTER" layoutX="177.0" text="MP" />
-                        <Label alignment="CENTER" layoutX="10.0" text="Character" />
+                        <Label alignment="CENTER" layoutX="226.0" text="Alterations">
+                           <font>
+                              <Font name="Eras Demi ITC" size="14.0" />
+                           </font></Label>
+                        <Label alignment="CENTER" layoutX="107.0" text="HP">
+                           <font>
+                              <Font name="Eras Demi ITC" size="14.0" />
+                           </font></Label>
+                        <Label alignment="CENTER" layoutX="177.0" text="MP">
+                           <font>
+                              <Font name="Eras Demi ITC" size="14.0" />
+                           </font></Label>
+                        <Label alignment="CENTER" layoutX="12.0" text="Character">
+                           <font>
+                              <Font name="Eras Demi ITC" size="13.0" />
+                           </font></Label>
                         <VBox fx:id="playerCharNames" alignment="CENTER" layoutY="21.0" prefHeight="96.0" prefWidth="84.0">
                            <children>
-                              <Label fx:id="myChar1Id" alignment="CENTER" text="Label" />
-                              <Label fx:id="myChar2Id" alignment="CENTER" text="Label" />
-                              <Label fx:id="myChar3Id" alignment="CENTER" text="Label" />
-                              <Label fx:id="myChar4Id" alignment="CENTER" text="Label" />
+                              <Label fx:id="myChar1Id" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="myChar2Id" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="myChar3Id" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="myChar4Id" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
                            </children>
                         </VBox>
                         <VBox fx:id="playerHps" alignment="CENTER" layoutX="75.0" layoutY="21.0" prefHeight="96.0" prefWidth="84.0">
                            <children>
-                              <Label fx:id="myChar1Hp" alignment="CENTER" text="300 / 400" />
-                              <Label fx:id="myChar3Hp" alignment="CENTER" text="Label" />
-                              <Label fx:id="myChar4Hp" alignment="CENTER" text="Label" />
-                              <Label fx:id="myChar2Hp" alignment="CENTER" text="Label" />
+                              <Label fx:id="myChar1Hp" alignment="CENTER" text="300 / 400">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="myChar3Hp" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="myChar4Hp" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="myChar2Hp" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
                            </children>
                         </VBox>
                         <VBox fx:id="playerMps" alignment="CENTER" layoutX="146.0" layoutY="21.0" prefHeight="96.0" prefWidth="84.0">
                            <children>
-                              <Label fx:id="myChar4Mp" alignment="CENTER" text="Label" />
-                              <Label fx:id="myChar3Mp" alignment="CENTER" text="Label" />
-                              <Label fx:id="myChar1Mp" alignment="CENTER" text="Label" />
-                              <Label fx:id="myChar2Mp" alignment="CENTER" text="Label" />
+                              <Label fx:id="myChar4Mp" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="myChar3Mp" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="myChar1Mp" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="myChar2Mp" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
                            </children>
                         </VBox>
                         <VBox fx:id="playerAlterations" alignment="CENTER" layoutX="220.0" layoutY="21.0" prefHeight="96.0" prefWidth="84.0">
                            <children>
-                              <Label fx:id="myChar1Alterations" alignment="CENTER" textAlignment="CENTER" />
-                              <Label fx:id="myChar2Alterations" alignment="CENTER" textAlignment="CENTER" />
-                              <Label fx:id="myChar3Alterations" alignment="CENTER" textAlignment="CENTER" />
-                              <Label fx:id="myChar4Alterations" alignment="CENTER" textAlignment="CENTER" />
+                              <Label fx:id="myChar1Alterations" alignment="CENTER" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="myChar2Alterations" alignment="CENTER" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="myChar3Alterations" alignment="CENTER" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="myChar4Alterations" alignment="CENTER" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
                            </children></VBox>
                      </children>
                   </Pane>
                   <Pane layoutX="634.0" prefHeight="150.0" prefWidth="310.0">
                      <children>
-                        <Label alignment="CENTER" layoutX="226.0" text="Alterations" />
-                        <Label alignment="CENTER" layoutX="107.0" text="HP" />
-                        <Label alignment="CENTER" layoutX="182.0" text="MP" />
-                        <Label alignment="CENTER" layoutX="10.0" text="Character" />
+                        <Label alignment="CENTER" layoutX="226.0" text="Alterations">
+                           <font>
+                              <Font name="Eras Demi ITC" size="13.0" />
+                           </font></Label>
+                        <Label alignment="CENTER" layoutX="107.0" text="HP">
+                           <font>
+                              <Font name="Eras Demi ITC" size="13.0" />
+                           </font></Label>
+                        <Label alignment="CENTER" layoutX="182.0" text="MP">
+                           <font>
+                              <Font name="Eras Demi ITC" size="13.0" />
+                           </font></Label>
+                        <Label alignment="CENTER" layoutX="17.0" text="Character">
+                           <font>
+                              <Font name="Eras Demi ITC" size="13.0" />
+                           </font></Label>
                         <VBox fx:id="opponentCharNames" alignment="CENTER" layoutY="21.0" prefHeight="96.0" prefWidth="84.0">
                            <children>
-                              <Label fx:id="opponentChar1Id" alignment="CENTER" text="Label" />
-                              <Label fx:id="opponentChar2Id" alignment="CENTER" text="Label" />
-                              <Label fx:id="opponentChar3Id" alignment="CENTER" text="Label" />
-                              <Label fx:id="opponentChar4Id" alignment="CENTER" text="Label" />
+                              <Label fx:id="opponentChar1Id" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="opponentChar2Id" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="opponentChar3Id" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="opponentChar4Id" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
                            </children>
                         </VBox>
                         <VBox fx:id="opponentHps" alignment="CENTER" layoutX="75.0" layoutY="21.0" prefHeight="96.0" prefWidth="84.0">
                            <children>
-                              <Label fx:id="opponentChar1Hp" alignment="CENTER" text="300 / 400" />
-                              <Label fx:id="opponentChar3Hp" alignment="CENTER" text="Label" />
-                              <Label fx:id="opponentChar4Hp" alignment="CENTER" text="Label" />
-                              <Label fx:id="opponentChar2Hp" alignment="CENTER" text="Label" />
+                              <Label fx:id="opponentChar1Hp" alignment="CENTER" text="300 / 400">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="opponentChar3Hp" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="opponentChar4Hp" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="opponentChar2Hp" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
                            </children>
                         </VBox>
                         <VBox fx:id="opponentMps" alignment="CENTER" layoutX="151.0" layoutY="21.0" prefHeight="96.0" prefWidth="84.0">
                            <children>
-                              <Label fx:id="opponentChar4Mp" alignment="CENTER" text="Label" />
-                              <Label fx:id="opponentChar3Mp" alignment="CENTER" text="Label" />
-                              <Label fx:id="opponentChar1Mp" alignment="CENTER" text="Label" />
-                              <Label fx:id="opponentChar2Mp" alignment="CENTER" text="Label" />
+                              <Label fx:id="opponentChar4Mp" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="opponentChar3Mp" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="opponentChar1Mp" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="opponentChar2Mp" alignment="CENTER" text="Label">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
                            </children>
                         </VBox>
                         <VBox fx:id="opponentAlterations" alignment="CENTER" layoutX="226.0" layoutY="21.0" prefHeight="96.0" prefWidth="84.0">
                            <children>
-                              <Label fx:id="opponentChar1Alterations" alignment="CENTER" />
-                              <Label fx:id="opponentChar2Alterations" alignment="CENTER" />
-                              <Label fx:id="opponentChar3Alterations" alignment="CENTER" />
-                              <Label fx:id="opponentChar4Alterations" alignment="CENTER" />
+                              <Label fx:id="opponentChar1Alterations" alignment="CENTER">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="opponentChar2Alterations" alignment="CENTER">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="opponentChar3Alterations" alignment="CENTER">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="opponentChar4Alterations" alignment="CENTER">
+                                 <font>
+                                    <Font name="Eras Demi ITC" size="13.0" />
+                                 </font></Label>
                            </children>
                         </VBox>
                      </children>
                   </Pane>
                   <Pane layoutX="310.0" prefHeight="150.0" prefWidth="325.0">
                      <children>
-                        <Button fx:id="actButton" disable="true" layoutX="263.0" layoutY="42.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="55.0" text="Act" />
+                        <Button fx:id="actButton" disable="true" layoutX="263.0" layoutY="42.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="55.0" text="Act">
+                           <font>
+                              <Font name="Eras Demi ITC" size="13.0" />
+                           </font></Button>
                         <ListView fx:id="moveListView" layoutX="14.0" layoutY="3.0" onMouseClicked="#handleMoveSelection" pickOnBounds="false" prefHeight="110.0" prefWidth="233.0" style="-fx-font-size: 0.85em;" />
                         <Separator layoutX="318.0" orientation="VERTICAL" prefHeight="150.0" prefWidth="15.0" />
                         <Separator layoutX="-7.0" orientation="VERTICAL" prefHeight="150.0" prefWidth="15.0" />
