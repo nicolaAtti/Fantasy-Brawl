@@ -10,7 +10,8 @@ trait Character {
   val specialMoves: Map[String, SpecialMove]
 
   /**
-    * Contains the character's status, depending on current HP and MP values and existing modifiers and afflictions
+    * Contains the character's status, depending on current HP and MP values and current modifiers and afflictions
+    *
     */
   var status: Status = Status(
     healthPoints = calculateMaxHealthPoints(),
@@ -33,49 +34,56 @@ trait Character {
 
   /**
     * Calculates the character's physical damage
-    * @return
+    *
+    * @return the character's physical damage
     */
   def physicalDamage: Int =
     roundDown(statistics.strength * classMultipliers.strength) + getModifierValues(PhysicalDamage)
 
   /**
     * Calculates the character's bonus physical critical strike damage
-    * @return
+    *
+    * @return the character's physical critical strike damage
     */
   def physicalCriticalDamage: Int =
     roundDown((statistics.strength * classMultipliers.strength) / 5 + 150) + getModifierValues(PhysicalCriticalDamage)
 
   /**
     * Calculates the character's speed
-    * @return
+    *
+    * @return the character's speed
     */
   def speed: Int =
     roundUp((statistics.agility * classMultipliers.agility) / 10) + getModifierValues(Speed)
 
   /**
     * Calculates the character's critical strike chance
-    * @return
+    *
+    * @return the character's critical strike chance
     */
   def criticalChance: Int =
     roundDown((statistics.agility * classMultipliers.agility) / 2) + getModifierValues(CriticalChance)
 
   /**
     * Calculates the character's magical defence
-    * @return
+    *
+    * @return the character's magical defence
     */
   def magicalDefence: Int =
     roundDown(statistics.spirit * classMultipliers.spirit) + getModifierValues(MagicalDefence)
 
   /**
     * Calculates the character's magical power
-    * @return
+    *
+    * @return the character's magical power
     */
   def magicalPower: Int =
     roundDown(statistics.intelligence * classMultipliers.intelligence) + getModifierValues(MagicalDamage)
 
   /**
     * Calculates the character's bonus magical critical strike power
-    * @return
+    *
+    * @return the character's magical critical strike power
     */
   def magicalCriticalPower: Int =
     roundDown((statistics.intelligence * classMultipliers.intelligence) / 10 + 150) + getModifierValues(
@@ -83,16 +91,18 @@ trait Character {
 
   /**
     * Calculates the character's physical defence
-    * @return
+    *
+    * @return the character's physical defence
     */
   def physicalDefence: Int =
     roundDown(statistics.resistance * classMultipliers.resistance) + getModifierValues(PhysicalDefence)
 
   /**
     * Cycles all the character's modifiers for a given sub-statistic and calculates the bonus/malus value
+    *
     * @param subStatistic the sub-statistic to search for
     * @return the total bonus/malus to the sub-statistic
-    * @author Nicola Atti
+    *
     */
   private def getModifierValues(subStatistic: SubStatistic): Int = {
     status.modifiers
@@ -125,9 +135,7 @@ private case class Healer(characterName: String,
                           statistics: Statistics,
                           specialMoves: Map[String, SpecialMove],
                           classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 0.5, 1, 2, 1, 1.5))
-    extends Character {
-  override val role: String = "Healer"
-}
+    extends Character { override val role: String = "Healer" }
 
 object Character {
 
