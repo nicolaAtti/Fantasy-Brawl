@@ -15,14 +15,14 @@ object Round {
                                    id + 1)
   }
 
-  def setupTurns(turnInformation: (List[(String, String)], Int)): Unit = {
-    id = turnInformation._2
-    turn = turnInformation._1.map {
-      case (owner, characterName) =>
-        if (owner == Battle.playerName)
-          (owner, Battle.playerTeam(characterName))
+  def setupTurns(turnInformation: List[((String, String), Int)], round: Int): Unit = {
+    id = round
+    turn = turnInformation.map {
+      case (key, speed) =>
+        if (key._1 == Battle.playerName)
+          (key._1, Battle.playerTeam(key._2))
         else
-          (owner, Battle.opponentTeam(characterName))
+          (key._1, Battle.opponentTeam(key._2))
     }
     if (id == 1)
       ApplicationView changeView BATTLE

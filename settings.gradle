@@ -3,4 +3,5 @@ rootProject.name = 'pps-17-fb'
 include 'client',
         'services:login-guest',
         'services:matchmaking',
+        'services:turn-ordering',
         'shared'

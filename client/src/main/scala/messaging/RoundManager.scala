@@ -32,7 +32,7 @@ object RoundManager {
       consume(startRoundResponseQueue) {
         body(as[StartRoundResponse]) { response =>
           response.turnInformation match {
-            case Right(turnInformation) => Round.setupTurns(turnInformation)
+            case Right(turnInformation) => Round.setupTurns(turnInformation, response.round)
             case Left(details) =>
               Platform runLater (() => {
                 val alert: Alert = new Alert(Alert.AlertType.ERROR)
