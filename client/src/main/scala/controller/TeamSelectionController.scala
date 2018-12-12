@@ -93,7 +93,7 @@ object TeamSelectionController extends Initializable with ViewController {
       import utilities.ScalaProlog._
       val character = getCharacter(characterName)
       var description: String = "Character name: " + characterName + "\n" +
-        "Character class: " + character.getClass.getName + "\n\n" +
+        "Character class: " + character.role + "\n\n" +
         "Strength: " + character.statistics.strength + "\n" +
         "Agility: " + character.statistics.agility + "\n" +
         "Spirit: " + character.statistics.spirit + "\n" +
