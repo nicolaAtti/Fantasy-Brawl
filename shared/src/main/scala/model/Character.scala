@@ -116,26 +116,31 @@ trait Character {
 private case class Warrior(characterName: String,
                            statistics: Statistics,
                            specialMoves: Map[String, SpecialMove],
-                           classMultipliers: ClassMultipliers = ClassMultipliers(2, 1, 1, 0.5, 1.5, 2))
-    extends Character { override val role: String = "Warrior" }
+                           classMultipliers: ClassMultipliers = ClassMultipliers(2, 1, 1, 0.5, 1.5, 2),
+                           role: String = "Warrior"
+                          )
+    extends Character {}
 
 private case class Thief(characterName: String,
                          statistics: Statistics,
                          specialMoves: Map[String, SpecialMove],
-                         classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 2, 1, 0.5, 1, 1.5))
-    extends Character { override val role: String = "Thief" }
+                         classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 2, 1, 0.5, 1, 1.5),
+                         role: String = "Thief")
+    extends Character {}
 
 private case class Wizard(characterName: String,
                           statistics: Statistics,
                           specialMoves: Map[String, SpecialMove],
-                          classMultipliers: ClassMultipliers = ClassMultipliers(1, 1, 1.5, 2, 0.5, 1.5))
-    extends Character { override val role: String = "Wizard" }
+                          classMultipliers: ClassMultipliers = ClassMultipliers(1, 1, 1.5, 2, 0.5, 1.5),
+                          role: String = "Wizard")
+    extends Character {}
 
 private case class Healer(characterName: String,
                           statistics: Statistics,
                           specialMoves: Map[String, SpecialMove],
-                          classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 0.5, 1, 2, 1, 1.5))
-    extends Character { override val role: String = "Healer" }
+                          classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 0.5, 1, 2, 1, 1.5),
+                          role: String = "Healer")
+    extends Character {}
 
 object Character {
 
