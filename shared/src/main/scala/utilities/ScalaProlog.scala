@@ -5,45 +5,12 @@ import alice.tuprolog._
 import model._
 
 object ScalaProlog {
-  val engine = new Prolog
-  val myEngine = new Prolog
-
-  def setNewTheoryInMyEngine(clauses: String*): Unit =
-    myEngine.setTheory(new Theory(clauses mkString " "))
+  import ScalaPrologHelper._
 
   implicit def termToString(term: Term): String = term.toString.replace("'", "")
   implicit def termToInt(term: Term): scala.Int = term.toString.toInt
   implicit def termToList(term: Term): List[String] =
     term.toString.replace("'", "").replace("[", "").replace("]", "").split(",").filter(s => s != "").toList
-
-  val characterContents =
-    Source.fromResource("model/PrologCharacters.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
-  val moveContents = Source.fromResource("model/PrologMoves.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
-
-  def setNewTheory(clauses: String*): Unit =
-    engine.setTheory(new Theory(clauses mkString " "))
-
-  def extractInt(solveInfo: SolveInfo, value: String): scala.Int = {
-    solveInfo.getVarValue(value)
-  }
-
-  def extractString(solveInfo: SolveInfo, value: String): String = {
-    solveInfo.getVarValue(value)
-  }
-
-  def extractList(solveInfo: SolveInfo, value: String): List[String] = {
-    solveInfo.getVarValue(value)
-  }
-
-  def solveN(query: String): Stream[SolveInfo] = {
-    myEngine.solve(query) #:: Stream.continually(myEngine.solveNext())
-  }
-
-  def getAllCharacters(): Stream[Character] = {
-    setNewTheoryInMyEngine(characterContents)
-    solveN("character(CharacterName,CharacterClass,Strength,Agility,Spirit,Intelligence,Resistance,SpecialMoves).")
-      .map(solveInfo => getCharacter(extractString(solveInfo, "CharacterName")))
-  }
 
   def getCharacter(characterName: String): Character = {
     setNewTheory(characterContents)
@@ -90,5 +57,31 @@ object ScalaProlog {
              SubStatistic(extractString(solveInfo, "SubStatistic")),
              extractInt(solveInfo, "Delta"),
              extractInt(solveInfo, "RoundsDuration"))
+  }
+
+  private object ScalaPrologHelper {
+
+    val engine = new Prolog
+
+    val characterContents =
+      Source.fromResource("model/PrologCharacters.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
+
+    val moveContents =
+      Source.fromResource("model/PrologMoves.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
+
+    def setNewTheory(clauses: String*): Unit =
+      engine.setTheory(new Theory(clauses mkString " "))
+
+    def extractInt(solveInfo: SolveInfo, value: String): scala.Int = {
+      solveInfo.getVarValue(value)
+    }
+
+    def extractString(solveInfo: SolveInfo, value: String): String = {
+      solveInfo.getVarValue(value)
+    }
+
+    def extractList(solveInfo: SolveInfo, value: String): List[String] = {
+      solveInfo.getVarValue(value)
+    }
   }
 }

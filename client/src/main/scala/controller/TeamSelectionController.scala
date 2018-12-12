@@ -7,7 +7,6 @@ import javafx.event.ActionEvent
 import javafx.fxml.{FXML, Initializable}
 import view.ApplicationView
 import view.ViewConfiguration.viewSelector._
-import alice.tuprolog.SolveInfo
 import javafx.geometry.Insets
 import javafx.scene.control.{Button, Label, TextArea}
 import javafx.scene.effect.ColorAdjust
@@ -16,7 +15,6 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout._
 import javafx.scene.paint.Paint
 import messaging.MatchmakingManager
-import model.SpecialMove
 
 /** Controller of the team selection view.
   *
