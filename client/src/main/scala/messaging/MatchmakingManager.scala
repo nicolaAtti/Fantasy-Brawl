@@ -39,8 +39,8 @@ object MatchmakingManager {
       consume(joinCasualMatchmakingResponseQueue) {
         body(as[JoinCasualQueueResponse]) { response =>
           response.opponentData match {
-            case Right((opponentName, opponentTeam)) =>
-              Battle.start((myName, myTeam), (opponentName, opponentTeam))
+            case Right((opponentName, opponentTeam, battleId)) =>
+              Battle.start((myName, myTeam), (opponentName, opponentTeam), battleId)
             case Left(details) =>
               Platform runLater (() => {
                 val alert: Alert = new Alert(Alert.AlertType.ERROR)
