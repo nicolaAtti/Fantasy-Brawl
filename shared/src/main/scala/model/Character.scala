@@ -117,8 +117,7 @@ private case class Warrior(characterName: String,
                            statistics: Statistics,
                            specialMoves: Map[String, SpecialMove],
                            classMultipliers: ClassMultipliers = ClassMultipliers(2, 1, 1, 0.5, 1.5, 2),
-                           role: String = "Warrior"
-                          )
+                           role: String = "Warrior")
     extends Character {}
 
 private case class Thief(characterName: String,
