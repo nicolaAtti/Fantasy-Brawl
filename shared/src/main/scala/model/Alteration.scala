@@ -20,21 +20,21 @@ object Alteration {
   val poisonedMultiplier = 0.75
   val regenerationMultiplier = 1.25
 
-  /** Retrieves the appropriate Alteration object given its string representation.
+  /** Retrieves the appropriate alteration object given its acronym.
     *
-    * @param name the name of the alteration
-    * @return the appropriate alteration object
+    * @param acronym the alteration's acronym
+    * @return the corresponding alteration object
     */
-  def apply(name: String): Alteration = name match {
-    case "Stunned"      => Stunned
-    case "Asleep"       => Asleep
-    case "Poisoned"     => Poisoned
-    case "Regeneration" => Regeneration
-    case "Berserk"      => Berserk
-    case "Silenced"     => Silenced
-    case "Frozen"       => Frozen
-    case "Blinded"      => Blinded
-    case _              => throw new IllegalArgumentException(s"Unknown alteration: $name")
+  def apply(acronym: String): Alteration = acronym match {
+    case Stunned.acronym      => Stunned
+    case Asleep.acronym       => Asleep
+    case Poisoned.acronym     => Poisoned
+    case Regeneration.acronym => Regeneration
+    case Berserk.acronym      => Berserk
+    case Silenced.acronym     => Silenced
+    case Frozen.acronym       => Frozen
+    case Blinded.acronym      => Blinded
+    case _                    => throw new IllegalArgumentException(s"Unknown alteration: $acronym")
   }
 
   /** When a character is stunned it cannot make any move for one turn. */
