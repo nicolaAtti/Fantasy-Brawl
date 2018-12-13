@@ -27,57 +27,57 @@
                   <Image url="@Backdrop1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="playerChar1Image" fitHeight="180.0" fitWidth="150.0" layoutX="78.0" layoutY="24.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true" style="-fx-background-color: transparent;">
+            <ImageView fx:id="playerChar1Image" fitHeight="200.0" fitWidth="170.0" layoutX="88.0" layoutY="14.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true" style="-fx-background-color: transparent;">
                <image>
-                  <Image url="@Albert1-clean.png" />
+                  <Image url="@Rikh1-clean.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="playerChar2Image" fitHeight="180.0" fitWidth="150.0" layoutX="201.0" layoutY="30.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="playerChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="248.0" layoutY="14.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Annabelle1-clean.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="playerChar3Image" fitHeight="180.0" fitWidth="150.0" layoutX="45.0" layoutY="184.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="playerChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="25.0" layoutY="172.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Lidya1-clean.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="playerChar4Image" fitHeight="180.0" fitWidth="150.0" layoutX="152.0" layoutY="184.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="playerChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="165.0" layoutY="172.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Jacob1-clean.png" />
+                  <Image url="@Noah1-clean.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar1Image" fitHeight="180.0" fitWidth="150.0" layoutX="818.0" layoutY="30.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar1Image" fitHeight="200.0" fitWidth="170.0" layoutX="786.0" layoutY="20.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Lidya2-clean.png" />
+                  <Image url="@Fernando2-clean.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar2Image" fitHeight="180.0" fitWidth="150.0" layoutX="691.0" layoutY="12.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="647.0" layoutY="20.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Cassandra2-clean.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar3Image" fitHeight="180.0" fitWidth="150.0" layoutX="647.0" layoutY="156.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="621.0" layoutY="172.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Noah2-clean.png" />
+                  <Image url="@tombstone2.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar4Image" fitHeight="180.0" fitWidth="150.0" layoutX="782.0" layoutY="172.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="764.0" layoutY="163.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Albert2-clean.png" />
                </image>
@@ -374,7 +374,7 @@
                   </Pane>
                   <Pane layoutX="310.0" prefHeight="150.0" prefWidth="325.0">
                      <children>
-                        <Button fx:id="actButton" disable="true" layoutX="263.0" layoutY="42.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="55.0" text="Act">
+                        <Button fx:id="actButton" disable="true" layoutX="263.0" layoutY="42.0" mnemonicParsing="false" onMouseClicked="#handleActButtonPress" prefHeight="38.0" prefWidth="55.0" text="Act">
                            <font>
                               <Font name="Eras Demi ITC" size="13.0" />
                            </font></Button>

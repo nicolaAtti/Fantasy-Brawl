@@ -18,13 +18,14 @@ object ScalaProlog {
     * @param characterName the character's name
     * @return the Character object
     */
-  def getCharacter(characterName: String): Character = {
+  def getCharacter(characterName: String, owner: Option[String]): Character = {
     setNewTheory(characterContents)
     val solveInfo = engine.solve(
       "character('" + characterName + "',CharacterClass,Strength,Agility,Spirit,Intelligence,Resistance,SpecialMoves).")
     Character(
       characterClass = extractString(solveInfo, "CharacterClass"),
-      characterName = characterName,
+      owner = owner,
+      name = characterName,
       statistics = Statistics(
         extractInt(solveInfo, "Strength"),
         extractInt(solveInfo, "Agility"),
@@ -35,6 +36,13 @@ object ScalaProlog {
       specialMoves = extractList(solveInfo, "SpecialMoves").map(moveName => moveName -> getSpecialMove(moveName)).toMap
     )
   }
+
+  /** Creates a character with no owner
+    *
+    * @param characterName the character's name
+    * @return a Character with owner set to "None"
+    */
+  def getCharacter(characterName: String): Character = getCharacter(characterName, None)
 
   /**
     * Executes a Prolog query to obtain a specific special move
