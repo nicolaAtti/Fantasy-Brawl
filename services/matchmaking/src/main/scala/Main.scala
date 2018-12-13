@@ -73,6 +73,12 @@ object Main extends App {
     }
   }
 
+  /**
+    * Sends a message to the matched players
+    *
+    * @param dataReqPlayer the data of the first player
+    * @param dataQueuedPlayer the data of the second player
+    */
   def sendBattleDataToBoth(dataReqPlayer: (String, Seq[String], String),
                            dataQueuedPlayer: (String, Seq[String], String),
                            battleId: String): Unit = {
