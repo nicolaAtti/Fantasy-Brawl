@@ -49,8 +49,10 @@ spec_move('Quick Stab','StandardDamage','Melee',30,[],[],['Slp'],15,1).
 spec_move('Fan Of Knives','StandardDamage','Ranged',25,[],[],['Slp'],10,4).
 spec_move('Duelist Step','BuffDebuff','Spell',0,['Quick Reflexes','Sped Up'],[],[],20,1).
 spec_move('Pummel','StandardDamage','Melee',10,[],['Sil'],['Slp'],15,1).
-%modifier --- Defines the duration,power and the interested attribute for every existing modifier
-%modifier(+ModId,-SubStatistic,-TurnDuration,-Value)
+
+
+%modifier --- Defines the duration, the power and the interested attribute for every existing modifier
+%modifier(+ModId,-SubStatistic,-RoundsDuration,-Value)
 %
 % Author: Nicola Atti
 
