@@ -3,16 +3,27 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+   <ImageView fitHeight="540.0" fitWidth="960.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@FantasyBrawlWelcomeScreen.png" />
+      </image></ImageView>
+<VBox alignment="CENTER" layoutX="237.0" layoutY="263.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="269.0" prefWidth="486.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ProgressIndicator />
-      <Label text="WAITING TO LOGIN">
+      <ProgressIndicator>
+            <effect>
+               <Glow level="1.0" />
+            </effect></ProgressIndicator>
+      <Label text="WAITING TO LOGIN" textFill="WHITE">
          <font>
-            <Font size="14.0" />
+            <Font name="Algerian" size="22.0" />
          </font>
          <padding>
             <Insets top="20.0" />
@@ -23,3 +34,4 @@
       </Label>
    </children>
 </VBox>
+</AnchorPane>
