@@ -8,11 +8,14 @@ import view.ViewConfiguration.viewSelector._
 
 object Round {
   var id: Int = 0
-  var turns: List[(String, Character)] = List()
+  var turns: List[Character] = List()
 
   def startRound(): Unit = {
-    RoundManager.startRoundRequest(Battle.playerName,
-                                   Battle.playerTeam.map(character => character._1 -> character._2.speed),
+    RoundManager.startRoundRequest(Battle.playerId,
+                                   Battle.teams
+                                     .filter(char => char.owner.get == Battle.playerId)
+                                     .map(character => character.characterName -> character.speed)
+                                     .toMap,
                                    id + 1)
   }
 
@@ -24,10 +27,7 @@ object Round {
     id = round
     turns = turnInformation.map {
       case ((playerName, characterName), _) =>
-        if (playerName == Battle.playerName)
-          (playerName, Battle.playerTeam(characterName))
-        else
-          (playerName, Battle.opponentTeam(characterName))
+        Battle.teams.find(char => char.characterName == characterName && char.owner.get == playerName).get
     }
     startTurn()
     if (id == 1)
@@ -35,7 +35,7 @@ object Round {
   }
 
   def startTurn(): Unit = {
-    BattleController.setActiveCharacter(turns.head._2)
+    BattleController.setActiveCharacter(turns.head)
     turns = turns.tail
     // ----------------------------------- applicare afflizioni
     //println(id)
