@@ -83,8 +83,8 @@ object Main extends App {
                            dataQueuedPlayer: (String, Seq[String], String),
                            battleId: String): Unit = {
     val responseForRequester = JoinCasualQueueResponse(
-      Right((dataQueuedPlayer._1, dataQueuedPlayer._2.toList, battleId)))
-    val responseForQueued = JoinCasualQueueResponse(Right((dataReqPlayer._1, dataReqPlayer._2.toList, battleId)))
+      Right((dataQueuedPlayer._1, dataQueuedPlayer._2, battleId)))
+    val responseForQueued = JoinCasualQueueResponse(Right((dataReqPlayer._1, dataReqPlayer._2, battleId)))
     rabbitControl ! Message.queue(responseForRequester, dataReqPlayer._3)
     rabbitControl ! Message.queue(responseForQueued, dataQueuedPlayer._3)
   }
