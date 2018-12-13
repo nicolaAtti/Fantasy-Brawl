@@ -24,7 +24,7 @@ object BattleController extends Initializable with ViewController {
 
   val controller: ViewController = this
 
-  final val SelectedEffect: InnerShadow = new InnerShadow(14.5, Color.BLUE)
+  final val TargetedEffect: InnerShadow = new InnerShadow(14.5, Color.BLUE)
 
   @FXML var playerCharNames: VBox = _
   @FXML var playerHps: VBox = _
@@ -68,8 +68,8 @@ object BattleController extends Initializable with ViewController {
     * @param resources
     */
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
-    SelectedEffect.setHeight(30)
-    SelectedEffect.setWidth(30)
+    TargetedEffect.setHeight(30)
+    TargetedEffect.setWidth(30)
     myImages = List(playerChar1Image, playerChar2Image, playerChar3Image, playerChar4Image)
     opponentImages = List(opponentChar1Image, opponentChar2Image, opponentChar3Image, opponentChar4Image)
     var timeSeconds: Int = 60
@@ -146,7 +146,8 @@ object BattleController extends Initializable with ViewController {
   /**
     * Updates the status of each character in the battle,
     * showing it's current health and mana values compared with it' maximum
-    * and by showing the various alterations that are active
+    * and by showing the various alterations that are active.
+    * After that changes the images of dead characters.
     *
     * @param player the player which structure is iterated
     */
@@ -160,6 +161,7 @@ object BattleController extends Initializable with ViewController {
         couple._2
           .asInstanceOf[Label]
           .setText(couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + "/" + _).dropRight(1)))
+      setDeadCharacters(player)
     case "Opponent" =>
       (Battle.opponentTeam.values zip opponentHps.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
@@ -169,6 +171,22 @@ object BattleController extends Initializable with ViewController {
         couple._2
           .asInstanceOf[Label]
           .setText(couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + "/" + _).dropRight(1)))
+      setDeadCharacters(player)
+  }
+
+  /**
+    * Checks if the team members of the player are at zero health points,
+    * and sets their image to a tombstone.
+    *
+    * @param player the player which structure is iterated
+    */
+  private def setDeadCharacters(player: String): Unit = player match {
+    case "Player" =>
+      (Battle.playerTeam.values zip myImages) foreach (couple =>
+        if (couple._1.status.healthPoints == 0) { couple._2.setImage(new Image("view/tombstone2.png")) })
+    case "Opponent" =>
+      (Battle.opponentTeam.values zip opponentImages) foreach (couple =>
+        if (couple._1.status.healthPoints == 0) { couple._2.setImage(new Image("view/tombstone1.png")) })
   }
 
   /**
@@ -279,7 +297,7 @@ object BattleController extends Initializable with ViewController {
     * @param charImage the character's image
     */
   private def setCharacterSelected(charImage: ImageView): Unit = {
-    charImage.setEffect(SelectedEffect)
+    charImage.setEffect(TargetedEffect)
   }
 
   /**
