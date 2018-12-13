@@ -104,15 +104,8 @@ object BattleController extends Initializable with ViewController {
     * @param team  the team to setup
     */
   def setupTeams(team: Set[Character]): Unit = {
-    team.foreach(teamMember =>
-      if (teamMember.owner.get equals Battle.playerId) {
-        playerCharacterImages = (playerImages zip team).toMap
-        playerCharacterImages.foreach(gg => println(gg))
-
-      } else {
-        opponentCharacterImages = (opponentImages zip team).toMap
-        opponentCharacterImages.foreach(gg => println(gg))
-    })
+    playerCharacterImages = (playerImages zip team.filter(character => character.owner.get == Battle.playerId)).toMap
+    opponentCharacterImages = (opponentImages zip team.filter(character => character.owner.get == Battle.opponentId)).toMap
     prepareImages()
     setupLabels()
 
@@ -140,8 +133,6 @@ object BattleController extends Initializable with ViewController {
     * showing it's current health and mana values compared with it' maximum
     * and by showing the various alterations that are active.
     * After that changes the images of dead characters.
-    *
-    *
     */
   def updateStatus(): Unit = {
     (playerCharacterImages.values zip playerHps.getChildren.toArray) foreach (couple =>
@@ -167,8 +158,6 @@ object BattleController extends Initializable with ViewController {
 
   /** Checks if the team members of the player are at zero health points,
     * and sets their image to a tombstone.
-    *
-    *
     */
   private def setDeadCharacters(): Unit = {
     playerCharacterImages.foreach(couple =>
@@ -184,14 +173,20 @@ object BattleController extends Initializable with ViewController {
     */
   def setActiveCharacter(character: Character): Unit = {
     activeCharacter = character
-    println(activeCharacter.specialMoves.keySet)
-    activeLabel = playerCharNames.getChildren.toArray
-      .filter(charName => charName.asInstanceOf[Label].getText equals activeCharacter.characterName)
-      .head
-      .asInstanceOf[Label]
-    activeLabel.setTextFill(Color.GREEN)
-    if (Battle.teams.contains(activeCharacter)) {
+    if(activeCharacter.owner.get == Battle.playerId) {
+      activeLabel = playerCharNames.getChildren.toArray
+        .filter(charName => charName.asInstanceOf[Label].getText equals activeCharacter.characterName)
+        .head
+        .asInstanceOf[Label]
+      activeLabel.setTextFill(Color.GREEN)
       setupCharacterMoves(activeCharacter)
+    }
+    else {
+      activeLabel = opponentCharNames.getChildren.toArray
+        .filter(charName => charName.asInstanceOf[Label].getText equals activeCharacter.characterName)
+        .head
+        .asInstanceOf[Label]
+      activeLabel.setTextFill(Color.RED)
     }
   }
 
@@ -211,7 +206,6 @@ object BattleController extends Initializable with ViewController {
     */
   @FXML def handleActButtonPress(): Unit = {
     activeLabel.setTextFill(Color.BLACK)
-    println(targets)
     targets = ListBuffer()
     targetImages.foreach(target => setCharacterUnselected(target))
     targetImages = ListBuffer()
@@ -251,18 +245,14 @@ object BattleController extends Initializable with ViewController {
 
   private def setTargets(imagePressed: ImageView, character: Character): Unit = {
     if (targetImages.exists(image => image.getId equals imagePressed.getId)) {
-      println("Removed")
       targetImages -= imagePressed
       targets -= character
       setCharacterUnselected(imagePressed)
     } else {
-      println("Added")
       targetImages += imagePressed
       targets += character
       setCharacterSelected(imagePressed)
     }
-    targetImages.foreach(println(_))
-    targets.foreach(println(_))
   }
 
   /** Activates/Deactivates the act button */
@@ -287,7 +277,6 @@ object BattleController extends Initializable with ViewController {
       false
     } else {
       val moveName = moveListView.getSelectionModel.getSelectedItem.split("--").head
-      println(moveName)
       var moveMaxTargets = 1
       moveName match {
         case "Physical Attack" => targetImages.size <= moveMaxTargets
