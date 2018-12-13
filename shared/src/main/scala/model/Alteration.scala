@@ -20,23 +20,6 @@ object Alteration {
   val poisonedMultiplier = 0.75
   val regenerationMultiplier = 1.25
 
-  /** Retrieves the appropriate alteration object given its acronym.
-    *
-    * @param acronym the alteration's acronym
-    * @return the corresponding alteration object
-    */
-  def apply(acronym: String): Alteration = acronym match {
-    case Stunned.acronym      => Stunned
-    case Asleep.acronym       => Asleep
-    case Poisoned.acronym     => Poisoned
-    case Regeneration.acronym => Regeneration
-    case Berserk.acronym      => Berserk
-    case Silenced.acronym     => Silenced
-    case Frozen.acronym       => Frozen
-    case Blinded.acronym      => Blinded
-    case _                    => throw new IllegalArgumentException(s"Unknown alteration: $acronym")
-  }
-
   /** When a character is stunned it cannot make any move for one turn. */
   case object Stunned extends Alteration {
     override def inhibits(move: Move) = true
@@ -110,4 +93,22 @@ object Alteration {
     override val beginTurnStatusVariation = None
     override val acronym: String = "Bln"
   }
+
+  /** Retrieves the appropriate alteration object given its acronym.
+    *
+    * @param acronym the alteration's acronym
+    * @return the corresponding alteration object
+    */
+  def apply(acronym: String): Alteration = acronym match {
+    case Stunned.acronym      => Stunned
+    case Asleep.acronym       => Asleep
+    case Poisoned.acronym     => Poisoned
+    case Regeneration.acronym => Regeneration
+    case Berserk.acronym      => Berserk
+    case Silenced.acronym     => Silenced
+    case Frozen.acronym       => Frozen
+    case Blinded.acronym      => Blinded
+    case _                    => throw new IllegalArgumentException(s"Unknown alteration: $acronym")
+  }
+
 }
