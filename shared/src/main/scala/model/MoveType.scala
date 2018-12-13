@@ -9,32 +9,32 @@ sealed trait MoveType {
 
 object MoveType {
 
+  def apply(name: String): MoveType = name match {
+    case Melee.representation  => Melee
+    case Ranged.representation => Ranged
+    case Spell.representation  => Spell
+    case _                     => throw new IllegalArgumentException(s"Unknown move type: $name")
+  }
+
   case object Melee extends MoveType {
     override def attackingBonus(character: Character): Int = character.physicalDamage
     override def attackingCriticalBonus(character: Character): Int = character.physicalCriticalDamage
     override def defendingBonus(character: Character): Int = character.physicalDefence
-    override def representation: String = "Melee"
+    override val representation: String = "Melee"
   }
 
   case object Ranged extends MoveType {
     override def attackingBonus(character: Character): Int = character.physicalDamage
     override def attackingCriticalBonus(character: Character): Int = character.physicalCriticalDamage
     override def defendingBonus(character: Character): Int = character.physicalDefence
-    override def representation: String = "Ranged"
+    override val representation: String = "Ranged"
   }
 
   case object Spell extends MoveType {
     override def attackingBonus(character: Character): Int = character.magicalPower
     override def attackingCriticalBonus(character: Character): Int = character.magicalCriticalPower
     override def defendingBonus(character: Character): Int = character.magicalDefence
-    override def representation: String = "Spell"
-  }
-
-  def apply(name: String): MoveType = name match {
-    case Melee.representation  => Melee
-    case Ranged.representation => Ranged
-    case Spell.representation  => Spell
-    case _                     => throw new IllegalArgumentException(s"Unknown move type: $name")
+    override val representation: String = "Spell"
   }
 
 }
