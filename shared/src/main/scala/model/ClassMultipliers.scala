@@ -1,7 +1,6 @@
 package model
 
-/**
-  * Contains the class modifiers to the Character statistics, based on the Character's class
+/** Contains the class modifiers to the Character statistics, based on the Character's class
   *
   * @param strength the class modifier impacting strength driven statistics
   * @param agility the class modifier impacting agility driven statistics
