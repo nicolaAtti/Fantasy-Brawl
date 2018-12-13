@@ -4,6 +4,7 @@ import utilities.Utility._
 
 trait Character {
   val characterName: String
+  val owner: Option[String]
   val role: String
   val statistics: Statistics
   val classMultipliers: ClassMultipliers
@@ -114,6 +115,7 @@ trait Character {
 }
 
 private case class Warrior(characterName: String,
+                           owner: Option[String],
                            statistics: Statistics,
                            specialMoves: Map[String, SpecialMove],
                            classMultipliers: ClassMultipliers = ClassMultipliers(2, 1, 1, 0.5, 1.5, 2),
@@ -121,6 +123,7 @@ private case class Warrior(characterName: String,
     extends Character {}
 
 private case class Thief(characterName: String,
+                         owner: Option[String],
                          statistics: Statistics,
                          specialMoves: Map[String, SpecialMove],
                          classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 2, 1, 0.5, 1, 1.5),
@@ -128,6 +131,7 @@ private case class Thief(characterName: String,
     extends Character {}
 
 private case class Wizard(characterName: String,
+                          owner: Option[String],
                           statistics: Statistics,
                           specialMoves: Map[String, SpecialMove],
                           classMultipliers: ClassMultipliers = ClassMultipliers(1, 1, 1.5, 2, 0.5, 1.5),
@@ -135,6 +139,7 @@ private case class Wizard(characterName: String,
     extends Character {}
 
 private case class Healer(characterName: String,
+                          owner: Option[String],
                           statistics: Statistics,
                           specialMoves: Map[String, SpecialMove],
                           classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 0.5, 1, 2, 1, 1.5),
@@ -144,14 +149,16 @@ private case class Healer(characterName: String,
 object Character {
 
   def apply(characterClass: String,
-            characterName: String,
+            name: String,
+            owner: Option[String],
             statistics: Statistics,
-            specialMoves: Map[String, SpecialMove]): Character =
+            specialMoves: Map[String, SpecialMove]
+            ): Character =
     characterClass match {
-      case "Warrior" => Warrior(characterName, statistics, specialMoves)
-      case "Thief"   => Thief(characterName, statistics, specialMoves)
-      case "Wizard"  => Wizard(characterName, statistics, specialMoves)
-      case "Healer"  => Healer(characterName, statistics, specialMoves)
+      case "Warrior" => Warrior(name,owner, statistics, specialMoves)
+      case "Thief"   => Thief(name,owner, statistics, specialMoves)
+      case "Wizard"  => Wizard(name,owner, statistics, specialMoves)
+      case "Healer"  => Healer(name,owner, statistics, specialMoves)
       case _         => throw new IllegalArgumentException(s"Unknown character role: $characterClass")
     }
 
