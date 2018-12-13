@@ -39,8 +39,8 @@ object MatchmakingManager {
       consume(joinCasualMatchmakingResponseQueue) {
         body(as[JoinCasualQueueResponse]) { response =>
           response.opponentData match {
-            case Right((opponentName, opponentTeam)) =>
-              Battle.start((myName, myTeam), (opponentName, opponentTeam))
+            case Right((opponentName, opponentTeam, battleId)) =>
+              Battle.start((myName, myTeam), (opponentName, opponentTeam), battleId)
             case Left(details) =>
               Platform runLater (() => {
                 val alert: Alert = new Alert(Alert.AlertType.ERROR)
@@ -59,8 +59,8 @@ object MatchmakingManager {
 
   /** Send a casual matchmaking request message.
     *
-    * @param playerName username of the player that wants to join.
-    * @param team team with which the player wants to fight.
+    * @param playerName username of the player that wants to join
+    * @param team team with which the player wants to fight
     */
   def joinCasualQueueRequest(playerName: String, team: Map[String, String]): Unit = {
     myTeam = team.map(member => member._2).toSeq
@@ -70,6 +70,11 @@ object MatchmakingManager {
                             Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
   }
 
+  /**
+    * Send a message to remove the player from the casual-queue
+    *
+    * @param playerName username of the player that wants to be removed
+    */
   def leaveCasualQueueRequest(playerName: String): Unit = {
     rabbitControl ! Message(JoinCasualQueueRequest(playerName, Seq(), "Remove"),
                             publisher,

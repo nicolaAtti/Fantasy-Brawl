@@ -12,6 +12,12 @@ object ScalaProlog {
   implicit def termToList(term: Term): List[String] =
     term.toString.replace("'", "").replace("[", "").replace("]", "").split(",").filter(s => s != "").toList
 
+  /**
+    * Executes a Prolog query to obtain a specific character
+    *
+    * @param characterName the character's name
+    * @return the Character object
+    */
   def getCharacter(characterName: String): Character = {
     setNewTheory(characterContents)
     val solveInfo = engine.solve(
@@ -30,6 +36,12 @@ object ScalaProlog {
     )
   }
 
+  /**
+    * Executes a Prolog query to obtain a specific special move
+    *
+    * @param moveName the name of the move
+    * @return the SpecialMove object
+    */
   def getSpecialMove(moveName: String): SpecialMove = {
     setNewTheory(moveContents)
     val solveInfo = engine.solve(
@@ -50,6 +62,12 @@ object ScalaProlog {
     )
   }
 
+  /**
+    * Executes a Prolog query to obtain a specific modifier
+    *
+    * @param modifierName the modifier's name
+    * @return the Modifier object
+    */
   def getModifier(modifierName: String): Modifier = {
     setNewTheory(moveContents)
     val solveInfo = engine.solve("modifier('" + modifierName + "',SubStatistic,RoundsDuration,Delta).")
@@ -72,14 +90,35 @@ object ScalaProlog {
     def setNewTheory(clauses: String*): Unit =
       engine.setTheory(new Theory(clauses mkString " "))
 
+    /**
+      * Extracts an Int value from a Prolog solution
+      *
+      * @param solveInfo the solution from a Prolog query
+      * @param value the name of the value to extract
+      * @return the extracted Int value
+      */
     def extractInt(solveInfo: SolveInfo, value: String): scala.Int = {
       solveInfo.getVarValue(value)
     }
 
+    /**
+      * Extracts a String from a Prolog solution
+      *
+      * @param solveInfo the solution from a Prolog query
+      * @param value the name of the value to extract
+      * @return the extracted String
+      */
     def extractString(solveInfo: SolveInfo, value: String): String = {
       solveInfo.getVarValue(value)
     }
 
+    /**
+      * Builds a Scala list of strings from a Prolog list
+      *
+      * @param solveInfo the solution from a Prolog query
+      * @param value the name of the value to extract
+      * @return the built List of string
+      */
     def extractList(solveInfo: SolveInfo, value: String): List[String] = {
       solveInfo.getVarValue(value)
     }

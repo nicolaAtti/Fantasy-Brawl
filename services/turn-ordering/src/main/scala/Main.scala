@@ -28,8 +28,6 @@ object Main extends App {
       consume(requestQueue) {
         (body(as[StartRoundRequest]) & optionalProperty(ReplyTo)) { (request, replyTo) =>
           {
-            println("--------------------------------------------------------")
-            println(replyTo.get)
             if (boh.isEmpty) {
               boh = Some(request.myTeamSpeeds.map {
                 case (characterName, speed) => (request.playerName, characterName) -> speed
