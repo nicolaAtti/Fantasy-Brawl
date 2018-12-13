@@ -152,13 +152,12 @@ object Character {
             name: String,
             owner: Option[String],
             statistics: Statistics,
-            specialMoves: Map[String, SpecialMove]
-            ): Character =
+            specialMoves: Map[String, SpecialMove]): Character =
     characterClass match {
-      case "Warrior" => Warrior(name,owner, statistics, specialMoves)
-      case "Thief"   => Thief(name,owner, statistics, specialMoves)
-      case "Wizard"  => Wizard(name,owner, statistics, specialMoves)
-      case "Healer"  => Healer(name,owner, statistics, specialMoves)
+      case "Warrior" => Warrior(name, owner, statistics, specialMoves)
+      case "Thief"   => Thief(name, owner, statistics, specialMoves)
+      case "Wizard"  => Wizard(name, owner, statistics, specialMoves)
+      case "Healer"  => Healer(name, owner, statistics, specialMoves)
       case _         => throw new IllegalArgumentException(s"Unknown character role: $characterClass")
     }
 

@@ -101,12 +101,13 @@ object BattleController extends Initializable with ViewController {
     *
     * @param team  the team to setup
     */
-  def setupTeams(team: Set[Character]): Unit ={
-    team.foreach(teamMember => if(teamMember.owner.get equals Battle.playerId) {
-      playerCharacterImages = (playerImages zip team).toMap
-      playerCharacterImages.foreach(gg => println(gg))
+  def setupTeams(team: Set[Character]): Unit = {
+    team.foreach(teamMember =>
+      if (teamMember.owner.get equals Battle.playerId) {
+        playerCharacterImages = (playerImages zip team).toMap
+        playerCharacterImages.foreach(gg => println(gg))
 
-    }else{
+      } else {
         opponentCharacterImages = (opponentImages zip team).toMap
         opponentCharacterImages.foreach(gg => println(gg))
     })
@@ -117,15 +118,19 @@ object BattleController extends Initializable with ViewController {
 
   /** Assigns to each character it's battle image, orientation depends on the player  */
   private def prepareImages(): Unit = {
-    playerCharacterImages.foreach(charImage => charImage._1.setImage(new Image("view/" + charImage._2.characterName + "1-" + "clean.png")))
-    opponentCharacterImages.foreach(charImage => charImage._1.setImage(new Image("view/" + charImage._2.characterName + "2-" + "clean.png")))
+    playerCharacterImages.foreach(charImage =>
+      charImage._1.setImage(new Image("view/" + charImage._2.characterName + "1-" + "clean.png")))
+    opponentCharacterImages.foreach(charImage =>
+      charImage._1.setImage(new Image("view/" + charImage._2.characterName + "2-" + "clean.png")))
   }
 
   /** Writes all the team's labels to display the name of each character in the battle
     */
   private def setupLabels(): Unit = {
-    (playerCharacterImages.values zip playerCharNames.getChildren.toArray) foreach(couple => couple._2.asInstanceOf[Label].setText(couple._1.characterName))
-    (opponentCharacterImages.values zip opponentCharNames.getChildren.toArray) foreach(couple => couple._2.asInstanceOf[Label].setText(couple._1.characterName))
+    (playerCharacterImages.values zip playerCharNames.getChildren.toArray) foreach (couple =>
+      couple._2.asInstanceOf[Label].setText(couple._1.characterName))
+    (opponentCharacterImages.values zip opponentCharNames.getChildren.toArray) foreach (couple =>
+      couple._2.asInstanceOf[Label].setText(couple._1.characterName))
     updateStatus()
   }
 
@@ -137,16 +142,20 @@ object BattleController extends Initializable with ViewController {
     *
     */
   def updateStatus(): Unit = {
-    (playerCharacterImages.values zip playerHps.getChildren.toArray) foreach(couple => couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints+ "/"+ couple._1.status.maxHealthPoints))
-    (playerCharacterImages.values zip playerMps.getChildren.toArray) foreach(couple => couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints+ "/"+ couple._1.status.maxManaPoints))
-    (playerCharacterImages.values zip playerAlterations.getChildren.toArray) foreach(couple =>
+    (playerCharacterImages.values zip playerHps.getChildren.toArray) foreach (couple =>
+      couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
+    (playerCharacterImages.values zip playerMps.getChildren.toArray) foreach (couple =>
+      couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints + "/" + couple._1.status.maxManaPoints))
+    (playerCharacterImages.values zip playerAlterations.getChildren.toArray) foreach (couple =>
       couple._2
         .asInstanceOf[Label]
         .setText(couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + "/" + _).dropRight(1)))
 
-    (opponentCharacterImages.values zip opponentHps.getChildren.toArray) foreach(couple => couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints+ "/"+ couple._1.status.maxHealthPoints))
-    (opponentCharacterImages.values zip opponentMps.getChildren.toArray) foreach(couple => couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints+ "/"+ couple._1.status.maxManaPoints))
-    (opponentCharacterImages.values zip opponentAlterations.getChildren.toArray) foreach(couple =>
+    (opponentCharacterImages.values zip opponentHps.getChildren.toArray) foreach (couple =>
+      couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
+    (opponentCharacterImages.values zip opponentMps.getChildren.toArray) foreach (couple =>
+      couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints + "/" + couple._1.status.maxManaPoints))
+    (opponentCharacterImages.values zip opponentAlterations.getChildren.toArray) foreach (couple =>
       couple._2
         .asInstanceOf[Label]
         .setText(couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + "/" + _).dropRight(1)))
@@ -159,9 +168,11 @@ object BattleController extends Initializable with ViewController {
     *
     *
     */
-  private def setDeadCharacters(): Unit ={
-    playerCharacterImages.foreach(couple => if (couple._2.status.healthPoints == 0) { couple._1.setImage(new Image("view/tombstone2.png")) })
-    opponentCharacterImages.foreach(couple => if (couple._2.status.healthPoints == 0) { couple._1.setImage(new Image("view/tombstone1.png")) })
+  private def setDeadCharacters(): Unit = {
+    playerCharacterImages.foreach(couple =>
+      if (couple._2.status.healthPoints == 0) { couple._1.setImage(new Image("view/tombstone2.png")) })
+    opponentCharacterImages.foreach(couple =>
+      if (couple._2.status.healthPoints == 0) { couple._1.setImage(new Image("view/tombstone1.png")) })
   }
 
   /** Obtains the current active character from the Battle and changes the corresponding label.

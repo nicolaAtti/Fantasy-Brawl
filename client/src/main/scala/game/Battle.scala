@@ -14,7 +14,7 @@ object Battle extends App {
   def start(player: (String, Seq[String]), opponent: (String, Seq[String]), battleId: String): Unit = {
     playerId = player._1
     opponentId = opponent._1
-    teams = setupTeam(player,opponent)
+    teams = setupTeam(player, opponent)
     teams.foreach(println(_))
     id = battleId
     Round.startRound()
