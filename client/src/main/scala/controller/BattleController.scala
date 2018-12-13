@@ -129,14 +129,29 @@ object BattleController extends Initializable with ViewController {
   }
 
   /**
-    * Writes all the team's labels to display names, health and mana values and possible alterations for each character
+    * Writes all the team's labels to display the name of each character in the battle
     *
     * @param player the player which structure is iterated
     */
-  def setupLabels(player: String): Unit = player match {
+  private def setupLabels(player: String): Unit = player match {
     case "Player" =>
       (Battle.playerTeam.keys zip playerCharNames.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1))
+      updateStatus(player)
+    case "Opponent" =>
+      (Battle.opponentTeam.keys zip opponentCharNames.getChildren.toArray) foreach (couple =>
+        couple._2.asInstanceOf[Label].setText(couple._1))
+  }
+
+  /**
+    * Updates the status of each character in the battle,
+    * showing it's current health and mana values compared with it' maximum
+    * and by showing the various alterations that are active
+    *
+    * @param player the player which structure is iterated
+    */
+  def updateStatus(player: String): Unit = player match {
+    case "Player" =>
       (Battle.playerTeam.values zip playerHps.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
       (Battle.playerTeam.values zip playerMps.getChildren.toArray) foreach (couple =>
@@ -145,10 +160,7 @@ object BattleController extends Initializable with ViewController {
         couple._2
           .asInstanceOf[Label]
           .setText(couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + "/" + _).dropRight(1)))
-
     case "Opponent" =>
-      (Battle.opponentTeam.keys zip opponentCharNames.getChildren.toArray) foreach (couple =>
-        couple._2.asInstanceOf[Label].setText(couple._1))
       (Battle.opponentTeam.values zip opponentHps.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
       (Battle.opponentTeam.values zip opponentMps.getChildren.toArray) foreach (couple =>
@@ -183,9 +195,10 @@ object BattleController extends Initializable with ViewController {
     *
     * @param character the character who's turn is
     */
-  def setupCharacterMoves(character: Character): Unit = {
+  private def setupCharacterMoves(character: Character): Unit = {
     moveList.add("Physical Attack")
-    character.specialMoves.foreach(move => moveList.add(move._1 + "--MP: " + move._2.manaCost+" Targets:" +move._2.maxTargets))
+    character.specialMoves.foreach(move =>
+      moveList.add(move._1 + "--MP: " + move._2.manaCost + " Targets:" + move._2.maxTargets))
     moveListView.setItems(moveList)
   }
 
@@ -223,10 +236,6 @@ object BattleController extends Initializable with ViewController {
     }
     actButtonActivation()
   }
-
-  //TODO
-  //Link with turn manager
-  def showAlteration(): Unit = ???
 
   /**
     * Activates/Deactivates the act button
