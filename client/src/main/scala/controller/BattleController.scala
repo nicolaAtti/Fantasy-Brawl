@@ -15,10 +15,11 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.util.Duration
-import model.Character
+import model.{Character, Move}
 
 import scala.collection.mutable.ListBuffer
 
+//noinspection ScalaDocMissingParameterDescription,FieldFromDelayedInit
 object BattleController extends Initializable with ViewController {
 
   val controller: ViewController = this
@@ -58,6 +59,7 @@ object BattleController extends Initializable with ViewController {
   var targets: ListBuffer[ImageView] = ListBuffer()
   var moveList: ObservableList[String] = FXCollections.observableArrayList()
   var activeCharacter: Character = _
+  var activeLabel: Label = _
 
   /**
     * Initializes the elements composing the Battle GUI
@@ -79,9 +81,9 @@ object BattleController extends Initializable with ViewController {
       if (timeSeconds <= 0) timeline.stop()
     }))
     timeline.play()
-    setBattlefield()
 
-    setActiveCharacter("Jacob")
+    setBattlefield()
+    setActiveCharacter()
   }
 
   /**
@@ -101,7 +103,6 @@ object BattleController extends Initializable with ViewController {
     */
   def setupTeam(team: Map[String, Character], player: String): Unit = player match {
     case "Player" =>
-      //setupCharacterMoves(myTeamMembers("Jacob"))
       prepareImages(player)
       setupLabels(player)
     case "Opponent" =>
@@ -158,21 +159,33 @@ object BattleController extends Initializable with ViewController {
           .setText(couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + "/" + _).dropRight(1)))
   }
 
-  //TODO
-  //Link with turn management
-  def setActiveCharacter(characterName: String): Unit = {
+  /**
+    * Obtains the current active character from the Battle and changes the corresponding label.
+    *
+    * The label is painted green to symbolize which character has now the turn, if the player owns
+    * the character, the GUI will show his move list.
+    */
+  def setActiveCharacter(): Unit = {
     activeCharacter = Battle.playerTeam("Jacob")
+    println(activeCharacter.specialMoves.keySet)
+    activeLabel = playerCharNames.getChildren.toArray
+      .filter(charName => charName.asInstanceOf[Label].getText equals activeCharacter.characterName)
+      .head
+      .asInstanceOf[Label]
+    activeLabel.setTextFill(Color.GREEN)
+    if (Battle.playerTeam.contains(activeCharacter.characterName)) {
+      setupCharacterMoves(activeCharacter)
+    }
   }
 
   /**
-    * Adds the active character's moves to the listView
+    * Adds the player's active character's moves to the listView
     *
     * @param character the character who's turn is
     */
   def setupCharacterMoves(character: Character): Unit = {
-    //Get the character's moves (if it's mine) that can act in the current turn
     moveList.add("Physical Attack")
-    character.specialMoves.keySet.foreach(moveName => moveList.add(moveName))
+    character.specialMoves.foreach(move => moveList.add(move._1 + "--MP: " + move._2.manaCost+" Targets:" +move._2.maxTargets))
     moveListView.setItems(moveList)
   }
 
@@ -180,7 +193,10 @@ object BattleController extends Initializable with ViewController {
     * Handles the press of the act button
     *
     */
-  @FXML def handleActButtonPress(): Unit = ???
+  @FXML def handleActButtonPress(): Unit = {
+    activeLabel.setTextFill(Color.BLACK)
+    //Compute the move and then send the new status message
+  }
 
   /**
     * Checks if the act button is to be activated after the selection of a different move
@@ -210,13 +226,13 @@ object BattleController extends Initializable with ViewController {
 
   //TODO
   //Link with turn manager
-  def addAlteration(): Unit = ???
+  def showAlteration(): Unit = ???
 
   /**
     * Activates/Deactivates the act button
     */
   private def actButtonActivation(): Unit = {
-    if (!cannotAct) {
+    if (canAct) {
       actButton.setDisable(false)
     } else {
       actButton.setDisable(true)
@@ -224,21 +240,28 @@ object BattleController extends Initializable with ViewController {
   }
 
   /**
-    * Checks if the act button should be active
+    * Checks if the act button should be active:
+    *
+    * The act button is active if the player has targeted at least one character, and the
+    * number of targets does not exceed the maximum number specified by the selected move.
+    * Furthermore the active character needs to have enough mana points to use the said move.
+    *
     * @return if the act button should be active or not
     */
-  private def cannotAct: Boolean = {
-    if (!moveListView.getSelectionModel.getSelectedItems.isEmpty && targets.nonEmpty) {
-      val moveName = moveListView.getSelectionModel.getSelectedItem
+  private def canAct: Boolean = {
+    if (moveListView.getSelectionModel.getSelectedItems.isEmpty || targets.isEmpty) {
+      false
+    } else {
+      val moveName = moveListView.getSelectionModel.getSelectedItem.split("--").head
+      println(moveName)
       var moveMaxTargets = 1
       moveName match {
-        case "Physical Attack" => targets.size > moveMaxTargets
+        case "Physical Attack" => targets.size <= moveMaxTargets
         case _ =>
-          moveMaxTargets = activeCharacter.specialMoves(moveName).maxTargets
-          targets.size > moveMaxTargets
+          val selectedMove = activeCharacter.specialMoves(moveName)
+          moveMaxTargets = selectedMove.maxTargets
+          targets.size <= moveMaxTargets && Move.canMakeMove(activeCharacter, selectedMove)
       }
-    } else {
-      true
     }
   }
 
