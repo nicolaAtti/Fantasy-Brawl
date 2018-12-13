@@ -13,7 +13,7 @@ object ScalaProlog {
     term.toString.replace("'", "").replace("[", "").replace("]", "").split(",").filter(s => s != "").toList
 
   /**
-    * Executes a prolog query to obtain a specific character
+    * Executes a Prolog query to obtain a specific character
     *
     * @param characterName the character's name
     * @return the Character object
@@ -37,7 +37,7 @@ object ScalaProlog {
   }
 
   /**
-    * Executes a prolog query to obtain a specific special move
+    * Executes a Prolog query to obtain a specific special move
     *
     * @param moveName the name of the move
     * @return the SpecialMove object
@@ -63,7 +63,7 @@ object ScalaProlog {
   }
 
   /**
-    * Executes a prolog query to obtain a specific modifier
+    * Executes a Prolog query to obtain a specific modifier
     *
     * @param modifierName the modifier's name
     * @return the Modifier object
@@ -91,9 +91,9 @@ object ScalaProlog {
       engine.setTheory(new Theory(clauses mkString " "))
 
     /**
-      * Extracts an Int value from a prolog solution
+      * Extracts an Int value from a Prolog solution
       *
-      * @param solveInfo the solution from a prolog query
+      * @param solveInfo the solution from a Prolog query
       * @param value the name of the value to extract
       * @return the extracted Int value
       */
@@ -102,9 +102,9 @@ object ScalaProlog {
     }
 
     /**
-      * Extracts an String from a prolog solution
+      * Extracts a String from a Prolog solution
       *
-      * @param solveInfo the solution from a prolog query
+      * @param solveInfo the solution from a Prolog query
       * @param value the name of the value to extract
       * @return the extracted String
       */
@@ -113,9 +113,9 @@ object ScalaProlog {
     }
 
     /**
-      * Builds a scala list of strings from a Prolog list
+      * Builds a Scala list of strings from a Prolog list
       *
-      * @param solveInfo the solution from a prolog query
+      * @param solveInfo the solution from a Prolog query
       * @param value the name of the value to extract
       * @return the built List of string
       */
