@@ -35,10 +35,7 @@ object Round {
   }
 
   def startTurn(): Unit = {
-    val currentCharacter: Character = turns.head._2
-    if(turns.head._1 == Battle.playerName)
-      Battle.playerTeam(currentCharacter) =
-    BattleController.setActiveCharacter(currentCharacter)
+    BattleController.setActiveCharacter(turns.head._2)
     turns = turns.tail
     // ----------------------------------- applicare afflizioni
     //println(id)
