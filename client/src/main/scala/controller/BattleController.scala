@@ -53,16 +53,22 @@ object BattleController extends Initializable with ViewController {
 
   @FXML var actButton: Button = _
 
-  var myImages: List[ImageView] = List()
+  var playerImages: List[ImageView] = List()
   var opponentImages: List[ImageView] = List()
 
-  var targets: ListBuffer[ImageView] = ListBuffer()
+  var playerCharacterImages: Map[ImageView, String] = Map()
+  var opponentCharacterImages: Map[ImageView, String] = Map()
+
+  var targetImages: ListBuffer[ImageView] = ListBuffer()
+  var targets: ListBuffer[(String, String)] = ListBuffer()
+
   var moveList: ObservableList[String] = FXCollections.observableArrayList()
   var activeCharacter: Character = _
   var activeLabel: Label = _
+  val timeline: Timeline = new Timeline()
+  var timeSeconds: Int = 60
 
-  /**
-    * Initializes the elements composing the Battle GUI
+  /** Initializes the elements composing the Battle GUI
     *
     * @param location
     * @param resources
@@ -70,10 +76,13 @@ object BattleController extends Initializable with ViewController {
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
     TargetedEffect.setHeight(30)
     TargetedEffect.setWidth(30)
-    myImages = List(playerChar1Image, playerChar2Image, playerChar3Image, playerChar4Image)
+
+    playerImages = List(playerChar1Image, playerChar2Image, playerChar3Image, playerChar4Image)
     opponentImages = List(opponentChar1Image, opponentChar2Image, opponentChar3Image, opponentChar4Image)
-    var timeSeconds: Int = 60
-    val timeline: Timeline = new Timeline()
+
+    setBattlefield()
+    setActiveCharacter()
+
     timeline.setCycleCount(60)
     timeline.getKeyFrames.add(new KeyFrame(Duration.seconds(1), (_: ActionEvent) => {
       timeSeconds = timeSeconds - 1
@@ -81,116 +90,109 @@ object BattleController extends Initializable with ViewController {
       if (timeSeconds <= 0) timeline.stop()
     }))
     timeline.play()
-
-    setBattlefield()
-    setActiveCharacter()
   }
 
-  /**
-    * Setups the GUI for both teams
-    *
-    **/
+  /** Setups the GUI for both teams */
   def setBattlefield(): Unit = {
     setupTeam(Battle.playerTeam, "Player")
     setupTeam(Battle.opponentTeam, "Opponent")
   }
 
-  /**
-    * Sets the player's team images and status description labels
+  /** Sets the player's team images and status description labels
     *
     * @param team  the team to setup
     * @param player the player owning the team
     */
   def setupTeam(team: Map[String, Character], player: String): Unit = player match {
     case "Player" =>
-      prepareImages(player)
-      setupLabels(player)
+      playerCharacterImages = (playerImages zip team.keySet).toMap
+      playerCharacterImages.foreach(gg => println(gg))
+      prepareImages(player, team)
+      setupLabels(player, team)
     case "Opponent" =>
-      prepareImages(player)
-      setupLabels(player)
+      opponentCharacterImages = (opponentImages zip team.keySet).toMap
+      opponentCharacterImages.foreach(gg => println(gg))
+      prepareImages(player, team)
+      setupLabels(player, team)
   }
 
-  /**
-    * Assigns to each character it's battle image, orientation depends on the player
+  /** Assigns to each character it's battle image, orientation depends on the player
     *
     * @param player the player which structure is iterated
     */
-  private def prepareImages(player: String): Unit = player match {
+  private def prepareImages(player: String, team: Map[String, Character]): Unit = player match {
     case "Player" =>
-      (Battle.playerTeam.keys zip myImages).foreach(
+      (team.keys zip playerImages).foreach(
         member =>
           member._2
             .setImage(new Image("view/" + member._1 + "1-" + "clean.png")))
     case "Opponent" =>
-      (Battle.opponentTeam.keys zip opponentImages).foreach(
+      (team.keys zip opponentImages).foreach(
         member =>
           member._2
             .setImage(new Image("view/" + member._1 + "2-" + "clean.png")))
   }
 
-  /**
-    * Writes all the team's labels to display the name of each character in the battle
+  /** Writes all the team's labels to display the name of each character in the battle
     *
     * @param player the player which structure is iterated
     */
-  private def setupLabels(player: String): Unit = player match {
+  private def setupLabels(player: String, team: Map[String, Character]): Unit = player match {
     case "Player" =>
-      (Battle.playerTeam.keys zip playerCharNames.getChildren.toArray) foreach (couple =>
+      (team.keys zip playerCharNames.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1))
-      updateStatus(player)
+      updateStatus(player, team)
     case "Opponent" =>
-      (Battle.opponentTeam.keys zip opponentCharNames.getChildren.toArray) foreach (couple =>
+      (team.keys zip opponentCharNames.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1))
+      updateStatus(player, team)
   }
 
-  /**
-    * Updates the status of each character in the battle,
+  /** Updates the status of each character in the battle,
     * showing it's current health and mana values compared with it' maximum
     * and by showing the various alterations that are active.
     * After that changes the images of dead characters.
     *
     * @param player the player which structure is iterated
     */
-  def updateStatus(player: String): Unit = player match {
+  def updateStatus(player: String, team: Map[String, Character]): Unit = player match {
     case "Player" =>
-      (Battle.playerTeam.values zip playerHps.getChildren.toArray) foreach (couple =>
+      (team.values zip playerHps.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
-      (Battle.playerTeam.values zip playerMps.getChildren.toArray) foreach (couple =>
+      (team.values zip playerMps.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints + "/" + couple._1.status.maxManaPoints))
-      (Battle.playerTeam.values zip playerAlterations.getChildren.toArray) foreach (couple =>
+      (team.values zip playerAlterations.getChildren.toArray) foreach (couple =>
         couple._2
           .asInstanceOf[Label]
           .setText(couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + "/" + _).dropRight(1)))
-      setDeadCharacters(player)
+      setDeadCharacters(player, team)
     case "Opponent" =>
-      (Battle.opponentTeam.values zip opponentHps.getChildren.toArray) foreach (couple =>
+      (team.values zip opponentHps.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
-      (Battle.opponentTeam.values zip opponentMps.getChildren.toArray) foreach (couple =>
+      (team.values zip opponentMps.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints + "/" + couple._1.status.maxManaPoints))
-      (Battle.opponentTeam.values zip opponentAlterations.getChildren.toArray) foreach (couple =>
+      (team.values zip opponentAlterations.getChildren.toArray) foreach (couple =>
         couple._2
           .asInstanceOf[Label]
           .setText(couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + "/" + _).dropRight(1)))
-      setDeadCharacters(player)
+      setDeadCharacters(player, team)
   }
 
-  /**
-    * Checks if the team members of the player are at zero health points,
+  /** Checks if the team members of the player are at zero health points,
     * and sets their image to a tombstone.
     *
     * @param player the player which structure is iterated
     */
-  private def setDeadCharacters(player: String): Unit = player match {
+  private def setDeadCharacters(player: String, team: Map[String, Character]): Unit = player match {
     case "Player" =>
-      (Battle.playerTeam.values zip myImages) foreach (couple =>
+      (team.values zip playerImages) foreach (couple =>
         if (couple._1.status.healthPoints == 0) { couple._2.setImage(new Image("view/tombstone2.png")) })
     case "Opponent" =>
-      (Battle.opponentTeam.values zip opponentImages) foreach (couple =>
+      (team.values zip opponentImages) foreach (couple =>
         if (couple._1.status.healthPoints == 0) { couple._2.setImage(new Image("view/tombstone1.png")) })
   }
 
-  /**
-    * Obtains the current active character from the Battle and changes the corresponding label.
+  /** Obtains the current active character from the Battle and changes the corresponding label.
     *
     * The label is painted green to symbolize which character has now the turn, if the player owns
     * the character, the GUI will show his move list.
@@ -208,8 +210,7 @@ object BattleController extends Initializable with ViewController {
     }
   }
 
-  /**
-    * Adds the player's active character's moves to the listView
+  /** Adds the player's active character's moves to the listView
     *
     * @param character the character who's turn is
     */
@@ -220,17 +221,28 @@ object BattleController extends Initializable with ViewController {
     moveListView.setItems(moveList)
   }
 
-  /**
-    * Handles the press of the act button
+  /** Handles the press of the act button
     *
     */
   @FXML def handleActButtonPress(): Unit = {
     activeLabel.setTextFill(Color.BLACK)
+    println(targets)
+    targets = ListBuffer()
+    targetImages.foreach(target => setCharacterUnselected(target))
+    targetImages = ListBuffer()
+
+    //Move.makeMove(activeCharacter.specialMoves(moveListView.getSelectionModel.getSelectedItem),activeCharacter,)
     //Compute the move and then send the new status message
   }
 
-  /**
-    * Checks if the act button is to be activated after the selection of a different move
+  /** Resets the turn timer */
+  def newTurn(): Unit = {
+    timeSeconds = 60
+    timerCounter.setText(timeSeconds.toString)
+    timeline.playFromStart()
+  }
+
+  /** Checks if the act button is to be activated after the selection of a different move
     *
     * @param mouseEvent
     */
@@ -238,26 +250,37 @@ object BattleController extends Initializable with ViewController {
     actButtonActivation()
   }
 
-  /**
-    * Adds/Removes the pressed character to/from the target's list, and checks if the act button is to be activated
+  /** Adds/Removes the pressed character to/from the target's list, and checks if the act button is to be activated
     *
     * @param mouseEvent
     */
   @FXML def handleCharacterToTargetPressed(mouseEvent: MouseEvent) {
-    var characterPressed: ImageView = mouseEvent.getSource.asInstanceOf[ImageView]
-    if (targets.contains(characterPressed)) {
-      targets -= characterPressed
-      setCharacterUnselected(characterPressed)
+    val characterPressed: ImageView = mouseEvent.getSource.asInstanceOf[ImageView]
+    if (characterPressed.getId.contains("player")) {
+      setTargets(characterPressed, playerCharacterImages(characterPressed), "Player")
     } else {
-      targets += characterPressed
-      setCharacterSelected(characterPressed)
+      setTargets(characterPressed, opponentCharacterImages(characterPressed), "Opponent")
     }
     actButtonActivation()
   }
 
-  /**
-    * Activates/Deactivates the act button
-    */
+  private def setTargets(imagePressed: ImageView, characterName: String, owner: String): Unit = {
+    if (targetImages.exists(image => image.getId equals imagePressed.getId)) {
+      println("Removed")
+      targetImages -= imagePressed
+      targets -= ((characterName, owner))
+      setCharacterUnselected(imagePressed)
+    } else {
+      println("Added")
+      targetImages += imagePressed
+      targets += ((characterName, owner))
+      setCharacterSelected(imagePressed)
+    }
+    targetImages.foreach(println(_))
+    targets.foreach(println(_))
+  }
+
+  /** Activates/Deactivates the act button */
   private def actButtonActivation(): Unit = {
     if (canAct) {
       actButton.setDisable(false)
@@ -266,8 +289,7 @@ object BattleController extends Initializable with ViewController {
     }
   }
 
-  /**
-    * Checks if the act button should be active:
+  /** Checks if the act button should be active:
     *
     * The act button is active if the player has targeted at least one character, and the
     * number of targets does not exceed the maximum number specified by the selected move.
@@ -276,32 +298,32 @@ object BattleController extends Initializable with ViewController {
     * @return if the act button should be active or not
     */
   private def canAct: Boolean = {
-    if (moveListView.getSelectionModel.getSelectedItems.isEmpty || targets.isEmpty) {
+    if (moveListView.getSelectionModel.getSelectedItems.isEmpty || targetImages.isEmpty) {
       false
     } else {
       val moveName = moveListView.getSelectionModel.getSelectedItem.split("--").head
       println(moveName)
       var moveMaxTargets = 1
       moveName match {
-        case "Physical Attack" => targets.size <= moveMaxTargets
+        case "Physical Attack" => targetImages.size <= moveMaxTargets
         case _ =>
           val selectedMove = activeCharacter.specialMoves(moveName)
           moveMaxTargets = selectedMove.maxTargets
-          targets.size <= moveMaxTargets && Move.canMakeMove(activeCharacter, selectedMove)
+          targetImages.size <= moveMaxTargets && Move.canMakeMove(activeCharacter, selectedMove)
       }
     }
   }
 
-  /**
-    * Applies the selection effect to the targeted character's image
+  /** Applies the selection effect to the targeted character's image
+    *
     * @param charImage the character's image
     */
   private def setCharacterSelected(charImage: ImageView): Unit = {
     charImage.setEffect(TargetedEffect)
   }
 
-  /**
-    * Removes the selection effect to the deselected character's image
+  /** Removes the selection effect to the deselected character's image
+    *
     * @param charImage the character's image
     */
   private def setCharacterUnselected(charImage: ImageView): Unit = {
