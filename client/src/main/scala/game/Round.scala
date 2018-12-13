@@ -1,5 +1,6 @@
 package game
 
+import controller.BattleController
 import messaging.RoundManager
 import model._
 import view.ApplicationView
@@ -7,7 +8,7 @@ import view.ViewConfiguration.viewSelector._
 
 object Round {
   var id: Int = 0
-  var turn: List[(String, Character)] = List()
+  var turns: List[(String, Character)] = List()
 
   def startRound(): Unit = {
     RoundManager.startRoundRequest(Battle.playerName,
@@ -15,17 +16,39 @@ object Round {
                                    id + 1)
   }
 
+  def endRound(): Unit = {
+    startRound()
+  }
+
   def setupTurns(turnInformation: List[((String, String), Int)], round: Int): Unit = {
     id = round
-    turn = turnInformation.map {
-      case (key, speed) =>
-        if (key._1 == Battle.playerName)
-          (key._1, Battle.playerTeam(key._2))
+    turns = turnInformation.map {
+      case ((playerName, characterName), _) =>
+        if (playerName == Battle.playerName)
+          (playerName, Battle.playerTeam(characterName))
         else
-          (key._1, Battle.opponentTeam(key._2))
+          (playerName, Battle.opponentTeam(characterName))
     }
+    startTurn()
     if (id == 1)
       ApplicationView changeView BATTLE
   }
-  def endRound(): Unit = {}
+
+  def startTurn(): Unit = {
+    val currentCharacter: Character = turns.head._2
+    if(turns.head._1 == Battle.playerName)
+      Battle.playerTeam(currentCharacter) =
+    BattleController.setActiveCharacter(currentCharacter)
+    turns = turns.tail
+    // ----------------------------------- applicare afflizioni
+    //println(id)
+    //turn.foreach{ case (playerName, character) => println(playerName + " - " + character.characterName + " : " + character.speed)}
+  }
+
+  def endTurn(): Unit = {
+    if (turns.nonEmpty)
+      startTurn()
+    else
+      endRound()
+  }
 }

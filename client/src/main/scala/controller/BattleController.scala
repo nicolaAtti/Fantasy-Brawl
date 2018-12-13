@@ -3,7 +3,7 @@ package controller
 import java.net.URL
 import java.util.ResourceBundle
 
-import game.Battle
+import game.{Battle, Round}
 import javafx.animation.{KeyFrame, Timeline}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.event.ActionEvent
@@ -59,6 +59,9 @@ object BattleController extends Initializable with ViewController {
   var moveList: ObservableList[String] = FXCollections.observableArrayList()
   var activeCharacter: Character = _
 
+  var timeSeconds: Int = 60
+  val timeline: Timeline = new Timeline()
+
   /**
     * Initializes the elements composing the Battle GUI
     *
@@ -70,18 +73,22 @@ object BattleController extends Initializable with ViewController {
     SelectedEffect.setWidth(30)
     myImages = List(playerChar1Image, playerChar2Image, playerChar3Image, playerChar4Image)
     opponentImages = List(opponentChar1Image, opponentChar2Image, opponentChar3Image, opponentChar4Image)
-    var timeSeconds: Int = 60
-    val timeline: Timeline = new Timeline()
+    setBattlefield()
+
     timeline.setCycleCount(60)
     timeline.getKeyFrames.add(new KeyFrame(Duration.seconds(1), (_: ActionEvent) => {
       timeSeconds = timeSeconds - 1
       timerCounter.setText(timeSeconds.toString)
-      if (timeSeconds <= 0) timeline.stop()
+      if (timeSeconds <= 0) {
+        timeline.stop()
+        Round.endTurn()
+      }
     }))
-    timeline.play()
-    setBattlefield()
+  }
 
-    setActiveCharacter("Jacob")
+  def resetTimer(): Unit ={
+    timeSeconds = 60
+    timeline.play()
   }
 
   /**
@@ -160,8 +167,9 @@ object BattleController extends Initializable with ViewController {
 
   //TODO
   //Link with turn management
-  def setActiveCharacter(characterName: String): Unit = {
-    activeCharacter = Battle.playerTeam("Jacob")
+  def setActiveCharacter(character: Character): Unit = {
+    activeCharacter = character
+    resetTimer()
   }
 
   /**
