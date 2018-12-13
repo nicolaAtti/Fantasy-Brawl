@@ -52,7 +52,7 @@ object Status {
     * @param status the status of a character before the modifications
     * @return the new status after the modifications
     */
-  def afterTurnStart(status: Status): Status = (afterAlterationsEffects _ andThen afterTick) (status)
+  def afterTurnStart(status: Status): Status = (afterAlterationsEffects _ andThen afterTick)(status)
 
 }
 
