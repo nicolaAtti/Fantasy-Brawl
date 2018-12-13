@@ -32,4 +32,21 @@ object SubStatistic {
   /** Represents the speed of a character */
   case object Speed extends SubStatistic
 
+  /** Retrieves the appropriate sub-statistic object given its name.
+    *
+    * @param name the sub-statistic's name
+    * @return the corresponding object
+    */
+  def apply(name: String): SubStatistic = name match {
+    case "PhysicalDamage"         => PhysicalDamage
+    case "MagicalDamage"          => MagicalDamage
+    case "PhysicalCriticalDamage" => PhysicalCriticalDamage
+    case "MagicalCriticalDamage"  => MagicalCriticalDamage
+    case "PhysicalDefence"        => PhysicalDefence
+    case "MagicalDefence"         => MagicalDefence
+    case "CriticalChance"         => CriticalChance
+    case "Speed"                  => Speed
+    case _                        => throw new IllegalArgumentException(s"Unknown sub-statistic name: $name")
+  }
+
 }
