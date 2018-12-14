@@ -1,10 +1,18 @@
 package view
 
+import javafx.scene.control.Alert
+
 /** Contains the configuration used for the views.
   *
   * @author Daniele Schiavi
   */
 object ViewConfiguration {
+  val WindowHeight: Double = 540
+  val WindowWidth: Double = 960
+
+  val DialogErrorType: Alert.AlertType = Alert.AlertType.ERROR
+  val DialogErrorTitle: String = "Error"
+
   val LoginTitle: String = "Fantasy Brawl - Login"
   val LoginForm: String = "LoginForm.fxml"
   val TeamSelectionTitle: String = "Fantasy Brawl - Team Selection"
