@@ -113,46 +113,53 @@ trait Character {
 
 }
 
+import Character._
+
 private case class Warrior(characterName: String,
                            statistics: Statistics,
                            specialMoves: Map[String, SpecialMove],
                            classMultipliers: ClassMultipliers = ClassMultipliers(2, 1, 1, 0.5, 1.5, 2),
-                           role: String = "Warrior")
+                           role: String = WarriorRepresentation)
     extends Character {}
 
 private case class Thief(characterName: String,
                          statistics: Statistics,
                          specialMoves: Map[String, SpecialMove],
                          classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 2, 1, 0.5, 1, 1.5),
-                         role: String = "Thief")
+                         role: String = ThiefRepresentation)
     extends Character {}
 
 private case class Wizard(characterName: String,
                           statistics: Statistics,
                           specialMoves: Map[String, SpecialMove],
                           classMultipliers: ClassMultipliers = ClassMultipliers(1, 1, 1.5, 2, 0.5, 1.5),
-                          role: String = "Wizard")
+                          role: String = WizardRepresentation)
     extends Character {}
 
 private case class Healer(characterName: String,
                           statistics: Statistics,
                           specialMoves: Map[String, SpecialMove],
                           classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 0.5, 1, 2, 1, 1.5),
-                          role: String = "Healer")
+                          role: String = HealerRepresentation)
     extends Character {}
 
 object Character {
+
+  val WarriorRepresentation: String = "Warrior"
+  val ThiefRepresentation: String = "Thief"
+  val WizardRepresentation: String = "Warrior"
+  val HealerRepresentation: String = "Healer"
 
   def apply(characterClass: String,
             characterName: String,
             statistics: Statistics,
             specialMoves: Map[String, SpecialMove]): Character =
     characterClass match {
-      case "Warrior" => Warrior(characterName, statistics, specialMoves)
-      case "Thief"   => Thief(characterName, statistics, specialMoves)
-      case "Wizard"  => Wizard(characterName, statistics, specialMoves)
-      case "Healer"  => Healer(characterName, statistics, specialMoves)
-      case _         => throw new IllegalArgumentException(s"Unknown character role: $characterClass")
+      case WarriorRepresentation => Warrior(characterName, statistics, specialMoves)
+      case ThiefRepresentation   => Thief(characterName, statistics, specialMoves)
+      case WizardRepresentation  => Wizard(characterName, statistics, specialMoves)
+      case HealerRepresentation  => Healer(characterName, statistics, specialMoves)
+      case _                     => throw new IllegalArgumentException(s"Unknown character role: $characterClass")
     }
 
 }
