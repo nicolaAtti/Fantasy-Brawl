@@ -1,16 +1,17 @@
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext
+package loginguest
 
-import org.mongodb.scala._
+import org.mongodb.scala.MongoClient
 import org.mongodb.scala.model.Filters
-import org.mongodb.scala.model.Updates._
+import org.mongodb.scala.model.Updates.inc
+
+import scala.concurrent.Future
 
 /** Provides a function and a set of constants to manage the asynchronous
   * communication with a nosql database.
   *
   * @author Marco Canducci
   */
-object AsyncDbManager {
+object MongoDbManager {
 
   val mongoClient = MongoClient("mongodb://login-guest-service:pps-17-fb@ds039291.mlab.com:39291/heroku_3bppsqjk")
   val database = mongoClient.getDatabase("heroku_3bppsqjk")
