@@ -23,23 +23,21 @@ object Round {
     startRound()
   }
 
-  def setupTurns(turnInformation: List[((String, String), Int)], round: Int): Unit = {
+  def setupTurns(turnInformation: List[(String, String)], round: Int): Unit = {
     id = round
     turns = turnInformation.map {
-      case ((playerName, characterName), _) =>
+      case (playerName, characterName) =>
         Battle.teams.find(char => char.characterName == characterName && char.owner.get == playerName).get
     }
-    startTurn()
     if (id == 1)
       ApplicationView changeView BATTLE
+    startTurn()
   }
 
   def startTurn(): Unit = {
     BattleController.setActiveCharacter(turns.head)
     turns = turns.tail
     // ----------------------------------- applicare afflizioni
-    //println(id)
-    //turn.foreach{ case (playerName, character) => println(playerName + " - " + character.characterName + " : " + character.speed)}
   }
 
   def endTurn(): Unit = {
