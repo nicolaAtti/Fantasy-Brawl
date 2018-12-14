@@ -2,7 +2,7 @@ package model
 
 import Move._
 import MoveType._
-import MoveEffects._
+import MoveEffectStrategies._
 import model.Alteration._
 
 sealed trait Move {
@@ -53,12 +53,12 @@ private object MoveHelper {
 
 case object PhysicalAttack extends Move {
   override val moveType = Melee
-  override val moveEffect = standardDamageEffect(
+  override val moveEffect = createStandardDamageEffect(
     moveType = this.moveType,
     baseDamage = 0,
-    addModifiers = Map.empty[String, Modifier],
-    addAlterations = Map.empty[Alteration, Int],
-    removeAlterations = Set[Alteration](Asleep)
+    addModifiers = Map.empty,
+    addAlterations = Map.empty,
+    removeAlterations = Set(Asleep)
   )
   override val manaCost = 0
   override val maxTargets = 1
@@ -77,7 +77,7 @@ case class SpecialMove(name: String,
 object SpecialMove {
 
   def apply(name: String,
-            moveEffectType: String,
+            moveEffectStrategyCode: String,
             moveType: MoveType,
             baseValue: Int,
             addModifiers: Map[String, Modifier],
@@ -90,37 +90,32 @@ object SpecialMove {
     require(baseValue >= 0, "The base value cannot be negative")
     require(maxTargets > 0, "The number of maximum targets must be at least one")
 
-    moveEffectType match {
+    moveEffectStrategyCode match {
 
       case "StandardDamage" =>
-        val moveEffect = standardDamageEffect(moveType = moveType,
-                                              baseDamage = baseValue,
-                                              addModifiers = addModifiers,
-                                              addAlterations = addAlterations,
-                                              removeAlterations = removeAlterations) _
+        val moveEffect = createStandardDamageEffect(moveType = moveType,
+                                                    baseDamage = baseValue,
+                                                    addModifiers = addModifiers,
+                                                    addAlterations = addAlterations,
+                                                    removeAlterations = removeAlterations)
         SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
 
       case "StandardHeal" =>
-        val moveEffect = standardHealEffect(baseHeal = baseValue,
-                                            addModifiers = addModifiers,
-                                            addAlterations = addAlterations,
-                                            removeAlterations = removeAlterations) _
+        val moveEffect = createStandardHealEffect(baseHeal = baseValue,
+                                                  addModifiers = addModifiers,
+                                                  addAlterations = addAlterations,
+                                                  removeAlterations = removeAlterations)
         SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
 
       case "Percentage" =>
-        val moveEffect = percentageEffect(percentage = baseValue,
-                                          addModifiers = addModifiers,
-                                          addAlterations = addAlterations,
-                                          removeAlterations = removeAlterations) _
+        val moveEffect = createPercentageEffect(baseValue, addModifiers, addAlterations, removeAlterations)
         SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
 
       case "BuffDebuff" =>
-        val moveEffect = buffDebuffEffect(addModifiers = addModifiers,
-                                          addAlterations = addAlterations,
-                                          removeAlterations = removeAlterations) _
+        val moveEffect = createBuffDebuffEffect(addModifiers, addAlterations, removeAlterations)
         SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
 
-      case _ => throw new IllegalArgumentException(s"Unknown move damage type: $moveEffectType")
+      case _ => throw new IllegalArgumentException(s"Unknown move damage type: $moveEffectStrategyCode")
     }
   }
 }
