@@ -33,33 +33,32 @@ object Move {
 
     import Status._
     if (results contains attacker)
-      adjust(results, attacker)(afterManaConsumption(_, move))
+      adjust(map = results, key = attacker)(afterManaConsumption(_, move))
     else
       results + (attacker -> afterManaConsumption(attacker.status, move))
   }
-}
 
-private object MoveHelper {
+  private object MoveHelper {
 
-  def hasEnoughMana(character: Character, move: Move): Boolean = character.status.manaPoints >= move.manaCost
+    def hasEnoughMana(character: Attacker, move: Move): Boolean = character.status.manaPoints >= move.manaCost
 
-  def isInhibited(character: Character, move: Move): Boolean =
-    character.status.alterations
-      .map { case (alteration, _) => alteration.inhibits(move) }
-      .fold(false)(_ || _)
+    def isInhibited(character: Attacker, move: Move): Boolean =
+      character.status.alterations
+        .map { case (alteration, _) => alteration.inhibits(move) }
+        .fold(false)(_ || _)
 
-  def adjust[A, B](m: Map[A, B], k: A)(f: B => B): Map[A, B] = m.updated(k, f(m(k)))
+    def adjust[A, B](map: Map[A, B], key: A)(f: B => B): Map[A, B] = map.updated(key, f(map(key)))
+
+  }
+
 }
 
 case object PhysicalAttack extends Move {
-  override val moveType = Melee
-  override val moveEffect = createStandardDamageEffect(
-    moveType = this.moveType,
-    baseDamage = 0,
-    addModifiers = Map.empty,
-    addAlterations = Map.empty,
-    removeAlterations = Set(Asleep)
-  )
+  override val moveType: MoveType = Melee
+  override val moveEffect: (Attacker, Target) => NewTargetStatus =
+    createStandardDamageEffect(moveType = this.moveType, baseDamage = 0)(addModifiers = Map.empty,
+                                                                         addAlterations = Map.empty,
+                                                                         removeAlterations = Set(Asleep))
   override val manaCost = 0
   override val maxTargets = 1
 }
@@ -90,32 +89,19 @@ object SpecialMove {
     require(baseValue >= 0, "The base value cannot be negative")
     require(maxTargets > 0, "The number of maximum targets must be at least one")
 
-    moveEffectStrategyCode match {
+    implicit val modifiersToAdd: Map[String, Modifier] = addModifiers
+    implicit val alterationsToAdd: Map[Alteration, Int] = addAlterations
+    implicit val alterationsToRemove: Set[Alteration] = removeAlterations
 
-      case "StandardDamage" =>
-        val moveEffect = createStandardDamageEffect(moveType = moveType,
-                                                    baseDamage = baseValue,
-                                                    addModifiers = addModifiers,
-                                                    addAlterations = addAlterations,
-                                                    removeAlterations = removeAlterations)
-        SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
-
-      case "StandardHeal" =>
-        val moveEffect = createStandardHealEffect(baseHeal = baseValue,
-                                                  addModifiers = addModifiers,
-                                                  addAlterations = addAlterations,
-                                                  removeAlterations = removeAlterations)
-        SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
-
-      case "Percentage" =>
-        val moveEffect = createPercentageEffect(baseValue, addModifiers, addAlterations, removeAlterations)
-        SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
-
-      case "BuffDebuff" =>
-        val moveEffect = createBuffDebuffEffect(addModifiers, addAlterations, removeAlterations)
-        SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
-
-      case _ => throw new IllegalArgumentException(s"Unknown move damage type: $moveEffectStrategyCode")
+    val moveEffect = moveEffectStrategyCode match {
+      case "StandardDamage" => createStandardDamageEffect(moveType = moveType, baseDamage = baseValue)
+      case "StandardHeal"   => createStandardHealEffect(baseHeal = baseValue)
+      case "Percentage"     => createPercentageEffect(percentage = baseValue)
+      case "BuffDebuff"     => createBuffDebuffEffect
+      case _                => throw new IllegalArgumentException(s"Unknown move effect strategy: $moveEffectStrategyCode")
     }
+
+    SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
   }
+
 }
