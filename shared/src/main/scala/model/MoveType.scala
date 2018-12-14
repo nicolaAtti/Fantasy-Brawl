@@ -55,6 +55,7 @@ object MoveType {
     override def defendingBonus(target: Character): Int = target.physicalDefence
     override val representation: String = "Melee"
   }
+
   /** Defines a move of type ranged.
     *
     * The power of a ranged move is influenced by the attacker's physical attack

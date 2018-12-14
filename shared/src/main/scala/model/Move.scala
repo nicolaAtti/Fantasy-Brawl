@@ -1,31 +1,32 @@
 package model
 
+import Move._
 import MoveType._
 import MoveEffects._
 import model.Alteration._
 
 sealed trait Move {
   def moveType: MoveType
-  def moveEffect: (Character, Character) => Status
+  def moveEffect: (Attacker, Target) => NewTargetStatus
   def manaCost: Int
   def maxTargets: Int
 }
 
 object Move {
+  import MoveHelper._
 
-  def canMakeMove(c: Character, m: Move): Boolean = hasEnoughMana(c, m) && !isIncapacitated(c, m)
+  type Attacker = Character
+  type Target = Character
+  type NewTargetStatus = Status
+  type NewStatuses = Map[Character, Status]
 
-  private def hasEnoughMana(character: Character, move: Move): Boolean = character.status.manaPoints >= move.manaCost
+  def canMakeMove(attacker: Attacker, move: Move): Boolean =
+    hasEnoughMana(attacker, move) && !isInhibited(attacker, move)
 
-  private def isIncapacitated(character: Character, move: Move): Boolean =
-    character.status.alterations
-      .map { case (alteration, _) => alteration.inhibits(move) }
-      .fold(false)(_ || _)
-
-  def makeMove(move: Move, attacker: Character, targets: Set[Character]): Map[Character, Status] = {
+  def makeMove(move: Move, attacker: Attacker, targets: Set[Target]): NewStatuses = {
     require(canMakeMove(attacker, move) && targets.size <= move.maxTargets)
 
-    val results: Map[Character, Status] =
+    val results: NewStatuses =
       targets
         .map(target => (target, move.moveEffect(attacker, target)))
         .toMap
@@ -36,9 +37,18 @@ object Move {
     else
       results + (attacker -> afterManaConsumption(attacker.status, move))
   }
+}
 
-  private def adjust[A, B](m: Map[A, B], k: A)(f: B => B): Map[A, B] = m.updated(k, f(m(k)))
+private object MoveHelper {
 
+  def hasEnoughMana(character: Character, move: Move): Boolean = character.status.manaPoints >= move.manaCost
+
+  def isInhibited(character: Character, move: Move): Boolean =
+    character.status.alterations
+      .map { case (alteration, _) => alteration.inhibits(move) }
+      .fold(false)(_ || _)
+
+  def adjust[A, B](m: Map[A, B], k: A)(f: B => B): Map[A, B] = m.updated(k, f(m(k)))
 }
 
 case object PhysicalAttack extends Move {
@@ -56,7 +66,7 @@ case object PhysicalAttack extends Move {
 
 case class SpecialMove(name: String,
                        moveType: MoveType,
-                       moveEffect: (Character, Character) => Status,
+                       moveEffect: (Attacker, Target) => NewTargetStatus,
                        manaCost: Int,
                        maxTargets: Int)
     extends Move {
@@ -83,35 +93,31 @@ object SpecialMove {
     moveEffectType match {
 
       case "StandardDamage" =>
-        val moveEffect: (Character, Character) => Status =
-          standardDamageEffect(moveType = moveType,
-                               baseDamage = baseValue,
-                               addModifiers = addModifiers,
-                               addAlterations = addAlterations,
-                               removeAlterations = removeAlterations)
+        val moveEffect = standardDamageEffect(moveType = moveType,
+                                              baseDamage = baseValue,
+                                              addModifiers = addModifiers,
+                                              addAlterations = addAlterations,
+                                              removeAlterations = removeAlterations) _
         SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
 
       case "StandardHeal" =>
-        val moveEffect: (Character, Character) => Status =
-          standardHealEffect(baseHeal = baseValue,
-                             addModifiers = addModifiers,
-                             addAlterations = addAlterations,
-                             removeAlterations = removeAlterations)
+        val moveEffect = standardHealEffect(baseHeal = baseValue,
+                                            addModifiers = addModifiers,
+                                            addAlterations = addAlterations,
+                                            removeAlterations = removeAlterations) _
         SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
 
       case "Percentage" =>
-        val moveEffect: (Character, Character) => Status =
-          percentageEffect(percentage = baseValue,
-                           addModifiers = addModifiers,
-                           addAlterations = addAlterations,
-                           removeAlterations = removeAlterations)
+        val moveEffect = percentageEffect(percentage = baseValue,
+                                          addModifiers = addModifiers,
+                                          addAlterations = addAlterations,
+                                          removeAlterations = removeAlterations) _
         SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
 
       case "BuffDebuff" =>
-        val moveEffect: (Character, Character) => Status =
-          buffDebuffEffect(addModifiers = addModifiers,
-                           addAlterations = addAlterations,
-                           removeAlterations = removeAlterations)
+        val moveEffect = buffDebuffEffect(addModifiers = addModifiers,
+                                          addAlterations = addAlterations,
+                                          removeAlterations = removeAlterations) _
         SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
 
       case _ => throw new IllegalArgumentException(s"Unknown move damage type: $moveEffectType")

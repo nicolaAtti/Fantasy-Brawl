@@ -6,11 +6,14 @@ object MoveEffects {
 
   val minDamage = 1
 
+  import model.Move._
+  import MoveEffectHelper._
+
   def standardDamageEffect(moveType: MoveType,
                            baseDamage: Int,
                            addModifiers: Map[String, Modifier],
                            addAlterations: Map[Alteration, Int],
-                           removeAlterations: Set[Alteration])(attacker: Character, target: Character): Status = {
+                           removeAlterations: Set[Alteration])(attacker: Attacker, target: Target): NewTargetStatus = {
     val normalDamage = baseDamage + moveType.attackingBonus(attacker) - moveType.defendingBonus(target)
     val actualDamage = minDamage max afterCriticalEvaluation(normalDamage,
                                                              criticalChance = attacker.criticalChance,
@@ -27,7 +30,7 @@ object MoveEffects {
   def standardHealEffect(baseHeal: Int,
                          addModifiers: Map[String, Modifier],
                          addAlterations: Map[Alteration, Int],
-                         removeAlterations: Set[Alteration])(attacker: Character, target: Character): Status = {
+                         removeAlterations: Set[Alteration])(attacker: Attacker, target: Target): NewTargetStatus = {
     val normalHeal = baseHeal + attacker.magicalPower
     val actualHeal = afterCriticalEvaluation(normalHeal,
                                              criticalChance = attacker.criticalChance,
@@ -44,7 +47,7 @@ object MoveEffects {
   def percentageEffect(percentage: Int,
                        addModifiers: Map[String, Modifier],
                        addAlterations: Map[Alteration, Int],
-                       removeAlterations: Set[Alteration])(attacker: Character, target: Character): Status = {
+                       removeAlterations: Set[Alteration])(attacker: Attacker, target: Target): NewTargetStatus = {
     updatedStatus(
       originalStatus = target.status,
       healthPointsToClamp = target.status.healthPoints * percentage / 100,
@@ -56,7 +59,7 @@ object MoveEffects {
 
   def buffDebuffEffect(addModifiers: Map[String, Modifier],
                        addAlterations: Map[Alteration, Int],
-                       removeAlterations: Set[Alteration])(attacker: Character, target: Character): Status = {
+                       removeAlterations: Set[Alteration])(attacker: Attacker, target: Target): NewTargetStatus = {
     updatedStatus(
       originalStatus = target.status,
       healthPointsToClamp = target.status.healthPoints,
@@ -65,18 +68,21 @@ object MoveEffects {
       alterationsToRemove = removeAlterations
     )
   }
+}
 
-  private def afterCriticalEvaluation(value: Int, criticalChance: Int, criticalBonus: Double): Int = {
+private object MoveEffectHelper {
+
+  def afterCriticalEvaluation(value: Int, criticalChance: Int, criticalBonus: Double): Int = {
     val criticalValue = value * criticalBonus / 100
     val isCritical = criticalChance > Random.nextInt(100)
     if (isCritical) Math.round(criticalValue).toInt else value
   }
 
-  private def updatedStatus(originalStatus: Status,
-                            healthPointsToClamp: Int,
-                            modifiersToAdd: Map[String, Modifier],
-                            alterationsToAdd: Map[Alteration, Int],
-                            alterationsToRemove: Set[Alteration]): Status = {
+  def updatedStatus(originalStatus: Status,
+                    healthPointsToClamp: Int,
+                    modifiersToAdd: Map[String, Modifier],
+                    alterationsToAdd: Map[Alteration, Int],
+                    alterationsToRemove: Set[Alteration]): Status = {
     originalStatus.copy(
       healthPoints = clamped(healthPointsToClamp, minValue = 0, maxValue = originalStatus.maxHealthPoints),
       modifiers = originalStatus.modifiers ++ modifiersToAdd,
@@ -84,6 +90,6 @@ object MoveEffects {
     )
   }
 
-  private def clamped(value: Int, minValue: Int, maxValue: Int): Int = minValue max value min maxValue
+  def clamped(value: Int, minValue: Int, maxValue: Int): Int = minValue max value min maxValue
 
 }
