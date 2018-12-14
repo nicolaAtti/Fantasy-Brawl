@@ -54,7 +54,7 @@ object ScalaProlog {
       addModifiers =
         extractList(solveInfo, "AddModifiers").map(modifierName => modifierName -> getModifier(modifierName)).toMap,
       addAlterations = extractList(solveInfo, "AddAlterations")
-        .map(alteration => Alteration(alteration) -> Alteration(alteration).turnDuration)
+        .map(alteration => Alteration(alteration) -> Alteration(alteration).roundsDuration)
         .toMap,
       removeAlterations = extractList(solveInfo, "RemoveAlterations").map(alteration => Alteration(alteration)).toSet,
       manaCost = extractInt(solveInfo, "ManaCost"),

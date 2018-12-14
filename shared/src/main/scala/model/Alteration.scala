@@ -1,17 +1,28 @@
 package model
 
-/** An Alteration is something that affects a character's behavior for a certain
-  * amount of turns.
+/** An alteration is something that affects a character's behavior for a certain
+  * amount of rounds.
   *
-  * It particular, every alteration describes:
-  * 1) What type moves it inhibits.
-  * 2) How to alter the status of an affected character at the beginning of its
-  * turn (for example how much its health points will be augmented or diminished).
+  * An alteration can inhibit some kind of moves, or even modify the status of
+  * the affected character at the beginning of its turn (describing for example
+  * how many health points it will gain or lose).
   */
 sealed trait Alteration {
+
+  /** Denotes if a certain move is inhibited by the alteration.
+    *
+    * @param move the move to test
+    * @return true if the move is inhibited, false otherwise
+    */
   def inhibits(move: Move): Boolean
-  def turnDuration: Int
+
+  /** Indicates how many rounds the alteration will last. */
+  def roundsDuration: Int
+
+  /** The status variation to apply at the beginning of the affected character's turn */
   def beginTurnStatusVariation: Option[(Status) => Status]
+
+  /** The acronym used to represent the alteration. */
   def acronym: String
 }
 
@@ -23,75 +34,75 @@ object Alteration {
   /** When a character is stunned it cannot make any move for one turn. */
   case object Stunned extends Alteration {
     override def inhibits(move: Move) = true
-    override val turnDuration = 1
+    override val roundsDuration = 1
     override val beginTurnStatusVariation = None
-    override val acronym: String = "Stn"
+    override val acronym = "Stn"
   }
 
   /** When a character is asleep it cannot make any move. This status lasts up to
-    * three turns if the character is not awakened first by other characters.
+    * three rounds if the character is not awakened first by other characters.
     */
   case object Asleep extends Alteration {
     override def inhibits(move: Move) = true
-    override val turnDuration = 3
+    override val roundsDuration = 3
     override val beginTurnStatusVariation = None
-    override val acronym: String = "Slp"
+    override val acronym = "Slp"
   }
 
   /** When a character is poisoned it must lose a quarter of its health points
-    * for three turns in a row.
+    * for three rounds in a row.
     */
   case object Poisoned extends Alteration {
     override def inhibits(move: Move) = false
-    override val turnDuration = 3
+    override val roundsDuration = 3
     override val beginTurnStatusVariation =
       Some(s => s.copy(healthPoints = Math.ceil(s.healthPoints * poisonedMultiplier).toInt)) // cannot die from poisoning
-    override val acronym: String = "Psn"
+    override val acronym = "Psn"
   }
 
   /** When a character is under the regeneration effect it must gain a quarter of
-    * its life for two turns in a row.
+    * its life for two rounds in a row.
     */
   case object Regeneration extends Alteration {
     override def inhibits(move: Move) = false
-    override val turnDuration = 2
+    override val roundsDuration = 2
     override val beginTurnStatusVariation: Option[Status => Status] =
       Some(s => s.copy(healthPoints = Math.round(s.healthPoints * regenerationMultiplier).toInt min s.maxHealthPoints))
-    override val acronym: String = "Reg"
+    override val acronym = "Reg"
   }
 
-  /** A character gone berserk cannot make any special move for three turns. */
+  /** A character gone berserk cannot make any special move for three rounds. */
   case object Berserk extends Alteration {
     override def inhibits(move: Move) = move.isInstanceOf[SpecialMove]
-    override val turnDuration = 3
+    override val roundsDuration = 3
     override val beginTurnStatusVariation = None
-    override val acronym: String = "Brk"
+    override val acronym = "Brk"
   }
 
   import MoveType._
 
-  /** A silenced character cannot cast any spell for two turns. */
+  /** A silenced character cannot cast any spell for two rounds. */
   case object Silenced extends Alteration {
     override def inhibits(move: Move) = move.moveType == Spell
-    override val turnDuration = 2
+    override val roundsDuration = 2
     override val beginTurnStatusVariation = None
-    override val acronym: String = "Sil"
+    override val acronym = "Sil"
   }
 
-  /** A frozen character cannot make any melee move for two turns. */
+  /** A frozen character cannot make any melee move for two rounds. */
   case object Frozen extends Alteration {
     override def inhibits(move: Move) = move.moveType == Melee
-    override val turnDuration = 2
+    override val roundsDuration = 2
     override val beginTurnStatusVariation = None
-    override val acronym: String = "Frz"
+    override val acronym = "Frz"
   }
 
-  /** A blinded character cannot make any ranged move for two turns. */
+  /** A blinded character cannot make any ranged move for two rounds. */
   case object Blinded extends Alteration {
     override def inhibits(move: Move) = move.moveType == Ranged
-    override val turnDuration = 2
+    override val roundsDuration = 2
     override val beginTurnStatusVariation = None
-    override val acronym: String = "Bln"
+    override val acronym = "Bln"
   }
 
   /** Retrieves the appropriate alteration object given its acronym.
@@ -108,7 +119,7 @@ object Alteration {
     case Silenced.acronym     => Silenced
     case Frozen.acronym       => Frozen
     case Blinded.acronym      => Blinded
-    case _                    => throw new IllegalArgumentException(s"Unknown alteration: $acronym")
+    case _                    => throw new IllegalArgumentException(s"Unknown alteration acronym: $acronym")
   }
 
 }
