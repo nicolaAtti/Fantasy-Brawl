@@ -84,12 +84,11 @@ private object MoveEffectHelper {
                     alterationsToAdd: Map[Alteration, Int],
                     alterationsToRemove: Set[Alteration]): Status = {
     originalStatus.copy(
-      healthPoints = clamped(healthPointsToClamp, minValue = 0, maxValue = originalStatus.maxHealthPoints),
+      healthPoints =
+        utilities.Misc.clamped(healthPointsToClamp, minValue = 0, maxValue = originalStatus.maxHealthPoints),
       modifiers = originalStatus.modifiers ++ modifiersToAdd,
       alterations = originalStatus.alterations ++ alterationsToAdd -- alterationsToRemove
     )
   }
-
-  def clamped(value: Int, minValue: Int, maxValue: Int): Int = minValue max value min maxValue
 
 }

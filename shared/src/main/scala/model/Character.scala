@@ -1,6 +1,6 @@
 package model
 
-import utilities.Utility._
+import utilities.Misc._
 
 trait Character {
   val characterName: String
