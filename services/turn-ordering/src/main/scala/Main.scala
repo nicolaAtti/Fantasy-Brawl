@@ -3,28 +3,29 @@ import ExecutionContext.Implicits.global
 import akka.actor.{ActorSystem, Props}
 import com.spingo.op_rabbit._
 import com.spingo.op_rabbit.properties.ReplyTo
+import communication.MessageFormat.MyFormat
 
 /** Entry point of the service that handles the login for guests users.
   * @author Marco Canducci
   */
 object Main extends App {
 
-  val rabbitControl = ActorSystem().actorOf(Props[RabbitControl])
-  implicit val recoveryStrategy = RecoveryStrategy.nack(requeue = false)
-
   import communication._
 
-  implicit val requestFormat = MessageFormat.format[StartRoundRequest]
-  implicit val responseFormat = MessageFormat.format[StartRoundResponse]
+  val rabbitControl = ActorSystem().actorOf(Props[RabbitControl])
+  implicit val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = Config.Requeue)
+
+  implicit val requestFormat: MyFormat[StartRoundRequest] = MessageFormat.format[StartRoundRequest]
+  implicit val responseFormat: MyFormat[StartRoundResponse] = MessageFormat.format[StartRoundResponse]
 
   import Queues._
 
   var boh: Option[(Map[(String, String), Int], Int, String)] = None
 
-  val requestQueue = Queue(StartRoundRequestQueue, durable = false, autoDelete = true)
+  val requestQueue = Queue(StartRoundRequestQueue, durable = Config.Durable, autoDelete = Config.AutoDelete)
   Subscription.run(rabbitControl) {
     import com.spingo.op_rabbit.Directives._
-    channel(qos = 3) {
+    channel(qos = Config.Qos) {
       consume(requestQueue) {
         (body(as[StartRoundRequest]) & optionalProperty(ReplyTo)) { (request, replyTo) =>
           {
@@ -33,10 +34,16 @@ object Main extends App {
                 case (characterName, speed) => (request.playerName, characterName) -> speed
               }, request.round, replyTo.get)
             } else {
+              println(request.myTeamSpeeds.map {
+                case (characterName, speed) => (request.playerName, characterName) -> speed
+              })
+              println(boh.get._1)
               val speedsNotOrdered = (request.myTeamSpeeds.map {
                 case (characterName, speed) => (request.playerName, characterName) -> speed
               } ++ boh.get._1).toList
-              val speedsOrdered: List[(String, String)] = speedsNotOrdered.sortBy(_._2).map(c => c._1._1 -> c._1._2)
+              val speedsOrdered: List[(String, String)] =
+                speedsNotOrdered.sortBy(_._2).reverse.map(c => c._1._1 -> c._1._2)
+              println(speedsOrdered)
               val response = StartRoundResponse(Right(speedsOrdered), request.round)
               rabbitControl ! Message.queue(response, replyTo.get)
               rabbitControl ! Message.queue(response, boh.get._3)
