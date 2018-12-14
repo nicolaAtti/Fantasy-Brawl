@@ -2,20 +2,17 @@ package controller
 
 import java.net.URL
 import java.util.ResourceBundle
-
 import javafx.event.ActionEvent
-import javafx.fxml.{FXML, FXMLLoader, Initializable}
+import javafx.fxml.{FXML, Initializable}
 import view.ApplicationView
 import view.ViewConfiguration.viewSelector._
 import javafx.geometry.Insets
-import javafx.scene.Scene
-import javafx.scene.control.{Button, Label, ScrollPane, TextArea}
+import javafx.scene.control.{Button, Label, TextArea}
 import javafx.scene.effect.ColorAdjust
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout._
 import javafx.scene.paint.Paint
-import javafx.stage.Stage
 import messaging.MatchmakingManager
 
 /** Controller of the team selection view.
@@ -51,9 +48,6 @@ object TeamSelectionController extends Initializable with ViewController {
   @FXML var gridToChoose: GridPane = _
   @FXML var joinCasualMatch: Button = _
 
-  private var selectedCharacter: StackPane = new StackPane()
-  private var chosenCharacter: StackPane = new StackPane()
-
   /** Pressure handler of the "Logout" button. */
   @FXML def handleLogout(event: ActionEvent) {
     ApplicationView changeView LOGIN
@@ -62,7 +56,7 @@ object TeamSelectionController extends Initializable with ViewController {
   /** Pressure handler of the "Join Casual Queue" button. */
   @FXML def handleJoinCasualQueue(event: ActionEvent) {
     ApplicationView changeView WAITING_OPPONENT
-    val teamName: Map[String, String] = team.map { case (position, characterPane) => position -> characterPane.getId }
+    val teamName: Seq[String] = team.map { case (_, characterPane) => characterPane.getId }.toSeq
     MatchmakingManager.joinCasualQueueRequest(username, teamName)
   }
 
@@ -72,14 +66,12 @@ object TeamSelectionController extends Initializable with ViewController {
 
   /** Pressure handler of the characters to choose from. */
   @FXML def handleCharacterToChoosePressed(mouseEvent: MouseEvent) {
-    val characterPressed: StackPane = mouseEvent.getSource.asInstanceOf[StackPane]
-    changeCharacterToChoose(characterPressed)
+    changeCharacterToChoose(mouseEvent.getSource.asInstanceOf[StackPane])
   }
 
   /** Pressure handler of the chosen characters. */
   @FXML def handleCharacterChosenPressed(mouseEvent: MouseEvent) {
-    val characterPressed: StackPane = mouseEvent.getSource.asInstanceOf[StackPane]
-    changeCharacterChosen(characterPressed)
+    changeCharacterChosen(mouseEvent.getSource.asInstanceOf[StackPane])
   }
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
@@ -92,6 +84,10 @@ object TeamSelectionController extends Initializable with ViewController {
   }
 
   private object SelectionHelpers {
+    var selectedCharacter: StackPane = new StackPane()
+    var chosenCharacter: StackPane = new StackPane()
+    val SelectedColor: Paint = Paint.valueOf("BLUE")
+    val DeselectedColor: Paint = Paint.valueOf("WHITE")
 
     def setDescription(characterName: String): Unit = {
       import utilities.ScalaProlog._
@@ -161,13 +157,11 @@ object TeamSelectionController extends Initializable with ViewController {
     }
 
     def selectCharacter(stackPane: StackPane): Unit = {
-      stackPane.setBackground(
-        new Background(new BackgroundFill(Paint.valueOf("BLUE"), CornerRadii.EMPTY, Insets.EMPTY)))
+      stackPane.setBackground(new Background(new BackgroundFill(SelectedColor, CornerRadii.EMPTY, Insets.EMPTY)))
     }
 
     def deselectCharacter(stackPane: StackPane): Unit = {
-      stackPane.setBackground(
-        new Background(new BackgroundFill(Paint.valueOf("WHITE"), CornerRadii.EMPTY, Insets.EMPTY)))
+      stackPane.setBackground(new Background(new BackgroundFill(DeselectedColor, CornerRadii.EMPTY, Insets.EMPTY)))
     }
   }
 }
