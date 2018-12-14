@@ -15,7 +15,6 @@ object Battle extends App {
     playerId = player._1
     opponentId = opponent._1
     teams = setupTeam(player, opponent)
-    teams.foreach(println(_))
     id = battleId
     Round.startRound()
   }
