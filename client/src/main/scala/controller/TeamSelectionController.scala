@@ -2,7 +2,6 @@ package controller
 
 import java.net.URL
 import java.util.ResourceBundle
-
 import javafx.event.ActionEvent
 import javafx.fxml.{FXML, Initializable}
 import view.ApplicationView
@@ -49,9 +48,6 @@ object TeamSelectionController extends Initializable with ViewController {
   @FXML var gridToChoose: GridPane = _
   @FXML var joinCasualMatch: Button = _
 
-  private var selectedCharacter: StackPane = new StackPane()
-  private var chosenCharacter: StackPane = new StackPane()
-
   /** Pressure handler of the "Logout" button. */
   @FXML def handleLogout(event: ActionEvent) {
     ApplicationView changeView LOGIN
@@ -60,20 +56,22 @@ object TeamSelectionController extends Initializable with ViewController {
   /** Pressure handler of the "Join Casual Queue" button. */
   @FXML def handleJoinCasualQueue(event: ActionEvent) {
     ApplicationView changeView WAITING_OPPONENT
-    val teamName: Map[String, String] = team.map { case (position, characterPane) => position -> characterPane.getId }
+    val teamName: Set[String] = team.map { case (_, characterPane) => characterPane.getId }.toSet
     MatchmakingManager.joinCasualQueueRequest(username, teamName)
+  }
+
+  @FXML def movesManualPressed(event: ActionEvent) {
+    ApplicationView.createMovesManualView()
   }
 
   /** Pressure handler of the characters to choose from. */
   @FXML def handleCharacterToChoosePressed(mouseEvent: MouseEvent) {
-    val characterPressed: StackPane = mouseEvent.getSource.asInstanceOf[StackPane]
-    changeCharacterToChoose(characterPressed)
+    changeCharacterToChoose(mouseEvent.getSource.asInstanceOf[StackPane])
   }
 
   /** Pressure handler of the chosen characters. */
   @FXML def handleCharacterChosenPressed(mouseEvent: MouseEvent) {
-    val characterPressed: StackPane = mouseEvent.getSource.asInstanceOf[StackPane]
-    changeCharacterChosen(characterPressed)
+    changeCharacterChosen(mouseEvent.getSource.asInstanceOf[StackPane])
   }
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
@@ -86,6 +84,10 @@ object TeamSelectionController extends Initializable with ViewController {
   }
 
   private object SelectionHelpers {
+    var selectedCharacter: StackPane = new StackPane()
+    var chosenCharacter: StackPane = new StackPane()
+    val SelectedColor: Paint = Paint.valueOf("BLUE")
+    val DeselectedColor: Paint = Paint.valueOf("WHITE")
 
     def setDescription(characterName: String): Unit = {
       import utilities.ScalaProlog._
@@ -99,12 +101,11 @@ object TeamSelectionController extends Initializable with ViewController {
         "Resistance: " + character.statistics.resistance + "\n\n" +
         "Special moves: \n"
       character.specialMoves.foreach {
-        case (_, move) => {
+        case (_, move) =>
           description += "    " + move.name +
             "     -> Type: " + move.moveType +
             ", Mana cost: " + move.manaCost +
             "\n"
-        }
       }
       characterDescription.setText(description)
     }
@@ -155,13 +156,11 @@ object TeamSelectionController extends Initializable with ViewController {
     }
 
     def selectCharacter(stackPane: StackPane): Unit = {
-      stackPane.setBackground(
-        new Background(new BackgroundFill(Paint.valueOf("BLUE"), CornerRadii.EMPTY, Insets.EMPTY)))
+      stackPane.setBackground(new Background(new BackgroundFill(SelectedColor, CornerRadii.EMPTY, Insets.EMPTY)))
     }
 
     def deselectCharacter(stackPane: StackPane): Unit = {
-      stackPane.setBackground(
-        new Background(new BackgroundFill(Paint.valueOf("WHITE"), CornerRadii.EMPTY, Insets.EMPTY)))
+      stackPane.setBackground(new Background(new BackgroundFill(DeselectedColor, CornerRadii.EMPTY, Insets.EMPTY)))
     }
   }
 }

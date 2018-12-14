@@ -89,10 +89,10 @@ object ScalaProlog {
 
     val engine = new Prolog
 
-    val characterContents =
+    val characterContents: String =
       Source.fromResource("model/PrologCharacters.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
 
-    val moveContents =
+    val moveContents: String =
       Source.fromResource("model/PrologMoves.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
 
     def setNewTheory(clauses: String*): Unit =

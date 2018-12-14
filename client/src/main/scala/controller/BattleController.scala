@@ -3,7 +3,8 @@ package controller
 import java.net.URL
 import java.util.ResourceBundle
 
-import game.Battle
+import communication.Config
+import game.{Battle, Round}
 import javafx.animation.{KeyFrame, Timeline}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.event.ActionEvent
@@ -16,11 +17,14 @@ import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.util.Duration
 import model.{Character, Move}
+import view.ApplicationView
 
 import scala.collection.mutable.ListBuffer
 
 //noinspection ScalaDocMissingParameterDescription,FieldFromDelayedInit
 object BattleController extends Initializable with ViewController {
+
+  import BattleControllerHelper._
 
   val controller: ViewController = this
 
@@ -66,7 +70,7 @@ object BattleController extends Initializable with ViewController {
   var activeCharacter: Character = _
   var activeLabel: Label = _
   val timeline: Timeline = new Timeline()
-  var timeSeconds: Int = 60
+  var timeSeconds: Int = Config.TurnDurationInSeconds
 
   /** Initializes the elements composing the Battle GUI
     *
@@ -81,14 +85,20 @@ object BattleController extends Initializable with ViewController {
     opponentImages = List(opponentChar1Image, opponentChar2Image, opponentChar3Image, opponentChar4Image)
 
     setBattlefield()
-    setActiveCharacter()
 
-    timeline.setCycleCount(60)
-    timeline.getKeyFrames.add(new KeyFrame(Duration.seconds(1), (_: ActionEvent) => {
-      timeSeconds = timeSeconds - 1
-      timerCounter.setText(timeSeconds.toString)
-      if (timeSeconds <= 0) timeline.stop()
-    }))
+    timeline.setCycleCount(Config.TurnDurationInSeconds)
+    timeline.getKeyFrames.add(
+      new KeyFrame(
+        Duration.seconds(1),
+        (_: ActionEvent) => {
+          timeSeconds = timeSeconds - 1
+          timerCounter.setText(timeSeconds.toString)
+          if (timeSeconds <= 0) {
+            timeline.stop()
+            Round.endTurn()
+          }
+        }
+      ))
     timeline.play()
   }
 
@@ -102,77 +112,45 @@ object BattleController extends Initializable with ViewController {
     * @param team  the team to setup
     */
   def setupTeams(team: Set[Character]): Unit = {
-    team.foreach(teamMember =>
-      if (teamMember.owner.get equals Battle.playerId) {
-        playerCharacterImages = (playerImages zip team).toMap
-        playerCharacterImages.foreach(gg => println(gg))
-
-      } else {
-        opponentCharacterImages = (opponentImages zip team).toMap
-        opponentCharacterImages.foreach(gg => println(gg))
-    })
+    playerCharacterImages = (playerImages zip team.filter(character => character.owner.get == Battle.playerId)).toMap
+    opponentCharacterImages =
+      (opponentImages zip team.filter(character => character.owner.get == Battle.opponentId)).toMap
     prepareImages()
     setupLabels()
 
-  }
-
-  /** Assigns to each character it's battle image, orientation depends on the player  */
-  private def prepareImages(): Unit = {
-    playerCharacterImages.foreach(charImage =>
-      charImage._1.setImage(new Image("view/" + charImage._2.characterName + "1-" + "clean.png")))
-    opponentCharacterImages.foreach(charImage =>
-      charImage._1.setImage(new Image("view/" + charImage._2.characterName + "2-" + "clean.png")))
-  }
-
-  /** Writes all the team's labels to display the name of each character in the battle
-    */
-  private def setupLabels(): Unit = {
-    (playerCharacterImages.values zip playerCharNames.getChildren.toArray) foreach (couple =>
-      couple._2.asInstanceOf[Label].setText(couple._1.characterName))
-    (opponentCharacterImages.values zip opponentCharNames.getChildren.toArray) foreach (couple =>
-      couple._2.asInstanceOf[Label].setText(couple._1.characterName))
-    updateStatus()
   }
 
   /** Updates the status of each character in the battle,
     * showing it's current health and mana values compared with it' maximum
     * and by showing the various alterations that are active.
     * After that changes the images of dead characters.
-    *
-    *
     */
   def updateStatus(): Unit = {
     (playerCharacterImages.values zip playerHps.getChildren.toArray) foreach (couple =>
-      couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
+      couple._2
+        .asInstanceOf[Label]
+        .setText(couple._1.status.healthPoints + Separator + couple._1.status.maxHealthPoints))
     (playerCharacterImages.values zip playerMps.getChildren.toArray) foreach (couple =>
-      couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints + "/" + couple._1.status.maxManaPoints))
+      couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints + Separator + couple._1.status.maxManaPoints))
     (playerCharacterImages.values zip playerAlterations.getChildren.toArray) foreach (couple =>
       couple._2
         .asInstanceOf[Label]
-        .setText(couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + "/" + _).dropRight(1)))
+        .setText(
+          couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + Separator + _).dropRight(1)))
 
     (opponentCharacterImages.values zip opponentHps.getChildren.toArray) foreach (couple =>
-      couple._2.asInstanceOf[Label].setText(couple._1.status.healthPoints + "/" + couple._1.status.maxHealthPoints))
+      couple._2
+        .asInstanceOf[Label]
+        .setText(couple._1.status.healthPoints + Separator + couple._1.status.maxHealthPoints))
     (opponentCharacterImages.values zip opponentMps.getChildren.toArray) foreach (couple =>
-      couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints + "/" + couple._1.status.maxManaPoints))
+      couple._2.asInstanceOf[Label].setText(couple._1.status.manaPoints + Separator + couple._1.status.maxManaPoints))
     (opponentCharacterImages.values zip opponentAlterations.getChildren.toArray) foreach (couple =>
       couple._2
         .asInstanceOf[Label]
-        .setText(couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + "/" + _).dropRight(1)))
+        .setText(
+          couple._1.status.alterations.keySet.map(alt => alt.acronym).foldRight("")(_ + Separator + _).dropRight(1)))
 
     setDeadCharacters()
-  }
-
-  /** Checks if the team members of the player are at zero health points,
-    * and sets their image to a tombstone.
-    *
-    *
-    */
-  private def setDeadCharacters(): Unit = {
-    playerCharacterImages.foreach(couple =>
-      if (couple._2.status.healthPoints == 0) { couple._1.setImage(new Image("view/tombstone2.png")) })
-    opponentCharacterImages.foreach(couple =>
-      if (couple._2.status.healthPoints == 0) { couple._1.setImage(new Image("view/tombstone1.png")) })
   }
 
   /** Obtains the current active character from the Battle and changes the corresponding label.
@@ -180,28 +158,22 @@ object BattleController extends Initializable with ViewController {
     * The label is painted green to symbolize which character has now the turn, if the player owns
     * the character, the GUI will show his move list.
     */
-  def setActiveCharacter(): Unit = {
-    activeCharacter = Battle.teams.find(char => char.characterName equals "Jacob").get
-    println(activeCharacter.specialMoves.keySet)
-    activeLabel = playerCharNames.getChildren.toArray
-      .filter(charName => charName.asInstanceOf[Label].getText equals activeCharacter.characterName)
-      .head
-      .asInstanceOf[Label]
-    activeLabel.setTextFill(Color.GREEN)
-    if (Battle.teams.contains(activeCharacter)) {
+  def setActiveCharacter(character: Character): Unit = {
+    activeCharacter = character
+    if (activeCharacter.owner.get == Battle.playerId) {
+      activeLabel = playerCharNames.getChildren.toArray
+        .filter(charName => charName.asInstanceOf[Label].getText equals activeCharacter.characterName)
+        .head
+        .asInstanceOf[Label]
+      activeLabel.setTextFill(Color.GREEN)
       setupCharacterMoves(activeCharacter)
+    } else {
+      activeLabel = opponentCharNames.getChildren.toArray
+        .filter(charName => charName.asInstanceOf[Label].getText equals activeCharacter.characterName)
+        .head
+        .asInstanceOf[Label]
+      activeLabel.setTextFill(Color.RED)
     }
-  }
-
-  /** Adds the player's active character's moves to the listView
-    *
-    * @param character the character who's turn is
-    */
-  private def setupCharacterMoves(character: Character): Unit = {
-    moveList.add("Physical Attack")
-    character.specialMoves.foreach(move =>
-      moveList.add(move._1 + "--MP: " + move._2.manaCost + " Targets:" + move._2.maxTargets))
-    moveListView.setItems(moveList)
   }
 
   /** Handles the press of the act button
@@ -209,7 +181,6 @@ object BattleController extends Initializable with ViewController {
     */
   @FXML def handleActButtonPress(): Unit = {
     activeLabel.setTextFill(Color.BLACK)
-    println(targets)
     targets = ListBuffer()
     targetImages.foreach(target => setCharacterUnselected(target))
     targetImages = ListBuffer()
@@ -218,9 +189,13 @@ object BattleController extends Initializable with ViewController {
     //Compute the move and then send the new status message
   }
 
+  @FXML def movesManualPressed(event: ActionEvent) {
+    ApplicationView.createMovesManualView()
+  }
+
   /** Resets the turn timer */
   def newTurn(): Unit = {
-    timeSeconds = 60
+    timeSeconds = Config.TurnDurationInSeconds
     timerCounter.setText(timeSeconds.toString)
     timeline.playFromStart()
   }
@@ -247,70 +222,110 @@ object BattleController extends Initializable with ViewController {
     actButtonActivation()
   }
 
-  private def setTargets(imagePressed: ImageView, character: Character): Unit = {
-    if (targetImages.exists(image => image.getId equals imagePressed.getId)) {
-      println("Removed")
-      targetImages -= imagePressed
-      targets -= character
-      setCharacterUnselected(imagePressed)
-    } else {
-      println("Added")
-      targetImages += imagePressed
-      targets += character
-      setCharacterSelected(imagePressed)
-    }
-    targetImages.foreach(println(_))
-    targets.foreach(println(_))
-  }
+  private object BattleControllerHelper {
+    val ImageExtension: String = ".png"
+    val Separator: String = "/"
+    val PhysicalAttackRepresentation: String = "Physical Attack"
+    val MovesSeparator: String = "--"
 
-  /** Activates/Deactivates the act button */
-  private def actButtonActivation(): Unit = {
-    if (canAct) {
-      actButton.setDisable(false)
-    } else {
-      actButton.setDisable(true)
+    /** Assigns to each character it's battle image, orientation depends on the player  */
+    def prepareImages(): Unit = {
+      playerCharacterImages.foreach(charImage =>
+        charImage._1.setImage(new Image("view/" + charImage._2.characterName + "1" + ImageExtension)))
+      opponentCharacterImages.foreach(charImage =>
+        charImage._1.setImage(new Image("view/" + charImage._2.characterName + "2" + ImageExtension)))
     }
-  }
 
-  /** Checks if the act button should be active:
-    *
-    * The act button is active if the player has targeted at least one character, and the
-    * number of targets does not exceed the maximum number specified by the selected move.
-    * Furthermore the active character needs to have enough mana points to use the said move.
-    *
-    * @return if the act button should be active or not
-    */
-  private def canAct: Boolean = {
-    if (moveListView.getSelectionModel.getSelectedItems.isEmpty || targetImages.isEmpty) {
-      false
-    } else {
-      val moveName = moveListView.getSelectionModel.getSelectedItem.split("--").head
-      println(moveName)
-      var moveMaxTargets = 1
-      moveName match {
-        case "Physical Attack" => targetImages.size <= moveMaxTargets
-        case _ =>
-          val selectedMove = activeCharacter.specialMoves(moveName)
-          moveMaxTargets = selectedMove.maxTargets
-          targetImages.size <= moveMaxTargets && Move.canMakeMove(activeCharacter, selectedMove)
+    /** Writes all the team's labels to display the name of each character in the battle
+      */
+    def setupLabels(): Unit = {
+      (playerCharacterImages.values zip playerCharNames.getChildren.toArray) foreach (couple =>
+        couple._2.asInstanceOf[Label].setText(couple._1.characterName))
+      (opponentCharacterImages.values zip opponentCharNames.getChildren.toArray) foreach (couple =>
+        couple._2.asInstanceOf[Label].setText(couple._1.characterName))
+      updateStatus()
+    }
+
+    /** Checks if the team members of the player are at zero health points,
+      * and sets their image to a tombstone.
+      */
+    def setDeadCharacters(): Unit = {
+      playerCharacterImages.foreach(couple =>
+        if (couple._2.status.healthPoints == 0) { couple._1.setImage(new Image("view/tombstone2.png")) })
+      opponentCharacterImages.foreach(couple =>
+        if (couple._2.status.healthPoints == 0) { couple._1.setImage(new Image("view/tombstone1.png")) })
+    }
+
+    /** Adds the player's active character's moves to the listView
+      *
+      * @param character the character who's turn is
+      */
+    def setupCharacterMoves(character: Character): Unit = {
+      moveList.add(PhysicalAttackRepresentation)
+      character.specialMoves.foreach(move =>
+        moveList.add(move._1 + MovesSeparator + "MP: " + move._2.manaCost + " Max targets: " + move._2.maxTargets))
+      moveListView.setItems(moveList)
+    }
+
+    def setTargets(imagePressed: ImageView, character: Character): Unit = {
+      if (targetImages.exists(image => image.getId equals imagePressed.getId)) {
+        targetImages -= imagePressed
+        targets -= character
+        setCharacterUnselected(imagePressed)
+      } else {
+        targetImages += imagePressed
+        targets += character
+        setCharacterSelected(imagePressed)
       }
     }
-  }
 
-  /** Applies the selection effect to the targeted character's image
-    *
-    * @param charImage the character's image
-    */
-  private def setCharacterSelected(charImage: ImageView): Unit = {
-    charImage.setEffect(TargetedEffect)
-  }
+    /** Activates/Deactivates the act button */
+    def actButtonActivation(): Unit = {
+      if (canAct) {
+        actButton.setDisable(false)
+      } else {
+        actButton.setDisable(true)
+      }
+    }
 
-  /** Removes the selection effect to the deselected character's image
-    *
-    * @param charImage the character's image
-    */
-  private def setCharacterUnselected(charImage: ImageView): Unit = {
-    charImage.setEffect(null)
-  }
+    /** Checks if the act button should be active:
+      *
+      * The act button is active if the player has targeted at least one character, and the
+      * number of targets does not exceed the maximum number specified by the selected move.
+      * Furthermore the active character needs to have enough mana points to use the said move.
+      *
+      * @return if the act button should be active or not
+      */
+    def canAct: Boolean = {
+      if (moveListView.getSelectionModel.getSelectedItems.isEmpty || targetImages.isEmpty) {
+        false
+      } else {
+        val moveName = moveListView.getSelectionModel.getSelectedItem.split(MovesSeparator).head
+        var moveMaxTargets = 1
+        moveName match {
+          case PhysicalAttackRepresentation => targetImages.size <= moveMaxTargets
+          case _ =>
+            val selectedMove = activeCharacter.specialMoves(moveName)
+            moveMaxTargets = selectedMove.maxTargets
+            targetImages.size <= moveMaxTargets && Move.canMakeMove(activeCharacter, selectedMove)
+        }
+      }
+    }
 
+    /** Applies the selection effect to the targeted character's image
+      *
+      * @param charImage the character's image
+      */
+    def setCharacterSelected(charImage: ImageView): Unit = {
+      charImage.setEffect(TargetedEffect)
+    }
+
+    /** Removes the selection effect to the deselected character's image
+      *
+      * @param charImage the character's image
+      */
+    def setCharacterUnselected(charImage: ImageView): Unit = {
+      charImage.setEffect(null)
+    }
+  }
 }

@@ -9,7 +9,7 @@
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ProgressIndicator />
-      <Label text="WAITING AN OPPONENT">
+      <Label alignment="CENTER" prefHeight="40.0" prefWidth="341.0" text="WAITING FOR AN OPPONENT">
          <font>
             <Font size="14.0" />
          </font>

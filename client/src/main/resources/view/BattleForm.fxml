@@ -29,7 +29,7 @@
             </ImageView>
             <ImageView fx:id="playerChar1Image" fitHeight="200.0" fitWidth="170.0" layoutX="88.0" layoutY="14.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true" style="-fx-background-color: transparent;">
                <image>
-                  <Image url="@Rikh1-clean.png" />
+                  <Image url="@Rikh1.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -37,35 +37,35 @@
             </ImageView>
             <ImageView fx:id="playerChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="248.0" layoutY="14.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Annabelle1-clean.png" />
+                  <Image url="@Annabelle1.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
             <ImageView fx:id="playerChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="25.0" layoutY="172.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Lidya1-clean.png" />
+                  <Image url="@Lidya1.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
             <ImageView fx:id="playerChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="165.0" layoutY="172.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Noah1-clean.png" />
+                  <Image url="@Noah1.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
             <ImageView fx:id="opponentChar1Image" fitHeight="200.0" fitWidth="170.0" layoutX="786.0" layoutY="20.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Fernando2-clean.png" />
+                  <Image url="@Fernando2.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
             <ImageView fx:id="opponentChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="647.0" layoutY="20.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Cassandra2-clean.png" />
+                  <Image url="@Cassandra2.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -79,14 +79,14 @@
                </cursor></ImageView>
             <ImageView fx:id="opponentChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="764.0" layoutY="163.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Albert2-clean.png" />
+                  <Image url="@Albert2.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
             <Pane layoutX="349.0" layoutY="1.0" prefHeight="45.0" prefWidth="285.0">
                <children>
-                  <Label fx:id="Timer" layoutX="159.0" prefHeight="45.0" prefWidth="79.0" text="Time:">
+                  <Label fx:id="Timer" layoutX="159.0" layoutY="-11.0" prefHeight="38.0" prefWidth="79.0" text="Time:">
                      <effect>
                         <Bloom threshold="0.0">
                            <input>
@@ -99,28 +99,12 @@
                         </Bloom>
                      </effect>
                      <font>
-                        <Font name="Harrington" size="24.0" />
+                        <Font name="Javanese Text" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="roundCounter" layoutX="90.0" prefHeight="45.0" prefWidth="28.0" text="1">
-                     <effect>
-                        <Bloom threshold="0.56">
-                           <input>
-                              <Glow>
-                                 <input>
-                                    <InnerShadow color="RED" />
-                                 </input>
-                              </Glow>
-                           </input>
-                        </Bloom>
-                     </effect>
+                  <Label fx:id="Round" layoutY="-11.0" prefHeight="67.0" prefWidth="98.0" text="Round:" textFill="#030303">
                      <font>
-                        <Font name="Harrington" size="24.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="Round" layoutY="-9.0" prefHeight="63.0" prefWidth="104.0" text="Round:" textFill="#030303">
-                     <font>
-                        <Font name="Harrington" size="24.0" />
+                        <Font name="Javanese Text" size="24.0" />
                      </font>
                      <effect>
                         <Bloom threshold="0.0">
@@ -134,7 +118,7 @@
                         </Bloom>
                      </effect>
                   </Label>
-                  <Label fx:id="timerCounter" layoutX="238.0" layoutY="-9.0" prefHeight="63.0" prefWidth="50.0" text="60">
+                  <Label fx:id="timerCounter" layoutX="238.0" layoutY="-11.0" prefHeight="38.0" prefWidth="50.0" text="60">
                      <effect>
                         <Bloom threshold="0.56">
                            <input>
@@ -147,7 +131,23 @@
                         </Bloom>
                      </effect>
                      <font>
-                        <Font name="Harrington" size="24.0" />
+                        <Font name="Javanese Text" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="roundCounter" layoutX="98.0" layoutY="-11.0" maxHeight="1.7976931348623157E308" prefHeight="67.0" prefWidth="41.0" text="1">
+                     <effect>
+                        <Bloom threshold="0.56">
+                           <input>
+                              <Glow>
+                                 <input>
+                                    <InnerShadow color="RED" />
+                                 </input>
+                              </Glow>
+                           </input>
+                        </Bloom>
+                     </effect>
+                     <font>
+                        <Font name="Javanese Text" size="24.0" />
                      </font>
                   </Label>
                </children>
@@ -374,13 +374,18 @@
                   </Pane>
                   <Pane layoutX="310.0" prefHeight="150.0" prefWidth="325.0">
                      <children>
-                        <Button fx:id="actButton" disable="true" layoutX="263.0" layoutY="42.0" mnemonicParsing="false" onMouseClicked="#handleActButtonPress" prefHeight="38.0" prefWidth="55.0" text="Act">
+                        <Button fx:id="actButton" disable="true" layoutX="255.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#handleActButtonPress" prefHeight="54.0" prefWidth="67.0" text="Act">
                            <font>
                               <Font name="Eras Demi ITC" size="13.0" />
                            </font></Button>
-                        <ListView fx:id="moveListView" layoutX="14.0" layoutY="3.0" onMouseClicked="#handleMoveSelection" pickOnBounds="false" prefHeight="110.0" prefWidth="233.0" style="-fx-font-size: 0.85em;" />
+                        <ListView fx:id="moveListView" layoutX="2.0" layoutY="3.0" onMouseClicked="#handleMoveSelection" pickOnBounds="false" prefHeight="110.0" prefWidth="251.0" style="-fx-font-size: 0.85em;" />
                         <Separator layoutX="318.0" orientation="VERTICAL" prefHeight="150.0" prefWidth="15.0" />
                         <Separator layoutX="-7.0" orientation="VERTICAL" prefHeight="150.0" prefWidth="15.0" />
+                        <Button fx:id="movesManual" alignment="CENTER" layoutX="255.0" layoutY="59.0" mnemonicParsing="false" onAction="#movesManualPressed" onMouseClicked="#handleActButtonPress" prefHeight="54.0" prefWidth="67.0" text="Moves manual" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="Eras Demi ITC" size="13.0" />
+                           </font>
+                        </Button>
                      </children></Pane>
                </children>
             </Pane>
