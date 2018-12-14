@@ -80,8 +80,8 @@ private object StatusHelper {
   def afterTick(status: Status): Status =
     status.copy(
       modifiers = status.modifiers
-        .mapValues(v => v.copy(roundsDuration = v.roundsDuration - 1))
-        .filter { case (_, modifier) => modifier.roundsDuration > 0 },
+        .mapValues(v => v.copy(remainingRounds = v.remainingRounds - 1))
+        .filter { case (_, modifier) => modifier.remainingRounds > 0 },
       alterations = status.alterations
         .mapValues(v => v - 1)
         .filter { case (_, countDown) => countDown > 0 }
