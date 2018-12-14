@@ -11,12 +11,16 @@ object Round {
   var turns: List[Character] = List()
 
   def startRound(): Unit = {
-    RoundManager.startRoundRequest(Battle.playerId,
-                                   Battle.teams
-                                     .filter(char => char.owner.get == Battle.playerId)
-                                     .map(character => character.characterName -> character.speed)
-                                     .toMap,
-                                   id + 1)
+    RoundManager.startRoundRequest(
+      Battle.playerId,
+      Battle.teams
+        .filter(char => char.owner.get == Battle.playerId)
+        .map(character => character.characterName -> character.speed)
+        .toMap,
+      Battle.opponentId,
+      Battle.id,
+      id + 1
+    )
   }
 
   def endRound(): Unit = {
