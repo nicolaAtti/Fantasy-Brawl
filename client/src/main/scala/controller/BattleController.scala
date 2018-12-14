@@ -3,19 +3,23 @@ package controller
 import java.net.URL
 import java.util.ResourceBundle
 
+import controller.TeamSelectionController.getClass
 import game.{Battle, Round}
 import javafx.animation.{KeyFrame, Timeline}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.event.ActionEvent
-import javafx.fxml.{FXML, Initializable}
+import javafx.fxml.{FXML, FXMLLoader, Initializable}
+import javafx.scene.Scene
 import javafx.scene.control.{Button, Label, ListView}
 import javafx.scene.effect.InnerShadow
 import javafx.scene.image.{Image, ImageView}
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
+import javafx.stage.Stage
 import javafx.util.Duration
 import model.{Character, Move}
+import view.ApplicationView
 
 import scala.collection.mutable.ListBuffer
 
@@ -216,6 +220,10 @@ object BattleController extends Initializable with ViewController {
 
     //Move.makeMove(activeCharacter.specialMoves(moveListView.getSelectionModel.getSelectedItem),activeCharacter,)
     //Compute the move and then send the new status message
+  }
+
+  @FXML def movesManualPressed(event: ActionEvent) {
+    ApplicationView.createMovesManualView()
   }
 
   /** Resets the turn timer */

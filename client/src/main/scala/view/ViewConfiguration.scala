@@ -15,6 +15,10 @@ object ViewConfiguration {
   val WaitingOpponentForm: String = "WaitingOpponentForm.fxml"
   val BattleTitle: String = "Fantasy Brawl - Battle"
   val BattleForm: String = "BattleForm.fxml"
+  val MovesManualTitle: String = "Fantasy Brawl - Team Selection"
+  val MovesManualForm: String = "MovesManualView.fxml"
+
+  val MovesManualViewBackgroundImage: String = "/view/background4.jpg"
 
   /** Defines the acceptable views. */
   object viewSelector extends Enumeration {

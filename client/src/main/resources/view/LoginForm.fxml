@@ -12,9 +12,9 @@
          <image>
             <Image url="@FantasyBrawlWelcomeScreen.png" />
          </image></ImageView>
-      <HBox alignment="CENTER" layoutX="367.0" layoutY="246.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="227.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+      <HBox alignment="CENTER" layoutX="367.0" layoutY="270.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="227.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
          <children>
-            <Button mnemonicParsing="false" onAction="#handleLoginAsGuest" text="Login as a guest" />
+            <Button mnemonicParsing="false" onAction="#handleLoginAsGuest" prefHeight="31.0" prefWidth="119.0" text="Login as a guest" />
          </children>
       </HBox>
    </children>

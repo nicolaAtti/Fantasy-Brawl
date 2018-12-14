@@ -4,16 +4,18 @@ import java.net.URL
 import java.util.ResourceBundle
 
 import javafx.event.ActionEvent
-import javafx.fxml.{FXML, Initializable}
+import javafx.fxml.{FXML, FXMLLoader, Initializable}
 import view.ApplicationView
 import view.ViewConfiguration.viewSelector._
 import javafx.geometry.Insets
-import javafx.scene.control.{Button, Label, TextArea}
+import javafx.scene.Scene
+import javafx.scene.control.{Button, Label, ScrollPane, TextArea}
 import javafx.scene.effect.ColorAdjust
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout._
 import javafx.scene.paint.Paint
+import javafx.stage.Stage
 import messaging.MatchmakingManager
 
 /** Controller of the team selection view.
@@ -62,6 +64,10 @@ object TeamSelectionController extends Initializable with ViewController {
     ApplicationView changeView WAITING_OPPONENT
     val teamName: Map[String, String] = team.map { case (position, characterPane) => position -> characterPane.getId }
     MatchmakingManager.joinCasualQueueRequest(username, teamName)
+  }
+
+  @FXML def movesManualPressed(event: ActionEvent) {
+    ApplicationView.createMovesManualView()
   }
 
   /** Pressure handler of the characters to choose from. */
