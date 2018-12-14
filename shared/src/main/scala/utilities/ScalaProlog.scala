@@ -117,4 +117,5 @@ object ScalaProlog {
       solveInfo.getVarValue(value)
     }
   }
+
 }

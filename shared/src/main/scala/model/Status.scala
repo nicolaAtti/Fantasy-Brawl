@@ -27,6 +27,7 @@ case class Status(healthPoints: Int,
 }
 
 object Status {
+  import StatusHelper._
 
   /** Evaluates the new status, consuming the appropriate amount of mana for the
     * specified move.
@@ -37,8 +38,6 @@ object Status {
     */
   def afterManaConsumption(status: Status, move: Move): Status =
     status.copy(manaPoints = 0 max (status.manaPoints - move.manaCost))
-
-  import StatusHelper._
 
   /** Evaluates the new status after having applied all the alterations effects,
     * then having decremented by one the remaining turns of each modifier and
@@ -54,36 +53,36 @@ object Status {
     */
   def afterTurnStart(status: Status): Status = (afterAlterationsEffects _ andThen afterTick)(status)
 
-}
+  private object StatusHelper {
 
-private object StatusHelper {
+    /** Evaluates the new status after having applied all the alterations effects.
+      *
+      * @param status the status of a character before the alterations
+      * @return the new status after the alterations effects
+      */
+    def afterAlterationsEffects(status: Status): Status =
+      status.alterations
+        .flatMap { case (alteration, _) => alteration.beginTurnStatusVariation } // 'flatten' takes out the Option and discard None values
+        .foldLeft(status)((s, beginTurnVariation) => beginTurnVariation(s))
 
-  /** Evaluates the new status after having applied all the alterations effects.
-    *
-    * @param status the status of a character before the alterations
-    * @return the new status after the alterations effects
-    */
-  def afterAlterationsEffects(status: Status): Status =
-    status.alterations
-      .flatMap { case (alteration, _) => alteration.beginTurnStatusVariation } // 'flatten' takes out the Option and discard None values
-      .foldLeft(status)((s, beginTurnVariation) => beginTurnVariation(s))
+    /** Evaluates the new status decrementing by one all the counters relative to
+      * the remaining turns of each modifier and alteration.
+      *
+      * If the remaining turns of a modifier (or an alteration) reach zero,
+      * that modifier (or the alteration) will be removed.
+      *
+      * @param status the status of a character before the countdown
+      * @return the new status after the countdown
+      */
+    def afterTick(status: Status): Status =
+      status.copy(
+        modifiers = status.modifiers
+          .mapValues(v => v.copy(remainingRounds = v.remainingRounds - 1))
+          .filter { case (_, modifier) => modifier.remainingRounds > 0 },
+        alterations = status.alterations
+          .mapValues(v => v - 1)
+          .filter { case (_, countDown) => countDown > 0 }
+      )
+  }
 
-  /** Evaluates the new status decrementing by one all the counters relative to
-    * the remaining turns of each modifier and alteration.
-    *
-    * If the remaining turns of a modifier (or an alteration) reach zero,
-    * that modifier (or the alteration) will be removed.
-    *
-    * @param status the status of a character before the countdown
-    * @return the new status after the countdown
-    */
-  def afterTick(status: Status): Status =
-    status.copy(
-      modifiers = status.modifiers
-        .mapValues(v => v.copy(remainingRounds = v.remainingRounds - 1))
-        .filter { case (_, modifier) => modifier.remainingRounds > 0 },
-      alterations = status.alterations
-        .mapValues(v => v - 1)
-        .filter { case (_, countDown) => countDown > 0 }
-    )
 }
