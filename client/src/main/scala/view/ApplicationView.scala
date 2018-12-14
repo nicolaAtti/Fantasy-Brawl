@@ -65,7 +65,7 @@ object ApplicationView {
       stage hide ()
     })
 
-  def createMovesManualView(): Unit ={
+  def createMovesManualView(): Unit = {
     val root: ScrollPane = new FXMLLoader(getClass getResource MovesManualForm).load()
     val stage = new Stage()
     stage setTitle MovesManualTitle
