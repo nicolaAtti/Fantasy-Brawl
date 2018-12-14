@@ -36,7 +36,7 @@ object Main extends App {
               val speedsNotOrdered = (request.myTeamSpeeds.map {
                 case (characterName, speed) => (request.playerName, characterName) -> speed
               } ++ boh.get._1).toList
-              val speedsOrdered: List[((String, String), Int)] = speedsNotOrdered.sortBy(_._2)
+              val speedsOrdered: List[(String, String)] = speedsNotOrdered.sortBy(_._2).map(c => c._1._1 -> c._1._2)
               val response = StartRoundResponse(Right(speedsOrdered), request.round)
               rabbitControl ! Message.queue(response, replyTo.get)
               rabbitControl ! Message.queue(response, boh.get._3)
