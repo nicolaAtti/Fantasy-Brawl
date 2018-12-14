@@ -82,8 +82,8 @@ object Main extends App {
     * @param dataReqPlayer the data of the first player
     * @param dataQueuedPlayer the data of the second player
     */
-  def sendBattleDataToBoth(dataReqPlayer: (String, Seq[String], String),
-                           dataQueuedPlayer: (String, Seq[String], String),
+  def sendBattleDataToBoth(dataReqPlayer: (String, Set[String], String),
+                           dataQueuedPlayer: (String, Set[String], String),
                            battleId: String): Unit = {
     val responseForRequester = JoinCasualQueueResponse(Right((dataQueuedPlayer._1, dataQueuedPlayer._2, battleId)))
     val responseForQueued = JoinCasualQueueResponse(Right((dataReqPlayer._1, dataReqPlayer._2, battleId)))

@@ -56,7 +56,7 @@ object TeamSelectionController extends Initializable with ViewController {
   /** Pressure handler of the "Join Casual Queue" button. */
   @FXML def handleJoinCasualQueue(event: ActionEvent) {
     ApplicationView changeView WAITING_OPPONENT
-    val teamName: Seq[String] = team.map { case (_, characterPane) => characterPane.getId }.toSeq
+    val teamName: Set[String] = team.map { case (_, characterPane) => characterPane.getId }.toSet
     MatchmakingManager.joinCasualQueueRequest(username, teamName)
   }
 
@@ -101,12 +101,11 @@ object TeamSelectionController extends Initializable with ViewController {
         "Resistance: " + character.statistics.resistance + "\n\n" +
         "Special moves: \n"
       character.specialMoves.foreach {
-        case (_, move) => {
+        case (_, move) =>
           description += "    " + move.name +
             "     -> Type: " + move.moveType +
             ", Mana cost: " + move.manaCost +
             "\n"
-        }
       }
       characterDescription.setText(description)
     }

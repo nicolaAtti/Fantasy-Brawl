@@ -1,6 +1,7 @@
 package loginguest
 
-import org.mongodb.scala.MongoClient
+import org.mongodb.scala.bson.conversions.Bson
+import org.mongodb.scala.{Document, MongoClient, MongoCollection, MongoDatabase}
 import org.mongodb.scala.model.Filters
 import org.mongodb.scala.model.Updates.inc
 
@@ -14,13 +15,13 @@ import scala.concurrent.Future
 object MongoDbManager {
 
   val mongoClient = MongoClient("mongodb://login-guest-service:pps-17-fb@ds039291.mlab.com:39291/heroku_3bppsqjk")
-  val database = mongoClient.getDatabase("heroku_3bppsqjk")
-  val collection = database.getCollection("counters")
+  val database: MongoDatabase = mongoClient.getDatabase("heroku_3bppsqjk")
+  val collection: MongoCollection[Document] = database.getCollection("counters")
   val documentId = "guests"
   val field = "number"
 
-  val filter = Filters.equal("_id", value = documentId)
-  val incrementByOne = inc(field, number = 1)
+  val filter: Bson = Filters.equal("_id", value = documentId)
+  val incrementByOne: Bson = inc(field, number = 1)
 
   /** Atomically returns and updates (increasing it by one) a counter inside
     * a remote nosql database.

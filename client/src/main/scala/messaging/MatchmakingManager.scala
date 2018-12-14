@@ -27,7 +27,7 @@ object MatchmakingManager {
   implicit private val RequestFormat: MyFormat[JoinCasualQueueRequest] = MessageFormat.format[JoinCasualQueueRequest]
   implicit private val ResponseFormat: MyFormat[JoinCasualQueueResponse] = MessageFormat.format[JoinCasualQueueResponse]
 
-  private var myTeam: Seq[String] = Seq()
+  private var myTeam: Set[String] = Set()
   private var myName: String = _
 
   private val publisher: Publisher = Publisher.queue(joinCasualMatchmakingRequestQueue)
@@ -62,7 +62,7 @@ object MatchmakingManager {
     * @param playerName username of the player that wants to join
     * @param team team with which the player wants to fight
     */
-  def joinCasualQueueRequest(playerName: String, team: Seq[String]): Unit = {
+  def joinCasualQueueRequest(playerName: String, team: Set[String]): Unit = {
     myName = playerName
     myTeam = team
     rabbitControl ! Message(JoinCasualQueueRequest(playerName, myTeam, Config.MatchmakingAddKey),
@@ -76,7 +76,7 @@ object MatchmakingManager {
     * @param playerName username of the player that wants to be removed
     */
   def leaveCasualQueueRequest(playerName: String): Unit = {
-    rabbitControl ! Message(JoinCasualQueueRequest(playerName, Seq(), Config.MatchmakingRemoveKey),
+    rabbitControl ! Message(JoinCasualQueueRequest(playerName, Set(), Config.MatchmakingRemoveKey),
                             publisher,
                             Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
   }

@@ -4,16 +4,16 @@ import org.mongodb.scala.bson.BsonValue
 import org.mongodb.scala.model.Filters
 import org.mongodb.scala.model.Updates.inc
 import org.mongodb.scala.result.DeleteResult
-import org.mongodb.scala.{Completed, Document, MongoClient}
+import org.mongodb.scala.{Completed, Document, MongoClient, MongoCollection, MongoDatabase}
 
 import scala.concurrent.Future
 
 object MongoDbManager {
 
   val mongoClient = MongoClient("mongodb://login-guest-service:pps-17-fb@ds039291.mlab.com:39291/heroku_3bppsqjk")
-  val database = mongoClient.getDatabase("heroku_3bppsqjk")
-  val queueCollection = database.getCollection("casual-queue")
-  val battleCollection = database.getCollection("active-battles")
+  val database: MongoDatabase = mongoClient.getDatabase("heroku_3bppsqjk")
+  val queueCollection: MongoCollection[Document] = database.getCollection("casual-queue")
+  val battleCollection: MongoCollection[Document] = database.getCollection("active-battles")
 
   val IdFieldName = "_id"
   val PlayerFieldName = "playerName"
@@ -38,11 +38,11 @@ object MongoDbManager {
     * @return a Future representing the success/failure of the operation,
     *         containing the player's name,team and response queue
     */
-  def takePlayerFromQueue(ticket: Int): Future[(String, Seq[String], String)] = {
+  def takePlayerFromQueue(ticket: Int): Future[(String, Set[String], String)] = {
     queueCollection
       .findOneAndDelete(filter = Filters.equal(IdFieldName, value = ticket))
       .map(document =>
-        (document(PlayerFieldName).asString().getValue, document(TeamMembersFieldName).asArray().toArray.toSeq.collect {
+        (document(PlayerFieldName).asString().getValue, document(TeamMembersFieldName).asArray().toArray.toSet.collect {
           case str: BsonValue => str.asString().getValue
         }, document(ReplyToFieldName).asString().getValue))
       .head()
@@ -58,7 +58,7 @@ object MongoDbManager {
     */
   def putPlayerInQueue(ticket: Int,
                        playerName: String,
-                       teamMembers: Seq[String],
+                       teamMembers: Set[String],
                        replyTo: String): Future[Completed] = {
     queueCollection
       .insertOne(
