@@ -41,10 +41,18 @@ object MongoDbManager {
   def takePlayerFromQueue(ticket: Int): Future[(String, Set[String], String)] = {
     queueCollection
       .findOneAndDelete(filter = Filters.equal(IdFieldName, value = ticket))
-      .map(document =>
-        (document(PlayerFieldName).asString().getValue, document(TeamMembersFieldName).asArray().toArray.toSet.collect {
-          case str: BsonValue => str.asString().getValue
-        }, document(ReplyToFieldName).asString().getValue))
+      .map(
+        document =>
+          (document(PlayerFieldName).asString().getValue,
+           document(TeamMembersFieldName)
+             .asArray()
+             .toArray
+             .toSeq
+             .collect {
+               case str: BsonValue => str.asString().getValue
+             }
+             .toSet,
+           document(ReplyToFieldName).asString().getValue))
       .head()
   }
 
@@ -64,7 +72,7 @@ object MongoDbManager {
       .insertOne(
         Document(IdFieldName -> ticket,
                  PlayerFieldName -> playerName,
-                 TeamMembersFieldName -> teamMembers,
+                 TeamMembersFieldName -> teamMembers.toSeq,
                  ReplyToFieldName -> replyTo))
       .head()
   }
