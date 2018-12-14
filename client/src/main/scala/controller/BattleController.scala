@@ -83,14 +83,18 @@ object BattleController extends Initializable with ViewController {
     setBattlefield()
 
     timeline.setCycleCount(60)
-    timeline.getKeyFrames.add(new KeyFrame(Duration.seconds(1), (_: ActionEvent) => {
-      timeSeconds = timeSeconds - 1
-      timerCounter.setText(timeSeconds.toString)
-      if (timeSeconds <= 0) {
-        timeline.stop()
-        Round.endTurn()
-      }
-    }))
+    timeline.getKeyFrames.add(
+      new KeyFrame(
+        Duration.seconds(1),
+        (_: ActionEvent) => {
+          timeSeconds = timeSeconds - 1
+          timerCounter.setText(timeSeconds.toString)
+          if (timeSeconds <= 0) {
+            timeline.stop()
+            Round.endTurn()
+          }
+        }
+      ))
     timeline.play()
   }
 
@@ -105,7 +109,8 @@ object BattleController extends Initializable with ViewController {
     */
   def setupTeams(team: Set[Character]): Unit = {
     playerCharacterImages = (playerImages zip team.filter(character => character.owner.get == Battle.playerId)).toMap
-    opponentCharacterImages = (opponentImages zip team.filter(character => character.owner.get == Battle.opponentId)).toMap
+    opponentCharacterImages =
+      (opponentImages zip team.filter(character => character.owner.get == Battle.opponentId)).toMap
     prepareImages()
     setupLabels()
 
@@ -173,15 +178,14 @@ object BattleController extends Initializable with ViewController {
     */
   def setActiveCharacter(character: Character): Unit = {
     activeCharacter = character
-    if(activeCharacter.owner.get == Battle.playerId) {
+    if (activeCharacter.owner.get == Battle.playerId) {
       activeLabel = playerCharNames.getChildren.toArray
         .filter(charName => charName.asInstanceOf[Label].getText equals activeCharacter.characterName)
         .head
         .asInstanceOf[Label]
       activeLabel.setTextFill(Color.GREEN)
       setupCharacterMoves(activeCharacter)
-    }
-    else {
+    } else {
       activeLabel = opponentCharNames.getChildren.toArray
         .filter(charName => charName.asInstanceOf[Label].getText equals activeCharacter.characterName)
         .head
