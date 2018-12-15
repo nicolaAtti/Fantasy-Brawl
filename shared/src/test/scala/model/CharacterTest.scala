@@ -16,7 +16,7 @@ class CharacterTest extends FunSuite {
     assert(
       jacob.characterName.equals("Jacob") &&
         jacob.statistics.strength == 51 &&
-        jacob.statistics.agility == 33 &&
+        jacob.statistics.agility == 41 &&
         jacob.statistics.spirit == 13 &&
         jacob.statistics.intelligence == 5 &&
         jacob.statistics.resistance == 27)
@@ -26,8 +26,8 @@ class CharacterTest extends FunSuite {
     assert(
       jacob.physicalDamage == 102 &&
         jacob.physicalCriticalDamage == 170 &&
-        jacob.speed == 4 &&
-        jacob.criticalChance == 16 &&
+        jacob.speed == 5 &&
+        jacob.criticalChance == 20 &&
         jacob.magicalDefence == 13 &&
         jacob.status.maxManaPoints == 65 &&
         jacob.magicalPower == 2 &&
@@ -61,10 +61,10 @@ class CharacterTest extends FunSuite {
 
   test("Other classes should have the right statistics") {
     assert(
-      annabelle.physicalDamage == 51 &&
-        annabelle.physicalCriticalDamage == 160 &&
-        annabelle.speed == 10 &&
-        annabelle.criticalChance == 46 &&
+      annabelle.physicalDamage == 58 &&
+        annabelle.physicalCriticalDamage == 161 &&
+        annabelle.speed == 8 &&
+        annabelle.criticalChance == 40 &&
         annabelle.magicalDefence == 22 &&
         annabelle.status.maxManaPoints == 110 &&
         annabelle.magicalPower == 4 &&

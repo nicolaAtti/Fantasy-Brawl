@@ -38,7 +38,7 @@ object Move {
     * A move will affect all the targets (evaluating the move effect for everyone
     * of them) and possibly the attacker if the move costs some mana points.
     * It's worth mentioning that a character can be both attacker and target at
-    * the same time: useful for example if a he/she wants to cure himself/herself
+    * the same time: useful for example if a he/she wants to heal himself/herself
     * casting a healing spell.
     *
     * @param move the move to be executed
