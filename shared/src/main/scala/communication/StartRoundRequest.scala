@@ -1,7 +1,7 @@
 package communication
 
 case class StartRoundRequest(playerName: String,
-                             myTeamSpeeds: Map[String, Int],
+                             playerTeamSpeeds: Map[String, Int],
                              opponentName: String,
                              battleId: String,
                              round: Int)

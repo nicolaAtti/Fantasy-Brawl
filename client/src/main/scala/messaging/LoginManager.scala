@@ -7,8 +7,10 @@ import communication._
 import ViewConfiguration.viewSelector._
 import com.spingo.op_rabbit.properties.ReplyTo
 import communication.MessageFormat.MyFormat
+import config.MessagingSettings
 import javafx.application.Platform
 import javafx.scene.control.Alert
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /** Manages login as a guest request and response messages.
@@ -17,13 +19,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
   */
 object LoginManager {
   private val rabbitControl: ActorRef = ActorSystem().actorOf(Props[RabbitControl])
-  implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = Config.Requeue)
+  implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = MessagingSettings.Requeue)
 
   import Queues._
   private val loginGuestRequestQueue =
-    Queue(LoginGuestRequestQueue, durable = Config.Durable, autoDelete = Config.AutoDelete)
+    Queue(LoginGuestRequestQueue, durable = MessagingSettings.Durable, autoDelete = MessagingSettings.AutoDelete)
   private val loginGuestResponseQueue =
-    Queue(LoginGuestResponseQueue, durable = Config.Durable, autoDelete = Config.AutoDelete)
+    Queue(LoginGuestResponseQueue, durable = MessagingSettings.Durable, autoDelete = MessagingSettings.AutoDelete)
 
   implicit private val RequestFormat: MyFormat[LoginGuestRequest] = MessageFormat.format[LoginGuestRequest]
   implicit private val ResponseFormat: MyFormat[LoginGuestResponse] = MessageFormat.format[LoginGuestResponse]
@@ -33,12 +35,12 @@ object LoginManager {
   /** Manages login as a guest response messages. */
   Subscription.run(rabbitControl) {
     import Directives._
-    channel(qos = Config.Qos) {
+    channel(qos = MessagingSettings.Qos) {
       consume(loginGuestResponseQueue) {
         body(as[LoginGuestResponse]) { response =>
           response.guestId match {
             case Right(id) =>
-              controller.TeamSelectionController.username = Config.GuestName + id
+              controller.TeamSelectionController.username = config.MiscSettings.GuestName + id
               ApplicationView changeView TEAM
             case Left(details) =>
               Platform runLater (() => {
