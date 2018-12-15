@@ -10,7 +10,34 @@ object MoveEffectStrategies {
   import model.Move._
   import StrategiesHelper._
 
+  /** Provides the appropriate move effect a string code, the move type, all the
+    * modifiers to add and the alterations to add/remove to/from the target.
+    *
+    * @param moveEffectStrategyCode the string code that discerns a certain effect
+    * @param moveType the move type
+    * @param baseValue the base value of the move effect
+    * @param addModifiers the modifiers that must be added to the target status
+    * @param addAlterations the alterations that must be added to the target status
+    * @param removeAlterations the alterations to remove from the target status
+    * @return the appropriate move effect
+    */
+  def apply(moveEffectStrategyCode: String, moveType: MoveType, baseValue: Int)(
+      addModifiers: Map[String, Modifier],
+      addAlterations: Map[Alteration, Int],
+      removeAlterations: Set[Alteration]): (Attacker, Target) => NewTargetStatus = {
 
+    implicit val modifiersToAdd: Map[String, Modifier] = addModifiers
+    implicit val alterationsToAdd: Map[Alteration, Int] = addAlterations
+    implicit val alterationsToRemove: Set[Alteration] = removeAlterations
+
+    moveEffectStrategyCode match {
+      case "StandardDamage" => createStandardDamageEffect(moveType = moveType, baseDamage = baseValue)
+      case "StandardHeal"   => createStandardHealEffect(baseHeal = baseValue)
+      case "Percentage"     => createPercentageEffect(percentage = baseValue)
+      case "BuffDebuff"     => createBuffDebuffEffect
+      case _                => throw new IllegalArgumentException(s"Unknown move effect strategy: $moveEffectStrategyCode")
+    }
+  }
 
   /** Provides a standard damage effect that describes how to:
     * 1) Decrease the target's health points.

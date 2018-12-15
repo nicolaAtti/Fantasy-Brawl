@@ -130,55 +130,8 @@ case class SpecialMove(name: String,
                        maxTargets: Int)
     extends Move {
   override def toString: String =
-    s"[$name] Move type: ${moveType.representation} | Mana cost: $manaCost | Max targets: $maxTargets"
-}
+    s"[[$name]] Move type: ${moveType.representation} | Mana cost: $manaCost | Max targets: $maxTargets"
 
-object SpecialMove {
-
-  /** Provides the appropriate SpecialMove object given its name, its move effect
-    * string code, its move type, all the modifiers to add and the alterations to
-    * add/remove, the mana points that it costs and the maximum number of targets
-    * that can be hit at once.
-    *
-    * @param name the move name
-    * @param moveEffectStrategyCode the move effect string code
-    * @param moveType the move type
-    * @param baseValue the base value of the move effect
-    * @param addModifiers the modifiers that the move adds to the targets
-    * @param addAlterations the alterations that the move adds to the targets
-    * @param removeAlterations the alterations to remove from the targets
-    * @param manaCost the mana points that the attacker character must spend in
-    *                 order to make the move
-    * @param maxTargets the maximum number of characters that can be targeted at once
-    * @return the SpecialMove object
-    */
-  def apply(name: String,
-            moveEffectStrategyCode: String,
-            moveType: MoveType,
-            baseValue: Int,
-            addModifiers: Map[String, Modifier],
-            addAlterations: Map[Alteration, Int],
-            removeAlterations: Set[Alteration],
-            manaCost: Int,
-            maxTargets: Int): SpecialMove = {
-
-    require(manaCost >= 0, "The mana cost cannot be negative")
-    require(baseValue >= 0, "The base value cannot be negative")
-    require(maxTargets > 0, "The number of maximum targets must be at least one")
-
-    implicit val modifiersToAdd: Map[String, Modifier] = addModifiers
-    implicit val alterationsToAdd: Map[Alteration, Int] = addAlterations
-    implicit val alterationsToRemove: Set[Alteration] = removeAlterations
-
-    val moveEffect = moveEffectStrategyCode match {
-      case "StandardDamage" => createStandardDamageEffect(moveType = moveType, baseDamage = baseValue)
-      case "StandardHeal"   => createStandardHealEffect(baseHeal = baseValue)
-      case "Percentage"     => createPercentageEffect(percentage = baseValue)
-      case "BuffDebuff"     => createBuffDebuffEffect
-      case _                => throw new IllegalArgumentException(s"Unknown move effect strategy: $moveEffectStrategyCode")
-    }
-
-    SpecialMove(name, moveType, moveEffect, manaCost, maxTargets)
-  }
-
+  require(manaCost >= 0, "The mana cost cannot be negative")
+  require(maxTargets > 0, "The number of maximum targets must be at least one")
 }

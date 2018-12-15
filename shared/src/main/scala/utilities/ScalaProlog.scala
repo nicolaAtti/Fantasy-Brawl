@@ -22,7 +22,7 @@ object ScalaProlog {
     val solveInfo = engine.solve(
       "character('" + characterName + "',CharacterClass,Strength,Agility,Spirit,Intelligence,Resistance,SpecialMoves).")
     Character(
-      characterClass = extractString(solveInfo, "CharacterClass"),
+      role = extractString(solveInfo, "CharacterClass"),
       owner = owner,
       name = characterName,
       statistics = Statistics(
@@ -54,15 +54,19 @@ object ScalaProlog {
       "spec_move('" + moveName + "',MoveEffectStrategy,MoveType,BaseValue,AddModifiers,AddAlterations,RemoveAlterations,ManaCost,MaxTargets).")
     SpecialMove(
       name = moveName,
-      moveEffectStrategyCode = extractString(solveInfo, "MoveEffectStrategy"),
       moveType = MoveType(extractString(solveInfo, "MoveType")),
-      baseValue = extractInt(solveInfo, "BaseValue"),
-      addModifiers =
-        extractList(solveInfo, "AddModifiers").map(modifierName => modifierName -> getModifier(modifierName)).toMap,
-      addAlterations = extractList(solveInfo, "AddAlterations")
-        .map(alteration => Alteration(alteration) -> Alteration(alteration).roundsDuration)
-        .toMap,
-      removeAlterations = extractList(solveInfo, "RemoveAlterations").map(alteration => Alteration(alteration)).toSet,
+      moveEffect = MoveEffectStrategies(
+        moveEffectStrategyCode = extractString(solveInfo, "MoveEffectStrategy"),
+        moveType = MoveType(extractString(solveInfo, "MoveType")),
+        baseValue = extractInt(solveInfo, "BaseValue")
+      )(
+        addModifiers =
+          extractList(solveInfo, "AddModifiers").map(modifierName => modifierName -> getModifier(modifierName)).toMap,
+        addAlterations = extractList(solveInfo, "AddAlterations")
+          .map(alteration => Alteration(alteration) -> Alteration(alteration).roundsDuration)
+          .toMap,
+        removeAlterations = extractList(solveInfo, "RemoveAlterations").map(alteration => Alteration(alteration)).toSet,
+      ),
       manaCost = extractInt(solveInfo, "ManaCost"),
       maxTargets = extractInt(solveInfo, "MaxTargets")
     )
