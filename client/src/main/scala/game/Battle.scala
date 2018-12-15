@@ -16,7 +16,7 @@ object Battle extends App {
     opponentId = opponent._1
     teams = setupTeam(player, opponent)
     id = battleId
-    Round.startRound()
+    Round.startNewRound()
   }
 
   private object BattleHelper {
