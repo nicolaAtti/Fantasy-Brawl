@@ -152,7 +152,7 @@ object Character {
 
   val WarriorRepresentation: String = "Warrior"
   val ThiefRepresentation: String = "Thief"
-  val WizardRepresentation: String = "Warrior"
+  val WizardRepresentation: String = "Wizard"
   val HealerRepresentation: String = "Healer"
 
   def apply(role: String,
