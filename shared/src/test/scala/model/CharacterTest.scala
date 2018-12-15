@@ -38,9 +38,10 @@ class CharacterTest extends FunSuite {
 
   test("New character should have his special moves") {
     val jacobSpecialMovesName = List("Skullcrack", "Sismic Slam", "Berserker Rage", "Second Wind")
-    assert(jacob.specialMoves
-      .map{ case (specialMoveName, _) => jacobSpecialMovesName.contains(specialMoveName)}
-      .forall(_ == true))
+    assert(
+      jacob.specialMoves
+        .map { case (specialMoveName, _) => jacobSpecialMovesName.contains(specialMoveName) }
+        .forall(_ == true))
   }
 
   test("New character should not have modifiers or alterations") {
