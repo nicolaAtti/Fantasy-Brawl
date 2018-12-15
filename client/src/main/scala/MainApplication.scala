@@ -7,7 +7,7 @@ class MainApplication extends Application {
   /** Create and show the login view. */
   override def start(primaryStage: Stage): Unit = {
     import view._
-    ApplicationView setupStage (primaryStage, 540, 960)
+    ApplicationView setupStage (primaryStage, ViewConfiguration.WindowHeight, ViewConfiguration.WindowWidth)
     ApplicationView changeView LOGIN
     ApplicationView showView ()
   }

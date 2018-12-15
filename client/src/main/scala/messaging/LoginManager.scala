@@ -17,11 +17,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
   */
 object LoginManager {
   private val rabbitControl: ActorRef = ActorSystem().actorOf(Props[RabbitControl])
-  implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(false)
+  implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = Config.Requeue)
 
   import Queues._
-  private val loginGuestRequestQueue = Queue(LoginGuestRequestQueue, durable = false, autoDelete = true)
-  private val loginGuestResponseQueue = Queue(LoginGuestResponseQueue, durable = false, autoDelete = true)
+  private val loginGuestRequestQueue =
+    Queue(LoginGuestRequestQueue, durable = Config.Durable, autoDelete = Config.AutoDelete)
+  private val loginGuestResponseQueue =
+    Queue(LoginGuestResponseQueue, durable = Config.Durable, autoDelete = Config.AutoDelete)
 
   implicit private val RequestFormat: MyFormat[LoginGuestRequest] = MessageFormat.format[LoginGuestRequest]
   implicit private val ResponseFormat: MyFormat[LoginGuestResponse] = MessageFormat.format[LoginGuestResponse]
@@ -31,17 +33,17 @@ object LoginManager {
   /** Manages login as a guest response messages. */
   Subscription.run(rabbitControl) {
     import Directives._
-    channel(qos = 3) {
+    channel(qos = Config.Qos) {
       consume(loginGuestResponseQueue) {
         body(as[LoginGuestResponse]) { response =>
           response.guestId match {
             case Right(id) =>
-              controller.TeamSelectionController.username = "guest#" + id
+              controller.TeamSelectionController.username = Config.GuestName + id
               ApplicationView changeView TEAM
             case Left(details) =>
               Platform runLater (() => {
-                val alert: Alert = new Alert(Alert.AlertType.ERROR)
-                alert setTitle "Error"
+                val alert: Alert = new Alert(ViewConfiguration.DialogErrorType)
+                alert setTitle ViewConfiguration.DialogErrorTitle
                 alert setHeaderText details
                 alert showAndWait ()
                 ApplicationView changeView LOGIN

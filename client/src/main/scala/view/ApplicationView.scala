@@ -6,6 +6,8 @@ import javafx.scene.Scene
 import javafx.stage.Stage
 import controller._
 import ViewConfiguration._
+import javafx.scene.control.ScrollPane
+import javafx.scene.image.ImageView
 import messaging.MatchmakingManager
 
 /** Manages the graphical interface.
@@ -62,6 +64,17 @@ object ApplicationView {
     Platform runLater (() => {
       stage hide ()
     })
+
+  def createMovesManualView(): Unit = {
+    val root: ScrollPane = new FXMLLoader(getClass getResource MovesManualForm).load()
+    val stage = new Stage()
+    stage setTitle MovesManualTitle
+    val img = new ImageView(MovesManualViewBackgroundImage)
+    img.fitWidthProperty().bind(stage.widthProperty())
+    root.setContent(img)
+    stage setScene new Scene(root)
+    stage.show()
+  }
 
   private def setupScene(title: String, form: String, controller: Option[ViewController]) {
     val loader: FXMLLoader = new FXMLLoader(getClass getResource form)

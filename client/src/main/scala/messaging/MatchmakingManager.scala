@@ -16,18 +16,18 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /** Manages casual matchmaking request and response messages. */
 object MatchmakingManager {
   private val rabbitControl: ActorRef = ActorSystem().actorOf(Props[RabbitControl])
-  implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(false)
+  implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = Config.Requeue)
 
   import Queues._
   private val joinCasualMatchmakingRequestQueue =
-    Queue(JoinCasualMatchmakingRequestQueue, durable = false, autoDelete = true)
+    Queue(JoinCasualMatchmakingRequestQueue, durable = Config.Durable, autoDelete = Config.AutoDelete)
   private val joinCasualMatchmakingResponseQueue =
-    Queue(JoinCasualMatchmakingResponseQueue, durable = false, autoDelete = true)
+    Queue(JoinCasualMatchmakingResponseQueue, durable = Config.Durable, autoDelete = Config.AutoDelete)
 
   implicit private val RequestFormat: MyFormat[JoinCasualQueueRequest] = MessageFormat.format[JoinCasualQueueRequest]
   implicit private val ResponseFormat: MyFormat[JoinCasualQueueResponse] = MessageFormat.format[JoinCasualQueueResponse]
 
-  private var myTeam: Seq[String] = Seq()
+  private var myTeam: Set[String] = Set()
   private var myName: String = _
 
   private val publisher: Publisher = Publisher.queue(joinCasualMatchmakingRequestQueue)
@@ -35,7 +35,7 @@ object MatchmakingManager {
   /** Manages casual matchmaking response messages. */
   Subscription.run(rabbitControl) {
     import Directives._
-    channel(qos = 3) {
+    channel(qos = Config.Qos) {
       consume(joinCasualMatchmakingResponseQueue) {
         body(as[JoinCasualQueueResponse]) { response =>
           response.opponentData match {
@@ -43,8 +43,8 @@ object MatchmakingManager {
               Battle.start((myName, myTeam), (opponentName, opponentTeam), battleId)
             case Left(details) =>
               Platform runLater (() => {
-                val alert: Alert = new Alert(Alert.AlertType.ERROR)
-                alert setTitle "Error"
+                val alert: Alert = new Alert(ViewConfiguration.DialogErrorType)
+                alert setTitle ViewConfiguration.DialogErrorTitle
                 alert setHeaderText details
                 alert showAndWait ()
                 ApplicationView changeView TEAM
@@ -62,10 +62,10 @@ object MatchmakingManager {
     * @param playerName username of the player that wants to join
     * @param team team with which the player wants to fight
     */
-  def joinCasualQueueRequest(playerName: String, team: Map[String, String]): Unit = {
-    myTeam = team.map(member => member._2).toSeq
+  def joinCasualQueueRequest(playerName: String, team: Set[String]): Unit = {
     myName = playerName
-    rabbitControl ! Message(JoinCasualQueueRequest(playerName, myTeam, "Add"),
+    myTeam = team
+    rabbitControl ! Message(JoinCasualQueueRequest(playerName, myTeam, Config.MatchmakingAddKey),
                             publisher,
                             Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
   }
@@ -76,7 +76,7 @@ object MatchmakingManager {
     * @param playerName username of the player that wants to be removed
     */
   def leaveCasualQueueRequest(playerName: String): Unit = {
-    rabbitControl ! Message(JoinCasualQueueRequest(playerName, Seq(), "Remove"),
+    rabbitControl ! Message(JoinCasualQueueRequest(playerName, Set(), Config.MatchmakingRemoveKey),
                             publisher,
                             Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
   }

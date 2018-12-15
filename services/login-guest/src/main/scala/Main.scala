@@ -4,6 +4,9 @@ import ExecutionContext.Implicits.global
 import akka.actor.{ActorSystem, Props}
 import com.spingo.op_rabbit._
 import com.spingo.op_rabbit.properties.ReplyTo
+import communication.Config
+import communication.MessageFormat.MyFormat
+import loginguest.MongoDbManager
 
 /** Entry point of the service that handles the login for guests users.
   * @author Marco Canducci
@@ -13,20 +16,21 @@ object Main extends App {
   final val Log = true
   final val LogMessage = "Received a new login request"
   final val LogDetailsPrefix = "Details: "
+  final val FailurePrint = "Failure... Caught:"
 
   val rabbitControl = ActorSystem().actorOf(Props[RabbitControl])
-  implicit val recoveryStrategy = RecoveryStrategy.nack(requeue = false)
+  implicit val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = Config.Requeue)
 
   import communication._
-  implicit val requestFormat = MessageFormat.format[LoginGuestRequest]
-  implicit val responseFormat = MessageFormat.format[LoginGuestResponse]
+  implicit val requestFormat: MyFormat[LoginGuestRequest] = MessageFormat.format[LoginGuestRequest]
+  implicit val responseFormat: MyFormat[LoginGuestResponse] = MessageFormat.format[LoginGuestResponse]
 
   import Queues._
-  val requestQueue = Queue(LoginGuestRequestQueue, durable = false, autoDelete = true)
+  val requestQueue = Queue(LoginGuestRequestQueue, durable = Config.Durable, autoDelete = Config.AutoDelete)
 
   val subscription = Subscription.run(rabbitControl) {
     import Directives._
-    channel(qos = 3) {
+    channel(qos = Config.Qos) {
       consume(requestQueue) {
         (body(as[LoginGuestRequest]) & optionalProperty(ReplyTo)) { (request, replyTo) =>
           {
@@ -38,9 +42,9 @@ object Main extends App {
               }
             }
 
-            AsyncDbManager.nextGuestNumber.onComplete {
+            MongoDbManager.nextGuestNumber.onComplete {
               case Success(n: Int) => sendGuestNumber(n, clientQueue = replyTo.get)
-              case Failure(e)      => println(s"Failure... Caught: $e")
+              case Failure(e)      => println(s"$FailurePrint $e")
             }
           }
           ack
