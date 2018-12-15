@@ -153,46 +153,44 @@ class MoveTest extends FunSuite {
     val newStatuses = Move.makeMove(multiTargetMove,
                                     wizardCharacter,
                                     Set(userCharacter, targetCharacter, healerCharacter, anotherCharacter))
-    assert((newStatuses(userCharacter).healthPoints == 393 || newStatuses(
-      userCharacter).healthPoints == 302) &&
-      (newStatuses(targetCharacter).healthPoints == 612 || newStatuses(
-        targetCharacter).healthPoints == 533) &&
-      (newStatuses(healerCharacter).healthPoints == 278 || newStatuses(
-        healerCharacter).healthPoints == 199) &&
-      (newStatuses(anotherCharacter).healthPoints == 267 || newStatuses(
-        anotherCharacter).healthPoints == 181) &&
-      (newStatuses(wizardCharacter).manaPoints == wizardCharacter.status.maxManaPoints - 25))
+    assert(
+      (newStatuses(userCharacter).healthPoints == 393 || newStatuses(userCharacter).healthPoints == 302) &&
+        (newStatuses(targetCharacter).healthPoints == 612 || newStatuses(targetCharacter).healthPoints == 533) &&
+        (newStatuses(healerCharacter).healthPoints == 278 || newStatuses(healerCharacter).healthPoints == 199) &&
+        (newStatuses(anotherCharacter).healthPoints == 267 || newStatuses(anotherCharacter).healthPoints == 181) &&
+        (newStatuses(wizardCharacter).manaPoints == wizardCharacter.status.maxManaPoints - 25))
   }
 
-  test("Using a damaging move should remove the Asleep alteration from it's targets"){
+  test("Using a damaging move should remove the Asleep alteration from it's targets") {
     val userCharacter = getCharacter("Jacob")
     val targetCharacter = getCharacter("Cassandra")
     targetCharacter.status = asleepStatus
     val newStatuses = Move.makeMove(physicalAttack, userCharacter, Set(targetCharacter))
-    assert(targetCharacter.status.alterations.contains(asleep) && !newStatuses(targetCharacter).alterations.contains(asleep))
+    assert(
+      targetCharacter.status.alterations.contains(asleep) && !newStatuses(targetCharacter).alterations.contains(asleep))
   }
 
-  test("A special move that applies an alteration, should apply it to all it's targets"){
+  test("A special move that applies an alteration, should apply it to all it's targets") {
     val userCharacter = getCharacter("Jacob")
     val targetCharacter = getCharacter("Cassandra")
     val healerCharacter = getCharacter("Albert")
     val wizardCharacter = getCharacter("Linn")
 
     val newStatuses = Move.makeMove(multiModifierMove,
-      wizardCharacter,
-      Set(userCharacter, targetCharacter, healerCharacter, wizardCharacter))
+                                    wizardCharacter,
+                                    Set(userCharacter, targetCharacter, healerCharacter, wizardCharacter))
     assert(newStatuses.forall(chars => chars._2.modifiers.contains("Bolstered Faith")))
   }
 
-  test("A special move that applies a modifier, should apply it to all it's targets"){
+  test("A special move that applies a modifier, should apply it to all it's targets") {
     val userCharacter = getCharacter("Jacob")
     val targetCharacter = getCharacter("Cassandra")
     val healerCharacter = getCharacter("Albert")
     val wizardCharacter = getCharacter("Linn")
 
     val newStatuses = Move.makeMove(multiAlterationMove,
-      wizardCharacter,
-      Set(userCharacter, targetCharacter, healerCharacter, wizardCharacter))
+                                    wizardCharacter,
+                                    Set(userCharacter, targetCharacter, healerCharacter, wizardCharacter))
     assert(newStatuses.forall(chars => chars._2.alterations.contains(regeneration)))
   }
 

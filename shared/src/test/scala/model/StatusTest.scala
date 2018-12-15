@@ -13,10 +13,11 @@ class StatusTest extends FunSuite {
   val concentratedModifier: Modifier = getModifier("Concentrated")
   val stunned: Alteration = Alteration("Stn")
 
-  val poisonedStatus = Status(200, 100, 200, 100, Map(), Map((poison,poison.roundsDuration)))
-  val regenerateStatus = Status(100, 100, 200, 100, Map(), Map((regeneration,regeneration.roundsDuration)))
-  val removeStatus: Status = Status(200,100,200,100,Map(("Concentrated",concentratedModifier)),Map((stunned,stunned.roundsDuration)))
+  val poisonedStatus = Status(200, 100, 200, 100, Map(), Map((poison, poison.roundsDuration)))
+  val regenerateStatus = Status(100, 100, 200, 100, Map(), Map((regeneration, regeneration.roundsDuration)))
 
+  val removeStatus: Status =
+    Status(200, 100, 200, 100, Map(("Concentrated", concentratedModifier)), Map((stunned, stunned.roundsDuration)))
 
   test("A newly created status should have correct health values") {
     assert(status.healthPoints == 200 && status.maxHealthPoints == status.healthPoints)
@@ -79,11 +80,11 @@ class StatusTest extends FunSuite {
     val afterTurnStatus = afterTurnStart(poisonedStatus)
     assert(afterTurnStatus.healthPoints == 150 && afterTurnStatus.alterations(poison) == 2)
   }
-  test("After a new turn start, the returned status must register the healing done by the Regeneration alteration"){
+  test("After a new turn start, the returned status must register the healing done by the Regeneration alteration") {
     val afterTurnStatus = afterTurnStart(regenerateStatus)
     assert(afterTurnStatus.healthPoints == 125 && afterTurnStatus.alterations(regeneration) == 1)
   }
-  test("After a new turn start, alterations or modifiers that reach duration zero should be removed"){
+  test("After a new turn start, alterations or modifiers that reach duration zero should be removed") {
     val afterTurnStatus = afterTurnStart(removeStatus)
     assert(afterTurnStatus.alterations == Map() && afterTurnStatus.modifiers == Map())
   }

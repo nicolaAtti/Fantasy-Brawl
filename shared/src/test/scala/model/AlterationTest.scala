@@ -8,7 +8,6 @@ class AlterationTest extends FunSuite {
   val specialRanged = SpecialMove("SpecialMoveName", MoveType("Ranged"), null, 0, 1)
   val specialSpell = SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)
 
-
   val stunned = Alteration("Stn")
   test("The stunned alteration should inhibit all moves") {
     assert(
