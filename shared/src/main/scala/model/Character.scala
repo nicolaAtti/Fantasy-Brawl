@@ -155,17 +155,17 @@ object Character {
   val WizardRepresentation: String = "Warrior"
   val HealerRepresentation: String = "Healer"
 
-  def apply(characterClass: String,
+  def apply(role: String,
             name: String,
             owner: Option[String],
             statistics: Statistics,
             specialMoves: Map[String, SpecialMove]): Character =
-    characterClass match {
-      case WarriorRepresentation => Warrior(characterName, statistics, specialMoves)
-      case ThiefRepresentation   => Thief(characterName, statistics, specialMoves)
-      case WizardRepresentation  => Wizard(characterName, statistics, specialMoves)
-      case HealerRepresentation  => Healer(characterName, statistics, specialMoves)
-      case _                     => throw new IllegalArgumentException(s"Unknown character role: $characterClass")
+    role match {
+      case WarriorRepresentation => Warrior(name, owner, statistics, specialMoves)
+      case ThiefRepresentation   => Thief(name, owner, statistics, specialMoves)
+      case WizardRepresentation  => Wizard(name, owner, statistics, specialMoves)
+      case HealerRepresentation  => Healer(name, owner, statistics, specialMoves)
+      case _                     => throw new IllegalArgumentException(s"Unknown character role: $role")
     }
 
 }
