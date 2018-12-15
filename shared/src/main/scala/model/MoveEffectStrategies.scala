@@ -10,6 +10,8 @@ object MoveEffectStrategies {
   import model.Move._
   import StrategiesHelper._
 
+
+
   /** Provides a standard damage effect that describes how to:
     * 1) Decrease the target's health points.
     * 2) Possibly affect the modifiers and the alterations of the target's status.
@@ -83,7 +85,6 @@ object MoveEffectStrategies {
     (_: Attacker, target: Target) =>
       updatedStatus(originalStatus = target.status, healthPointsToClamp = target.status.healthPoints * percentage / 100)
 
-
   /** Provides a buff/debuff move effect: this type of effect only affects the
     * modifiers and the alterations of the target's status.
     *
@@ -148,7 +149,6 @@ object MoveEffectStrategies {
         alterations = originalStatus.alterations ++ alterationsToAdd -- alterationsToRemove
       )
     }
-
   }
 
 }
