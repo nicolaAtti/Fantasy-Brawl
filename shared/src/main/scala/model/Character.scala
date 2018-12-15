@@ -1,6 +1,6 @@
 package model
 
-import utilities.Utility._
+import utilities.Misc._
 
 trait Character {
   val characterName: String
@@ -114,12 +114,14 @@ trait Character {
 
 }
 
+import Character._
+
 private case class Warrior(characterName: String,
                            owner: Option[String],
                            statistics: Statistics,
                            specialMoves: Map[String, SpecialMove],
                            classMultipliers: ClassMultipliers = ClassMultipliers(2, 1, 1, 0.5, 1.5, 2),
-                           role: String = "Warrior")
+                           role: String = WarriorRepresentation)
     extends Character {}
 
 private case class Thief(characterName: String,
@@ -127,7 +129,7 @@ private case class Thief(characterName: String,
                          statistics: Statistics,
                          specialMoves: Map[String, SpecialMove],
                          classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 2, 1, 0.5, 1, 1.5),
-                         role: String = "Thief")
+                         role: String = ThiefRepresentation)
     extends Character {}
 
 private case class Wizard(characterName: String,
@@ -135,7 +137,7 @@ private case class Wizard(characterName: String,
                           statistics: Statistics,
                           specialMoves: Map[String, SpecialMove],
                           classMultipliers: ClassMultipliers = ClassMultipliers(1, 1, 1.5, 2, 0.5, 1.5),
-                          role: String = "Wizard")
+                          role: String = WizardRepresentation)
     extends Character {}
 
 private case class Healer(characterName: String,
@@ -143,22 +145,27 @@ private case class Healer(characterName: String,
                           statistics: Statistics,
                           specialMoves: Map[String, SpecialMove],
                           classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 0.5, 1, 2, 1, 1.5),
-                          role: String = "Healer")
+                          role: String = HealerRepresentation)
     extends Character {}
 
 object Character {
 
-  def apply(characterClass: String,
+  val WarriorRepresentation: String = "Warrior"
+  val ThiefRepresentation: String = "Thief"
+  val WizardRepresentation: String = "Wizard"
+  val HealerRepresentation: String = "Healer"
+
+  def apply(role: String,
             name: String,
             owner: Option[String],
             statistics: Statistics,
             specialMoves: Map[String, SpecialMove]): Character =
-    characterClass match {
-      case "Warrior" => Warrior(name, owner, statistics, specialMoves)
-      case "Thief"   => Thief(name, owner, statistics, specialMoves)
-      case "Wizard"  => Wizard(name, owner, statistics, specialMoves)
-      case "Healer"  => Healer(name, owner, statistics, specialMoves)
-      case _         => throw new IllegalArgumentException(s"Unknown character role: $characterClass")
+    role match {
+      case WarriorRepresentation => Warrior(name, owner, statistics, specialMoves)
+      case ThiefRepresentation   => Thief(name, owner, statistics, specialMoves)
+      case WizardRepresentation  => Wizard(name, owner, statistics, specialMoves)
+      case HealerRepresentation  => Healer(name, owner, statistics, specialMoves)
+      case _                     => throw new IllegalArgumentException(s"Unknown character role: $role")
     }
 
 }

@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane prefHeight="420.0" prefWidth="960.0">
          <children>
@@ -86,7 +86,7 @@
                </cursor></ImageView>
             <Pane layoutX="349.0" layoutY="1.0" prefHeight="45.0" prefWidth="285.0">
                <children>
-                  <Label fx:id="Timer" layoutX="159.0" layoutY="-11.0" prefHeight="38.0" prefWidth="79.0" text="Time:">
+                  <Label fx:id="Timer" layoutX="159.0" prefHeight="45.0" prefWidth="79.0" text="Time:">
                      <effect>
                         <Bloom threshold="0.0">
                            <input>
@@ -102,7 +102,7 @@
                         <Font name="Javanese Text" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="Round" layoutY="-11.0" prefHeight="67.0" prefWidth="98.0" text="Round:" textFill="#030303">
+                  <Label fx:id="Round" prefHeight="45.0" prefWidth="98.0" text="Round:" textFill="#030303">
                      <font>
                         <Font name="Javanese Text" size="24.0" />
                      </font>
@@ -118,7 +118,7 @@
                         </Bloom>
                      </effect>
                   </Label>
-                  <Label fx:id="timerCounter" layoutX="238.0" layoutY="-11.0" prefHeight="38.0" prefWidth="50.0" text="60">
+                  <Label fx:id="timerCounter" layoutX="238.0" prefHeight="45.0" prefWidth="50.0" text="60">
                      <effect>
                         <Bloom threshold="0.56">
                            <input>
@@ -134,7 +134,7 @@
                         <Font name="Javanese Text" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="roundCounter" layoutX="98.0" layoutY="-11.0" maxHeight="1.7976931348623157E308" prefHeight="67.0" prefWidth="41.0" text="1">
+                  <Label fx:id="roundCounter" layoutX="98.0" maxHeight="1.7976931348623157E308" prefHeight="45.0" prefWidth="41.0" text="1">
                      <effect>
                         <Bloom threshold="0.56">
                            <input>

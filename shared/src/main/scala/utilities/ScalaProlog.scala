@@ -12,8 +12,7 @@ object ScalaProlog {
   implicit def termToList(term: Term): List[String] =
     term.toString.replace("'", "").replace("[", "").replace("]", "").split(",").filter(s => s != "").toList
 
-  /**
-    * Executes a Prolog query to obtain a specific character
+  /** Executes a Prolog query to obtain a specific character.
     *
     * @param characterName the character's name
     * @return the Character object
@@ -23,7 +22,7 @@ object ScalaProlog {
     val solveInfo = engine.solve(
       "character('" + characterName + "',CharacterClass,Strength,Agility,Spirit,Intelligence,Resistance,SpecialMoves).")
     Character(
-      characterClass = extractString(solveInfo, "CharacterClass"),
+      role = extractString(solveInfo, "CharacterClass"),
       owner = owner,
       name = characterName,
       statistics = Statistics(
@@ -44,8 +43,7 @@ object ScalaProlog {
     */
   def getCharacter(characterName: String): Character = getCharacter(characterName, None)
 
-  /**
-    * Executes a Prolog query to obtain a specific special move
+  /** Executes a Prolog query to obtain a specific special move.
     *
     * @param moveName the name of the move
     * @return the SpecialMove object
@@ -53,25 +51,28 @@ object ScalaProlog {
   def getSpecialMove(moveName: String): SpecialMove = {
     setNewTheory(moveContents)
     val solveInfo = engine.solve(
-      "spec_move('" + moveName + "',MoveEffectType,MoveType,BaseValue,AddModifiers,AddAlterations,RemoveAlterations,ManaCost,MaxTargets).")
+      "spec_move('" + moveName + "',MoveEffectStrategy,MoveType,BaseValue,AddModifiers,AddAlterations,RemoveAlterations,ManaCost,MaxTargets).")
     SpecialMove(
       name = moveName,
-      moveEffectType = extractString(solveInfo, "MoveEffectType"),
       moveType = MoveType(extractString(solveInfo, "MoveType")),
-      baseValue = extractInt(solveInfo, "BaseValue"),
-      addModifiers =
-        extractList(solveInfo, "AddModifiers").map(modifierName => modifierName -> getModifier(modifierName)).toMap,
-      addAlterations = extractList(solveInfo, "AddAlterations")
-        .map(alteration => Alteration(alteration) -> Alteration(alteration).turnDuration)
-        .toMap,
-      removeAlterations = extractList(solveInfo, "RemoveAlterations").map(alteration => Alteration(alteration)).toSet,
+      moveEffect = MoveEffectStrategies(
+        moveEffectStrategyCode = extractString(solveInfo, "MoveEffectStrategy"),
+        moveType = MoveType(extractString(solveInfo, "MoveType")),
+        baseValue = extractInt(solveInfo, "BaseValue")
+      )(
+        addModifiers =
+          extractList(solveInfo, "AddModifiers").map(modifierName => modifierName -> getModifier(modifierName)).toMap,
+        addAlterations = extractList(solveInfo, "AddAlterations")
+          .map(alteration => Alteration(alteration) -> Alteration(alteration).roundsDuration)
+          .toMap,
+        removeAlterations = extractList(solveInfo, "RemoveAlterations").map(alteration => Alteration(alteration)).toSet,
+      ),
       manaCost = extractInt(solveInfo, "ManaCost"),
       maxTargets = extractInt(solveInfo, "MaxTargets")
     )
   }
 
-  /**
-    * Executes a Prolog query to obtain a specific modifier
+  /** Executes a Prolog query to obtain a specific modifier.
     *
     * @param modifierName the modifier's name
     * @return the Modifier object
@@ -98,8 +99,7 @@ object ScalaProlog {
     def setNewTheory(clauses: String*): Unit =
       engine.setTheory(new Theory(clauses mkString " "))
 
-    /**
-      * Extracts an Int value from a Prolog solution
+    /** Extracts an Int value from a Prolog solution
       *
       * @param solveInfo the solution from a Prolog query
       * @param value the name of the value to extract
@@ -109,8 +109,7 @@ object ScalaProlog {
       solveInfo.getVarValue(value)
     }
 
-    /**
-      * Extracts a String from a Prolog solution
+    /** Extracts a String from a Prolog solution
       *
       * @param solveInfo the solution from a Prolog query
       * @param value the name of the value to extract
@@ -120,8 +119,7 @@ object ScalaProlog {
       solveInfo.getVarValue(value)
     }
 
-    /**
-      * Builds a Scala list of strings from a Prolog list
+    /** Builds a Scala list of strings from a Prolog list
       *
       * @param solveInfo the solution from a Prolog query
       * @param value the name of the value to extract
@@ -131,4 +129,5 @@ object ScalaProlog {
       solveInfo.getVarValue(value)
     }
   }
+
 }
