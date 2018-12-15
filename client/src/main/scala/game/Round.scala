@@ -10,11 +10,11 @@ object Round {
   var id: Int = 0
   var turns: List[Character] = List()
 
-  def startRound(): Unit = {
+  def startNewRound(): Unit = {
     RoundManager.startRoundRequest(
       Battle.playerId,
       Battle.teams
-        .filter(char => char.owner.get == Battle.playerId)
+        .filter(character => character.owner.get == Battle.playerId && character.status.healthPoints > 0)
         .map(character => character.characterName -> character.speed)
         .toMap,
       Battle.opponentId,
@@ -24,7 +24,7 @@ object Round {
   }
 
   def endRound(): Unit = {
-    startRound()
+    startNewRound()
   }
 
   def setupTurns(turnInformation: List[(String, String)], round: Int): Unit = {
@@ -39,9 +39,16 @@ object Round {
   }
 
   def startTurn(): Unit = {
-    BattleController.setActiveCharacter(turns.head)
+    val activeCharacter = turns.head
     turns = turns.tail
-    // ----------------------------------- applicare afflizioni
+    val newStatus = Status.afterTurnStart(activeCharacter.status)
+    if(activeCharacter.status.healthPoints > 0 && newStatus.healthPoints > 0){
+      activeCharacter.status = newStatus
+      BattleController.setActiveCharacter(activeCharacter)
+    } else {
+      //BattleController.characterDied(activeCharacter)
+      endTurn()
+    }
   }
 
   def endTurn(): Unit = {
