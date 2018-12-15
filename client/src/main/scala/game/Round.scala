@@ -42,11 +42,11 @@ object Round {
     val activeCharacter = turns.head
     turns = turns.tail
     val newStatus = Status.afterTurnStart(activeCharacter.status)
-    if(activeCharacter.status.healthPoints > 0 && newStatus.healthPoints > 0){
+    if (activeCharacter.status.healthPoints > 0 && newStatus.healthPoints > 0) {
       activeCharacter.status = newStatus
       BattleController.setActiveCharacter(activeCharacter)
     } else {
-      //BattleController.characterDied(activeCharacter)
+      // TODO BattleController.characterDied(activeCharacter)
       endTurn()
     }
   }
