@@ -4,6 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import com.spingo.op_rabbit._
 import com.spingo.op_rabbit.properties.ReplyTo
 import communication.MessageFormat.MyFormat
+import config.MessagingSettings
 
 /** Entry point of the service that handles the login for guests users.
   * @author Marco Canducci
@@ -13,7 +14,7 @@ object Main extends App {
   import communication._
 
   val rabbitControl = ActorSystem().actorOf(Props[RabbitControl])
-  implicit val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = Config.Requeue)
+  implicit val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = MessagingSettings.Requeue)
 
   implicit val requestFormat: MyFormat[StartRoundRequest] = MessageFormat.format[StartRoundRequest]
   implicit val responseFormat: MyFormat[StartRoundResponse] = MessageFormat.format[StartRoundResponse]
@@ -22,10 +23,11 @@ object Main extends App {
 
   var boh: Option[(Map[(String, String), Int], Int, String)] = None
 
-  val requestQueue = Queue(StartRoundRequestQueue, durable = Config.Durable, autoDelete = Config.AutoDelete)
+  val requestQueue =
+    Queue(StartRoundRequestQueue, durable = MessagingSettings.Durable, autoDelete = MessagingSettings.AutoDelete)
   Subscription.run(rabbitControl) {
     import com.spingo.op_rabbit.Directives._
-    channel(qos = Config.Qos) {
+    channel(qos = MessagingSettings.Qos) {
       consume(requestQueue) {
         (body(as[StartRoundRequest]) & optionalProperty(ReplyTo)) { (request, replyTo) =>
           {

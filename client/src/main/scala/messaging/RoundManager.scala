@@ -5,6 +5,7 @@ import com.spingo.op_rabbit._
 import com.spingo.op_rabbit.properties.ReplyTo
 import communication.MessageFormat.MyFormat
 import communication._
+import config.MessagingSettings
 import game.Round
 import javafx.application.Platform
 import javafx.scene.control.Alert
@@ -15,13 +16,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 object RoundManager {
   private val rabbitControl: ActorRef = ActorSystem().actorOf(Props[RabbitControl])
-  implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = Config.Requeue)
+  implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = MessagingSettings.Requeue)
 
   import Queues._
   private val startRoundRequestQueue =
-    Queue(StartRoundRequestQueue, durable = Config.Durable, autoDelete = Config.AutoDelete)
+    Queue(StartRoundRequestQueue, durable = MessagingSettings.Durable, autoDelete = MessagingSettings.AutoDelete)
   private val startRoundResponseQueue =
-    Queue(StartRoundResponseQueue, durable = Config.Durable, autoDelete = Config.AutoDelete)
+    Queue(StartRoundResponseQueue, durable = MessagingSettings.Durable, autoDelete = MessagingSettings.AutoDelete)
 
   implicit private val RequestFormat: MyFormat[StartRoundRequest] = MessageFormat.format[StartRoundRequest]
   implicit private val ResponseFormat: MyFormat[StartRoundResponse] = MessageFormat.format[StartRoundResponse]
@@ -30,7 +31,7 @@ object RoundManager {
 
   Subscription.run(rabbitControl) {
     import Directives._
-    channel(qos = Config.Qos) {
+    channel(qos = MessagingSettings.Qos) {
       consume(startRoundResponseQueue) {
         body(as[StartRoundResponse]) { response =>
           response.turnInformation match {

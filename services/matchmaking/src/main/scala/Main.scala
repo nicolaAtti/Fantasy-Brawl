@@ -5,6 +5,7 @@ import akka.actor.{ActorSystem, Props}
 import com.spingo.op_rabbit._
 import com.spingo.op_rabbit.properties.ReplyTo
 import communication.MessageFormat.MyFormat
+import config.MessagingSettings
 import matchmaking.MongoDbManager
 
 object Main extends App {
@@ -19,25 +20,29 @@ object Main extends App {
   import communication._
 
   val rabbitControl = ActorSystem().actorOf(Props[RabbitControl])
-  implicit val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = Config.Requeue)
+  implicit val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = MessagingSettings.Requeue)
 
   implicit val requestFormat: MyFormat[JoinCasualQueueRequest] = MessageFormat.format[JoinCasualQueueRequest]
   implicit val responseFormat: MyFormat[JoinCasualQueueResponse] = MessageFormat.format[JoinCasualQueueResponse]
 
   import Queues._
-  val requestQueue = Queue(JoinCasualMatchmakingRequestQueue, durable = Config.Durable, autoDelete = Config.AutoDelete)
+
+  val requestQueue = Queue(JoinCasualMatchmakingRequestQueue,
+                           durable = MessagingSettings.Durable,
+                           autoDelete = MessagingSettings.AutoDelete)
 
   val subscription = Subscription.run(rabbitControl) {
     import com.spingo.op_rabbit.Directives._
-    channel(qos = Config.Qos) {
+    channel(qos = MessagingSettings.Qos) {
       consume(requestQueue) {
         (body(as[JoinCasualQueueRequest]) & optionalProperty(ReplyTo)) { (request, replyTo) =>
           {
-            if (Config.ServicesLog) {
+            import config._
+            if (MiscSettings.ServicesLog) {
               println(LogMessage)
             }
             request.operation match {
-              case Config.MatchmakingAddKey =>
+              case MiscSettings.MatchmakingAddKey =>
                 MongoDbManager.getTicket.onComplete {
                   case Success(ticket: Int) =>
                     MongoDbManager.putPlayerInQueue(ticket, request.playerName, request.team, replyTo.get).onComplete {
@@ -63,7 +68,7 @@ object Main extends App {
                     }
                   case Failure(e) => println(s"$FailurePrint $e")
                 }
-              case Config.MatchmakingRemoveKey =>
+              case MiscSettings.MatchmakingRemoveKey =>
                 MongoDbManager.removePlayerFromQueue(request.playerName).onComplete {
                   case Success(_)         => println(ClientSuccessfullyRemovedPrint)
                   case Failure(exception) => println(s"$FailurePrint $exception")
