@@ -3,14 +3,19 @@ package model
 import org.scalatest.FunSuite
 
 class AlterationTest extends FunSuite {
+
+  val specialMelee = SpecialMove("SpecialMoveName", MoveType("Melee"), null, 0, 1)
+  val specialRanged = SpecialMove("SpecialMoveName", MoveType("Ranged"), null, 0, 1)
+  val specialSpell = SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)
+
+
   val stunned = Alteration("Stn")
   test("The stunned alteration should inhibit all moves") {
     assert(
       stunned.inhibits(PhysicalAttack) &&
-        stunned.inhibits(SpecialMove("SpecialMoveName", MoveType("Melee"), null, 0, 1)) &&
-        stunned.inhibits(SpecialMove("SpecialMoveName", MoveType("Melee"), null, 0, 1)) &&
-        stunned.inhibits(SpecialMove("SpecialMoveName", MoveType("Melee"), null, 0, 1)) &&
-        stunned.inhibits(SpecialMove("SpecialMoveName", MoveType("Melee"), null, 0, 1)))
+        stunned.inhibits(specialMelee) &&
+        stunned.inhibits(specialRanged) &&
+        stunned.inhibits(specialSpell))
   }
   test("The stunned alteration should last 1 round") {
     assert(stunned.roundsDuration == 1)
@@ -23,10 +28,9 @@ class AlterationTest extends FunSuite {
   test("The asleep alteration should inhibit all moves") {
     assert(
       asleep.inhibits(PhysicalAttack) &&
-        asleep.inhibits(SpecialMove("SpecialMoveName", MoveType("Melee"), null, 0, 1)) &&
-        asleep.inhibits(SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)) &&
-        asleep.inhibits(SpecialMove("SpecialMoveName", MoveType("Ranged"), null, 0, 1)) &&
-        asleep.inhibits(SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)))
+        asleep.inhibits(specialMelee) &&
+        asleep.inhibits(specialRanged) &&
+        asleep.inhibits(specialSpell))
   }
   test("The asleep alteration should last 3 rounds") {
     assert(asleep.roundsDuration == 3)
@@ -39,10 +43,9 @@ class AlterationTest extends FunSuite {
   test("The poisoned alteration should not inhibit any move") {
     assert(
       !poisoned.inhibits(PhysicalAttack) &&
-        !poisoned.inhibits(SpecialMove("SpecialMoveName", MoveType("Melee"), null, 0, 1)) &&
-        !poisoned.inhibits(SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)) &&
-        !poisoned.inhibits(SpecialMove("SpecialMoveName", MoveType("Ranged"), null, 0, 1)) &&
-        !poisoned.inhibits(SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)))
+        !poisoned.inhibits(specialMelee) &&
+        !poisoned.inhibits(specialRanged) &&
+        !poisoned.inhibits(specialSpell))
   }
   test("The poisoned alteration should last 3 rounds") {
     assert(poisoned.roundsDuration == 3)
@@ -55,10 +58,9 @@ class AlterationTest extends FunSuite {
   test("The regeneration alteration should not inhibit any move") {
     assert(
       !regeneration.inhibits(PhysicalAttack) &&
-        !regeneration.inhibits(SpecialMove("SpecialMoveName", MoveType("Melee"), null, 0, 1)) &&
-        !regeneration.inhibits(SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)) &&
-        !regeneration.inhibits(SpecialMove("SpecialMoveName", MoveType("Ranged"), null, 0, 1)) &&
-        !regeneration.inhibits(SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)))
+        !regeneration.inhibits(specialMelee) &&
+        !regeneration.inhibits(specialRanged) &&
+        !regeneration.inhibits(specialSpell))
   }
   test("The regeneration alteration should last 3 rounds") {
     assert(regeneration.roundsDuration == 2)
@@ -71,10 +73,9 @@ class AlterationTest extends FunSuite {
   test("The berserk alteration should inhibit all moves except the physical attack") {
     assert(
       !berserk.inhibits(PhysicalAttack) &&
-        berserk.inhibits(SpecialMove("SpecialMoveName", MoveType("Melee"), null, 0, 1)) &&
-        berserk.inhibits(SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)) &&
-        berserk.inhibits(SpecialMove("SpecialMoveName", MoveType("Ranged"), null, 0, 1)) &&
-        berserk.inhibits(SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)))
+        berserk.inhibits(specialMelee) &&
+        berserk.inhibits(specialRanged) &&
+        berserk.inhibits(specialSpell))
   }
   test("The berserk alteration should last 3 rounds") {
     assert(berserk.roundsDuration == 3)
@@ -87,10 +88,9 @@ class AlterationTest extends FunSuite {
   test("The silenced alteration should inhibit only spell moves") {
     assert(
       !silenced.inhibits(PhysicalAttack) &&
-        !silenced.inhibits(SpecialMove("SpecialMoveName", MoveType("Melee"), null, 0, 1)) &&
-        silenced.inhibits(SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)) &&
-        !silenced.inhibits(SpecialMove("SpecialMoveName", MoveType("Ranged"), null, 0, 1)) &&
-        silenced.inhibits(SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)))
+        !silenced.inhibits(specialMelee) &&
+        !silenced.inhibits(specialRanged) &&
+        silenced.inhibits(specialSpell))
   }
   test("The silenced alteration should last 2 rounds") {
     assert(silenced.roundsDuration == 2)
@@ -103,10 +103,9 @@ class AlterationTest extends FunSuite {
   test("The frozen alteration should inhibit only melee moves") {
     assert(
       frozen.inhibits(PhysicalAttack) &&
-        frozen.inhibits(SpecialMove("SpecialMoveName", MoveType("Melee"), null, 0, 1)) &&
-        !frozen.inhibits(SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)) &&
-        !frozen.inhibits(SpecialMove("SpecialMoveName", MoveType("Ranged"), null, 0, 1)) &&
-        !frozen.inhibits(SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)))
+        frozen.inhibits(specialMelee) &&
+        !frozen.inhibits(specialRanged) &&
+        !frozen.inhibits(specialSpell))
   }
   test("The frozen alteration should last 2 rounds") {
     assert(frozen.roundsDuration == 2)
@@ -119,10 +118,9 @@ class AlterationTest extends FunSuite {
   test("The blinded alteration should inhibit only ranged moves") {
     assert(
       !blinded.inhibits(PhysicalAttack) &&
-        !blinded.inhibits(SpecialMove("SpecialMoveName", MoveType("Melee"), null, 0, 1)) &&
-        !blinded.inhibits(SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)) &&
-        blinded.inhibits(SpecialMove("SpecialMoveName", MoveType("Ranged"), null, 0, 1)) &&
-        !blinded.inhibits(SpecialMove("SpecialMoveName", MoveType("Spell"), null, 0, 1)))
+        !blinded.inhibits(specialMelee) &&
+        blinded.inhibits(specialRanged) &&
+        !blinded.inhibits(specialSpell))
   }
   test("The blinded alteration should last 2 rounds") {
     assert(blinded.roundsDuration == 2)

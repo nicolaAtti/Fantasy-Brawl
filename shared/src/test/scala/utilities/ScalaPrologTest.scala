@@ -1,5 +1,6 @@
-package model
+package utilities
 
+import model.{Character, Modifier, SpecialMove}
 import org.scalatest.FunSuite
 import utilities.ScalaProlog._
 
