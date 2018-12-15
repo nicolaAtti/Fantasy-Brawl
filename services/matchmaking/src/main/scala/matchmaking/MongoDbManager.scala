@@ -10,7 +10,7 @@ import scala.concurrent.Future
 
 object MongoDbManager {
 
-  val mongoClient = MongoClient("mongodb://login-guest-service:pps-17-fb@ds039291.mlab.com:39291/heroku_3bppsqjk")
+  val mongoClient = MongoClient("mongodb://fantasy-brawl-service:pps-17-fb@ds039291.mlab.com:39291/heroku_3bppsqjk")
   val database: MongoDatabase = mongoClient.getDatabase("heroku_3bppsqjk")
   val queueCollection: MongoCollection[Document] = database.getCollection("casual-queue")
   val battleCollection: MongoCollection[Document] = database.getCollection("active-battles")
