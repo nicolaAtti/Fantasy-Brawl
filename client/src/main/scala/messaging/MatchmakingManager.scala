@@ -7,6 +7,7 @@ import communication._
 import MessageFormat.MyFormat
 import view._
 import ViewConfiguration.viewSelector._
+import config.MessagingSettings
 import game.Battle
 import javafx.application.Platform
 import javafx.scene.control.Alert
@@ -16,13 +17,17 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /** Manages casual matchmaking request and response messages. */
 object MatchmakingManager {
   private val rabbitControl: ActorRef = ActorSystem().actorOf(Props[RabbitControl])
-  implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = Config.Requeue)
+  implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = MessagingSettings.Requeue)
 
   import Queues._
   private val joinCasualMatchmakingRequestQueue =
-    Queue(JoinCasualMatchmakingRequestQueue, durable = Config.Durable, autoDelete = Config.AutoDelete)
+    Queue(JoinCasualMatchmakingRequestQueue,
+          durable = MessagingSettings.Durable,
+          autoDelete = MessagingSettings.AutoDelete)
   private val joinCasualMatchmakingResponseQueue =
-    Queue(JoinCasualMatchmakingResponseQueue, durable = Config.Durable, autoDelete = Config.AutoDelete)
+    Queue(JoinCasualMatchmakingResponseQueue,
+          durable = MessagingSettings.Durable,
+          autoDelete = MessagingSettings.AutoDelete)
 
   implicit private val RequestFormat: MyFormat[JoinCasualQueueRequest] = MessageFormat.format[JoinCasualQueueRequest]
   implicit private val ResponseFormat: MyFormat[JoinCasualQueueResponse] = MessageFormat.format[JoinCasualQueueResponse]
@@ -35,7 +40,7 @@ object MatchmakingManager {
   /** Manages casual matchmaking response messages. */
   Subscription.run(rabbitControl) {
     import Directives._
-    channel(qos = Config.Qos) {
+    channel(qos = MessagingSettings.Qos) {
       consume(joinCasualMatchmakingResponseQueue) {
         body(as[JoinCasualQueueResponse]) { response =>
           response.opponentData match {
@@ -65,7 +70,7 @@ object MatchmakingManager {
   def joinCasualQueueRequest(playerName: String, team: Set[String]): Unit = {
     myName = playerName
     myTeam = team
-    rabbitControl ! Message(JoinCasualQueueRequest(playerName, myTeam, Config.MatchmakingAddKey),
+    rabbitControl ! Message(JoinCasualQueueRequest(playerName, myTeam, config.MiscSettings.MatchmakingAddKey),
                             publisher,
                             Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
   }
@@ -76,8 +81,10 @@ object MatchmakingManager {
     * @param playerName username of the player that wants to be removed
     */
   def leaveCasualQueueRequest(playerName: String): Unit = {
-    rabbitControl ! Message(JoinCasualQueueRequest(playerName, Set(), Config.MatchmakingRemoveKey),
-                            publisher,
-                            Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
+    rabbitControl ! Message(
+      JoinCasualQueueRequest(playerName, Set(), config.MiscSettings.MatchmakingRemoveKey),
+      publisher,
+      Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName))
+    )
   }
 }

@@ -3,7 +3,7 @@ package controller
 import java.net.URL
 import java.util.ResourceBundle
 
-import communication.Config
+import config.MessagingSettings
 import game.{Battle, Round}
 import javafx.animation.{KeyFrame, Timeline}
 import javafx.collections.{FXCollections, ObservableList}
@@ -70,7 +70,7 @@ object BattleController extends Initializable with ViewController {
   var activeCharacter: Character = _
   var activeLabel: Label = _
   val timeline: Timeline = new Timeline()
-  var timeSeconds: Int = Config.TurnDurationInSeconds
+  var timeSeconds: Int = config.MiscSettings.TurnDurationInSeconds
 
   /** Initializes the elements composing the Battle GUI
     *
@@ -86,7 +86,7 @@ object BattleController extends Initializable with ViewController {
 
     setBattlefield()
 
-    timeline.setCycleCount(Config.TurnDurationInSeconds)
+    timeline.setCycleCount(config.MiscSettings.TurnDurationInSeconds)
     timeline.getKeyFrames.add(
       new KeyFrame(
         Duration.seconds(1),
@@ -195,7 +195,7 @@ object BattleController extends Initializable with ViewController {
 
   /** Resets the turn timer */
   def newTurn(): Unit = {
-    timeSeconds = Config.TurnDurationInSeconds
+    timeSeconds = config.MiscSettings.TurnDurationInSeconds
     timerCounter.setText(timeSeconds.toString)
     timeline.playFromStart()
   }

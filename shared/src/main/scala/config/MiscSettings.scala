@@ -1,10 +1,6 @@
-package communication
+package config
 
-object Config {
-  val Qos: Int = 1
-  val Requeue: Boolean = false
-  val Durable: Boolean = false
-  val AutoDelete: Boolean = true
+object MiscSettings {
 
   val ServicesLog: Boolean = true
 
@@ -14,4 +10,5 @@ object Config {
   val GuestName: String = "guest#"
 
   val TurnDurationInSeconds: Int = 60
+
 }
