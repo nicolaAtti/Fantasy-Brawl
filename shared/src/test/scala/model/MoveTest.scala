@@ -13,6 +13,7 @@ class MoveTest extends FunSuite {
   val multiModifierMove = getSpecialMove("Bolster Faith")
   val multiTargetMove = getSpecialMove("Flamestrike")
   val percentageMove = getSpecialMove("Chrono Shift")
+  val percentageHeal = getSpecialMove("Second Wind")
 
   val stunned = Alteration("Stn")
   val frozen = Alteration("Frz")
@@ -205,8 +206,15 @@ class MoveTest extends FunSuite {
     val newStatuses = Move.makeMove(percentageMove,wizardCharacter,Set(userCharacter,targetCharacter,healerCharacter,anotherCharacter))
     assert(newStatuses(userCharacter).healthPoints == 459 &&
             newStatuses(targetCharacter).healthPoints == 629 &&
-            newStatuses(healerCharacter).healthPoints == 345 &&
-            newStatuses(anotherCharacter).healthPoints == 345)
+            newStatuses(healerCharacter).healthPoints == 344 &&
+            newStatuses(anotherCharacter).healthPoints == 344)
+  }
+  test("A special move that heals for a percentage of the current health should heal for the correct amount"){
+    val userCharacter = getCharacter("Jacob")
+    val damagedStatus = Status(50, 100, 300, 100, Map(), Map())
+    userCharacter.status = damagedStatus
+    val newStatuses = Move.makeMove(percentageHeal,userCharacter,Set(userCharacter))
+    assert(newStatuses(userCharacter).healthPoints == 87)
   }
 
 }
