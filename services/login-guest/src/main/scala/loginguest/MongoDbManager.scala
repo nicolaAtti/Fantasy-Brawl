@@ -16,7 +16,7 @@ object MongoDbManager {
 
   import config.DbNaming._
   val database = MongoClient(ClientName).getDatabase(DatabaseName)
-  val collection = database.getCollection("counters")
+  val collection = database.getCollection(Login.CollectionName)
 
   /** Atomically returns and updates (increasing it by one) the guests counter.
     *
