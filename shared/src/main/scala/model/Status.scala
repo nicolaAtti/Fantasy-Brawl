@@ -74,15 +74,15 @@ object Status {
       * @param status the status of a character before the countdown
       * @return the new status after the countdown
       */
-    def afterTick(status: Status): Status =
-      status.copy(
-        modifiers = status.modifiers
-          .mapValues(v => v.copy(remainingRounds = v.remainingRounds - 1))
-          .filter { case (_, modifier) => modifier.remainingRounds > 0 },
-        alterations = status.alterations
-          .mapValues(v => v - 1)
-          .filter { case (_, countDown) => countDown > 0 }
-      )
+    def afterTick(status: Status): Status = {
+      val updatedModifiers = for ((id, modifier) <- status.modifiers if modifier.remainingRounds > 1)
+        yield (id, modifier.copy(remainingRounds = modifier.remainingRounds - 1))
+
+      val updatedAlterations = for ((alteration, countDown) <- status.alterations if countDown > 1)
+        yield (alteration, countDown - 1)
+
+      status.copy(modifiers = updatedModifiers, alterations = updatedAlterations)
+    }
   }
 
 }
