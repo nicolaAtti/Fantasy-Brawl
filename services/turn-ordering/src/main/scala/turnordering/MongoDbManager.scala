@@ -58,14 +58,12 @@ object MongoDbManager {
 
     def playerInfoToDocument(playerInfo: PlayerInfo): Document = ???
 
-
   }
 
 }
 
 object ManagerTesting extends App {
   import MongoDbManager._
-
 
   getCurrentRound(battleId = "1-2").onComplete {
     case Success(round) => println("Success: " + round)
@@ -74,9 +72,9 @@ object ManagerTesting extends App {
 
   Thread.sleep(3000)
 
-  incrementCurrentRound(battleId = "1-2").onComplete{
+  incrementCurrentRound(battleId = "1-2").onComplete {
     case Success(success) => println("Success: " + success)
-    case Failure(e)     => println(s"Failure: $e")
+    case Failure(e)       => println(s"Failure: $e")
   }
 
   Thread.sleep(3000)
