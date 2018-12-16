@@ -243,11 +243,11 @@ object BattleController extends Initializable with ViewController {
       * @param character the character who's turn is
       */
     def setupCharacterMoves(character: Character): Unit = {
-      moveList = FXCollections.observableArrayList()
       moveList.add(PhysicalAttackRepresentation)
       character.specialMoves.foreach(move =>
         moveList.add(move._1 + MovesSeparator + "MP: " + move._2.manaCost + " Max targets: " + move._2.maxTargets))
       moveListView.setItems(moveList)
+      moveListView.getSelectionModel.selectFirst()
     }
 
     def setTargets(imagePressed: ImageView, character: Character): Unit = {
@@ -327,6 +327,9 @@ object BattleController extends Initializable with ViewController {
     targets = ListBuffer()
     targetImages.foreach(target => setCharacterUnselected(target))
     targetImages = ListBuffer()
+    moveList = FXCollections.observableArrayList()
+    moveListView.setItems(moveList)
+    actButton.setDisable(true)
 
     //Move.makeMove(activeCharacter.specialMoves(moveListView.getSelectionModel.getSelectedItem),activeCharacter,)
     //Compute the move and then send the new status message
