@@ -36,7 +36,8 @@ object DbNaming {
     val PlayerName = "player_id"
     val BattleId = "battle_id"
     val Round = "round_id"
-    val TeamSpeeds = "team_speeds"
+    val TeamNames = "team_names"
+    val TeamSpeedValues = "team_speed_values"
     val ReplyTo = "reply_to_queue"
   }
 
