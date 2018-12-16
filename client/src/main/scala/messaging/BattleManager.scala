@@ -32,6 +32,7 @@ object BattleManager {
           (response.round, response.turn) match {
             case (round, turn) if round == Round.id && turn == Round.turns.head =>
               Round.updateTeamsStatuses(response.newStatuses)
+              Round.endTurn()
             case _ => Unit
           }
           ack
