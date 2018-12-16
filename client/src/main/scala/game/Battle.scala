@@ -13,7 +13,10 @@ object Battle extends App {
 
   import BattleHelper._
 
-  def start(player: (String, Set[String]), opponent: (String, Set[String]), battleQueue: String, battleId: String): Unit = {
+  def start(player: (String, Set[String]),
+            opponent: (String, Set[String]),
+            battleQueue: String,
+            battleId: String): Unit = {
     id = battleId
     playerId = player._1
     opponentId = opponent._1
