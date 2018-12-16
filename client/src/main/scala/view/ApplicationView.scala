@@ -72,6 +72,7 @@ object ApplicationView {
     val img = new ImageView(MovesManualViewBackgroundImage)
     img.fitWidthProperty().bind(stage.widthProperty())
     root.setContent(img)
+    root.toBack()
     stage setScene new Scene(root)
     stage.show()
   }
