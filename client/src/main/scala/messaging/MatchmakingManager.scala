@@ -44,7 +44,8 @@ object MatchmakingManager {
       consume(joinCasualMatchmakingResponseQueue) {
         body(as[JoinCasualQueueResponse]) { response =>
           response.opponentData match {
-            case Right((opponentName, opponentTeam, battleId)) =>
+            case Right((opponentName, opponentTeam, opponentQueue, battleId)) =>
+              // TODO set opponentQueue to BattleManager
               Battle.start((myName, myTeam), (opponentName, opponentTeam), battleId)
             case Left(details) =>
               Platform runLater (() => {
