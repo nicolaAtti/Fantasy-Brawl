@@ -1,9 +1,9 @@
 package loginguest
 
-import org.mongodb.scala.bson.conversions.Bson
-import org.mongodb.scala.{Document, MongoClient, MongoCollection, MongoDatabase}
+import org.mongodb.scala.{MongoClient}
 import org.mongodb.scala.model.Filters
 import org.mongodb.scala.model.Updates.inc
+import org.mongodb.scala.bson.conversions.Bson
 
 import scala.concurrent.Future
 
