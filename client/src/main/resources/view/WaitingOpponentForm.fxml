@@ -9,9 +9,9 @@
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ProgressIndicator />
-      <Label alignment="CENTER" prefHeight="40.0" prefWidth="341.0" text="WAITING FOR AN OPPONENT">
+      <Label alignment="CENTER" prefHeight="82.0" prefWidth="500.0" text="WAITING FOR AN OPPONENT">
          <font>
-            <Font size="14.0" />
+            <Font name="Javanese Text" size="22.0" />
          </font>
          <padding>
             <Insets top="20.0" />
@@ -20,5 +20,12 @@
             <Insets />
          </VBox.margin>
       </Label>
+      <Label alignment="CENTER" prefHeight="40.0" prefWidth="616.0" text="Tip : Trouble with selecting your targets in battle? Try by clicking on their image." textAlignment="CENTER">
+         <font>
+            <Font name="Javanese Text" size="14.0" />
+         </font></Label>
    </children>
+   <padding>
+      <Insets top="50.0" />
+   </padding>
 </VBox>
