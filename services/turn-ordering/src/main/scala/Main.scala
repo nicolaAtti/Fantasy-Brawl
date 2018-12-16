@@ -40,7 +40,8 @@ object Main extends App {
             }
             getCurrentRound(request.battleId).onComplete {
               case Success(round: Int) if request.round > round =>
-                val player = PlayerInfo(request.playerName, request.playerTeamSpeeds, request.battleId, request.round, replyTo.get)
+                val player =
+                  PlayerInfo(request.playerName, request.playerTeamSpeeds, request.battleId, request.round, replyTo.get)
                 addPlayerInfo(player).onComplete {
                   case Success(_) =>
                     getPlayerInfo(request.opponentName, request.battleId, request.round).onComplete {
