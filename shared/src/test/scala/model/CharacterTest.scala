@@ -73,4 +73,10 @@ class CharacterTest extends FunSuite {
         annabelle.status.maxHealthPoints == 405 &&
         annabelle.physicalDefence == 27)
   }
+  test("A character whose hit points are more than zero should be considered alive"){
+    assert(jacob.isAlive)
+    val status = Status(0,50,200,100,Map(),Map())
+    jacob.status = status
+    assert(!jacob.isAlive)
+  }
 }
