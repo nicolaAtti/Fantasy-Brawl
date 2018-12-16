@@ -1,14 +1,15 @@
 package turnordering
 
 import org.mongodb.scala.result.DeleteResult
-import org.mongodb.scala.{Completed, MongoClient, MongoDatabase}
+import org.mongodb.scala.{Completed, Document, MongoClient, MongoCollection, MongoDatabase}
 
 import scala.concurrent.Future
 
 object MongoDbManager {
 
-  import config._
-  val database: MongoDatabase = MongoClient(DbSettings.MongoClientStr).getDatabase(DbSettings.MongoDatabaseStr)
+  import config.DbNaming._
+  val database: MongoDatabase = MongoClient(ClientName).getDatabase(DatabaseName)
+  val battlesCollection = database.getCollection(ActiveBattles.CollectionName)
 
   def getCurrentRound(battleId: String): Future[Int] = ???
 
