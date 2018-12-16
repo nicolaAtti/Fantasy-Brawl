@@ -25,15 +25,6 @@ object Round {
     )
   }
 
-  def endRound(): Unit = {
-    if (!Battle.teams.exists(character => character.owner.get == Battle.playerId && character.isAlive))
-      Battle.end(Battle.opponentId)
-    else if (!Battle.teams.exists(character => character.owner.get == Battle.opponentId && character.isAlive))
-      Battle.end(Battle.playerId)
-    else
-      startNewRound()
-  }
-
   def setupTurns(turnInformation: List[(String, String)], round: Int): Unit = {
     id = round
     turns = turnInformation.map {
@@ -56,12 +47,21 @@ object Round {
   }
 
   def endTurn(): Unit = {
-    turns = turns.tail
     BattleController.updateStatus()
-    if (turns.nonEmpty)
-      startTurn()
-    else
-      endRound()
+    val playerLost = !Battle.teams.exists(character => character.owner.get == Battle.playerId && character.isAlive)
+    val opponentLost = !Battle.teams.exists(character => character.owner.get == Battle.opponentId && character.isAlive)
+    (playerLost, opponentLost) match {
+      case (true, true) if turns.head.owner.get == Battle.playerId   => Battle.end(Battle.playerId)
+      case (true, true) if turns.head.owner.get == Battle.opponentId => Battle.end(Battle.opponentId)
+      case (true, _)                                                 => Battle.end(Battle.opponentId)
+      case (_, true)                                                 => Battle.end(Battle.playerId)
+      case _ =>
+        turns = turns.tail
+        if (turns.nonEmpty)
+          startTurn()
+        else
+          startNewRound()
+    }
   }
 
   def actCalculation(moveName: String, targets: List[Character]): Unit = {
