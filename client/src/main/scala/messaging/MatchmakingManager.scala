@@ -71,7 +71,7 @@ object MatchmakingManager {
     myName = playerName
     myTeam = team
     rabbitControl ! Message(
-      JoinCasualQueueRequest(playerName, myTeam, config.MiscSettings.MatchmakingAddKey, Battle.playerQueue),
+      JoinCasualQueueRequest(playerName, myTeam, config.MiscSettings.MatchmakingAddKey, Queues.BattleQueue),
       publisher,
       Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName))
     )
@@ -84,7 +84,7 @@ object MatchmakingManager {
     */
   def leaveCasualQueueRequest(playerName: String): Unit = {
     rabbitControl ! Message(
-      JoinCasualQueueRequest(playerName, Set(), config.MiscSettings.MatchmakingRemoveKey, Battle.playerQueue),
+      JoinCasualQueueRequest(playerName, Set(), config.MiscSettings.MatchmakingRemoveKey, Queues.BattleQueue),
       publisher,
       Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName))
     )

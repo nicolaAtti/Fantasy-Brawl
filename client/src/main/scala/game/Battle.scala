@@ -8,7 +8,6 @@ object Battle extends App {
   var id: String = _
   var playerId: String = _
   var opponentId: String = _
-  var playerQueue: String = communication.Queues.BattleQueue
   var opponentQueue: String = _
 
   import BattleHelper._
