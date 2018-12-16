@@ -27,9 +27,9 @@ object BattleController extends Initializable with ViewController {
 
   val controller: ViewController = this
 
-  final val TargetedEffect: DropShadow = new DropShadow(0,0,0,Color.BLUE)
-  final val ActivePlayerEffect: DropShadow = new DropShadow(0,0,0,Color.GREEN)
-  final val ActiveOpponentEffect: DropShadow = new DropShadow(0,0,0,Color.RED)
+  final val TargetedEffect: DropShadow = new DropShadow(0, 0, 0, Color.BLUE)
+  final val ActivePlayerEffect: DropShadow = new DropShadow(0, 0, 0, Color.GREEN)
+  final val ActiveOpponentEffect: DropShadow = new DropShadow(0, 0, 0, Color.RED)
 
   @FXML var playerCharNames: VBox = _
   @FXML var playerHps: VBox = _
@@ -172,7 +172,7 @@ object BattleController extends Initializable with ViewController {
     * the character, the GUI will show his move list.
     */
   def setActiveCharacter(character: Character): Unit = {
-    if(activeLabel != null){
+    if (activeLabel != null) {
       activeLabel.setTextFill(Color.WHITE)
       activeImage.setEffect(null)
     }
