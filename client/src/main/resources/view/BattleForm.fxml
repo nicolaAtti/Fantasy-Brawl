@@ -21,7 +21,7 @@
    <children>
       <Pane prefHeight="420.0" prefWidth="960.0">
          <children>
-            <ImageView fitHeight="389.0" fitWidth="960.0" layoutY="-3.0" pickOnBounds="true" smooth="false">
+            <ImageView fitHeight="384.0" fitWidth="960.0" layoutY="-3.0" pickOnBounds="true" smooth="false">
                <image>
                   <Image url="@Backdrop1.png" />
                </image>
@@ -353,14 +353,14 @@
                   </Pane>
                   <Pane layoutX="310.0" prefHeight="150.0" prefWidth="325.0">
                      <children>
-                        <Button fx:id="actButton" disable="true" layoutX="255.0" mnemonicParsing="false" onMouseClicked="#handleActButtonPress" prefHeight="58.0" prefWidth="67.0" text="Act">
+                        <Button fx:id="actButton" disable="true" layoutX="255.0" layoutY="-7.0" mnemonicParsing="false" onMouseClicked="#handleActButtonPress" prefHeight="58.0" prefWidth="67.0" text="Act">
                            <font>
                               <Font name="Eras Demi ITC" size="13.0" />
                            </font></Button>
-                        <ListView fx:id="moveListView" layoutX="2.0" onMouseClicked="#handleMoveSelection" pickOnBounds="false" prefHeight="119.0" prefWidth="251.0" style="-fx-font-size: 0.85em;" />
-                        <Separator layoutX="318.0" orientation="VERTICAL" prefHeight="150.0" prefWidth="15.0" />
-                        <Separator layoutX="-7.0" orientation="VERTICAL" prefHeight="150.0" prefWidth="15.0" />
-                        <Button fx:id="movesManual" alignment="CENTER" layoutX="255.0" layoutY="61.0" mnemonicParsing="false" onAction="#movesManualPressed" onMouseClicked="#handleActButtonPress" prefHeight="58.0" prefWidth="67.0" text="Moves manual" textAlignment="CENTER" wrapText="true">
+                        <ListView fx:id="moveListView" layoutX="2.0" layoutY="-7.0" onMouseClicked="#handleMoveSelection" pickOnBounds="false" prefHeight="119.0" prefWidth="251.0" style="-fx-font-size: 0.85em;" />
+                        <Separator layoutX="318.0" layoutY="-8.0" orientation="VERTICAL" prefHeight="158.0" prefWidth="15.0" />
+                        <Separator layoutX="-7.0" layoutY="-8.0" orientation="VERTICAL" prefHeight="158.0" prefWidth="15.0" />
+                        <Button fx:id="movesManual" alignment="CENTER" layoutX="255.0" layoutY="54.0" mnemonicParsing="false" onAction="#movesManualPressed" onMouseClicked="#handleActButtonPress" prefHeight="58.0" prefWidth="67.0" text="Moves manual" textAlignment="CENTER" wrapText="true">
                            <font>
                               <Font name="Eras Demi ITC" size="13.0" />
                            </font>

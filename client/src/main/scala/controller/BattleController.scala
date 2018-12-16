@@ -243,6 +243,7 @@ object BattleController extends Initializable with ViewController {
       * @param character the character who's turn is
       */
     def setupCharacterMoves(character: Character): Unit = {
+      moveList = FXCollections.observableArrayList()
       moveList.add(PhysicalAttackRepresentation)
       character.specialMoves.foreach(move =>
         moveList.add(move._1 + MovesSeparator + "MP: " + move._2.manaCost + " Max targets: " + move._2.maxTargets))
