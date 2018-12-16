@@ -20,6 +20,7 @@ object DbNaming {
 
     val PlayerName = "player_name"
     val TeamMembers = "team_members"
+    val BattleQueue = "battle-queue"
     val ReplyTo = "reply_to"
   }
 
@@ -31,6 +32,12 @@ object DbNaming {
 
   object TurnOrdering {
     val CollectionName = "turn_ordering_requests"
+
+    val PlayerName = "player_id"
+    val BattleId = "battle_id"
+    val Round = "round_id"
+    val TeamSpeeds = "team_speeds"
+    val ReplyTo = "reply_to_queue"
   }
 
 }

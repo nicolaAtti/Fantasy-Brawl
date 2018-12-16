@@ -10,4 +10,6 @@ object Queues {
   val JoinCasualMatchmakingResponseQueue: String = uuid
   val StartRoundRequestQueue: String = "start-round-request"
   val StartRoundResponseQueue: String = uuid
+  val BattleQueue: String = uuid
+
 }
