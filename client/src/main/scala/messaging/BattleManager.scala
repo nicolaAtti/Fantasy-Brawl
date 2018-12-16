@@ -31,8 +31,7 @@ object BattleManager {
         body(as[StatusUpdateMessage]) { response =>
           (response.round, response.turn) match {
             case (round, turn) if round == Round.id && turn == Round.turns.head =>
-              Battle.teams.foreach(character =>
-                if (response.newStatus.contains(character)) character.status = response.newStatus(character))
+              Round.updateTeamsStatuses(response.newStatuses)
             case _ => Unit
           }
           ack

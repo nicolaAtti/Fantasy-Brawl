@@ -1,7 +1,8 @@
 package game
 
 import controller.BattleController
-import messaging.RoundManager
+import messaging.{BattleManager, RoundManager}
+import model.Move.NewStatuses
 import model._
 import view.ApplicationView
 import view.ViewConfiguration.viewSelector._
@@ -70,9 +71,12 @@ object Round {
       newStatuses = Move.makeMove(PhysicalAttack, activeCharacter, targets.toSet)
     else
       newStatuses = Move.makeMove(activeCharacter.specialMoves(moveName), activeCharacter, targets.toSet)
-
-    // TODO update status
-
+    updateTeamsStatuses(newStatuses)
+    BattleManager.updateOpponentStatus(newStatuses, id, activeCharacter)
     endTurn()
+  }
+
+  def updateTeamsStatuses(newStatuses: NewStatuses): Unit = {
+    Battle.teams.foreach(character => if (newStatuses.contains(character)) character.status = newStatuses(character))
   }
 }
