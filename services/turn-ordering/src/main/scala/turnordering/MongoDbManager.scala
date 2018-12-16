@@ -132,7 +132,7 @@ object MongoDbManager {
         replyTo = document(TurnOrdering.ReplyTo).asString.getValue
       )
     }
-    
+
   }
 }
 
