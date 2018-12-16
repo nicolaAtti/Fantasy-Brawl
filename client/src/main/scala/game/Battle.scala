@@ -16,7 +16,11 @@ object Battle extends App {
     opponentId = opponent._1
     teams = setupTeam(player, opponent)
     id = battleId
-    Round.startRound()
+    Round.startNewRound()
+  }
+
+  def end(winner: String): Unit = {
+    // TODO set the winner
   }
 
   private object BattleHelper {

@@ -3,7 +3,6 @@ package controller
 import java.net.URL
 import java.util.ResourceBundle
 
-import config.MessagingSettings
 import game.{Battle, Round}
 import javafx.animation.{KeyFrame, Timeline}
 import javafx.collections.{FXCollections, ObservableList}

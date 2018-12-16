@@ -9,12 +9,13 @@ import view.ViewConfiguration.viewSelector._
 object Round {
   var id: Int = 0
   var turns: List[Character] = List()
+  val PhysicalAttackRepresentation: String = "Physical Attack"
 
-  def startRound(): Unit = {
+  def startNewRound(): Unit = {
     RoundManager.startRoundRequest(
       Battle.playerId,
       Battle.teams
-        .filter(char => char.owner.get == Battle.playerId)
+        .filter(character => character.owner.get == Battle.playerId && character.isAlive)
         .map(character => character.characterName -> character.speed)
         .toMap,
       Battle.opponentId,
@@ -24,7 +25,12 @@ object Round {
   }
 
   def endRound(): Unit = {
-    startRound()
+    if (!Battle.teams.exists(character => character.owner.get == Battle.playerId && character.isAlive))
+      Battle.end(Battle.opponentId)
+    else if (!Battle.teams.exists(character => character.owner.get == Battle.opponentId && character.isAlive))
+      Battle.end(Battle.playerId)
+    else
+      startNewRound()
   }
 
   def setupTurns(turnInformation: List[(String, String)], round: Int): Unit = {
@@ -39,15 +45,34 @@ object Round {
   }
 
   def startTurn(): Unit = {
-    BattleController.setActiveCharacter(turns.head)
-    turns = turns.tail
-    // ----------------------------------- applicare afflizioni
+    val activeCharacter = turns.head
+    if (activeCharacter.isAlive) {
+      activeCharacter.status = Status.afterTurnStart(activeCharacter.status)
+      BattleController.setActiveCharacter(activeCharacter)
+    } else {
+      endTurn()
+    }
   }
 
   def endTurn(): Unit = {
+    turns = turns.tail
+    BattleController.updateStatus()
     if (turns.nonEmpty)
       startTurn()
     else
       endRound()
+  }
+
+  def actCalculation(moveName: String, targets: List[Character]): Unit = {
+    val activeCharacter = turns.head
+    var newStatuses: Move.NewStatuses = Map()
+    if (moveName == PhysicalAttackRepresentation)
+      newStatuses = Move.makeMove(PhysicalAttack, activeCharacter, targets.toSet)
+    else
+      newStatuses = Move.makeMove(activeCharacter.specialMoves(moveName), activeCharacter, targets.toSet)
+
+    // TODO update status
+
+    endTurn()
   }
 }
