@@ -1,5 +1,6 @@
 package game
 
+import controller.BattleController
 import model._
 import utilities.ScalaProlog._
 
@@ -25,7 +26,7 @@ object Battle extends App {
   }
 
   def end(winner: String): Unit = {
-    // TODO set the winner
+    BattleController.settingWinner(winner)
   }
 
   private object BattleHelper {

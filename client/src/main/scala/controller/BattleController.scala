@@ -9,7 +9,7 @@ import javafx.collections.{FXCollections, ObservableList}
 import javafx.event.ActionEvent
 import javafx.fxml.{FXML, Initializable}
 import javafx.scene.control.{Button, Label, ListView}
-import javafx.scene.effect.InnerShadow
+import javafx.scene.effect.DropShadow
 import javafx.scene.image.{Image, ImageView}
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.VBox
@@ -27,7 +27,9 @@ object BattleController extends Initializable with ViewController {
 
   val controller: ViewController = this
 
-  final val TargetedEffect: InnerShadow = new InnerShadow(14.5, Color.BLUE)
+  final val TargetedEffect: DropShadow = new DropShadow(0,0,0,Color.BLUE)
+  final val ActivePlayerEffect: DropShadow = new DropShadow(0,0,0,Color.GREEN)
+  final val ActiveOpponentEffect: DropShadow = new DropShadow(0,0,0,Color.RED)
 
   @FXML var playerCharNames: VBox = _
   @FXML var playerHps: VBox = _
@@ -56,6 +58,8 @@ object BattleController extends Initializable with ViewController {
 
   @FXML var actButton: Button = _
 
+  @FXML var winnerLabel: Label = _
+
   var playerImages: List[ImageView] = List()
   var opponentImages: List[ImageView] = List()
 
@@ -68,6 +72,7 @@ object BattleController extends Initializable with ViewController {
   var moveList: ObservableList[String] = FXCollections.observableArrayList()
   var activeCharacter: Character = _
   var activeLabel: Label = _
+  var activeImage: ImageView = _
   val timeline: Timeline = new Timeline()
   var timeSeconds: Int = config.MiscSettings.TurnDurationInSeconds
 
@@ -77,8 +82,12 @@ object BattleController extends Initializable with ViewController {
     * @param resources
     */
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
-    TargetedEffect.setHeight(30)
-    TargetedEffect.setWidth(30)
+    TargetedEffect.setHeight(10)
+    TargetedEffect.setWidth(10)
+    ActivePlayerEffect.setHeight(10)
+    ActivePlayerEffect.setWidth(10)
+    ActiveOpponentEffect.setHeight(10)
+    ActiveOpponentEffect.setWidth(10)
 
     playerImages = List(playerChar1Image, playerChar2Image, playerChar3Image, playerChar4Image)
     opponentImages = List(opponentChar1Image, opponentChar2Image, opponentChar3Image, opponentChar4Image)
@@ -104,6 +113,11 @@ object BattleController extends Initializable with ViewController {
   /** Setups the GUI for both teams */
   def setBattlefield(): Unit = {
     setupTeams(Battle.teams)
+  }
+
+  def settingWinner(winner: String): Unit = {
+    winnerLabel.setText("WINNER IS " + winner.toUpperCase)
+    winnerLabel.setVisible(true)
   }
 
   /** Sets the player's team images and status description labels
@@ -158,6 +172,10 @@ object BattleController extends Initializable with ViewController {
     * the character, the GUI will show his move list.
     */
   def setActiveCharacter(character: Character): Unit = {
+    if(activeLabel != null){
+      activeLabel.setTextFill(Color.WHITE)
+      activeImage.setEffect(null)
+    }
     activeCharacter = character
     if (activeCharacter.owner.get == Battle.playerId) {
       activeLabel = playerCharNames.getChildren.toArray
@@ -165,6 +183,8 @@ object BattleController extends Initializable with ViewController {
         .head
         .asInstanceOf[Label]
       activeLabel.setTextFill(Color.GREEN)
+      activeImage = playerCharacterImages.find(char => char._2 == activeCharacter).get._1
+      activeImage.setEffect(ActivePlayerEffect)
       setupCharacterMoves(activeCharacter)
     } else {
       activeLabel = opponentCharNames.getChildren.toArray
@@ -172,7 +192,10 @@ object BattleController extends Initializable with ViewController {
         .head
         .asInstanceOf[Label]
       activeLabel.setTextFill(Color.RED)
+      activeImage = opponentCharacterImages.find(char => char._2 == activeCharacter).get._1
+      activeImage.setEffect(ActiveOpponentEffect)
     }
+    newTurn()
   }
 
   /** Handles the press of the act button
