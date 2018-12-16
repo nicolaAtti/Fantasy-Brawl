@@ -4,60 +4,31 @@ import org.mongodb.scala.bson.BsonValue
 import org.mongodb.scala.model.Filters
 import org.mongodb.scala.model.Updates.inc
 import org.mongodb.scala.result.DeleteResult
-import org.mongodb.scala.{Completed, Document, MongoClient, MongoCollection, MongoDatabase}
+import org.mongodb.scala.{Completed, Document, MongoClient}
 
 import scala.concurrent.Future
 
 object MongoDbManager {
 
-  val mongoClient = MongoClient("mongodb://fantasy-brawl-service:pps-17-fb@ds039291.mlab.com:39291/heroku_3bppsqjk")
-  val database: MongoDatabase = mongoClient.getDatabase("heroku_3bppsqjk")
-  val queueCollection: MongoCollection[Document] = database.getCollection("casual-queue")
-  val battleCollection: MongoCollection[Document] = database.getCollection("active-battles")
+  import config.DbNaming._
+  val database = MongoClient(ClientName).getDatabase(DatabaseName)
+  val casualQueueCollection = database.getCollection(CasualQueue.CollectionName)
+  val battleCollection = database.getCollection(ActiveBattles.CollectionName)
 
-  val IdFieldName = "_id"
-  val PlayerFieldName = "playerName"
-  val TeamMembersFieldName = "teamMembers"
-  val ReplyToFieldName = "replyTo"
-  val FirstPlayerFieldName = "firstPlayerName"
-  val SecondPlayerFieldName = "secondPlayerName"
-
-  val ticketDocumentId = "casual-queue-ticket"
-  val field = "ticket"
-
-  def getTicket: Future[Int] = {
-    queueCollection
-      .findOneAndUpdate(filter = Filters.equal(IdFieldName, value = ticketDocumentId), update = inc(field, number = 1))
-      .map(oldDocument => oldDocument(field).asInt32().getValue)
-      .head()
-  }
-
-  /**
-    * Search for a document in the DB representing a queued player and remove it
+  /** Retrieves a ticket from the casual queue and increments the tickets counter.
     *
     * @return a Future representing the success/failure of the operation,
-    *         containing the player's name,team and response queue
+    *         containing the casual queue ticket
     */
-  def takePlayerFromQueue(ticket: Int): Future[(String, Set[String], String)] = {
-    queueCollection
-      .findOneAndDelete(filter = Filters.equal(IdFieldName, value = ticket))
-      .map(
-        document =>
-          (document(PlayerFieldName).asString().getValue,
-           document(TeamMembersFieldName)
-             .asArray()
-             .toArray
-             .toSeq
-             .collect {
-               case str: BsonValue => str.asString().getValue
-             }
-             .toSet,
-           document(ReplyToFieldName).asString().getValue))
+  def getTicket: Future[Int] = {
+    casualQueueCollection
+      .findOneAndUpdate(filter = Filters.equal(fieldName = "_id", value = CasualQueue.TicketsDocumentId),
+                        update = inc(CasualQueue.TicketNumber, number = 1))
+      .map(oldDocument => oldDocument(CasualQueue.TicketNumber).asInt32().getValue)
       .head()
   }
 
-  /**
-    * Creates a new document inside the DB representing a new player inside the casual queue
+  /** Creates a new document representing a new player inside the casual queue
     *
     * @param playerName the player that joins the queue
     * @param teamMembers the player's tea,
@@ -68,37 +39,57 @@ object MongoDbManager {
                        playerName: String,
                        teamMembers: Set[String],
                        replyTo: String): Future[Completed] = {
-    queueCollection
+    casualQueueCollection
       .insertOne(
-        Document(IdFieldName -> ticket,
-                 PlayerFieldName -> playerName,
-                 TeamMembersFieldName -> teamMembers.toSeq,
-                 ReplyToFieldName -> replyTo))
+        Document("_id" -> ticket,
+                 CasualQueue.PlayerName -> playerName,
+                 CasualQueue.TeamMembers -> teamMembers.toSeq,
+                 CasualQueue.ReplyTo -> replyTo))
       .head()
   }
 
-  /**
-    * Creates a new document inside the DB representing a battle instance
+  /** Searches for a document with the information of a queued player with a
+    * certain ticket and removes it.
     *
-    * @param player1Name the first player
-    * @param player2Name the second player
-    * @return a Future representing the success/failure of the operation
+    * @return a Future representing the success/failure of the operation,
+    *         containing the player's name, team and response queue
     */
-  def createBattleInstance(player1Name: String, player2Name: String, battleId: String): Future[Completed] = {
-    battleCollection
-      .insertOne(
-        Document(IdFieldName -> battleId, FirstPlayerFieldName -> player1Name, SecondPlayerFieldName -> player2Name))
+  def takePlayerFromQueue(ticket: Int): Future[(String, Set[String], String)] = {
+    casualQueueCollection
+      .findOneAndDelete(filter = Filters.equal(fieldName = "_id", value = ticket))
+      .map(
+        document =>
+          (document(CasualQueue.PlayerName).asString().getValue,
+           document(CasualQueue.TeamMembers)
+             .asArray()
+             .toArray
+             .toSeq
+             .collect {
+               case str: BsonValue => str.asString().getValue
+             }
+             .toSet,
+           document(CasualQueue.ReplyTo).asString().getValue))
       .head()
   }
 
-  /**
-    * Removes an existing document of a queued player from the DB
+  /** Removes an existing document of a queued player from the DB
     *
     * @param playerName the player to remove
     * @return a Future representing the success/failure of the operation
     */
   def removePlayerFromQueue(playerName: String): Future[DeleteResult] = {
-    queueCollection.deleteOne(Filters.equal(PlayerFieldName, playerName)).head()
+    casualQueueCollection.deleteOne(Filters.equal(CasualQueue.PlayerName, playerName)).head()
+  }
+
+  /** Creates a new battle instance inside the battles collection.
+    *
+    * @param battleId the battle identifier
+    * @return a Future representing the success/failure of the operation
+    */
+  def createBattleInstance(battleId: String): Future[Completed] = {
+    battleCollection
+      .insertOne(Document("_id" -> battleId, ActiveBattles.CurrentRound -> 0))
+      .head()
   }
 
 }

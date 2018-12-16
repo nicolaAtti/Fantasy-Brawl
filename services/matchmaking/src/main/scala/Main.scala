@@ -54,7 +54,7 @@ object Main extends App {
                             val battleId =
                               if (ticket % 2 == 0) opponentTicket + Separator + ticket
                               else ticket + Separator + opponentTicket
-                            MongoDbManager.createBattleInstance(request.playerName, opponentName, battleId).onComplete {
+                            MongoDbManager.createBattleInstance(battleId).onComplete {
                               case Success(_) =>
                                 sendBattleDataToBoth((request.playerName, request.team, replyTo.get),
                                                      (opponentName, opponentTeam, opponentReplyTo),
