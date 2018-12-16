@@ -40,10 +40,11 @@ object Main extends App {
             }
             getCurrentRound(request.battleId).onComplete {
               case Success(round: Int) if request.round > round =>
-                val player = PlayerInfo(request.playerName, request.playerTeamSpeeds, request.battleId, replyTo.get)
+                val player =
+                  PlayerInfo(request.playerName, request.playerTeamSpeeds, request.battleId, request.round, replyTo.get)
                 addPlayerInfo(player).onComplete {
                   case Success(_) =>
-                    getPlayerInfo(request.opponentName, request.battleId).onComplete {
+                    getPlayerInfo(request.opponentName, request.battleId, request.round).onComplete {
                       case Success(opponent) =>
                         import Helper._
                         val speedsOrdered = (extractTeamSpeeds(opponent) ++ extractTeamSpeeds(player))
@@ -55,8 +56,8 @@ object Main extends App {
                         val response = StartRoundResponse(Right(speedsOrdered), request.round)
                         rabbitControl ! Message.queue(response, replyTo.get)
                         rabbitControl ! Message.queue(response, opponent.replyTo)
-                        deletePlayerInfo(request.playerName, request.battleId)
-                        deletePlayerInfo(opponent.name, request.battleId)
+                        deletePlayerInfo(request.playerName, request.battleId, request.round)
+                        deletePlayerInfo(opponent.name, request.battleId, request.round)
                         incrementCurrentRound(request.battleId)
                       case Failure(e) => println(s"$FailurePrint $e")
                     }
