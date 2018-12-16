@@ -173,7 +173,7 @@ object BattleController extends Initializable with ViewController {
     */
   def setActiveCharacter(character: Character): Unit = {
     if (activeLabel != null) {
-      activeLabel.setTextFill(Color.WHITE)
+      activeLabel.setTextFill(Color.BLACK)
       activeImage.setEffect(null)
     }
     activeCharacter = character
@@ -202,6 +202,7 @@ object BattleController extends Initializable with ViewController {
     *
     */
   @FXML def handleActButtonPress(): Unit = {
+    Round.actCalculation(moveListView.getSelectionModel.getSelectedItem.split(MovesSeparator).head, targets.toList)
     activeLabel.setTextFill(Color.BLACK)
     targets = ListBuffer()
     targetImages.foreach(target => setCharacterUnselected(target))
