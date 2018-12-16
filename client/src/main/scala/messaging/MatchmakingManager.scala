@@ -45,8 +45,7 @@ object MatchmakingManager {
         body(as[JoinCasualQueueResponse]) { response =>
           response.opponentData match {
             case Right((opponentName, opponentTeam, opponentQueue, battleId)) =>
-              // TODO set opponentQueue to BattleManager
-              Battle.start((myName, myTeam), (opponentName, opponentTeam), battleId)
+              Battle.start((myName, myTeam), (opponentName, opponentTeam), opponentQueue, battleId)
             case Left(details) =>
               Platform runLater (() => {
                 val alert: Alert = new Alert(ViewConfiguration.DialogErrorType)
