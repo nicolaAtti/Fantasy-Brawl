@@ -33,40 +33,40 @@ object Main extends App {
     channel(qos = MessagingSettings.Qos) {
       consume(requestQueue) {
         (body(as[StartRoundRequest]) & optionalProperty(ReplyTo)) { (request, replyTo) =>
-        {
-          import config._
-          if (MiscSettings.ServicesLog) {
-            println(LogMessage)
+          {
+            import config._
+            if (MiscSettings.ServicesLog) {
+              println(LogMessage)
+            }
+            getCurrentRound(request.battleId).onComplete {
+              case Success(round: Int) if request.round > round =>
+                val player = PlayerInfo(request.playerName, request.playerTeamSpeeds, request.battleId, replyTo.get)
+                addPlayerInfo(player).onComplete {
+                  case Success(_) =>
+                    getPlayerInfo(request.opponentName, request.battleId).onComplete {
+                      case Success(opponent) =>
+                        import Helper._
+                        val speedsOrdered = (extractTeamSpeeds(opponent) ++ extractTeamSpeeds(player))
+                          .sortBy { case (_, speed) => speed }
+                          .reverse
+                          .map {
+                            case (character, _) => character
+                          }
+                        val response = StartRoundResponse(Right(speedsOrdered), request.round)
+                        rabbitControl ! Message.queue(response, replyTo.get)
+                        rabbitControl ! Message.queue(response, opponent.replyTo)
+                        deletePlayerInfo(request.playerName, request.battleId)
+                        deletePlayerInfo(opponent.name, request.battleId)
+                        incrementCurrentRound(request.battleId)
+                      case Failure(e) => println(s"$FailurePrint $e")
+                    }
+                  case Failure(e) => println(s"$FailurePrint $e")
+                }
+              case Success(round: Int) => println(s"$OldRequestPrint $request.round actual $round")
+              case Failure(e)          => println(s"$FailurePrint $e")
+            }
+            ack
           }
-          getCurrentRound(request.battleId).onComplete {
-            case Success(round: Int) if request.round > round =>
-              val player = PlayerInfo(request.playerName, request.playerTeamSpeeds, request.battleId, replyTo.get)
-              addPlayerInfo(player).onComplete {
-                case Success(_) =>
-                  getPlayerInfo(request.opponentName, request.battleId).onComplete {
-                    case Success(opponent) =>
-                      import Helper._
-                      val speedsOrdered = (extractTeamSpeeds(opponent) ++ extractTeamSpeeds(player))
-                        .sortBy { case (_, speed) => speed }
-                        .reverse
-                        .map {
-                          case (character, _) => character
-                        }
-                      val response = StartRoundResponse(Right(speedsOrdered), request.round)
-                      rabbitControl ! Message.queue(response, replyTo.get)
-                      rabbitControl ! Message.queue(response, opponent.replyTo)
-                      deletePlayerInfo(request.playerName, request.battleId)
-                      deletePlayerInfo(opponent.name, request.battleId)
-                      incrementCurrentRound(request.battleId)
-                    case Failure(e) => println(s"$FailurePrint $e")
-                  }
-                case Failure(e) => println(s"$FailurePrint $e")
-              }
-            case Success(round: Int) => println(s"$OldRequestPrint $request.round actual $round")
-            case Failure(e)          => println(s"$FailurePrint $e")
-          }
-          ack
-        }
         }
       }
     }
