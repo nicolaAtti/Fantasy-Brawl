@@ -1,12 +1,12 @@
 package turnordering
 
-import org.mongodb.scala.bson.{BsonArray, BsonValue}
+import org.mongodb.scala.bson.BsonValue
 import org.mongodb.scala.bson.collection.immutable.Document
 import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.Filters
 import org.mongodb.scala.model.Updates.inc
 import org.mongodb.scala.result.{DeleteResult, UpdateResult}
-import org.mongodb.scala.{Completed, MongoClient, MongoCollection, MongoDatabase}
+import org.mongodb.scala.{Completed, MongoClient}
 
 import scala.util.{Failure, Success}
 import scala.concurrent._
@@ -44,25 +44,41 @@ object MongoDbManager {
       .head
   }
 
-  /** Add all the player's informations for the turn ordering of the next round.
+  import DbHelper._
+
+  /** Adds all the player's informations for the next round turn-ordering request.
     *
     * @param playerInfo the player informations
     * @return a Future representing the success/failure of the operation
     */
   def addPlayerInfo(playerInfo: PlayerInfo): Future[Completed] = {
     turnOrderingCollection
-      .insertOne(ManagerHelper.playerInfoToDocument(playerInfo))
+      .insertOne(playerInfo)
       .head
   }
 
+  /** Retrieves all the player's informations of an old turn-ordering request.
+    *
+    * @param playerName the player name of the old request
+    * @param battleId the battle id of the old request
+    * @param round the round of the old request
+    * @return a Future representing the success/failure of the operation
+    */
   def getPlayerInfo(playerName: String, battleId: String, round: Int): Future[PlayerInfo] = {
     turnOrderingCollection
       .find(filter = Filters.equal(TurnOrdering.PlayerName, playerName))
       .first
-      .map(ManagerHelper.documentToPlayerInfo)
+      .map(documentToPlayerInfo)
       .head
   }
 
+  /** Deletes the player's informations of an old turn-ordering request.
+    *
+    * @param playerName the player name of the old request
+    * @param battleId the battle id of the old request
+    * @param round the round of the old request
+    * @return a Future representing the success/failure of the operation
+    */
   def deletePlayerInfo(playerName: String, battleId: String, round: Int): Future[DeleteResult] = {
     turnOrderingCollection
       .deleteOne(
@@ -72,9 +88,14 @@ object MongoDbManager {
       .head
   }
 
-  object ManagerHelper {
+  private object DbHelper {
 
-    def playerInfoToDocument(playerInfo: PlayerInfo): Document = {
+    /** Implicitly converts a PlayerInfo object to a MongoDb immutable Document.
+      *
+      * @param playerInfo the PlayerInfo object to convert
+      * @return the mongodb immutable Document
+      */
+    implicit def playerInfoToDocument(playerInfo: PlayerInfo): Document = {
       val (characterNames: List[String], characterSpeeds: List[Int]) = playerInfo.teamSpeeds.unzip
 
       Document(
@@ -87,7 +108,12 @@ object MongoDbManager {
       )
     }
 
-    def documentToPlayerInfo(document: Document): PlayerInfo = {
+    /** Implicitly converts a MongoDb immutable Document to a PlayerInfo object.
+      *
+      * @param document the mongodb immutable Document
+      * @return the PlayerInfo object
+      */
+    implicit def documentToPlayerInfo(document: Document): PlayerInfo = {
       val teamNames: Array[String] = document(TurnOrdering.TeamNames).asArray.toArray.map {
         case bsonName: BsonValue => bsonName.asString.getValue
       }
@@ -106,22 +132,52 @@ object MongoDbManager {
         replyTo = document(TurnOrdering.ReplyTo).asString.getValue
       )
     }
+
   }
 
 }
 
+/** Very naive test useful both as a usage example and as a verification for the
+  * conversion from PlayerInfo to Document and vice-versa.
+  * (NB: Test only when the remote Database is online!)
+  */
 object TestConversion extends App {
   import MongoDbManager._
 
-  val playerInfo = PlayerInfo("Nome1", Map("Marco" -> 10, "Nicola" -> 9), "id/battle", 0, "uuidrepr6")
+  val playerName = "Mark999"
+  val speeds = Map("Annabelle" -> 8, "Jacob" -> 5, "Fernando" -> 6)
+  val battleId = "88-89"
+  val round = 15
+  val clientQueue = "fkjghsdfkjghsdflkjdhlfgoielrjglkdjhfwoghsldgfj"
 
-  addPlayerInfo(playerInfo)
+  val playerInfo =
+    PlayerInfo(name = playerName, teamSpeeds = speeds, battleId = battleId, round = round, replyTo = clientQueue)
 
-  getPlayerInfo("Nome1", "id/battle", 0).onComplete {
-    case Success(info) => println(info + "\n" + playerInfo + "\n" + (info == playerInfo))
-    case Failure(e)    => println(s"error $e")
+  import config.MiscSettings._
+
+  addPlayerInfo(playerInfo).onComplete {
+
+    case Success(_) => {
+      println("Player info successfully added to the Database")
+      getPlayerInfo(playerName, battleId, round).onComplete {
+
+        case Success(retrievedInfo) => {
+          println("Player info retrieved from the Database")
+          println(s"--> Original:  $playerInfo")
+          println(s"--> Retrieved: $retrievedInfo")
+          println(s"--> Have I done a good job? ${playerInfo == retrievedInfo}")
+          deletePlayerInfo(playerName, battleId, round).onComplete {
+
+            case Success(_) => println("Player info successfully deleted from the Database")
+
+            case Failure(e) => println(s"$LogFailurePrefix$e")
+          }
+        }
+        case Failure(e) => println(s"$LogFailurePrefix$e")
+      }
+    }
+    case Failure(e) => println(s"$LogFailurePrefix$e")
   }
 
-  Thread.sleep(5000)
-
+  Thread.sleep(10000) // wait for async requests to take place
 }
