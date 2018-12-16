@@ -1,5 +1,5 @@
 package communication
 
-import model.Move
+import model.{Move, Character}
 
-case class StatusUpdateMessage(newStatus: Move.NewStatuses, round: Int)
+case class StatusUpdateMessage(newStatus: Move.NewStatuses, round: Int, turn: Character)
