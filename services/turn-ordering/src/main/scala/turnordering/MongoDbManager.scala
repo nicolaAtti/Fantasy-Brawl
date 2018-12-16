@@ -43,11 +43,23 @@ object MongoDbManager {
       .head()
   }
 
+  /** Add all the player's informations for the turn ordering of the next round.
+    *
+    * @param playerInfo the player informations
+    * @return a Future representing the success/failure of the operation
+    */
   def addPlayerInfo(playerInfo: PlayerInfo): Future[Completed] = ???
 
-  def getPlayerInfo(playerName: String, battleId: String): Future[PlayerInfo] = ???
+  def getPlayerInfo(playerName: String, battleId: String, round: Int): Future[PlayerInfo] = ???
 
-  def deletePlayerInfo(playerName: String, battleId: String): Future[DeleteResult] = ???
+  def deletePlayerInfo(playerName: String, battleId: String, round: Int): Future[DeleteResult] = ???
+
+  private object ManagerHelper {
+
+    def playerInfoToDocument(playerInfo: PlayerInfo): Document = ???
+
+
+  }
 
 }
 
