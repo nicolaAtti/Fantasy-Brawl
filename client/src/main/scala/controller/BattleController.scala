@@ -4,7 +4,7 @@ import java.net.URL
 import java.util.ResourceBundle
 
 import game.{Battle, Round}
-import javafx.animation.{KeyFrame, Timeline}
+import javafx.animation.{Animation, KeyFrame, Timeline}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.event.ActionEvent
 import javafx.fxml.{FXML, Initializable}
@@ -28,7 +28,7 @@ object BattleController extends Initializable with ViewController {
   val controller: ViewController = this
 
   final val TargetedEffect: DropShadow = new DropShadow(0, 0, 0, Color.BLUE)
-  final val ActivePlayerEffect: DropShadow = new DropShadow(0, 0, 0, Color.GREEN)
+  final val ActivePlayerEffect: DropShadow = new DropShadow(0, 0, 0, Color.LIME)
   final val ActiveOpponentEffect: DropShadow = new DropShadow(0, 0, 0, Color.RED)
 
   @FXML var playerCharNames: VBox = _
@@ -73,6 +73,7 @@ object BattleController extends Initializable with ViewController {
   var activeCharacter: Character = _
   var activeLabel: Label = _
   var activeImage: ImageView = _
+
   val timeline: Timeline = new Timeline()
   var timeSeconds: Int = config.MiscSettings.TurnDurationInSeconds
 
@@ -82,19 +83,16 @@ object BattleController extends Initializable with ViewController {
     * @param resources
     */
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
-    TargetedEffect.setHeight(10)
-    TargetedEffect.setWidth(10)
-    ActivePlayerEffect.setHeight(10)
-    ActivePlayerEffect.setWidth(10)
-    ActiveOpponentEffect.setHeight(10)
-    ActiveOpponentEffect.setWidth(10)
+    TargetedEffect.setHeight(30)
+    TargetedEffect.setWidth(30)
+    ActivePlayerEffect.setHeight(30)
+    ActivePlayerEffect.setWidth(30)
+    ActiveOpponentEffect.setHeight(30)
+    ActiveOpponentEffect.setWidth(30)
 
     playerImages = List(playerChar1Image, playerChar2Image, playerChar3Image, playerChar4Image)
     opponentImages = List(opponentChar1Image, opponentChar2Image, opponentChar3Image, opponentChar4Image)
-
-    setBattlefield()
-
-    timeline.setCycleCount(config.MiscSettings.TurnDurationInSeconds)
+    timeline.setCycleCount(Animation.INDEFINITE)
     timeline.getKeyFrames.add(
       new KeyFrame(
         Duration.seconds(1),
@@ -107,7 +105,8 @@ object BattleController extends Initializable with ViewController {
           }
         }
       ))
-    timeline.play()
+    setBattlefield()
+    timeline.playFromStart()
   }
 
   /** Setups the GUI for both teams */
@@ -198,51 +197,11 @@ object BattleController extends Initializable with ViewController {
     newTurn()
   }
 
-  /** Handles the press of the act button
-    *
-    */
-  @FXML def handleActButtonPress(): Unit = {
-    Round.actCalculation(moveListView.getSelectionModel.getSelectedItem.split(MovesSeparator).head, targets.toList)
-    activeLabel.setTextFill(Color.BLACK)
-    targets = ListBuffer()
-    targetImages.foreach(target => setCharacterUnselected(target))
-    targetImages = ListBuffer()
-
-    //Move.makeMove(activeCharacter.specialMoves(moveListView.getSelectionModel.getSelectedItem),activeCharacter,)
-    //Compute the move and then send the new status message
-  }
-
-  @FXML def movesManualPressed(event: ActionEvent) {
-    ApplicationView.createMovesManualView()
-  }
-
   /** Resets the turn timer */
   def newTurn(): Unit = {
     timeSeconds = config.MiscSettings.TurnDurationInSeconds
     timerCounter.setText(timeSeconds.toString)
     timeline.playFromStart()
-  }
-
-  /** Checks if the act button is to be activated after the selection of a different move
-    *
-    * @param mouseEvent
-    */
-  @FXML def handleMoveSelection(mouseEvent: MouseEvent) {
-    actButtonActivation()
-  }
-
-  /** Adds/Removes the pressed character to/from the target's list, and checks if the act button is to be activated
-    *
-    * @param mouseEvent
-    */
-  @FXML def handleCharacterToTargetPressed(mouseEvent: MouseEvent) {
-    val characterPressed: ImageView = mouseEvent.getSource.asInstanceOf[ImageView]
-    if (characterPressed.getId.contains("player")) {
-      setTargets(characterPressed, playerCharacterImages(characterPressed))
-    } else {
-      setTargets(characterPressed, opponentCharacterImages(characterPressed))
-    }
-    actButtonActivation()
   }
 
   private object BattleControllerHelper {
@@ -284,6 +243,7 @@ object BattleController extends Initializable with ViewController {
       * @param character the character who's turn is
       */
     def setupCharacterMoves(character: Character): Unit = {
+      moveList = FXCollections.observableArrayList()
       moveList.add(PhysicalAttackRepresentation)
       character.specialMoves.foreach(move =>
         moveList.add(move._1 + MovesSeparator + "MP: " + move._2.manaCost + " Max targets: " + move._2.maxTargets))
@@ -293,10 +253,12 @@ object BattleController extends Initializable with ViewController {
     def setTargets(imagePressed: ImageView, character: Character): Unit = {
       if (targetImages.exists(image => image.getId equals imagePressed.getId)) {
         targetImages -= imagePressed
+        println(targetImages)
         targets -= character
         setCharacterUnselected(imagePressed)
       } else {
         targetImages += imagePressed
+        println(targetImages)
         targets += character
         setCharacterSelected(imagePressed)
       }
@@ -348,7 +310,53 @@ object BattleController extends Initializable with ViewController {
       * @param charImage the character's image
       */
     def setCharacterUnselected(charImage: ImageView): Unit = {
-      charImage.setEffect(null)
+      if (playerCharacterImages.contains(charImage) && playerCharacterImages(charImage) == activeCharacter) {
+        charImage.setEffect(ActivePlayerEffect)
+      } else {
+        charImage.setEffect(null)
+      }
+    }
+  }
+
+  /** Handles the press of the act button
+    *
+    */
+  @FXML def handleActButtonPress(): Unit = {
+    Round.actCalculation(moveListView.getSelectionModel.getSelectedItem.split(MovesSeparator).head, targets.toList)
+    activeLabel.setTextFill(Color.BLACK)
+    targets = ListBuffer()
+    targetImages.foreach(target => setCharacterUnselected(target))
+    targetImages = ListBuffer()
+
+    //Move.makeMove(activeCharacter.specialMoves(moveListView.getSelectionModel.getSelectedItem),activeCharacter,)
+    //Compute the move and then send the new status message
+  }
+
+  @FXML def movesManualPressed(event: ActionEvent) {
+    ApplicationView.createMovesManualView()
+  }
+
+  /** Checks if the act button is to be activated after the selection of a different move
+    *
+    * @param mouseEvent
+    */
+  @FXML def handleMoveSelection(mouseEvent: MouseEvent) {
+    actButtonActivation()
+  }
+
+  /** Adds/Removes the pressed character to/from the target's list, and checks if the act button is to be activated
+    *
+    * @param mouseEvent
+    */
+  @FXML def handleCharacterToTargetPressed(mouseEvent: MouseEvent) {
+    if (activeCharacter.owner.get == Battle.playerId) {
+      val characterPressed: ImageView = mouseEvent.getSource.asInstanceOf[ImageView]
+      if (characterPressed.getId.contains("player")) {
+        setTargets(characterPressed, playerCharacterImages(characterPressed))
+      } else {
+        setTargets(characterPressed, opponentCharacterImages(characterPressed))
+      }
+      actButtonActivation()
     }
   }
 }
