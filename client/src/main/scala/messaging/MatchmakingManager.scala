@@ -45,8 +45,7 @@ object MatchmakingManager {
         body(as[JoinCasualQueueResponse]) { response =>
           response.opponentData match {
             case Right((opponentName, opponentTeam, opponentQueue, battleId)) =>
-              // TODO set opponentQueue to BattleManager
-              Battle.start((myName, myTeam), (opponentName, opponentTeam), battleId)
+              Battle.start((myName, myTeam), (opponentName, opponentTeam), opponentQueue, battleId)
             case Left(details) =>
               Platform runLater (() => {
                 val alert: Alert = new Alert(ViewConfiguration.DialogErrorType)
@@ -72,7 +71,7 @@ object MatchmakingManager {
     myName = playerName
     myTeam = team
     rabbitControl ! Message(
-      JoinCasualQueueRequest(playerName, myTeam, config.MiscSettings.MatchmakingAddKey, Battle.playerQueue),
+      JoinCasualQueueRequest(playerName, myTeam, config.MiscSettings.MatchmakingAddKey, Queues.BattleQueue),
       publisher,
       Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName))
     )
@@ -85,7 +84,7 @@ object MatchmakingManager {
     */
   def leaveCasualQueueRequest(playerName: String): Unit = {
     rabbitControl ! Message(
-      JoinCasualQueueRequest(playerName, Set(), config.MiscSettings.MatchmakingRemoveKey, Battle.playerQueue),
+      JoinCasualQueueRequest(playerName, Set(), config.MiscSettings.MatchmakingRemoveKey, Queues.BattleQueue),
       publisher,
       Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName))
     )

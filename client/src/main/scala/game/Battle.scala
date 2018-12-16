@@ -1,5 +1,6 @@
 package game
 
+import controller.BattleController
 import model._
 import utilities.ScalaProlog._
 
@@ -8,21 +9,24 @@ object Battle extends App {
   var id: String = _
   var playerId: String = _
   var opponentId: String = _
-  var playerQueue: String = communication.Queues.BattleQueue
   var opponentQueue: String = _
 
   import BattleHelper._
 
-  def start(player: (String, Set[String]), opponent: (String, Set[String]), battleId: String): Unit = {
+  def start(player: (String, Set[String]),
+            opponent: (String, Set[String]),
+            battleQueue: String,
+            battleId: String): Unit = {
+    id = battleId
     playerId = player._1
     opponentId = opponent._1
+    opponentQueue = battleQueue
     teams = setupTeam(player, opponent)
-    id = battleId
     Round.startNewRound()
   }
 
   def end(winner: String): Unit = {
-    // TODO set the winner
+    BattleController.settingWinner(winner)
   }
 
   private object BattleHelper {

@@ -1,7 +1,8 @@
 package game
 
 import controller.BattleController
-import messaging.RoundManager
+import messaging.{BattleManager, RoundManager}
+import model.Move.NewStatuses
 import model._
 import view.ApplicationView
 import view.ViewConfiguration.viewSelector._
@@ -22,15 +23,6 @@ object Round {
       Battle.id,
       id + 1
     )
-  }
-
-  def endRound(): Unit = {
-    if (!Battle.teams.exists(character => character.owner.get == Battle.playerId && character.isAlive))
-      Battle.end(Battle.opponentId)
-    else if (!Battle.teams.exists(character => character.owner.get == Battle.opponentId && character.isAlive))
-      Battle.end(Battle.playerId)
-    else
-      startNewRound()
   }
 
   def setupTurns(turnInformation: List[(String, String)], round: Int): Unit = {
@@ -55,12 +47,21 @@ object Round {
   }
 
   def endTurn(): Unit = {
-    turns = turns.tail
     BattleController.updateStatus()
-    if (turns.nonEmpty)
-      startTurn()
-    else
-      endRound()
+    val playerLost = !Battle.teams.exists(character => character.owner.get == Battle.playerId && character.isAlive)
+    val opponentLost = !Battle.teams.exists(character => character.owner.get == Battle.opponentId && character.isAlive)
+    (playerLost, opponentLost) match {
+      case (true, true) if turns.head.owner.get == Battle.playerId   => Battle.end(Battle.playerId)
+      case (true, true) if turns.head.owner.get == Battle.opponentId => Battle.end(Battle.opponentId)
+      case (true, _)                                                 => Battle.end(Battle.opponentId)
+      case (_, true)                                                 => Battle.end(Battle.playerId)
+      case _ =>
+        turns = turns.tail
+        if (turns.nonEmpty)
+          startTurn()
+        else
+          startNewRound()
+    }
   }
 
   def actCalculation(moveName: String, targets: List[Character]): Unit = {
@@ -70,9 +71,12 @@ object Round {
       newStatuses = Move.makeMove(PhysicalAttack, activeCharacter, targets.toSet)
     else
       newStatuses = Move.makeMove(activeCharacter.specialMoves(moveName), activeCharacter, targets.toSet)
-
-    // TODO update status
-
+    updateTeamsStatuses(newStatuses)
+    BattleManager.updateOpponentStatus(newStatuses, id, activeCharacter)
     endTurn()
+  }
+
+  def updateTeamsStatuses(newStatuses: NewStatuses): Unit = {
+    Battle.teams.foreach(character => if (newStatuses.contains(character)) character.status = newStatuses(character))
   }
 }
