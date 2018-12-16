@@ -14,8 +14,6 @@ import loginguest.MongoDbManager
 object Main extends App {
 
   final val LogMessage = "Received a new login request"
-  final val LogDetailsPrefix = "Details: "
-  final val FailurePrint = "Failure... Caught:"
 
   val rabbitControl = ActorSystem().actorOf(Props[RabbitControl])
   implicit val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = MessagingSettings.Requeue)
@@ -35,8 +33,8 @@ object Main extends App {
       consume(requestQueue) {
         (body(as[LoginGuestRequest]) & optionalProperty(ReplyTo)) { (request, replyTo) =>
           {
-            import config._
-            if (MiscSettings.ServicesLog) {
+            import config.MiscSettings._
+            if (ServicesLog) {
               println(LogMessage)
               request.details match {
                 case Some(d) => println(LogDetailsPrefix + d)
@@ -46,7 +44,7 @@ object Main extends App {
 
             MongoDbManager.nextGuestNumber.onComplete {
               case Success(n: Int) => sendGuestNumber(n, clientQueue = replyTo.get)
-              case Failure(e)      => println(s"$FailurePrint $e")
+              case Failure(e)      => println(s"$LogFailurePrefix $e")
             }
           }
           ack
