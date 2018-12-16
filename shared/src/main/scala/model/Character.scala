@@ -99,11 +99,11 @@ trait Character {
     roundDown(statistics.resistance * classMultipliers.resistance) + getModifierValues(PhysicalDefence)
 
   /**
-    * Check if the character is dead
+    * Check if the character is alive
     *
-    * @return true if the character is dead of false if it's alive
+    * @return true if the character is alive of false if it's dead
     */
-  def isDead: Boolean = status.healthPoints == 0
+  def isAlive: Boolean = status.healthPoints > 0
 
   /**
     * Cycles all the character's modifiers for a given sub-statistic and calculates the bonus/malus value
