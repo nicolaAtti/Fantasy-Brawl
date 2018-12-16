@@ -71,9 +71,11 @@ object MatchmakingManager {
   def joinCasualQueueRequest(playerName: String, team: Set[String]): Unit = {
     myName = playerName
     myTeam = team
-    rabbitControl ! Message(JoinCasualQueueRequest(playerName, myTeam, config.MiscSettings.MatchmakingAddKey),
-                            publisher,
-                            Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName)))
+    rabbitControl ! Message(
+      JoinCasualQueueRequest(playerName, myTeam, config.MiscSettings.MatchmakingAddKey, Battle.playerQueue),
+      publisher,
+      Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName))
+    )
   }
 
   /**
@@ -83,7 +85,7 @@ object MatchmakingManager {
     */
   def leaveCasualQueueRequest(playerName: String): Unit = {
     rabbitControl ! Message(
-      JoinCasualQueueRequest(playerName, Set(), config.MiscSettings.MatchmakingRemoveKey),
+      JoinCasualQueueRequest(playerName, Set(), config.MiscSettings.MatchmakingRemoveKey, Battle.playerQueue),
       publisher,
       Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName))
     )

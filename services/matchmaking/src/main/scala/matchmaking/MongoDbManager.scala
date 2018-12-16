@@ -38,13 +38,17 @@ object MongoDbManager {
   def putPlayerInQueue(ticket: Int,
                        playerName: String,
                        teamMembers: Set[String],
+                       battleQueue: String,
                        replyTo: String): Future[Completed] = {
     casualQueueCollection
       .insertOne(
-        Document("_id" -> ticket,
-                 CasualQueue.PlayerName -> playerName,
-                 CasualQueue.TeamMembers -> teamMembers.toSeq,
-                 CasualQueue.ReplyTo -> replyTo))
+        Document(
+          "_id" -> ticket,
+          CasualQueue.PlayerName -> playerName,
+          CasualQueue.TeamMembers -> teamMembers.toSeq,
+          CasualQueue.BattleQueue -> battleQueue,
+          CasualQueue.ReplyTo -> replyTo
+        ))
       .head()
   }
 
@@ -54,7 +58,7 @@ object MongoDbManager {
     * @return a Future representing the success/failure of the operation,
     *         containing the player's name, team and response queue
     */
-  def takePlayerFromQueue(ticket: Int): Future[(String, Set[String], String)] = {
+  def takePlayerFromQueue(ticket: Int): Future[(String, Set[String], String, String)] = {
     casualQueueCollection
       .findOneAndDelete(filter = Filters.equal(fieldName = "_id", value = ticket))
       .map(
@@ -68,6 +72,7 @@ object MongoDbManager {
                case str: BsonValue => str.asString().getValue
              }
              .toSet,
+           document(CasualQueue.BattleQueue).asString().getValue,
            document(CasualQueue.ReplyTo).asString().getValue))
       .head()
   }

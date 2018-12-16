@@ -45,27 +45,29 @@ object Main extends App {
               case MiscSettings.MatchmakingAddKey =>
                 MongoDbManager.getTicket.onComplete {
                   case Success(ticket: Int) =>
-                    MongoDbManager.putPlayerInQueue(ticket, request.playerName, request.team, replyTo.get).onComplete {
-                      case Success(_) =>
-                        val opponentTicket = if (ticket % 2 == 0) ticket - 1 else ticket + 1
-                        MongoDbManager.takePlayerFromQueue(opponentTicket).onComplete {
-                          case Success((opponentName, opponentTeam, opponentReplyTo)) =>
-                            MongoDbManager.removePlayerFromQueue(request.playerName)
-                            val battleId =
-                              if (ticket % 2 == 0) opponentTicket + Separator + ticket
-                              else ticket + Separator + opponentTicket
-                            MongoDbManager.createBattleInstance(battleId).onComplete {
-                              case Success(_) =>
-                                sendBattleDataToBoth((request.playerName, request.team, replyTo.get),
-                                                     (opponentName, opponentTeam, opponentReplyTo),
-                                                     battleId)
-                              case Failure(e) => println(s"$FailurePrint $e")
-                            }
-                          case Failure(e) => println(s"$FailurePrint $e")
-                          case _          => println(s"$OpponentNotFoundPrint $opponentTicket")
-                        }
-                      case Failure(e) => println(s"$FailurePrint $e")
-                    }
+                    MongoDbManager
+                      .putPlayerInQueue(ticket, request.playerName, request.team, request.battleQueue, replyTo.get)
+                      .onComplete {
+                        case Success(_) =>
+                          val opponentTicket = if (ticket % 2 == 0) ticket - 1 else ticket + 1
+                          MongoDbManager.takePlayerFromQueue(opponentTicket).onComplete {
+                            case Success((opponentName, opponentTeam, opponentBattleQueue, opponentReplyTo)) =>
+                              MongoDbManager.removePlayerFromQueue(request.playerName)
+                              val battleId =
+                                if (ticket % 2 == 0) opponentTicket + Separator + ticket
+                                else ticket + Separator + opponentTicket
+                              MongoDbManager.createBattleInstance(battleId).onComplete {
+                                case Success(_) =>
+                                  sendBattleDataToBoth((request.playerName, request.team, replyTo.get),
+                                                       (opponentName, opponentTeam, opponentReplyTo),
+                                                       battleId)
+                                case Failure(e) => println(s"$FailurePrint $e")
+                              }
+                            case Failure(e) => println(s"$FailurePrint $e")
+                            case _          => println(s"$OpponentNotFoundPrint $opponentTicket")
+                          }
+                        case Failure(e) => println(s"$FailurePrint $e")
+                      }
                   case Failure(e) => println(s"$FailurePrint $e")
                 }
               case MiscSettings.MatchmakingRemoveKey =>
