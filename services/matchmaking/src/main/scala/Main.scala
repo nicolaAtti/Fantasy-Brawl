@@ -54,7 +54,7 @@ object Main extends App {
                             val battleId =
                               if (ticket % 2 == 0) opponentTicket + Separator + ticket
                               else ticket + Separator + opponentTicket
-                            MongoDbManager.createBattleInstance(request.playerName, opponentName, battleId).onComplete {
+                            MongoDbManager.createBattleInstance(battleId).onComplete {
                               case Success(_) =>
                                 sendBattleDataToBoth((request.playerName, request.team, replyTo.get),
                                                      (opponentName, opponentTeam, opponentReplyTo),
@@ -90,8 +90,10 @@ object Main extends App {
   def sendBattleDataToBoth(dataReqPlayer: (String, Set[String], String),
                            dataQueuedPlayer: (String, Set[String], String),
                            battleId: String): Unit = {
-    val responseForRequester = JoinCasualQueueResponse(Right((dataQueuedPlayer._1, dataQueuedPlayer._2, battleId)))
-    val responseForQueued = JoinCasualQueueResponse(Right((dataReqPlayer._1, dataReqPlayer._2, battleId)))
+    val responseForRequester = JoinCasualQueueResponse(
+      Right((dataQueuedPlayer._1, dataQueuedPlayer._2, dataQueuedPlayer._3, battleId)))
+    val responseForQueued = JoinCasualQueueResponse(
+      Right((dataReqPlayer._1, dataReqPlayer._2, dataReqPlayer._3, battleId)))
     rabbitControl ! Message.queue(responseForRequester, dataReqPlayer._3)
     rabbitControl ! Message.queue(responseForQueued, dataQueuedPlayer._3)
   }

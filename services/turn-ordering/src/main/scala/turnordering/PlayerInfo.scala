@@ -1,7 +1,3 @@
 package turnordering
 
-case class PlayerInfo(playerName: String,
-                      playerTeamSpeeds: Map[String, Int],
-                      battleId: String,
-                      round: String,
-                      replyTo: String)
+case class PlayerInfo(name: String, teamSpeeds: Map[String, Int], battleId: String, replyTo: String)
