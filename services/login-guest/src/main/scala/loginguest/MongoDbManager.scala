@@ -23,11 +23,11 @@ object MongoDbManager {
     * @return a Future with the unique guest number
     */
   def nextGuestNumber: Future[Int] = {
-    val incByOne: Bson = inc(Login.GuestsNumber, number = 1)
+    val incByOne: Bson = inc(Login.GuestNumber, number = 1)
 
     collection
       .findOneAndUpdate(filter = Filters.equal(fieldName = "_id", value = Login.GuestsDocumentId), update = incByOne)
-      .map(oldDocument => oldDocument(Login.GuestsNumber).asInt32().getValue)
+      .map(oldDocument => oldDocument(Login.GuestNumber).asInt32().getValue)
       .head() // returns the Observable's head in a Future
   }
 

@@ -6,31 +6,31 @@ object DbNaming {
   val DatabaseName = "heroku_3bppsqjk"
 
   object Login {
-    val CollectionName = "counters"
+    val CollectionName = "login"
 
     val GuestsDocumentId = "guests"
-    val GuestsNumber = "number"
+    val GuestNumber = "guest_number"
   }
 
   object CasualQueue {
-    val CollectionName = "casual-queue"
+    val CollectionName = "casual_queue"
 
-    val TicketsDocumentId = "casual-queue-ticket"
-    val Ticket = "ticket"
+    val TicketsDocumentId = "casual_queue_tickets"
+    val TicketNumber = "ticket_number"
 
-    val PlayerName = "playerName"
-    val TeamMembers = "teamMembers"
-    val ReplyTo = "replyTo"
+    val PlayerName = "player_name"
+    val TeamMembers = "team_members"
+    val ReplyTo = "reply_to"
   }
 
   object ActiveBattles {
-    val CollectionName = "active-battles"
+    val CollectionName = "active_battles"
 
-    val CurrentRound = "current-round"
+    val CurrentRound = "current_round"
   }
 
   object TurnOrdering {
-    val CollectionName = "turn-ordering-requests"
+    val CollectionName = "turn_ordering_requests"
   }
 
 }

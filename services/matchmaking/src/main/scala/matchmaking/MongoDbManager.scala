@@ -23,8 +23,8 @@ object MongoDbManager {
   def getTicket: Future[Int] = {
     casualQueueCollection
       .findOneAndUpdate(filter = Filters.equal(fieldName = "_id", value = CasualQueue.TicketsDocumentId),
-                        update = inc(CasualQueue.Ticket, number = 1))
-      .map(oldDocument => oldDocument(CasualQueue.Ticket).asInt32().getValue)
+                        update = inc(CasualQueue.TicketNumber, number = 1))
+      .map(oldDocument => oldDocument(CasualQueue.TicketNumber).asInt32().getValue)
       .head()
   }
 
