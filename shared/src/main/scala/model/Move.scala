@@ -130,7 +130,8 @@ case class SpecialMove(name: String,
                        maxTargets: Int)
     extends Move {
   override def toString: String =
-    s"[[$name]] Move type: ${moveType.representation} | Mana cost: $manaCost | Max targets: $maxTargets"
+    s"$name Move type: ${moveType.representation} | Mana cost: $manaCost | Max targets: $maxTargets"
+  println(s"$name Move type: ${moveType.representation} | Mana cost: $manaCost | Max targets: $maxTargets")
 
   require(manaCost >= 0, "The mana cost cannot be negative")
   require(maxTargets > 0, "The number of maximum targets must be at least one")

@@ -66,12 +66,15 @@ object ApplicationView {
     })
 
   def createMovesManualView(): Unit = {
-    val root: ScrollPane = new FXMLLoader(getClass getResource MovesManualForm).load()
+    val loader = new FXMLLoader(getClass getResource MovesManualForm)
+    loader.setController(MoveManualController.controller)
+    val root: ScrollPane = loader.load()
     val stage = new Stage()
     stage setTitle MovesManualTitle
-    val img = new ImageView(MovesManualViewBackgroundImage)
-    img.fitWidthProperty().bind(stage.widthProperty())
-    root.setContent(img)
+    //val img = new ImageView(MovesManualViewBackgroundImage)
+    //img.fitWidthProperty().bind(stage.widthProperty())
+    //root.setContent(img)
+    //root.toBack()
     stage setScene new Scene(root)
     stage.show()
   }
