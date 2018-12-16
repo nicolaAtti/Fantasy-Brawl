@@ -1,6 +1,5 @@
 package controller
 
-
 import java.net.URL
 import java.util.ResourceBundle
 
@@ -22,18 +21,16 @@ object MoveManualController extends Initializable with ViewController {
   @FXML var rangedButton: Button = _
   @FXML var spellButton: Button = _
 
+  /** Return the LoginController. */
+  val controller: ViewController = this
 
-    /** Return the LoginController. */
-    val controller: ViewController = this
-
-    override def initialize(location: URL, resources: ResourceBundle): Unit = {
-      rangedMoves.setVisible(false)
-      spellMoves.setVisible(false)
-      rangedDescriptions.setVisible(false)
-      spellDescriptions.setVisible(false)
-      meleeButton.setDisable(true)
-    }
-
+  override def initialize(location: URL, resources: ResourceBundle): Unit = {
+    rangedMoves.setVisible(false)
+    spellMoves.setVisible(false)
+    rangedDescriptions.setVisible(false)
+    spellDescriptions.setVisible(false)
+    meleeButton.setDisable(true)
+  }
 
   @FXML def meleeButtonPressed(mouseEvent: MouseEvent): Unit = {
     rangedMoves.setVisible(false)
@@ -48,6 +45,7 @@ object MoveManualController extends Initializable with ViewController {
     meleeButton.setDisable(true)
 
   }
+
   @FXML def rangedButtonPressed(mouseEvent: MouseEvent): Unit = {
     meleeMoves.setVisible(false)
     meleeDescriptions.setVisible(false)
@@ -60,6 +58,7 @@ object MoveManualController extends Initializable with ViewController {
     rangedDescriptions.setVisible(true)
     rangedButton.setDisable(true)
   }
+
   @FXML def spellButtonPressed(mouseEvent: MouseEvent): Unit = {
     meleeMoves.setVisible(false)
     meleeDescriptions.setVisible(false)
