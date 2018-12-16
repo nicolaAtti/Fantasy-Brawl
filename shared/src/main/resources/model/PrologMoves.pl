@@ -11,7 +11,7 @@ spec_move('Poison Vial','StandardDamage','Ranged',20,[],['Psn'],['Slp'],15,1).
 spec_move('Flash Grenade','BuffDebuff','Ranged',0,[],['Bln'],['Slp'],20,4).
 spec_move('Backstab','StandardDamage','Melee',60,[],[],['Slp'],15,1).
 spec_move('Preparation','BuffDebuff','Spell',0,['Prepared'],[],[],20,1).
-spec_move('Second Wind','Percentage','Spell',110,[],[],[],20,1).
+spec_move('Second Wind','Percentage','Spell',175,[],[],[],20,1).
 spec_move('Sismic Slam','StandardDamage','Melee',40,[],[],['Slp'],15,4).
 spec_move('Skullcrack','StandardDamage','Melee',30,[],['Stn'],['Slp'],20,1).
 spec_move('Berserker Rage','BuffDebuff','Spell',0,[],['Brk'],[],30,1).
@@ -23,9 +23,9 @@ spec_move('Shield Bash','StandardDamage','Melee',10,[],['Sil'],['Slp'],20,1).
 spec_move('Adrenaline Rush','BuffDebuff','Spell',0,['Sped Up'],[],[],15,1).
 spec_move('Iron Will','BuffDebuff','Spell',0,['Will Of Iron'],[],[],15,1).
 spec_move('Mighty Slam','StandardDamage','Melee',40,[],[],['Slp'],25,1).
-spec_move('Trip Attack','StandardDamage','Melee',15,['Slowed'],[],['Slp'],15,1).
+spec_move('Trip Attack','StandardDamage','Melee',5,['Slowed'],[],['Slp'],15,1).
 spec_move('Sunder Defenses','StandardDamage','Melee',5,['Sundered Defences'],[],['Slp'],15,1).
-spec_move('Chrono Shift','Percentage','Spell',15,[],[],['Slp'],30,4).
+spec_move('Chrono Shift','Percentage','Spell',85,[],[],['Slp'],30,4).
 spec_move('Haste','BuffDebuff','Spell',0,['Sped Up'],[],[],20,1).
 spec_move('Hypnosis','BuffDebuff','Spell',0,[],['Slp'],[],30,1).
 spec_move('Arcane Blast','StandardDamage','Spell',50,[],[],['Slp'],25,1).
@@ -33,7 +33,7 @@ spec_move('Pyroblast','StandardDamage','Spell',35,[],[],['Slp'],15,1).
 spec_move('Dragon Breath','StandardDamage','Spell',15,[],['Stn'],['Slp'],20,1).
 spec_move('Flamestrike','StandardDamage','Spell',40,[],[],['Slp'],25,4).
 spec_move('Holy Nova','StandardDamage','Spell',30,[],[],['Slp'],20,4).
-spec_move('Radiance','Percentage','Spell',130,[],[],[],40,4).
+spec_move('Radiance','Percentage','Spell',140,[],[],[],40,4).
 spec_move('Chastise','BuffDebuff','Spell',0,[],['Stn'],['Slp'],20,1).
 
 spec_move('Aimed Shot','StandardDamage','Ranged',35,[],[],['Slp'],15,1).

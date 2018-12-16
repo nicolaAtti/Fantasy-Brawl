@@ -12,6 +12,8 @@ class MoveTest extends FunSuite {
   val multiAlterationMove = getSpecialMove("Benefic Spores")
   val multiModifierMove = getSpecialMove("Bolster Faith")
   val multiTargetMove = getSpecialMove("Flamestrike")
+  val percentageMove = getSpecialMove("Chrono Shift")
+  val percentageHeal = getSpecialMove("Second Wind")
 
   val stunned = Alteration("Stn")
   val frozen = Alteration("Frz")
@@ -192,6 +194,27 @@ class MoveTest extends FunSuite {
                                     wizardCharacter,
                                     Set(userCharacter, targetCharacter, healerCharacter, wizardCharacter))
     assert(newStatuses.forall(chars => chars._2.alterations.contains(regeneration)))
+  }
+
+  test("A special move that deals percentage damage should deal the right amount of damage regardless of defences") {
+    val userCharacter = getCharacter("Jacob")
+    val targetCharacter = getCharacter("Cassandra")
+    val healerCharacter = getCharacter("Albert")
+    val wizardCharacter = getCharacter("Linn")
+    val anotherCharacter = getCharacter("Annabelle")
+
+    val newStatuses = Move.makeMove(percentageMove,wizardCharacter,Set(userCharacter,targetCharacter,healerCharacter,anotherCharacter))
+    assert(newStatuses(userCharacter).healthPoints == 459 &&
+            newStatuses(targetCharacter).healthPoints == 629 &&
+            newStatuses(healerCharacter).healthPoints == 344 &&
+            newStatuses(anotherCharacter).healthPoints == 344)
+  }
+  test("A special move that heals for a percentage of the current health should heal for the correct amount"){
+    val userCharacter = getCharacter("Jacob")
+    val damagedStatus = Status(50, 100, 300, 100, Map(), Map())
+    userCharacter.status = damagedStatus
+    val newStatuses = Move.makeMove(percentageHeal,userCharacter,Set(userCharacter))
+    assert(newStatuses(userCharacter).healthPoints == 87)
   }
 
 }

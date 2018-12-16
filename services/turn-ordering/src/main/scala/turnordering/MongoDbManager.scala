@@ -132,9 +132,8 @@ object MongoDbManager {
         replyTo = document(TurnOrdering.ReplyTo).asString.getValue
       )
     }
-
+    
   }
-
 }
 
 /** Very naive test useful both as a usage example and as a verification for the
