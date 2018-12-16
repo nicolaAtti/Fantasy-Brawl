@@ -4,7 +4,7 @@ import org.mongodb.scala.bson.BsonValue
 import org.mongodb.scala.model.Filters
 import org.mongodb.scala.model.Updates.inc
 import org.mongodb.scala.result.DeleteResult
-import org.mongodb.scala.{Completed, Document, MongoClient, MongoCollection, MongoDatabase}
+import org.mongodb.scala.{Completed, Document, MongoClient}
 
 import scala.concurrent.Future
 
