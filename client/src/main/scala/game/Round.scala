@@ -63,10 +63,10 @@ object Round {
       endRound()
   }
 
-  def actCalculation(moveName: String, targets: List[Character]): Unit ={
+  def actCalculation(moveName: String, targets: List[Character]): Unit = {
     val activeCharacter = turns.head
-    var newStatuses = _
-    if(moveName == PhysicalAttackRepresentation)
+    var newStatuses: Move.NewStatuses = Map()
+    if (moveName == PhysicalAttackRepresentation)
       newStatuses = Move.makeMove(PhysicalAttack, activeCharacter, targets.toSet)
     else
       newStatuses = Move.makeMove(activeCharacter.specialMoves(moveName), activeCharacter, targets.toSet)
