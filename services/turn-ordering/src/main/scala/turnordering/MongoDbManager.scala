@@ -8,7 +8,7 @@ import scala.concurrent.Future
 object MongoDbManager {
 
   import config._
-  val database: MongoDatabase = MongoClient(DbSettings.MongoClientStr).getDatabase(DbSettings.MongoDatabaseStr)
+  val database: MongoDatabase = MongoClient(DbNaming.ClientName).getDatabase(DbNaming.DatabaseName)
 
   def getCurrentRound(battleId: String): Future[Int] = ???
 
