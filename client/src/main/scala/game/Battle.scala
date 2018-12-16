@@ -19,7 +19,7 @@ object Battle extends App {
     Round.startNewRound()
   }
 
-  def end(winner: String): Unit ={
+  def end(winner: String): Unit = {
     // TODO set the winner
   }
 
