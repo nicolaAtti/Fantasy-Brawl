@@ -100,15 +100,9 @@ object TeamSelectionController extends Initializable with ViewController {
         "Intelligence: " + character.statistics.intelligence + "\n" +
         "Resistance: " + character.statistics.resistance + "\n\n" +
         "Special moves: \n\n"
-//      character.specialMoves.foreach {
-//        case (_, move) =>
-//          description += "    " + move.name +
-//            "     -> Type: " + move.moveType +
-//            ", Mana cost: " + move.manaCost +
-//            "\n"
-//      }
-      character.specialMoves.foreach { specialMove =>
-        description += s"    $specialMove\n"
+      character.specialMoves.foreach {
+        case (_, move) =>
+          description += s"    [${move.name}]  Type: ${move.moveType} | Mana cost: ${move.manaCost} | Max targets: ${move.maxTargets}\n"
       }
       characterDescription.setText(description)
     }
