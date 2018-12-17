@@ -224,9 +224,9 @@ object BattleController extends Initializable with ViewController {
   def displayMoveEffect(characterUser: Character, moveName: String, moveTargets: Set[Character]): Unit = {
     var moveReport: String = ""
     if (characterUser.owner.get equals Battle.playerId) {
-      moveReport = s"Your ${characterUser.characterName} used $moveName on"
+      moveReport = s"YOUR ${characterUser.characterName} used $moveName on"
     } else {
-      moveReport = s"Enemy ${characterUser.characterName} used $moveName on"
+      moveReport = s"ENEMY ${characterUser.characterName} used $moveName on"
     }
     val playerTargets = moveTargets.filter(character => character.owner.get equals Battle.playerId)
     val opponentTargets = moveTargets.filter(character => character.owner.get equals Battle.opponentId)
