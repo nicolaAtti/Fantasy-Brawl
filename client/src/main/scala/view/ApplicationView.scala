@@ -7,7 +7,6 @@ import javafx.stage.Stage
 import controller._
 import ViewConfiguration._
 import javafx.scene.control.ScrollPane
-import javafx.scene.image.ImageView
 import messaging.MatchmakingManager
 
 /** Manages the graphical interface.
@@ -72,10 +71,9 @@ object ApplicationView {
     val root: ScrollPane = loader.load()
     val stage = new Stage()
     stage setTitle MovesManualTitle
-    //val img = new ImageView(MovesManualViewBackgroundImage)
-    //img.fitWidthProperty().bind(stage.widthProperty())
-    //root.setContent(img)
-    //root.toBack()
+    stage setHeight ViewConfiguration.WindowHeight
+    stage setWidth 600
+    stage.setResizable(false)
     stage setScene new Scene(root)
     stage.show()
   }

@@ -13,9 +13,9 @@ object MessageFormat {
   def format[A]: MyFormat[A] = new RabbitMarshaller[A] with RabbitUnmarshaller[A] {
     val contentType = "text/plain"
     protected val contentEncoding = Some("UTF-8")
-    def marshall(value: A): Array[Byte] = serialize(value)
+    def marshall(value: A): Array[Byte] = serialize[A](value)
 
-    def unmarshall(value: Array[Byte], contentType: Option[String], charset: Option[String]): A = deserialize(value)
+    def unmarshall(value: Array[Byte], contentType: Option[String], charset: Option[String]): A = deserialize[A](value)
   }
 
   private object Serializer {
