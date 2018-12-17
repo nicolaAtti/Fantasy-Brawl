@@ -62,7 +62,9 @@ object MatchmakingManager {
     }
   }
 
-  /** Send a casual matchmaking request message.
+  import config.MessagingSettings._
+
+  /** Sends a casual matchmaking request message.
     *
     * @param playerName username of the player that wants to join
     * @param team team with which the player wants to fight
@@ -71,20 +73,19 @@ object MatchmakingManager {
     myName = playerName
     myTeam = team
     rabbitControl ! Message(
-      JoinCasualQueueRequest(playerName, myTeam, config.MiscSettings.MatchmakingAddKey, Queues.BattleQueue),
+      JoinCasualQueueRequest(playerName, myTeam, PlayerJoinedCasualQueue, Queues.BattleQueue),
       publisher,
       Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName))
     )
   }
 
-  /**
-    * Send a message to remove the player from the casual-queue
+  /** Send a message to remove the player from the casual-queue
     *
     * @param playerName username of the player that wants to be removed
     */
   def leaveCasualQueueRequest(playerName: String): Unit = {
     rabbitControl ! Message(
-      JoinCasualQueueRequest(playerName, Set(), config.MiscSettings.MatchmakingRemoveKey, Queues.BattleQueue),
+      JoinCasualQueueRequest(playerName, Set(), PlayerLeftCasualQueue, Queues.BattleQueue),
       publisher,
       Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName))
     )
