@@ -11,10 +11,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -56,28 +53,28 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar1Image" fitHeight="200.0" fitWidth="170.0" layoutX="802.0" layoutY="14.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar1Image" fitHeight="200.0" fitWidth="170.0" layoutX="808.0" layoutY="26.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Fernando2.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="682.0" layoutY="26.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="675.0" layoutY="14.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Cassandra2.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="633.0" layoutY="140.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="634.0" layoutY="149.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@tombstone2.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="772.0" layoutY="140.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="763.0" layoutY="149.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Albert2.png" />
                </image>
@@ -120,22 +117,7 @@
                   </Label>
                </children>
             </Pane>
-            <GridPane layoutX="4.0" layoutY="386.0" prefHeight="119.0" prefWidth="295.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.0" minWidth="10.0" prefWidth="74.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.0" minWidth="10.0" prefWidth="76.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.0" minWidth="10.0" prefWidth="67.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.0" minWidth="10.0" prefWidth="84.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="34.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="28.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="29.0" minHeight="9.0" prefHeight="23.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-            </GridPane>
-            <Label fx:id="winnerLabel" alignment="CENTER" layoutX="177.0" layoutY="126.0" prefHeight="132.0" prefWidth="607.0" text="WINNER IS GUEST999" textFill="RED" visible="false">
+            <Label fx:id="winnerLabel" alignment="CENTER" layoutX="177.0" layoutY="126.0" prefHeight="132.0" prefWidth="607.0" text="WINNER IS GUEST999" textFill="RED">
                <font>
                   <Font name="Javanese Text" size="30.0" />
                </font>
@@ -163,6 +145,13 @@
                   <DropShadow height="10.0" radius="4.5" spread="0.6" width="10.0" />
                </effect>
             </Label>
+            <Button fx:id="toMenuButton" alignment="CENTER" layoutX="388.0" layoutY="233.0" mnemonicParsing="false" onMouseClicked="#handleToMenuButtonPressed" prefHeight="33.0" prefWidth="186.0" text="Back to Team Menu">
+               <font>
+                  <Font name="Javanese Text" size="14.0" />
+               </font>
+               <effect>
+                  <DropShadow height="20.0" offsetX="4.0" offsetY="-4.0" radius="9.5" width="20.0" />
+               </effect></Button>
          </children>
       </Pane>
       <AnchorPane layoutY="390.0" prefHeight="150.0" prefWidth="960.0">

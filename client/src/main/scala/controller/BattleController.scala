@@ -17,7 +17,7 @@ import javafx.scene.paint.Color
 import javafx.util.Duration
 import model.{Character, Move}
 import view.ApplicationView
-
+import view.ViewConfiguration.viewSelector._
 import scala.collection.mutable.ListBuffer
 
 //noinspection ScalaDocMissingParameterDescription,FieldFromDelayedInit
@@ -55,6 +55,7 @@ object BattleController extends Initializable with ViewController {
   @FXML var actButton: Button = _
 
   @FXML var winnerLabel: Label = _
+  @FXML var toMenuButton: Button = _
 
   @FXML var playerIdLabel: Label = _
   @FXML var opponentIdLabel: Label = _
@@ -124,6 +125,8 @@ object BattleController extends Initializable with ViewController {
   def settingWinner(winner: String): Unit = {
     winnerLabel.setText("WINNER IS " + winner.toUpperCase)
     winnerLabel.setVisible(true)
+    toMenuButton.setDisable(false)
+    toMenuButton.setVisible(true)
   }
 
   /** Sets the player's team images and status description labels
@@ -381,5 +384,11 @@ object BattleController extends Initializable with ViewController {
       }
       actButtonActivation()
     }
+  }
+
+  @FXML def handleToMenuButtonPressed(mouseEvent: MouseEvent): Unit ={
+    //Change view and reset objects
+    ApplicationView changeView TEAM
+
   }
 }
