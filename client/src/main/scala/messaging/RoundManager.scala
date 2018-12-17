@@ -29,6 +29,8 @@ object RoundManager {
 
   private val publisher: Publisher = Publisher.queue(startRoundRequestQueue)
 
+  var currentRound: Int = 0
+
   Subscription.run(rabbitControl) {
     import Directives._
     channel(qos = MessagingSettings.Qos) {
@@ -36,9 +38,12 @@ object RoundManager {
         body(as[StartRoundResponse]) { response =>
           response.turnInformation match {
             case Right(turnInformation) => {
-              println("Received turnazione")
-              Round.setupTurns(turnInformation, response.round)
-
+              if(response.round > currentRound) {
+                currentRound = response.round
+                Round.setupTurns(turnInformation, response.round)
+              }else{
+                println("Received message of an old round....discarding")
+              }
             }
             case Left(details) =>
               Platform runLater (() => {

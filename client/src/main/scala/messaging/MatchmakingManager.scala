@@ -45,7 +45,6 @@ object MatchmakingManager {
         body(as[JoinCasualQueueResponse]) { response =>
           response.opponentData match {
             case Right((opponentName, opponentTeam, opponentQueue, battleId)) =>
-              println("Received message from matchmaker")
               Battle.start((myName, myTeam), (opponentName, opponentTeam), opponentQueue, battleId)
             case Left(details) =>
               Platform runLater (() => {
