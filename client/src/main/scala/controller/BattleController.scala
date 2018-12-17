@@ -221,20 +221,20 @@ object BattleController extends Initializable with ViewController {
     targetImages = ListBuffer()
   }
 
-  def displayMoveEffect(characterUser: Character,moveName: String,moveTargets: Set[Character]): Unit = {
+  def displayMoveEffect(characterUser: Character, moveName: String, moveTargets: Set[Character]): Unit = {
     var moveReport: String = ""
-    if(characterUser.owner.get equals Battle.playerId){
+    if (characterUser.owner.get equals Battle.playerId) {
       moveReport = s"Your ${characterUser.characterName} used $moveName on:"
-    }else{
+    } else {
       moveReport = s"Enemy ${characterUser.characterName} used $moveName on:"
     }
     val playerTargets = moveTargets.filter(character => character.owner.get equals Battle.playerId)
     val opponentTargets = moveTargets.filter(character => character.owner.get equals Battle.opponentId)
 
     moveReport = moveReport concat "Your"
-    playerTargets.foreach(playerChar => moveReport = moveReport concat " ,"+playerChar.characterName)
+    playerTargets.foreach(playerChar => moveReport = moveReport concat " ," + playerChar.characterName)
     moveReport = moveReport concat "Enemy"
-    opponentTargets.foreach(opponentChar => moveReport = moveReport concat " ,"+opponentChar.characterName)
+    opponentTargets.foreach(opponentChar => moveReport = moveReport concat " ," + opponentChar.characterName)
 
     moveReportLabel.setText(moveReport)
     moveReportLabel.setVisible(true)
@@ -407,7 +407,7 @@ object BattleController extends Initializable with ViewController {
     }
   }
 
-  @FXML def handleToMenuButtonPressed(mouseEvent: MouseEvent): Unit ={
+  @FXML def handleToMenuButtonPressed(mouseEvent: MouseEvent): Unit = {
     //Change view and reset objects
     ApplicationView changeView TEAM
 
