@@ -27,10 +27,6 @@ object BattleController extends Initializable with ViewController {
 
   val controller: ViewController = this
 
-  final val TargetedEffect: DropShadow = new DropShadow(0, 0, 0, Color.BLUE)
-  final val ActivePlayerEffect: DropShadow = new DropShadow(0, 0, 0, Color.LIME)
-  final val ActiveOpponentEffect: DropShadow = new DropShadow(0, 0, 0, Color.RED)
-
   @FXML var playerCharNames: VBox = _
   @FXML var playerHps: VBox = _
   @FXML var playerMps: VBox = _
@@ -83,12 +79,15 @@ object BattleController extends Initializable with ViewController {
     * @param resources
     */
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
-    TargetedEffect.setHeight(30)
-    TargetedEffect.setWidth(30)
-    ActivePlayerEffect.setHeight(30)
-    ActivePlayerEffect.setWidth(30)
-    ActiveOpponentEffect.setHeight(30)
-    ActiveOpponentEffect.setWidth(30)
+    TargetedEffect.setHeight(CharacterSelectionDimension)
+    TargetedEffect.setWidth(CharacterSelectionDimension)
+    TargetedEffect.setSpread(CharacterSelectionSpread)
+    ActivePlayerEffect.setHeight(CharacterSelectionDimension)
+    ActivePlayerEffect.setWidth(CharacterSelectionDimension)
+    ActivePlayerEffect.setSpread(CharacterSelectionSpread)
+    ActiveOpponentEffect.setHeight(CharacterSelectionDimension)
+    ActiveOpponentEffect.setWidth(CharacterSelectionDimension)
+    ActiveOpponentEffect.setSpread(CharacterSelectionSpread)
 
     playerImages = List(playerChar1Image, playerChar2Image, playerChar3Image, playerChar4Image)
     opponentImages = List(opponentChar1Image, opponentChar2Image, opponentChar3Image, opponentChar4Image)
@@ -107,6 +106,9 @@ object BattleController extends Initializable with ViewController {
       ))
     setBattlefield()
     timeline.playFromStart()
+
+    playerCharNames.getChildren.forEach(label => label.asInstanceOf[Label].setTextFill(Color.DARKSLATEGRAY))
+    opponentCharNames.getChildren.forEach(label => label.asInstanceOf[Label].setTextFill(Color.DARKSLATEGRAY))
   }
 
   /** Setups the GUI for both teams */
@@ -172,7 +174,7 @@ object BattleController extends Initializable with ViewController {
     */
   def setActiveCharacter(character: Character): Unit = {
     if (activeLabel != null) {
-      activeLabel.setTextFill(Color.BLACK)
+      activeLabel.setTextFill(Color.DARKSLATEGRAY)
       activeImage.setEffect(null)
     }
     activeCharacter = character
@@ -181,7 +183,7 @@ object BattleController extends Initializable with ViewController {
         .filter(charName => charName.asInstanceOf[Label].getText equals activeCharacter.characterName)
         .head
         .asInstanceOf[Label]
-      activeLabel.setTextFill(Color.GREEN)
+      activeLabel.setTextFill(CharacterPlayerSelectionLabelColor)
       activeImage = playerCharacterImages.find(char => char._2 == activeCharacter).get._1
       activeImage.setEffect(ActivePlayerEffect)
       setupCharacterMoves(activeCharacter)
@@ -190,13 +192,13 @@ object BattleController extends Initializable with ViewController {
         .filter(charName => charName.asInstanceOf[Label].getText equals activeCharacter.characterName)
         .head
         .asInstanceOf[Label]
-      activeLabel.setTextFill(Color.RED)
+      activeLabel.setTextFill(CharacterOpponentSelectionLabelColor)
       activeImage = opponentCharacterImages.find(char => char._2 == activeCharacter).get._1
       activeImage.setEffect(ActiveOpponentEffect)
     }
     newTurn()
   }
-  
+
   /** Resets the turn timer */
   def newTurn(): Unit = {
     timeSeconds = config.MiscSettings.TurnDurationInSeconds
@@ -209,6 +211,13 @@ object BattleController extends Initializable with ViewController {
     val Separator: String = "/"
     val PhysicalAttackRepresentation: String = "Physical Attack"
     val MovesSeparator: String = "--"
+    val CharacterSelectionDimension = 20
+    val CharacterSelectionSpread = 0.7
+    final val TargetedEffect: DropShadow = new DropShadow(0, 0, 0, Color.BLUE)
+    final val ActivePlayerEffect: DropShadow = new DropShadow(0, 0, 0, Color.LIME)
+    final val ActiveOpponentEffect: DropShadow = new DropShadow(0, 0, 0, Color.RED)
+    val CharacterPlayerSelectionLabelColor: Color = Color.LIMEGREEN
+    val CharacterOpponentSelectionLabelColor: Color = Color.ORANGERED
 
     /** Assigns to each character it's battle image, orientation depends on the player  */
     def prepareImages(): Unit = {
@@ -233,9 +242,16 @@ object BattleController extends Initializable with ViewController {
       */
     def setDeadCharacters(): Unit = {
       playerCharacterImages.foreach(couple =>
-        if (couple._2.status.healthPoints == 0) { couple._1.setImage(new Image("view/tombstone2.png")) })
+        if (!couple._2.isAlive) { couple._1.setImage(new Image("view/tombstone2.png")) })
       opponentCharacterImages.foreach(couple =>
-        if (couple._2.status.healthPoints == 0) { couple._1.setImage(new Image("view/tombstone1.png")) })
+        if (!couple._2.isAlive) { couple._1.setImage(new Image("view/tombstone1.png")) })
+      setDeadLabel(playerCharNames)
+      setDeadLabel(opponentCharNames)
+    }
+
+    def setDeadLabel(charNames: VBox): Unit = {
+      charNames.getChildren.forEach(label =>
+        Battle.teams.find(character => character.characterName == label.asInstanceOf[Label].getText).get.isAlive)
     }
 
     /** Adds the player's active character's moves to the listView
