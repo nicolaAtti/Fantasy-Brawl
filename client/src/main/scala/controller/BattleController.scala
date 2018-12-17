@@ -56,6 +56,9 @@ object BattleController extends Initializable with ViewController {
 
   @FXML var winnerLabel: Label = _
 
+  @FXML var playerIdLabel: Label = _
+  @FXML var opponentIdLabel: Label = _
+
   var playerImages: List[ImageView] = List()
   var opponentImages: List[ImageView] = List()
 
@@ -113,6 +116,8 @@ object BattleController extends Initializable with ViewController {
 
   /** Setups the GUI for both teams */
   def setBattlefield(): Unit = {
+    playerIdLabel.setText(Battle.playerId)
+    opponentIdLabel.setText(Battle.opponentId)
     setupTeams(Battle.teams)
   }
 

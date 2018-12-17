@@ -27,7 +27,7 @@
                   <Image url="@Backdrop1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="playerChar1Image" fitHeight="200.0" fitWidth="170.0" layoutX="88.0" layoutY="14.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true" style="-fx-background-color: transparent;">
+            <ImageView fx:id="playerChar1Image" fitHeight="200.0" fitWidth="170.0" layoutX="101.0" layoutY="14.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true" style="-fx-background-color: transparent;">
                <image>
                   <Image url="@Rikh1.png" />
                </image>
@@ -35,49 +35,49 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="playerChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="248.0" layoutY="14.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="playerChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="262.0" layoutY="26.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Annabelle1.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="playerChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="27.0" layoutY="163.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="playerChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="47.0" layoutY="140.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Lidya1.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="playerChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="165.0" layoutY="163.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="playerChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="165.0" layoutY="134.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Noah1.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar1Image" fitHeight="200.0" fitWidth="170.0" layoutX="786.0" layoutY="20.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar1Image" fitHeight="200.0" fitWidth="170.0" layoutX="802.0" layoutY="14.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Fernando2.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="647.0" layoutY="20.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="682.0" layoutY="26.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Cassandra2.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="621.0" layoutY="158.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="633.0" layoutY="140.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@tombstone2.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="764.0" layoutY="158.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="772.0" layoutY="140.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Albert2.png" />
                </image>
@@ -145,6 +145,22 @@
                         <Glow level="1.0" />
                      </input>
                   </DropShadow>
+               </effect>
+            </Label>
+            <Label fx:id="playerIdLabel" alignment="CENTER" layoutX="1.0" layoutY="330.0" prefHeight="56.0" prefWidth="166.0" text="Guest#0000" textFill="WHITE">
+               <font>
+                  <Font name="Javanese Text" size="20.0" />
+               </font>
+               <effect>
+                  <DropShadow height="10.0" radius="4.5" spread="0.6" width="10.0" />
+               </effect>
+            </Label>
+            <Label fx:id="opponentIdLabel" alignment="CENTER" layoutX="802.0" layoutY="330.0" prefHeight="56.0" prefWidth="155.0" text="Guest#0000" textFill="WHITE">
+               <font>
+                  <Font name="Javanese Text" size="20.0" />
+               </font>
+               <effect>
+                  <DropShadow height="10.0" radius="4.5" spread="0.6" width="10.0" />
                </effect>
             </Label>
          </children>
