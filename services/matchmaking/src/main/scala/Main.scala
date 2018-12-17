@@ -5,32 +5,29 @@ import akka.actor.{ActorSystem, Props}
 import com.spingo.op_rabbit._
 import com.spingo.op_rabbit.properties.ReplyTo
 import com.spingo.op_rabbit.Directives._
+
 import communication.MessageFormat.MyFormat
+import config.MessagingSettings
 import matchmaking.MongoDbManager
 
 object Main extends App {
 
   final val LogMessage = "Received a new casual queue join request"
-  final val LogDetailsPrefix = "Details: "
-  final val Separator = "-"
-  final val FailurePrint = "Failure... Caught:"
   final val OpponentNotFoundPrint = "Could not find opponent with ticket"
-  final val ClientLeftTheGamePrint = "The player left the game"
+  final val PlayerLeftPrint = "The player left the game"
+  final val BattleIdSeparator = "-"
 
   import communication._
-  import config._
+  import config.MessagingSettings._
+  import config.MiscSettings._
 
   val rabbitControl = ActorSystem().actorOf(Props[RabbitControl])
   implicit val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = MessagingSettings.Requeue)
-
   implicit val requestFormat: MyFormat[JoinCasualQueueRequest] = MessageFormat.format[JoinCasualQueueRequest]
   implicit val responseFormat: MyFormat[JoinCasualQueueResponse] = MessageFormat.format[JoinCasualQueueResponse]
 
   import Queues._
-
-  val requestQueue = Queue(JoinCasualMatchmakingRequestQueue,
-    durable = MessagingSettings.Durable,
-    autoDelete = MessagingSettings.AutoDelete)
+  val requestQueue = Queue(JoinCasualMatchmakingRequestQueue, durable = Durable, autoDelete = AutoDelete)
 
   import MatchmakingHelper._
 
@@ -38,25 +35,25 @@ object Main extends App {
 
     channel(qos = MessagingSettings.Qos) {
       consume(requestQueue) {
-        (body(as[JoinCasualQueueRequest]) & optionalProperty(ReplyTo)) {
-          (request, replyTo) => {
+        (body(as[JoinCasualQueueRequest]) & optionalProperty(ReplyTo)) { (request, replyTo) =>
+          {
 
-            if (MiscSettings.ServicesLog) {
+            if (config.MiscSettings.ServicesLog) {
               println(LogMessage)
             }
             request.operation match {
 
-              case MiscSettings.MatchmakingAddKey =>
+              case PlayerJoinedCasualQueue =>
                 findAnOpponent(request.playerName, request.team, request.battleQueue, replyTo.get)
 
-              case MiscSettings.MatchmakingRemoveKey =>
-                MongoDbManager.notifyPlayerLeftTheGame(request.playerName).onComplete {
-                  case Success(_) => println(s"${request.playerName}: $ClientLeftTheGamePrint")
-                  case Failure(exception) => println(s"$FailurePrint $exception")
+              case PlayerLeftCasualQueue =>
+                MongoDbManager.notifyPlayerLeft(request.playerName).onComplete {
+                  case Success(_)         => println(s"${request.playerName}: $PlayerLeftPrint")
+                  case Failure(exception) => println(s"$LogFailurePrefix$exception")
                 }
             }
           }
-            ack
+          ack
         }
       }
     }
@@ -86,20 +83,19 @@ object Main extends App {
 
                       case Success(_) =>
                         println("Sending battle information to both clients ...")
-                        sendBattleDataToBoth(
-                          (playerName, team, replyTo),
-                          (opponentName, opponentTeam, opponentReplyTo),
-                          battleId)
+                        sendBattleDataToBoth((playerName, team, replyTo),
+                                             (opponentName, opponentTeam, opponentReplyTo),
+                                             battleId)
 
-                      case Failure(e) => println(s"$FailurePrint $e")
+                      case Failure(e) => println(s"$LogFailurePrefix$e")
                     }
                   }
-                case Failure(e) => println(s"$FailurePrint $e")
-                case _ => println(s"$OpponentNotFoundPrint $opponentTicket")
+                case Failure(e) => println(s"$LogFailurePrefix$e")
+                case _          => println(s"$OpponentNotFoundPrint $opponentTicket")
               }
-            case Failure(e) => println(s"$FailurePrint $e")
+            case Failure(e) => println(s"$LogFailurePrefix$e")
           }
-        case Failure(e) => println(s"$FailurePrint $e")
+        case Failure(e) => println(s"$LogFailurePrefix$e")
       }
     }
 
@@ -127,7 +123,7 @@ object Main extends App {
     }
 
     def evaluateBattleId(ticket1: Int, ticket2: Int): String = {
-      s"${ticket1 min ticket2}$Separator${ticket1 max ticket2}"
+      s"${ticket1 min ticket2}$BattleIdSeparator${ticket1 max ticket2}"
     }
   }
 
