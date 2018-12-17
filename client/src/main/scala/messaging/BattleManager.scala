@@ -24,24 +24,26 @@ object BattleManager {
 
   private val publisher: Publisher = Publisher.queue(opponentQueue)
 
-  Subscription.run(rabbitControl) {
-    import Directives._
-    channel(qos = MessagingSettings.Qos) {
-      consume(playerQueue) {
-        body(as[StatusUpdateMessage]) { response =>
-          (response.round, response.attacker) match {
-            case (round, (owner, characterName))
-                if round == Round.roundId && owner == Round.turns.head.owner.get && characterName == Round.turns.head.characterName =>
-              import BattleManagerHelper._
-              Round.makeMoveAndUpdateTeamsStatuses(findCharacter(response.attacker),
-                                                   response.moveName,
-                                                   response.targets.map {
-                                                     case target => findCharacter(target)
-                                                   })
-              Round.endTurn()
-            case _ => Unit
+  def start(): Unit = {
+    Subscription.run(rabbitControl) {
+      import Directives._
+      channel(qos = MessagingSettings.Qos) {
+        consume(playerQueue) {
+          body(as[StatusUpdateMessage]) { response =>
+            (response.round, response.attacker) match {
+              case (round, (owner, characterName))
+                  if round == Round.roundId && owner == Round.turns.head.owner.get && characterName == Round.turns.head.characterName =>
+                import BattleManagerHelper._
+                Round.makeMoveAndUpdateTeamsStatuses(findCharacter(response.attacker),
+                                                     response.moveName,
+                                                     response.targets.map {
+                                                       case target => findCharacter(target)
+                                                     })
+                Round.endTurn()
+              case _ => Unit
+            }
+            ack
           }
-          ack
         }
       }
     }

@@ -31,31 +31,33 @@ object RoundManager {
 
   var currentRound: Int = 0
 
-  Subscription.run(rabbitControl) {
-    import Directives._
-    channel(qos = MessagingSettings.Qos) {
-      consume(startRoundResponseQueue) {
-        body(as[StartRoundResponse]) { response =>
-          response.turnInformation match {
-            case Right(turnInformation) => {
-              if (response.round > currentRound) {
-                currentRound = response.round
-                Round.setupTurns(turnInformation, response.round)
-              } else {
-                println("Received message of an old round....discarding")
+  def start(): Unit = {
+    Subscription.run(rabbitControl) {
+      import Directives._
+      channel(qos = MessagingSettings.Qos) {
+        consume(startRoundResponseQueue) {
+          body(as[StartRoundResponse]) { response =>
+            response.turnInformation match {
+              case Right(turnInformation) => {
+                if (response.round > currentRound) {
+                  currentRound = response.round
+                  Round.setupTurns(turnInformation, response.round)
+                } else {
+                  println("Received message of an old round....discarding")
+                }
               }
+              case Left(details) =>
+                Platform runLater (() => {
+                  val alert: Alert = new Alert(ViewConfiguration.DialogErrorType)
+                  alert setTitle ViewConfiguration.DialogErrorTitle
+                  alert setHeaderText details
+                  alert showAndWait ()
+                  ApplicationView changeView BATTLE
+                })
+              case _ => Unit
             }
-            case Left(details) =>
-              Platform runLater (() => {
-                val alert: Alert = new Alert(ViewConfiguration.DialogErrorType)
-                alert setTitle ViewConfiguration.DialogErrorTitle
-                alert setHeaderText details
-                alert showAndWait ()
-                ApplicationView changeView BATTLE
-              })
-            case _ => Unit
+            ack
           }
-          ack
         }
       }
     }

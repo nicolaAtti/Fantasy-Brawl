@@ -1,7 +1,7 @@
 package game
 
 import controller.BattleController
-import messaging.RoundManager
+import messaging.{BattleManager, RoundManager}
 import model._
 import utilities.ScalaProlog._
 
@@ -22,6 +22,7 @@ object Battle extends App {
     playerId = player._1
     opponentId = opponent._1
     opponentQueue = battleQueue
+    BattleManager.start()
     teams = setupTeam(player, opponent)
     Round.startNewRound()
   }

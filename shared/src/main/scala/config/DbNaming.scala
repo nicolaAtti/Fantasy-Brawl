@@ -20,12 +20,13 @@ object DbNaming {
 
     val PlayerName = "player_name"
     val TeamMembers = "team_members"
-    val BattleQueue = "battle-queue"
+    val BattleQueue = "battle_queue"
     val ReplyTo = "reply_to"
+    val LeftTheQueue = "left_the_queue"
   }
 
-  object ActiveBattles {
-    val CollectionName = "active_battles"
+  object Battles {
+    val CollectionName = "battles"
 
     val CurrentRound = "current_round"
   }

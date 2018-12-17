@@ -27,4 +27,18 @@ object Misc {
     */
   def clamped(value: Int, minValue: Int, maxValue: Int): Int = minValue max value min maxValue
 
+  /** Tells if an integer number is even.
+    *
+    * @param number the number
+    * @return true if even, false otherwise
+    */
+  def isEven(number: Int): Boolean = number % 2 == 0
+
+  /** Tells if an integer number is odd.
+    *
+    * @param number the number
+    * @return true if odd, false otherwise
+    */
+  def isOdd(number: Int): Boolean = !isEven(number)
+
 }
