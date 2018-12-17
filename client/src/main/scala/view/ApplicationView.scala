@@ -47,6 +47,7 @@ object ApplicationView {
       if (stage.getTitle equals WaitingOpponentTitle) {
         MatchmakingManager.leaveCasualQueueRequest(TeamSelectionController.username)
       }
+      Thread sleep 500
       Platform exit ()
       System exit 0
     })

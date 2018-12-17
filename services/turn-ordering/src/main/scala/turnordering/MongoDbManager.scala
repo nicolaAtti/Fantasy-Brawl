@@ -16,7 +16,7 @@ object MongoDbManager {
 
   import config.DbNaming._
   val database = MongoClient(ClientName).getDatabase(DatabaseName)
-  val battlesCollection = database.getCollection(ActiveBattles.CollectionName)
+  val battlesCollection = database.getCollection(Battles.CollectionName)
   val turnOrderingCollection = database.getCollection(TurnOrdering.CollectionName)
 
   /** Retrieves the current round of an ongoing battle.
@@ -28,7 +28,7 @@ object MongoDbManager {
   def getCurrentRound(battleId: String): Future[Int] = {
     battlesCollection
       .find(filter = Filters.equal("_id", battleId))
-      .map(document => document(ActiveBattles.CurrentRound).asInt32().getValue)
+      .map(document => document(Battles.CurrentRound).asInt32().getValue)
       .head
   }
 
@@ -38,7 +38,7 @@ object MongoDbManager {
     * @return a Future representing the success/failure of the operation
     */
   def incrementCurrentRound(battleId: String): Future[UpdateResult] = {
-    val incByOne: Bson = inc(ActiveBattles.CurrentRound, number = 1)
+    val incByOne: Bson = inc(Battles.CurrentRound, number = 1)
     battlesCollection
       .updateOne(filter = Filters.equal("_id", battleId), update = incByOne)
       .head

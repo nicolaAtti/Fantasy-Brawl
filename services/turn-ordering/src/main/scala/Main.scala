@@ -13,7 +13,6 @@ object Main extends App {
 
   final val LogMessage = "Received a new turn ordering request"
   final val OldRequestPrint = "Received an old round request: "
-  final val FailurePrint = "Failure... Caught:"
 
   import communication._
 
@@ -24,10 +23,12 @@ object Main extends App {
   implicit val responseFormat: MyFormat[StartRoundResponse] = MessageFormat.format[StartRoundResponse]
 
   import Queues._
+  import config.MiscSettings._
 
   val requestQueue =
     Queue(StartRoundRequestQueue, durable = MessagingSettings.Durable, autoDelete = MessagingSettings.AutoDelete)
   Subscription.run(rabbitControl) {
+
     import com.spingo.op_rabbit.Directives._
     import turnordering.MongoDbManager._
     channel(qos = MessagingSettings.Qos) {
@@ -59,12 +60,12 @@ object Main extends App {
                         deletePlayerInfo(request.playerName, request.battleId, request.round)
                         deletePlayerInfo(opponent.name, request.battleId, request.round)
                         incrementCurrentRound(request.battleId)
-                      case Failure(e) => println(s"$FailurePrint $e")
+                      case Failure(e) => println(s"$LogFailurePrefix$e")
                     }
-                  case Failure(e) => println(s"$FailurePrint $e")
+                  case Failure(e) => println(s"$LogFailurePrefix$e")
                 }
-              case Success(round: Int) => println(s"$OldRequestPrint $request.round actual $round")
-              case Failure(e)          => println(s"$FailurePrint $e")
+              case Success(round: Int) => println(s"$OldRequestPrint ${request.round} actual $round")
+              case Failure(e)          => println(s"$LogFailurePrefix$e")
             }
             ack
           }

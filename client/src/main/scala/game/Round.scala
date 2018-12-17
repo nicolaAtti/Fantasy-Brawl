@@ -3,7 +3,6 @@ package game
 import controller.BattleController
 import javafx.application.Platform
 import messaging.{BattleManager, RoundManager}
-import model.Move.NewStatuses
 import model._
 import view.ApplicationView
 import view.ViewConfiguration.viewSelector._
@@ -51,8 +50,10 @@ object Round {
   }
 
   def endTurn(): Unit = {
-    BattleController.resetTargets()
-    BattleController.updateStatus()
+    Platform runLater (() => {
+      BattleController.resetTargets()
+      BattleController.updateStatus()
+    })
     val playerLost = !Battle.teams.exists(character => character.owner.get == Battle.playerId && character.isAlive)
     val opponentLost = !Battle.teams.exists(character => character.owner.get == Battle.opponentId && character.isAlive)
     (playerLost, opponentLost) match {
@@ -87,6 +88,8 @@ object Round {
     else
       newStatuses = Move.makeMove(attacker.specialMoves(moveName), attacker, targets)
     Battle.teams.foreach(character => if (newStatuses.contains(character)) character.status = newStatuses(character))
-    BattleController.displayMoveEffect(attacker, moveName, targets)
+    Platform runLater (() => {
+      BattleController.displayMoveEffect(attacker, moveName, targets)
+    })
   }
 }
