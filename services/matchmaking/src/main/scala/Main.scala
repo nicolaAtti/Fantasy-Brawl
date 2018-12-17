@@ -37,7 +37,6 @@ object Main extends App {
       consume(requestQueue) {
         (body(as[JoinCasualQueueRequest]) & optionalProperty(ReplyTo)) { (request, replyTo) =>
           {
-
             if (config.MiscSettings.ServicesLog) {
               println(LogMessage)
             }
@@ -82,9 +81,8 @@ object Main extends App {
                     MongoDbManager.createBattleInstance(battleId).onComplete {
 
                       case Success(_) =>
-                        println("Sending battle information to both clients ...")
-                        sendBattleDataToBoth((playerName, team, replyTo),
-                                             (opponentName, opponentTeam, opponentReplyTo),
+                        sendBattleDataToBoth((playerName, team, battleQueue, replyTo),
+                                             (opponentName, opponentTeam, opponentBattleQueue, opponentReplyTo),
                                              battleId)
 
                       case Failure(e) => println(s"$LogFailurePrefix$e")
@@ -105,15 +103,15 @@ object Main extends App {
       * @param dataQueuedPlayer the data of the second player
       * @param battleId         the battle identifier
       */
-    def sendBattleDataToBoth(dataReqPlayer: (String, Set[String], String),
-                             dataQueuedPlayer: (String, Set[String], String),
+    def sendBattleDataToBoth(dataReqPlayer: (String, Set[String], String, String),
+                             dataQueuedPlayer: (String, Set[String], String, String),
                              battleId: String): Unit = {
       val responseForRequester = JoinCasualQueueResponse(
         Right((dataQueuedPlayer._1, dataQueuedPlayer._2, dataQueuedPlayer._3, battleId)))
       val responseForQueued = JoinCasualQueueResponse(
         Right((dataReqPlayer._1, dataReqPlayer._2, dataReqPlayer._3, battleId)))
-      rabbitControl ! Message.queue(responseForRequester, dataReqPlayer._3)
-      rabbitControl ! Message.queue(responseForQueued, dataQueuedPlayer._3)
+      rabbitControl ! Message.queue(responseForRequester, dataReqPlayer._4)
+      rabbitControl ! Message.queue(responseForQueued, dataQueuedPlayer._4)
     }
 
     import utilities.Misc._
