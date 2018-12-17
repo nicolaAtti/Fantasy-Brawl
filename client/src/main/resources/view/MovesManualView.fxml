@@ -6,6 +6,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
 <ScrollPane hbarPolicy="NEVER" hmax="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
@@ -27,9 +28,6 @@
                   <Font name="Imprint MT Shadow" size="14.0" />
                </font>
             </Label>
-            <Button fx:id="meleeButton" layoutX="296.0" layoutY="35.0" mnemonicParsing="false" onMouseClicked="#meleeButtonPressed" prefHeight="25.0" prefWidth="75.0" text="Melee" />
-            <Button fx:id="rangedButton" layoutX="383.0" layoutY="35.0" mnemonicParsing="false" onMouseClicked="#rangedButtonPressed" prefWidth="75.0" text="Ranged" />
-            <Button fx:id="spellButton" layoutX="469.0" layoutY="35.0" mnemonicParsing="false" onMouseClicked="#spellButtonPressed" prefWidth="75.0" text="Spells" />
             <Label fx:id="rangedDescriptions" alignment="TOP_LEFT" layoutX="57.0" layoutY="91.0" prefHeight="650.0" prefWidth="492.0" text="Poison Vial: Throw a vial of noxious gas to a target poisoning him and inflicting 20 extra damage.&#10;Mana cost: 15&#10;Flash Grenade: Throw a flash grenade up to 4 targets blinding them.&#10;Mana cost: 20&#10;Aimed Shot: Shoot with careful aim to a target inflicting 35 extra damage.&#10;Mana cost: 15&#10;Arrow Volley: Shoot multiple arrows in the air inflicting 20 extra damage up to 4 targets.&#10;Mana cost: 25&#10;Fan of Knives: Throw multiple daggers up to 4 targets inflicting 25 extra damage.&#10;Mana cost: 10" wrapText="true">
                <font>
                   <Font name="Imprint MT Shadow" size="14.0" />
@@ -50,6 +48,13 @@
                   <Font name="Imprint MT Shadow" size="14.0" />
                </font>
             </Label>
+            <HBox alignment="CENTER" layoutX="191.0" layoutY="22.0" prefHeight="26.0" prefWidth="399.0" spacing="40.0">
+               <children>
+                  <Button fx:id="meleeButton" mnemonicParsing="false" onMouseClicked="#meleeButtonPressed" prefHeight="25.0" prefWidth="75.0" text="Melee" />
+                  <Button fx:id="rangedButton" mnemonicParsing="false" onMouseClicked="#rangedButtonPressed" prefHeight="25.0" prefWidth="75.0" text="Ranged" />
+                  <Button fx:id="spellButton" mnemonicParsing="false" onMouseClicked="#spellButtonPressed" prefHeight="25.0" prefWidth="75.0" text="Spells" />
+               </children>
+            </HBox>
          </children>
       </AnchorPane>
    </content>
