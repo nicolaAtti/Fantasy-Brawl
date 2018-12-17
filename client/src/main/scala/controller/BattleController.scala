@@ -371,7 +371,9 @@ object BattleController extends Initializable with ViewController {
     *
     */
   @FXML def handleActButtonPress(): Unit = {
-    Round.actCalculation(moveListView.getSelectionModel.getSelectedItem.split(MovesSeparator).head, targets.toList)
+    Round.actCalculation(activeCharacter,
+                         moveListView.getSelectionModel.getSelectedItem.split(MovesSeparator).head,
+                         targets.toList)
     activeLabel.setTextFill(Color.BLACK)
     resetTargets()
     moveList = FXCollections.observableArrayList()
