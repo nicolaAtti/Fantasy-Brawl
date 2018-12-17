@@ -87,6 +87,6 @@ object Round {
     else
       newStatuses = Move.makeMove(attacker.specialMoves(moveName), attacker, targets)
     Battle.teams.foreach(character => if (newStatuses.contains(character)) character.status = newStatuses(character))
-    // TODO BattleController.displayMoveEffect(attacker, moveName, targets)
+    BattleController.displayMoveEffect(attacker, moveName, targets)
   }
 }

@@ -231,10 +231,10 @@ object BattleController extends Initializable with ViewController {
     val playerTargets = moveTargets.filter(character => character.owner.get equals Battle.playerId)
     val opponentTargets = moveTargets.filter(character => character.owner.get equals Battle.opponentId)
 
-    moveReport = moveReport concat "Your"
-    playerTargets.foreach(playerChar => moveReport = moveReport concat " ," + playerChar.characterName)
-    moveReport = moveReport concat "Enemy"
-    opponentTargets.foreach(opponentChar => moveReport = moveReport concat " ," + opponentChar.characterName)
+    moveReport = moveReport concat "Your "
+    playerTargets.foreach(playerChar => moveReport = moveReport concat ", " + playerChar.characterName)
+    moveReport = moveReport concat "Enemy "
+    opponentTargets.foreach(opponentChar => moveReport = moveReport concat ", " + opponentChar.characterName)
 
     moveReportLabel.setText(moveReport)
     moveReportLabel.setVisible(true)
