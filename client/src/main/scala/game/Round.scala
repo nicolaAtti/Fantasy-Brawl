@@ -1,6 +1,7 @@
 package game
 
 import controller.BattleController
+import javafx.application.Platform
 import messaging.{BattleManager, RoundManager}
 import model.Move.NewStatuses
 import model._
@@ -8,7 +9,7 @@ import view.ApplicationView
 import view.ViewConfiguration.viewSelector._
 
 object Round {
-  var id: Int = 0
+  var roundId: Int = 0
   var turns: List[Character] = List()
   val PhysicalAttackRepresentation: String = "Physical Attack"
 
@@ -21,17 +22,17 @@ object Round {
         .toMap,
       Battle.opponentId,
       Battle.id,
-      id + 1
+      roundId + 1
     )
   }
 
   def setupTurns(turnInformation: List[(String, String)], round: Int): Unit = {
-    id = round
+    roundId = round
     turns = turnInformation.map {
       case (playerName, characterName) =>
         Battle.teams.find(char => char.characterName == characterName && char.owner.get == playerName).get
     }
-    if (id == 1)
+    if (roundId == 1)
       ApplicationView changeView BATTLE
     startTurn()
   }
@@ -40,7 +41,10 @@ object Round {
     val activeCharacter = turns.head
     if (activeCharacter.isAlive) {
       activeCharacter.status = Status.afterTurnStart(activeCharacter.status)
-      BattleController.setActiveCharacter(activeCharacter)
+      Platform runLater (() => {
+        BattleController.setActiveCharacter(activeCharacter)
+        BattleController.roundCounter.setText(roundId.toString)
+      })
     } else {
       endTurn()
     }
@@ -72,7 +76,7 @@ object Round {
     else
       newStatuses = Move.makeMove(activeCharacter.specialMoves(moveName), activeCharacter, targets.toSet)
     updateTeamsStatuses(newStatuses)
-    BattleManager.updateOpponentStatus(newStatuses, id, activeCharacter)
+    BattleManager.updateOpponentStatus(newStatuses, roundId, activeCharacter)
     endTurn()
   }
 

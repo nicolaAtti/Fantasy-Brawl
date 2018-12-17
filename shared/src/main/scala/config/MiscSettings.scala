@@ -4,7 +4,7 @@ object MiscSettings {
 
   val ServicesLog: Boolean = true
   val LogDetailsPrefix = "Details: "
-  val LogFailurePrefix = "Failure... Caught:"
+  val LogFailurePrefix = "Failure... Caught: "
 
   val MatchmakingAddKey: String = "add"
   val MatchmakingRemoveKey: String = "remove"

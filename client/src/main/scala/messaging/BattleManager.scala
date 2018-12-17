@@ -30,7 +30,7 @@ object BattleManager {
       consume(playerQueue) {
         body(as[StatusUpdateMessage]) { response =>
           (response.round, response.turn) match {
-            case (round, turn) if round == Round.id && turn == Round.turns.head =>
+            case (round, turn) if round == Round.roundId && turn == Round.turns.head =>
               Round.updateTeamsStatuses(response.newStatuses)
               Round.endTurn()
             case _ => Unit

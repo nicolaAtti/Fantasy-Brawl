@@ -67,10 +67,7 @@ object MongoDbManager {
            document(CasualQueue.TeamMembers)
              .asArray()
              .toArray
-             .toSeq
-             .collect {
-               case str: BsonValue => str.asString().getValue
-             }
+             .map { case bsonTeamMember: BsonValue => bsonTeamMember.asString().getValue }
              .toSet,
            document(CasualQueue.BattleQueue).asString().getValue,
            document(CasualQueue.ReplyTo).asString().getValue))
