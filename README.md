@@ -48,6 +48,6 @@ It is possible to download the source code and all release executable jars at th
 The latest documentation is available at the page :  https://nicolaAtti.github.io/pps-17-fb/
 
 ## Team members
-Nicola Atti(nicola.atti@studio.unibo.it) *Project Owner* 
+Nicola Atti(nicola.atti@studio.unibo.it) *Project Owner*              
 Marco Canducci(marco.canducci@studio.unibo.it)  
 Daniele Schiavi(daniele.schiavi@studio.unibo.it)
