@@ -67,7 +67,7 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="634.0" layoutY="149.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="626.0" layoutY="133.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@tombstone2.png" />
                </image>
@@ -117,7 +117,7 @@
                   </Label>
                </children>
             </Pane>
-            <Label fx:id="winnerLabel" alignment="CENTER" layoutX="177.0" layoutY="126.0" prefHeight="132.0" prefWidth="607.0" text="WINNER IS GUEST999" textFill="RED">
+            <Label fx:id="winnerLabel" alignment="CENTER" layoutX="177.0" layoutY="126.0" prefHeight="132.0" prefWidth="607.0" text="WINNER IS GUEST999" textFill="RED" visible="false">
                <font>
                   <Font name="Javanese Text" size="30.0" />
                </font>
@@ -145,13 +145,20 @@
                   <DropShadow height="10.0" radius="4.5" spread="0.6" width="10.0" />
                </effect>
             </Label>
-            <Button fx:id="toMenuButton" alignment="CENTER" layoutX="388.0" layoutY="233.0" mnemonicParsing="false" onMouseClicked="#handleToMenuButtonPressed" prefHeight="33.0" prefWidth="186.0" text="Back to Team Menu">
+            <Button fx:id="toMenuButton" alignment="CENTER" disable="true" layoutX="388.0" layoutY="233.0" mnemonicParsing="false" onMouseClicked="#handleToMenuButtonPressed" prefHeight="33.0" prefWidth="186.0" text="Back to Team Menu" visible="false">
                <font>
                   <Font name="Javanese Text" size="14.0" />
                </font>
                <effect>
                   <DropShadow height="20.0" offsetX="4.0" offsetY="-4.0" radius="9.5" width="20.0" />
                </effect></Button>
+            <Label fx:id="moveReportLabel" alignment="CENTER" layoutX="142.0" layoutY="337.0" prefHeight="43.0" prefWidth="665.0" text="Your Rick used Chrono Shift on Opponent: Cassandra,Albert,Fernando and Your Annabelle" textFill="WHITE" visible="false">
+               <font>
+                  <Font name="Javanese Text" size="15.0" />
+               </font>
+               <effect>
+                  <DropShadow height="10.0" radius="4.5" spread="0.6" width="10.0" />
+               </effect></Label>
          </children>
       </Pane>
       <AnchorPane layoutY="390.0" prefHeight="150.0" prefWidth="960.0">
