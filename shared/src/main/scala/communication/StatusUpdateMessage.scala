@@ -1,5 +1,11 @@
 package communication
 
-import model.{Move, Character}
+import communication.StatusUpdateMessage.CharacterKey
 
-case class StatusUpdateMessage(newStatuses: Move.NewStatuses, round: Int, turn: Character)
+case class StatusUpdateMessage(character: CharacterKey, moveName: String, targets: Set[CharacterKey], round: Int)
+
+object StatusUpdateMessage{
+  type PlayerName = String
+  type CharacterName = String
+  type CharacterKey = (PlayerName, CharacterName)
+}
