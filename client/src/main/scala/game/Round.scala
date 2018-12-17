@@ -51,6 +51,7 @@ object Round {
   }
 
   def endTurn(): Unit = {
+    BattleController.resetTargets()
     BattleController.updateStatus()
     val playerLost = !Battle.teams.exists(character => character.owner.get == Battle.playerId && character.isAlive)
     val opponentLost = !Battle.teams.exists(character => character.owner.get == Battle.opponentId && character.isAlive)

@@ -17,7 +17,7 @@ import javafx.scene.paint.Color
 import javafx.util.Duration
 import model.{Character, Move}
 import view.ApplicationView
-
+import view.ViewConfiguration.viewSelector._
 import scala.collection.mutable.ListBuffer
 
 //noinspection ScalaDocMissingParameterDescription,FieldFromDelayedInit
@@ -55,6 +55,12 @@ object BattleController extends Initializable with ViewController {
   @FXML var actButton: Button = _
 
   @FXML var winnerLabel: Label = _
+  @FXML var toMenuButton: Button = _
+
+  @FXML var playerIdLabel: Label = _
+  @FXML var opponentIdLabel: Label = _
+
+  @FXML var moveReportLabel: Label = _
 
   var playerImages: List[ImageView] = List()
   var opponentImages: List[ImageView] = List()
@@ -113,12 +119,16 @@ object BattleController extends Initializable with ViewController {
 
   /** Setups the GUI for both teams */
   def setBattlefield(): Unit = {
+    playerIdLabel.setText(Battle.playerId)
+    opponentIdLabel.setText(Battle.opponentId)
     setupTeams(Battle.teams)
   }
 
   def settingWinner(winner: String): Unit = {
     winnerLabel.setText("WINNER IS " + winner.toUpperCase)
     winnerLabel.setVisible(true)
+    toMenuButton.setDisable(false)
+    toMenuButton.setVisible(true)
   }
 
   /** Sets the player's team images and status description labels
@@ -131,7 +141,6 @@ object BattleController extends Initializable with ViewController {
       (opponentImages zip team.filter(character => character.owner.get == Battle.opponentId)).toMap
     prepareImages()
     setupLabels()
-
   }
 
   /** Updates the status of each character in the battle,
@@ -196,14 +205,39 @@ object BattleController extends Initializable with ViewController {
       activeImage = opponentCharacterImages.find(char => char._2 == activeCharacter).get._1
       activeImage.setEffect(ActiveOpponentEffect)
     }
-    newTurn()
+    resetTimer()
   }
 
   /** Resets the turn timer */
-  def newTurn(): Unit = {
+  def resetTimer(): Unit = {
     timeSeconds = config.MiscSettings.TurnDurationInSeconds
     timerCounter.setText(timeSeconds.toString)
     timeline.playFromStart()
+  }
+
+  def resetTargets(): Unit = {
+    targets = ListBuffer()
+    targetImages.foreach(target => setCharacterUnselected(target))
+    targetImages = ListBuffer()
+  }
+
+  def displayMoveEffect(characterUser: Character, moveName: String, moveTargets: Set[Character]): Unit = {
+    var moveReport: String = ""
+    if (characterUser.owner.get equals Battle.playerId) {
+      moveReport = s"Your ${characterUser.characterName} used $moveName on:"
+    } else {
+      moveReport = s"Enemy ${characterUser.characterName} used $moveName on:"
+    }
+    val playerTargets = moveTargets.filter(character => character.owner.get equals Battle.playerId)
+    val opponentTargets = moveTargets.filter(character => character.owner.get equals Battle.opponentId)
+
+    moveReport = moveReport concat "Your"
+    playerTargets.foreach(playerChar => moveReport = moveReport concat " ," + playerChar.characterName)
+    moveReport = moveReport concat "Enemy"
+    opponentTargets.foreach(opponentChar => moveReport = moveReport concat " ," + opponentChar.characterName)
+
+    moveReportLabel.setText(moveReport)
+    moveReportLabel.setVisible(true)
   }
 
   private object BattleControllerHelper {
@@ -270,12 +304,10 @@ object BattleController extends Initializable with ViewController {
     def setTargets(imagePressed: ImageView, character: Character): Unit = {
       if (targetImages.exists(image => image.getId equals imagePressed.getId)) {
         targetImages -= imagePressed
-        println(targetImages)
         targets -= character
         setCharacterUnselected(imagePressed)
       } else {
         targetImages += imagePressed
-        println(targetImages)
         targets += character
         setCharacterSelected(imagePressed)
       }
@@ -341,15 +373,10 @@ object BattleController extends Initializable with ViewController {
   @FXML def handleActButtonPress(): Unit = {
     Round.actCalculation(moveListView.getSelectionModel.getSelectedItem.split(MovesSeparator).head, targets.toList)
     activeLabel.setTextFill(Color.BLACK)
-    targets = ListBuffer()
-    targetImages.foreach(target => setCharacterUnselected(target))
-    targetImages = ListBuffer()
+    resetTargets()
     moveList = FXCollections.observableArrayList()
     moveListView.setItems(moveList)
     actButton.setDisable(true)
-
-    //Move.makeMove(activeCharacter.specialMoves(moveListView.getSelectionModel.getSelectedItem),activeCharacter,)
-    //Compute the move and then send the new status message
   }
 
   @FXML def movesManualPressed(event: ActionEvent) {
@@ -378,5 +405,11 @@ object BattleController extends Initializable with ViewController {
       }
       actButtonActivation()
     }
+  }
+
+  @FXML def handleToMenuButtonPressed(mouseEvent: MouseEvent): Unit = {
+    //Change view and reset objects
+    ApplicationView changeView TEAM
+
   }
 }
