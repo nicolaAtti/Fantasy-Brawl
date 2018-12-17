@@ -6,7 +6,7 @@ import communication.MessageFormat.MyFormat
 import communication._
 import config.MessagingSettings
 import game.{Battle, Round}
-import model.{Move, Character}
+import model.Character
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -29,9 +29,15 @@ object BattleManager {
     channel(qos = MessagingSettings.Qos) {
       consume(playerQueue) {
         body(as[StatusUpdateMessage]) { response =>
-          (response.round, response.turn) match {
-            case (round, turn) if round == Round.roundId && turn == Round.turns.head =>
-              Round.updateTeamsStatuses(response.newStatuses)
+          (response.round, response.attacker) match {
+            case (round, (owner, characterName))
+                if round == Round.roundId && owner == Round.turns.head.owner.get && characterName == Round.turns.head.characterName =>
+              import BattleManagerHelper._
+              Round.makeMoveAndUpdateTeamsStatuses(findCharacter(response.attacker),
+                                                   response.moveName,
+                                                   response.targets.map {
+                                                     case target => findCharacter(target)
+                                                   })
               Round.endTurn()
             case _ => Unit
           }
@@ -41,7 +47,19 @@ object BattleManager {
     }
   }
 
-  def updateOpponentStatus(newStatus: Move.NewStatuses, round: Int, turn: Character): Unit = {
-    rabbitControl ! Message(StatusUpdateMessage(newStatus, round, turn), publisher)
+  def updateOpponentStatus(character: StatusUpdateMessage.CharacterKey,
+                           moveName: String,
+                           targets: Set[StatusUpdateMessage.CharacterKey],
+                           round: Int): Unit = {
+    rabbitControl ! Message(StatusUpdateMessage(character, moveName, targets, round), publisher)
+  }
+
+  private object BattleManagerHelper {
+
+    def findCharacter(characterKey: StatusUpdateMessage.CharacterKey): Character = {
+      Battle.teams
+        .find(character => character.owner.get == characterKey._1 && character.characterName == characterKey._2)
+        .get
+    }
   }
 }

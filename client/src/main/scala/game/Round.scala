@@ -68,19 +68,24 @@ object Round {
     }
   }
 
-  def actCalculation(moveName: String, targets: List[Character]): Unit = {
-    val activeCharacter = turns.head
-    var newStatuses: Move.NewStatuses = Map()
-    if (moveName == PhysicalAttackRepresentation)
-      newStatuses = Move.makeMove(PhysicalAttack, activeCharacter, targets.toSet)
-    else
-      newStatuses = Move.makeMove(activeCharacter.specialMoves(moveName), activeCharacter, targets.toSet)
-    updateTeamsStatuses(newStatuses)
-    BattleManager.updateOpponentStatus(newStatuses, roundId, activeCharacter)
+  def actCalculation(attacker: Character, moveName: String, targets: List[Character]): Unit = {
+    makeMoveAndUpdateTeamsStatuses(attacker, moveName, targets.toSet)
+    BattleManager.updateOpponentStatus((attacker.owner.get, attacker.characterName),
+                                       moveName,
+                                       targets
+                                         .map(character => (character.owner.get, character.characterName))
+                                         .toSet,
+                                       Round.roundId)
     endTurn()
   }
 
-  def updateTeamsStatuses(newStatuses: NewStatuses): Unit = {
+  def makeMoveAndUpdateTeamsStatuses(attacker: Character, moveName: String, targets: Set[Character]): Unit = {
+    var newStatuses: Move.NewStatuses = Map()
+    if (moveName == PhysicalAttackRepresentation)
+      newStatuses = Move.makeMove(PhysicalAttack, attacker, targets)
+    else
+      newStatuses = Move.makeMove(attacker.specialMoves(moveName), attacker, targets)
     Battle.teams.foreach(character => if (newStatuses.contains(character)) character.status = newStatuses(character))
+    // TODO BattleController.displayMoveEffect(attacker, moveName, targets)
   }
 }
