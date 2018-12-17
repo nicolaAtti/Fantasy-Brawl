@@ -38,10 +38,10 @@ object RoundManager {
         body(as[StartRoundResponse]) { response =>
           response.turnInformation match {
             case Right(turnInformation) => {
-              if(response.round > currentRound) {
+              if (response.round > currentRound) {
                 currentRound = response.round
                 Round.setupTurns(turnInformation, response.round)
-              }else{
+              } else {
                 println("Received message of an old round....discarding")
               }
             }
