@@ -20,15 +20,15 @@ In order to play the game you need to have the JRE installed (at least 1.8 versi
 After the requirements are met, to play simply run the client .jar file provided with the latest release, as the needed services are uploaded on Heroku.
 
 ```
-	java pps-17-fb-1.0-client.jar
+	java -jar pps-17-fb-1.0-client.jar
 ```
 
 If the services aren't working, a manual launch of all three of them is required.
 
 ```
-	java pps-17-fb-1.0-login-guest.jar
-	java pps-17-fb-1.0-matchmaking.jar
-	java pps-18-fb-1.0-turn-ordering.jar
+	java -jar pps-17-fb-1.0-login-guest.jar
+	java -jar pps-17-fb-1.0-matchmaking.jar
+	java -jar pps-18-fb-1.0-turn-ordering.jar
 ```
 
 ## How to play
