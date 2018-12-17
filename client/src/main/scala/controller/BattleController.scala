@@ -125,6 +125,7 @@ object BattleController extends Initializable with ViewController {
   }
 
   def settingWinner(winner: String): Unit = {
+    timeline.stop()
     winnerLabel.setText("WINNER IS " + winner.toUpperCase)
     winnerLabel.setVisible(true)
     toMenuButton.setDisable(false)

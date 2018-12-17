@@ -1,6 +1,7 @@
 package game
 
 import controller.BattleController
+import javafx.application.Platform
 import messaging.{BattleManager, RoundManager}
 import model._
 import utilities.ScalaProlog._
@@ -28,7 +29,9 @@ object Battle extends App {
   }
 
   def end(winner: String): Unit = {
-    BattleController.settingWinner(winner)
+    Platform runLater (() => {
+      BattleController.settingWinner(winner)
+    })
     RoundManager.currentRound = 0
   }
 
