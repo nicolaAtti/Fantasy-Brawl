@@ -136,7 +136,6 @@ object BattleController extends Initializable with ViewController {
       (opponentImages zip team.filter(character => character.owner.get == Battle.opponentId)).toMap
     prepareImages()
     setupLabels()
-
   }
 
   /** Updates the status of each character in the battle,
@@ -201,14 +200,20 @@ object BattleController extends Initializable with ViewController {
       activeImage = opponentCharacterImages.find(char => char._2 == activeCharacter).get._1
       activeImage.setEffect(ActiveOpponentEffect)
     }
-    newTurn()
+    resetTimer()
   }
 
   /** Resets the turn timer */
-  def newTurn(): Unit = {
+  def resetTimer(): Unit = {
     timeSeconds = config.MiscSettings.TurnDurationInSeconds
     timerCounter.setText(timeSeconds.toString)
     timeline.playFromStart()
+  }
+
+  def resetTargets(): Unit = {
+    targets = ListBuffer()
+    targetImages.foreach(target => setCharacterUnselected(target))
+    targetImages = ListBuffer()
   }
 
   private object BattleControllerHelper {
@@ -275,12 +280,10 @@ object BattleController extends Initializable with ViewController {
     def setTargets(imagePressed: ImageView, character: Character): Unit = {
       if (targetImages.exists(image => image.getId equals imagePressed.getId)) {
         targetImages -= imagePressed
-        println(targetImages)
         targets -= character
         setCharacterUnselected(imagePressed)
       } else {
         targetImages += imagePressed
-        println(targetImages)
         targets += character
         setCharacterSelected(imagePressed)
       }
@@ -346,15 +349,10 @@ object BattleController extends Initializable with ViewController {
   @FXML def handleActButtonPress(): Unit = {
     Round.actCalculation(moveListView.getSelectionModel.getSelectedItem.split(MovesSeparator).head, targets.toList)
     activeLabel.setTextFill(Color.BLACK)
-    targets = ListBuffer()
-    targetImages.foreach(target => setCharacterUnselected(target))
-    targetImages = ListBuffer()
+    resetTargets()
     moveList = FXCollections.observableArrayList()
     moveListView.setItems(moveList)
     actButton.setDisable(true)
-
-    //Move.makeMove(activeCharacter.specialMoves(moveListView.getSelectionModel.getSelectedItem),activeCharacter,)
-    //Compute the move and then send the new status message
   }
 
   @FXML def movesManualPressed(event: ActionEvent) {
