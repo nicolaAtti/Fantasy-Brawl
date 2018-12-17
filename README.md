@@ -10,8 +10,8 @@ This project is a mostly original concept for a multiplayer, turn-based, fightin
 
 <Strong>Recomended Settings</Strong>
 
-It's recomended to play this game on a Windows operating system, in order to fully experience it's graphics.
-Mac and Linux systems will work, but your graphical experience could be ruined.
+It's recomended to play this game on a Windows operating system, in order to fully experience it's graphic components.
+Mac and Linux systems will equally work, but the graphical experience could be reduced.
 
 <Strong>Requirements</Strong>
 
