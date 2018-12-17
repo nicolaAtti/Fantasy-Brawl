@@ -35,7 +35,11 @@ object RoundManager {
       consume(startRoundResponseQueue) {
         body(as[StartRoundResponse]) { response =>
           response.turnInformation match {
-            case Right(turnInformation) => Round.setupTurns(turnInformation, response.round)
+            case Right(turnInformation) => {
+              println("Received turnazione")
+              Round.setupTurns(turnInformation, response.round)
+
+            }
             case Left(details) =>
               Platform runLater (() => {
                 val alert: Alert = new Alert(ViewConfiguration.DialogErrorType)

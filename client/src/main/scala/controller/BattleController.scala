@@ -111,6 +111,7 @@ object BattleController extends Initializable with ViewController {
 
   /** Setups the GUI for both teams */
   def setBattlefield(): Unit = {
+    println("Accado due volte?")
     setupTeams(Battle.teams)
   }
 
