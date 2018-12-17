@@ -33,26 +33,28 @@ object LoginManager {
   private val publisher: Publisher = Publisher.queue(loginGuestRequestQueue)
 
   /** Manages login as a guest response messages. */
-  Subscription.run(rabbitControl) {
-    import Directives._
-    channel(qos = MessagingSettings.Qos) {
-      consume(loginGuestResponseQueue) {
-        body(as[LoginGuestResponse]) { response =>
-          response.guestId match {
-            case Right(id) =>
-              controller.TeamSelectionController.username = config.MiscSettings.GuestName + id
-              ApplicationView changeView TEAM
-            case Left(details) =>
-              Platform runLater (() => {
-                val alert: Alert = new Alert(ViewConfiguration.DialogErrorType)
-                alert setTitle ViewConfiguration.DialogErrorTitle
-                alert setHeaderText details
-                alert showAndWait ()
-                ApplicationView changeView LOGIN
-              })
-            case _ => Unit
+  def start(): Unit = {
+    Subscription.run(rabbitControl) {
+      import Directives._
+      channel(qos = MessagingSettings.Qos) {
+        consume(loginGuestResponseQueue) {
+          body(as[LoginGuestResponse]) { response =>
+            response.guestId match {
+              case Right(id) =>
+                controller.TeamSelectionController.username = config.MiscSettings.GuestName + id
+                ApplicationView changeView TEAM
+              case Left(details) =>
+                Platform runLater (() => {
+                  val alert: Alert = new Alert(ViewConfiguration.DialogErrorType)
+                  alert setTitle ViewConfiguration.DialogErrorTitle
+                  alert setHeaderText details
+                  alert showAndWait ()
+                  ApplicationView changeView LOGIN
+                })
+              case _ => Unit
+            }
+            ack
           }
-          ack
         }
       }
     }

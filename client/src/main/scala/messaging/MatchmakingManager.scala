@@ -38,25 +38,27 @@ object MatchmakingManager {
   private val publisher: Publisher = Publisher.queue(joinCasualMatchmakingRequestQueue)
 
   /** Manages casual matchmaking response messages. */
-  Subscription.run(rabbitControl) {
-    import Directives._
-    channel(qos = MessagingSettings.Qos) {
-      consume(joinCasualMatchmakingResponseQueue) {
-        body(as[JoinCasualQueueResponse]) { response =>
-          response.opponentData match {
-            case Right((opponentName, opponentTeam, opponentQueue, battleId)) =>
-              Battle.start((myName, myTeam), (opponentName, opponentTeam), opponentQueue, battleId)
-            case Left(details) =>
-              Platform runLater (() => {
-                val alert: Alert = new Alert(ViewConfiguration.DialogErrorType)
-                alert setTitle ViewConfiguration.DialogErrorTitle
-                alert setHeaderText details
-                alert showAndWait ()
-                ApplicationView changeView TEAM
-              })
-            case _ => Unit
+  def start(): Unit = {
+    Subscription.run(rabbitControl) {
+      import Directives._
+      channel(qos = MessagingSettings.Qos) {
+        consume(joinCasualMatchmakingResponseQueue) {
+          body(as[JoinCasualQueueResponse]) { response =>
+            response.opponentData match {
+              case Right((opponentName, opponentTeam, opponentQueue, battleId)) =>
+                Battle.start((myName, myTeam), (opponentName, opponentTeam), opponentQueue, battleId)
+              case Left(details) =>
+                Platform runLater (() => {
+                  val alert: Alert = new Alert(ViewConfiguration.DialogErrorType)
+                  alert setTitle ViewConfiguration.DialogErrorTitle
+                  alert setHeaderText details
+                  alert showAndWait ()
+                  ApplicationView changeView TEAM
+                })
+              case _ => Unit
+            }
+            ack
           }
-          ack
         }
       }
     }
