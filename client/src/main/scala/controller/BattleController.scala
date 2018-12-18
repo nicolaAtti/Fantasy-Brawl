@@ -21,6 +21,11 @@ import view.ViewConfiguration.ViewSelector._
 import scala.collection.mutable.ListBuffer
 
 //noinspection ScalaDocMissingParameterDescription,FieldFromDelayedInit
+
+/** Controller for the Battle GUI
+  *
+  * @author Nicola Atti
+  */
 object BattleController extends Initializable with ViewController {
 
   import BattleControllerHelper._
@@ -79,7 +84,7 @@ object BattleController extends Initializable with ViewController {
   val timeline: Timeline = new Timeline()
   var timeSeconds: Int = config.MiscSettings.TurnDurationInSeconds
 
-  /** Initializes the elements composing the Battle GUI
+  /** Initializes the graphic and logic elements composing the Battle GUI
     *
     * @param location
     * @param resources
@@ -124,6 +129,12 @@ object BattleController extends Initializable with ViewController {
     setupTeams(Battle.teams)
   }
 
+  /** Makes the victory message visible, showing the match winner.
+    *
+    * Also activates a button to return to the TeamSelection menu.
+    *
+    * @param winner the winner of the match
+    */
   def settingWinner(winner: String): Unit = {
     timeline.stop()
     winnerLabel.setText("WINNER IS " + winner.toUpperCase)
@@ -147,7 +158,8 @@ object BattleController extends Initializable with ViewController {
   /** Updates the status of each character in the battle,
     * showing it's current health and mana values compared with it' maximum
     * and by showing the various alterations that are active.
-    * After that changes the images of dead characters.
+    *
+    * After that changes the images and labels of dead characters.
     */
   def updateStatus(): Unit = {
     (playerCharacterImages.values zip playerHps.getChildren.toArray) foreach (couple =>
@@ -216,12 +228,19 @@ object BattleController extends Initializable with ViewController {
     timeline.playFromStart()
   }
 
+  /** Empties the target list */
   def resetTargets(): Unit = {
     targets = ListBuffer()
     targetImages.foreach(target => setCharacterUnselected(target))
     targetImages = ListBuffer()
   }
 
+  /** Displays the latest move efffect showing the user, the move and its targets.
+    *
+    * @param characterUser the move user
+    * @param moveName the move name
+    * @param moveTargets the targets
+    */
   def displayMoveEffect(characterUser: Character, moveName: String, moveTargets: Set[Character]): Unit = {
     var moveReport: String = ""
     if (characterUser.owner.get equals Battle.playerId) {
@@ -246,6 +265,10 @@ object BattleController extends Initializable with ViewController {
     updateStatus()
   }
 
+  /** Provides private operations for the BattleController
+    *
+    * @author Nicola Atti
+    */
   private object BattleControllerHelper {
     val ImageExtension: String = ".png"
     val Separator: String = "/"
@@ -267,8 +290,7 @@ object BattleController extends Initializable with ViewController {
         charImage._1.setImage(new Image("view/" + charImage._2.characterName + "2" + ImageExtension)))
     }
 
-    /** Writes all the team's labels to display the name of each character in the battle
-      */
+    /** Writes all the team's labels to display the name of each character in the battle */
     def setupLabels(): Unit = {
       (playerCharacterImages.values zip playerCharNames.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.characterName))
@@ -295,6 +317,11 @@ object BattleController extends Initializable with ViewController {
       })
     }
 
+    /** Sets the name and alteration labels of dead characters to symbolize their status
+      *
+      * @param deadCharacter the dead character
+      * @param owner the dead character owner
+      */
     def setDeadLabel(deadCharacter: Character, owner: String): Unit = {
       if (owner equals Battle.playerId) {
         (playerCharacterImages.values zip playerCharNames.getChildren.toArray)
@@ -338,6 +365,11 @@ object BattleController extends Initializable with ViewController {
       moveListView.getSelectionModel.selectFirst()
     }
 
+    /** Adds/removes the pressed character to/from the list of targets
+      *
+      * @param imagePressed the character image pressed
+      * @param character the character associated with the image
+      */
     def setTargets(imagePressed: ImageView, character: Character): Unit = {
       if (targetImages.exists(image => image.getId equals imagePressed.getId)) {
         targetImages -= imagePressed
@@ -418,6 +450,10 @@ object BattleController extends Initializable with ViewController {
     actButton.setDisable(true)
   }
 
+  /** Handles the pression of the move manual button, showing the move manual GUI
+    *
+    * @param event
+    */
   @FXML def movesManualPressed(event: ActionEvent) {
     ApplicationView.createMovesManualView()
   }
@@ -446,9 +482,11 @@ object BattleController extends Initializable with ViewController {
     }
   }
 
+  /** Handles the pression of the victory button, returning the player to the TeamSelection menu
+    *
+    * @param mouseEvent
+    */
   @FXML def handleToMenuButtonPressed(mouseEvent: MouseEvent): Unit = {
-    //Change view and reset objects
     ApplicationView changeView TEAM
-
   }
 }

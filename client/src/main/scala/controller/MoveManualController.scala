@@ -9,6 +9,10 @@ import javafx.scene.control.{Button, ChoiceBox, Label}
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.Pane
 
+/** The controller for the move manual GUI
+  *
+  * @author Nicola Atti
+  */
 object MoveManualController extends Initializable with ViewController {
   @FXML var characterChoiceBox: ChoiceBox[String] = _
   @FXML var labelPane: Pane = _
@@ -39,6 +43,10 @@ object MoveManualController extends Initializable with ViewController {
     characterLabelMap = (characterList.toArray zip labelPane.getChildren.toArray).toMap
   }
 
+  /** Changes the character moves to be displayed
+    *
+    * @param mouseEvent
+    */
   @FXML def handleChoiceBoxSelection(mouseEvent: MouseEvent): Unit = {
     val selected = characterChoiceBox.getSelectionModel.getSelectedItem
     characterLabelMap(actualSelected).asInstanceOf[Label].setVisible(false)
