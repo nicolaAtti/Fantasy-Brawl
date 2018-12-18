@@ -96,7 +96,6 @@ object Main extends App {
               }
             case Failure(e) => println(s"$LogFailurePrefix$e")
           }
-        case Success(_) => Unit
         case Failure(e) => println(s"$LogFailurePrefix$e")
       }
     }
