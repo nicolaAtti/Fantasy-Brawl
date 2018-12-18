@@ -5,16 +5,19 @@ import akka.actor.{ActorSystem, Props}
 import com.spingo.op_rabbit._
 import com.spingo.op_rabbit.properties.ReplyTo
 import com.spingo.op_rabbit.Directives._
-
 import communication.MessageFormat.MyFormat
+import communication.matchmaking.PlayerInfo
 import config.MessagingSettings
 import matchmaking.MongoDbManager
 
+/** Entry point for the service that provides matchmaking functionality,
+  * pairing two consecutive clients present in the casual queue.
+  *
+  * @author Nicola Atti, Marco Canducci
+  */
 object Main extends App {
 
   final val LogMessage = "Received a new casual queue join request"
-  final val OpponentNotFoundPrint = "Could not find opponent with ticket"
-  final val PlayerLeftPrint = "The player left the game"
   final val BattleIdSeparator = "-"
 
   import communication._
@@ -40,16 +43,12 @@ object Main extends App {
             if (config.MiscSettings.ServicesLog) {
               println(LogMessage)
             }
+
             request.operation match {
-
               case PlayerJoinedCasualQueue =>
-                findAnOpponent(request.playerName, request.team, request.battleQueue, replyTo.get)
-
+                findAnOpponent(PlayerInfo(request.playerName, request.team, request.battleQueue), replyTo.get)
               case PlayerLeftCasualQueue =>
-                MongoDbManager.notifyPlayerLeft(request.playerName).onComplete {
-                  case Success(_)         => println(s"${request.playerName}: $PlayerLeftPrint")
-                  case Failure(exception) => println(s"$LogFailurePrefix$exception")
-                }
+                MongoDbManager.notifyPlayerLeft(request.playerName)
             }
           }
           ack
@@ -60,66 +59,84 @@ object Main extends App {
 
   private object MatchmakingHelper {
 
-    def findAnOpponent(playerName: String, team: Set[String], battleQueue: String, replyTo: String): Unit = {
+    /** Given the information of the player that made the request, searches for
+      * an opponent and sends the respective match information to both.
+      *
+      * @param requestInfo the information about the player who sent the actual request
+      * @param requestReplyTo the matchmaking-messages response queue of the
+      *                       player who made the request
+      */
+    def findAnOpponent(requestInfo: PlayerInfo, requestReplyTo: String): Unit = {
       MongoDbManager.getTicket.onComplete {
 
-        case Success(ticket: Int) =>
-          MongoDbManager.putPlayerInQueue(ticket, playerName, team, battleQueue, replyTo).onComplete {
+        case Success(requestTicket) =>
+          MongoDbManager.putPlayerInQueue(requestTicket, requestInfo, requestReplyTo).onComplete {
 
             case Success(_) =>
-              val opponentTicket = evaluateOpponentTicket(ticket)
+              val opponentTicket = evaluateOpponentTicket(requestTicket)
               MongoDbManager.takePlayerFromQueue(opponentTicket).onComplete {
 
-                case Success((opponentName, opponentTeam, opponentBattleQueue, opponentReplyTo, opponentLeft)) =>
-                  MongoDbManager.removePlayerFromQueue(playerName)
+                case Success((opponentInfo, opponentReplyTo, opponentHasLeft)) =>
+                  MongoDbManager.removePlayerFromQueue(requestInfo.name)
 
-                  if (opponentLeft) {
-                    findAnOpponent(playerName, team, battleQueue, replyTo) // try again
+                  if (opponentHasLeft) {
+                    findAnOpponent(requestInfo, requestReplyTo) // try again
 
                   } else {
-                    val battleId = evaluateBattleId(ticket, opponentTicket)
+                    val battleId = evaluateBattleId(requestTicket, opponentTicket)
                     MongoDbManager.createBattleInstance(battleId).onComplete {
 
                       case Success(_) =>
-                        sendBattleDataToBoth((playerName, team, battleQueue, replyTo),
-                                             (opponentName, opponentTeam, opponentBattleQueue, opponentReplyTo),
-                                             battleId)
-
+                        sendBattleDataToBoth(requestInfo, requestReplyTo, opponentInfo, opponentReplyTo, battleId)
                       case Failure(e) => println(s"$LogFailurePrefix$e")
                     }
                   }
+                case Success(_) => Unit
                 case Failure(e) => println(s"$LogFailurePrefix$e")
-                case _          => println(s"$OpponentNotFoundPrint $opponentTicket")
               }
             case Failure(e) => println(s"$LogFailurePrefix$e")
           }
+        case Success(_) => Unit
         case Failure(e) => println(s"$LogFailurePrefix$e")
       }
     }
 
-    /** Sends a message to the matched players
+    /** Sends a message to both the matched players.
       *
-      * @param dataReqPlayer    the data of the first player
-      * @param dataQueuedPlayer the data of the second player
-      * @param battleId         the battle identifier
+      * @param requestInfo the data of the player that made the request
+      * @param requestReplyTo the queue's name for the response
+      * @param opponentInfo the data of the matched opponent player
+      * @param opponentReplyTo the queue's name for the opponent's response
+      * @param battleId the battle identifier
       */
-    def sendBattleDataToBoth(dataReqPlayer: (String, Set[String], String, String),
-                             dataQueuedPlayer: (String, Set[String], String, String),
+    def sendBattleDataToBoth(requestInfo: PlayerInfo,
+                             requestReplyTo: String,
+                             opponentInfo: PlayerInfo,
+                             opponentReplyTo: String,
                              battleId: String): Unit = {
-      val responseForRequester = JoinCasualQueueResponse(
-        Right((dataQueuedPlayer._1, dataQueuedPlayer._2, dataQueuedPlayer._3, battleId)))
-      val responseForQueued = JoinCasualQueueResponse(
-        Right((dataReqPlayer._1, dataReqPlayer._2, dataReqPlayer._3, battleId)))
-      rabbitControl ! Message.queue(responseForRequester, dataReqPlayer._4)
-      rabbitControl ! Message.queue(responseForQueued, dataQueuedPlayer._4)
+      val responseForRequester = JoinCasualQueueResponse(Right((opponentInfo, battleId)))
+      val responseForQueued = JoinCasualQueueResponse(Right((requestInfo, battleId)))
+      rabbitControl ! Message.queue(responseForRequester, requestReplyTo)
+      rabbitControl ! Message.queue(responseForQueued, opponentReplyTo)
     }
 
     import utilities.Misc._
 
-    def evaluateOpponentTicket(myTicket: Int): Int = {
-      if (isEven(myTicket)) myTicket - 1 else myTicket + 1
+    /** Given a ticket, evaluates the opponent's ticket number.
+      *
+      * @param myTicket the ticket
+      * @return
+      */
+    def evaluateOpponentTicket(ticket: Int): Int = {
+      if (isEven(ticket)) ticket - 1 else ticket + 1
     }
 
+    /** Given two matched tickets, evaluates the battle identifier.
+      *
+      * @param ticket1 the first ticket number
+      * @param ticket2 the second ticket number
+      * @return the battle identifier for the coupled players with ticket1 and ticket2
+      */
     def evaluateBattleId(ticket1: Int, ticket2: Int): String = {
       s"${ticket1 min ticket2}$BattleIdSeparator${ticket1 max ticket2}"
     }
