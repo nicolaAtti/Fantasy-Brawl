@@ -7,6 +7,7 @@ import communication._
 import MessageFormat.MyFormat
 import view._
 import ViewConfiguration.ViewSelector._
+import communication.matchmaking.PlayerInfo
 import config.MessagingSettings
 import game.Battle
 import javafx.application.Platform
@@ -75,7 +76,7 @@ object MatchmakingManager {
     myName = playerName
     myTeam = team
     rabbitControl ! Message(
-      JoinCasualQueueRequest(playerName, myTeam, PlayerJoinedCasualQueue, Queues.BattleQueue),
+      JoinCasualQueueRequest(PlayerInfo(playerName, myTeam, Queues.BattleQueue), JoinCasualQueueRequest.Operation.ADD),
       publisher,
       Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName))
     )
@@ -87,7 +88,8 @@ object MatchmakingManager {
     */
   def leaveCasualQueueRequest(playerName: String): Unit = {
     rabbitControl ! Message(
-      JoinCasualQueueRequest(playerName, Set(), PlayerLeftCasualQueue, Queues.BattleQueue),
+      JoinCasualQueueRequest(PlayerInfo(playerName, Set(), Queues.BattleQueue),
+                             JoinCasualQueueRequest.Operation.REMOVE),
       publisher,
       Seq(ReplyTo(joinCasualMatchmakingResponseQueue.queueName))
     )

@@ -42,9 +42,7 @@ object BattleManager {
                 Platform runLater (() => {
                   BattleController.displayMoveEffect(findCharacter(response.attacker),
                                                      response.moveName,
-                                                     response.targets.map {
-                                                       case target => findCharacter(target)
-                                                     })
+                                                     response.targets.map(target => findCharacter(target)))
                 })
                 Round.endTurn()
               case _ => Unit
@@ -56,9 +54,9 @@ object BattleManager {
     }
   }
 
-  def updateOpponentStatus(character: StatusUpdateMessage.CharacterKey,
+  def updateOpponentStatus(character: CharacterKey,
                            moveName: String,
-                           targets: Set[StatusUpdateMessage.CharacterKey],
+                           targets: Set[CharacterKey],
                            newStatuses: Map[CharacterKey, Status],
                            round: Int): Unit = {
     rabbitControl ! Message(StatusUpdateMessage(character, moveName, targets, newStatuses, round), publisher)
@@ -66,7 +64,7 @@ object BattleManager {
 
   private object BattleManagerHelper {
 
-    def findCharacter(characterKey: StatusUpdateMessage.CharacterKey): Character = {
+    def findCharacter(characterKey: CharacterKey): Character = {
       Battle.teams
         .find(character => character.owner.get == characterKey._1 && character.characterName == characterKey._2)
         .get
