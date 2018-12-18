@@ -2,6 +2,7 @@ package matchmaking
 
 import org.mongodb.scala.bson.BsonValue
 import com.mongodb.client.model.Updates
+import communication.matchmaking.PlayerInfo
 import org.mongodb.scala.model.Filters
 import org.mongodb.scala.model.Updates.inc
 import org.mongodb.scala.result.{DeleteResult, UpdateResult}
@@ -9,6 +10,10 @@ import org.mongodb.scala.{Completed, Document, MongoClient}
 
 import scala.concurrent.Future
 
+/** Provides functionalities for database asynchronous interations
+  *
+  * @Author Nicola Atti, Marco Canducci
+  */
 object MongoDbManager {
 
   import config.DbNaming._
@@ -17,10 +22,10 @@ object MongoDbManager {
   val casualQueueCollection = database.getCollection(CasualQueue.CollectionName)
   val battleCollection = database.getCollection(Battles.CollectionName)
 
-  /** Retrieves a ticket from the casual queue and increments the tickets counter.
+  /** Retrieves a ticket from the casual queue and increments the ticket counter.
     *
     * @return a Future representing the success/failure of the operation,
-    *         containing the casual queue ticket
+    *         containing the casual queue's ticket number
     */
   def getTicket: Future[Int] = {
     casualQueueCollection
@@ -30,55 +35,53 @@ object MongoDbManager {
       .head
   }
 
-  /** Creates a new document representing a new player inside the casual queue.
+  /** Creates a document representing a new player inside the casual queue.
     *
-    * @param playerName  the player that joins the queue
-    * @param teamMembers the player's tea,
-    * @param replyTo     the player response queue
+    * @param ticket the player's ticket for the matchmaking queue
+    * @param playerInfo the player's information
+    * @param replyTo the player response queue
     * @return a Future representing the success/failure of the operation
     */
-  def putPlayerInQueue(ticket: Int,
-                       playerName: String,
-                       teamMembers: Set[String],
-                       battleQueue: String,
-                       replyTo: String): Future[Completed] = {
+  def putPlayerInQueue(ticket: Int, playerInfo: PlayerInfo, replyTo: String): Future[Completed] = {
     casualQueueCollection
       .insertOne(
         Document(
           "_id" -> ticket,
-          CasualQueue.PlayerName -> playerName,
-          CasualQueue.TeamMembers -> teamMembers.toSeq,
-          CasualQueue.BattleQueue -> battleQueue,
+          CasualQueue.PlayerName -> playerInfo.name,
+          CasualQueue.TeamMembers -> playerInfo.teamNames.toSeq,
+          CasualQueue.BattleQueue -> playerInfo.battleQueue,
           CasualQueue.ReplyTo -> replyTo,
           CasualQueue.LeftTheQueue -> false
         ))
       .head
   }
 
-  /** Searches for a document with the information of a queued player with a
-    * certain ticket and removes it.
+  /** Searches for the player information associated with the given ticket and,
+    * if present, removes them.
     *
     * @return a Future representing the success/failure of the operation,
-    *         containing the player's name, team and response queue
+    *         containing the player's information, the response queue and a flag
+    *         that represents if the player has left the queue or not.
     */
-  def takePlayerFromQueue(ticket: Int): Future[(String, Set[String], String, String, Boolean)] = {
+  def takePlayerFromQueue(ticket: Int): Future[(PlayerInfo, String, Boolean)] = {
     casualQueueCollection
       .findOneAndDelete(filter = Filters.equal(fieldName = "_id", value = ticket))
-      .map(
-        document =>
-          (document(CasualQueue.PlayerName).asString.getValue,
-           document(CasualQueue.TeamMembers)
+      .map(document =>
+        (PlayerInfo(
+           name = document(CasualQueue.PlayerName).asString.getValue,
+           teamNames = document(CasualQueue.TeamMembers)
              .asArray()
              .toArray
              .map { case bsonTeamMember: BsonValue => bsonTeamMember.asString.getValue }
              .toSet,
-           document(CasualQueue.BattleQueue).asString.getValue,
-           document(CasualQueue.ReplyTo).asString.getValue,
-           document(CasualQueue.LeftTheQueue).asBoolean.getValue))
+           battleQueue = document(CasualQueue.BattleQueue).asString.getValue
+         ),
+         document(CasualQueue.ReplyTo).asString.getValue,
+         document(CasualQueue.LeftTheQueue).asBoolean.getValue))
       .head
   }
 
-  /** Removes an existing document of a queued player from the DB.
+  /** Removes the existing document of a queued player given its name.
     *
     * @param playerName the player to remove
     * @return a Future representing the success/failure of the deletion
@@ -91,7 +94,7 @@ object MongoDbManager {
 
   /** Notifies that a player has left the game while waiting for an opponent.
     *
-    * @param playerName the name of the player that left the game
+    * @param playerName the name of the player that left the queue
     * @return a Future representing the success/failure of the update
     */
   def notifyPlayerLeft(playerName: String): Future[UpdateResult] = {

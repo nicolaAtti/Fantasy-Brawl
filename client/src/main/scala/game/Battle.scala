@@ -1,5 +1,6 @@
 package game
 
+import communication.matchmaking.PlayerInfo
 import controller.BattleController
 import javafx.application.Platform
 import messaging.BattleManager
@@ -15,16 +16,13 @@ object Battle extends App {
 
   import BattleHelper._
 
-  def start(player: (String, Set[String]),
-            opponent: (String, Set[String]),
-            battleQueue: String,
-            battleId: String): Unit = {
+  def start(player: (String, Set[String]), opponentInfo: PlayerInfo, battleId: String): Unit = {
     id = battleId
     playerId = player._1
-    opponentId = opponent._1
-    opponentQueue = battleQueue
+    opponentId = opponentInfo.name
+    opponentQueue = opponentInfo.battleQueue
     BattleManager.start()
-    teams = setupTeam(player, opponent)
+    teams = setupTeam(player, (opponentInfo.name, opponentInfo.teamNames))
     Round.startNewRound()
   }
 
