@@ -2,7 +2,10 @@ package model
 
 import scala.util.Random
 
-/** A factory of the possible move effects present in the game. */
+/** A factory of the possible move effects present in the game.
+  *
+  * @author Marco Canducci
+  */
 object MoveEffectStrategies {
 
   val minDamage = 1

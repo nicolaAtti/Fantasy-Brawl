@@ -10,6 +10,8 @@ package model
   * @param maxManaPoints the maximum mana points that a character can have
   * @param modifiers the current modifiers that alter the character's statistics
   * @param alterations the current alterations that affects the character's behaviour
+  *
+  * @author Marco Canducci
   */
 case class Status(healthPoints: Int,
                   manaPoints: Int,
