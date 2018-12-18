@@ -17,9 +17,9 @@ class CharacterTest extends FunSuite {
       jacob.characterName.equals("Jacob") &&
         jacob.statistics.strength == 51 &&
         jacob.statistics.agility == 41 &&
-        jacob.statistics.spirit == 13 &&
+        jacob.statistics.spirit == 20 &&
         jacob.statistics.intelligence == 5 &&
-        jacob.statistics.resistance == 27)
+        jacob.statistics.resistance == 25)
   }
 
   test("New character should have the right sub-statistics") {
@@ -28,12 +28,12 @@ class CharacterTest extends FunSuite {
         jacob.physicalCriticalDamage == 170 &&
         jacob.speed == 5 &&
         jacob.criticalChance == 20 &&
-        jacob.magicalDefence == 13 &&
-        jacob.status.maxManaPoints == 65 &&
+        jacob.magicalDefence == 20 &&
+        jacob.status.maxManaPoints == 100 &&
         jacob.magicalPower == 2 &&
         jacob.magicalCriticalPower == 150 &&
-        jacob.status.maxHealthPoints == 540 &&
-        jacob.physicalDefence == 40)
+        jacob.status.maxHealthPoints == 750 &&
+        jacob.physicalDefence == 37)
   }
 
   test("New character should have his special moves") {
@@ -70,7 +70,7 @@ class CharacterTest extends FunSuite {
         annabelle.status.maxManaPoints == 110 &&
         annabelle.magicalPower == 4 &&
         annabelle.magicalCriticalPower == 150 &&
-        annabelle.status.maxHealthPoints == 405 &&
+        annabelle.status.maxHealthPoints == 675 &&
         annabelle.physicalDefence == 27)
   }
   test("A character whose hit points are more than zero should be considered alive"){

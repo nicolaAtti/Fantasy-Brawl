@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane prefHeight="420.0" prefWidth="960.0">
          <children>
@@ -152,9 +152,9 @@
                <effect>
                   <DropShadow height="20.0" offsetX="4.0" offsetY="-4.0" radius="9.5" width="20.0" />
                </effect></Button>
-            <Label fx:id="moveReportLabel" alignment="CENTER" layoutX="142.0" layoutY="337.0" prefHeight="43.0" prefWidth="665.0" text="Your Rick used Chrono Shift on Opponent: Cassandra,Albert,Fernando and Your Annabelle" textFill="WHITE" visible="false">
+            <Label fx:id="moveReportLabel" alignment="CENTER" layoutX="148.0" layoutY="328.0" prefHeight="43.0" prefWidth="665.0" text="Your Rick used Chrono Shift on &#10;Opponent: Cassandra,Albert,Fernando and Your Annabelle" textAlignment="CENTER" textFill="WHITE">
                <font>
-                  <Font name="Javanese Text" size="15.0" />
+                  <Font name="Times New Roman Bold Italic" size="15.0" />
                </font>
                <effect>
                   <DropShadow height="10.0" radius="4.5" spread="0.6" width="10.0" />
