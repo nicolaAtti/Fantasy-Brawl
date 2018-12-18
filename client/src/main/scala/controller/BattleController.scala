@@ -115,6 +115,7 @@ object BattleController extends Initializable with ViewController {
             timeline.stop()
             if (activeCharacter.owner.get == Battle.playerId) {
               BattleManager.skipTurn((activeCharacter.owner.get, activeCharacter.characterName), Round.roundId)
+              displayMoveEffect(activeCharacter, "", Set())
               Round.endTurn()
             }
           }
@@ -254,9 +255,9 @@ object BattleController extends Initializable with ViewController {
       moveReport = s"ENEMY ${characterUser.characterName} "
     }
     if (moveName == "") {
-      moveReport = moveReport concat "skipped its turn"
+      moveReport = moveReport concat "skipped the turn"
     } else {
-      moveReport = moveReport concat "used $moveName on \n"
+      moveReport = moveReport concat "used " concat moveName concat " on \n"
       val playerTargets = moveTargets.filter(character => character.owner.get equals Battle.playerId)
       val opponentTargets = moveTargets.filter(character => character.owner.get equals Battle.opponentId)
 

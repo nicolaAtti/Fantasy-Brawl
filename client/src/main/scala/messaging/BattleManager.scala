@@ -39,13 +39,13 @@ object BattleManager {
                   if round == Round.roundId && owner == Round.turns.head.owner.get && characterName == Round.turns.head.characterName =>
                 if (response.moveName != "") {
                   updateTeamsStatuses(response.newStatuses)
+                  import BattleManagerHelper._
+                  Platform runLater (() => {
+                    BattleController.displayMoveEffect(findCharacter(response.attacker),
+                                                       response.moveName,
+                                                       response.targets.map(target => findCharacter(target)))
+                  })
                 }
-                import BattleManagerHelper._
-                Platform runLater (() => {
-                  BattleController.displayMoveEffect(findCharacter(response.attacker),
-                                                     response.moveName,
-                                                     response.targets.map(target => findCharacter(target)))
-                })
                 Round.endTurn()
               case _ => Unit
             }
