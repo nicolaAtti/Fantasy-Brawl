@@ -9,7 +9,7 @@ import config.MessagingSettings
 import game.Round
 import javafx.application.Platform
 import javafx.scene.control.Alert
-import view.ViewConfiguration.viewSelector._
+import view.ViewConfiguration.ViewSelector._
 import view._
 
 import scala.concurrent.ExecutionContext.Implicits.global

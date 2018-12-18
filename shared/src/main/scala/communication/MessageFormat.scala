@@ -3,13 +3,17 @@ package communication
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, ObjectInputStream, ObjectOutputStream}
 import com.spingo.op_rabbit.{RabbitMarshaller, RabbitUnmarshaller}
 
-/** Provides features of Marshaller and Unmarshaller to messages through the use of serialization. */
+/** Provides features of Marshalling and Unmarshalling of messages through the use
+  * of serialization.
+  *
+  * @author Daniele Schiavi
+  */
 object MessageFormat {
 
   type MyFormat[A] = RabbitMarshaller[A] with RabbitUnmarshaller[A]
   import Serializer._
 
-  /** Provides Marshaller and Unmarshaller to messages. */
+  /** Provides Marshaller and Unmarshaller for messages. */
   def format[A]: MyFormat[A] = new RabbitMarshaller[A] with RabbitUnmarshaller[A] {
     val contentType = "text/plain"
     protected val contentEncoding = Some("UTF-8")

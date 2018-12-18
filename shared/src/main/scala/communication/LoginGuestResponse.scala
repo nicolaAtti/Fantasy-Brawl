@@ -4,6 +4,5 @@ package communication
   *
   * @param guestId Right(id) the incremental ID assigned to the guest,
   *                Left(error) details about the error
-  * @author Marco Canducci
   */
 case class LoginGuestResponse(guestId: Either[String, Int])

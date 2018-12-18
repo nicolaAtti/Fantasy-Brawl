@@ -5,7 +5,7 @@ import java.util.ResourceBundle
 import javafx.event.ActionEvent
 import javafx.fxml.{FXML, Initializable}
 import view.ApplicationView
-import view.ViewConfiguration.viewSelector._
+import view.ViewConfiguration.ViewSelector._
 import javafx.geometry.Insets
 import javafx.scene.control.{Button, Label, TextArea}
 import javafx.scene.effect.ColorAdjust

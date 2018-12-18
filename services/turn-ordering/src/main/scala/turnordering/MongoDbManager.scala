@@ -1,5 +1,6 @@
 package turnordering
 
+import communication.turnordering.PlayerInfo
 import org.mongodb.scala.bson.BsonValue
 import org.mongodb.scala.bson.collection.immutable.Document
 import org.mongodb.scala.bson.conversions.Bson
@@ -159,11 +160,11 @@ object TestConversion extends App {
 
   addPlayerInfo(playerInfo).onComplete {
 
-    case Success(_) => {
+    case Success(_) =>
       println("Player info successfully added to the Database")
       getPlayerInfo(playerName, battleId, round).onComplete {
 
-        case Success(retrievedInfo) => {
+        case Success(retrievedInfo) =>
           println("Player info retrieved from the Database")
           println(s"--> Original:  $playerInfo")
           println(s"--> Retrieved: $retrievedInfo")
@@ -174,10 +175,8 @@ object TestConversion extends App {
 
             case Failure(e) => println(s"$LogFailurePrefix$e")
           }
-        }
         case Failure(e) => println(s"$LogFailurePrefix$e")
       }
-    }
     case Failure(e) => println(s"$LogFailurePrefix$e")
   }
 
