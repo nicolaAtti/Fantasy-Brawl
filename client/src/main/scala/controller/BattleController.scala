@@ -20,8 +20,6 @@ import view.ApplicationView
 import view.ViewConfiguration.viewSelector._
 import scala.collection.mutable.ListBuffer
 
-
-
 /** Controller for the Battle GUI
   *
   * @author Nicola Atti
