@@ -123,8 +123,8 @@ object Main extends App {
 
     /** Given a ticket, evaluates the opponent's ticket number.
       *
-      * @param myTicket the ticket
-      * @return
+      * @param ticket the ticket
+      * @return the opponent ticket number
       */
     def evaluateOpponentTicket(ticket: Int): Int = {
       if (isEven(ticket)) ticket - 1 else ticket + 1
