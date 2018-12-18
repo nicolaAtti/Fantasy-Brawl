@@ -8,14 +8,19 @@ import utilities.Misc._
   */
 trait Character {
   val characterName: String
+
   /** The player owning the character */
   val owner: Option[String]
+
   /** The character's fighting class */
   val role: String
+
   /** The character's statistics */
   val statistics: Statistics
+
   /** The character's statistic multipliers, specific to its role */
   val classMultipliers: ClassMultipliers
+
   /** The character's special moves */
   val specialMoves: Map[String, SpecialMove]
 
