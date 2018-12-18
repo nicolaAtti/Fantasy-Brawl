@@ -243,6 +243,7 @@ object BattleController extends Initializable with ViewController {
 
     moveReportLabel.setText(moveReport)
     moveReportLabel.setVisible(true)
+    updateStatus()
   }
 
   private object BattleControllerHelper {

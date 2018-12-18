@@ -4,6 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import com.spingo.op_rabbit._
 import com.spingo.op_rabbit.properties.ReplyTo
 import communication.MessageFormat.MyFormat
+import communication.StatusUpdateMessage.CharacterKey
 import config.MessagingSettings
 import turnordering.PlayerInfo
 
@@ -31,6 +32,7 @@ object Main extends App {
 
     import com.spingo.op_rabbit.Directives._
     import turnordering.MongoDbManager._
+
     channel(qos = MessagingSettings.Qos) {
       consume(requestQueue) {
         (body(as[StartRoundRequest]) & optionalProperty(ReplyTo)) { (request, replyTo) =>
@@ -40,31 +42,52 @@ object Main extends App {
               println(LogMessage)
             }
             getCurrentRound(request.battleId).onComplete {
-              case Success(round: Int) if request.round > round =>
+
+              case Success(round: Int) if request.round == round + 1 =>
                 val player =
                   PlayerInfo(request.playerName, request.playerTeamSpeeds, request.battleId, request.round, replyTo.get)
                 addPlayerInfo(player).onComplete {
+
                   case Success(_) =>
                     getPlayerInfo(request.opponentName, request.battleId, request.round).onComplete {
-                      case Success(opponent) =>
-                        import Helper._
-                        val speedsOrdered = (extractTeamSpeeds(opponent) ++ extractTeamSpeeds(player))
-                          .sortBy { case (_, speed) => speed }
-                          .reverse
-                          .map {
-                            case (character, _) => character
-                          }
-                        val response = StartRoundResponse(Right(speedsOrdered), request.round)
-                        rabbitControl ! Message.queue(response, replyTo.get)
-                        rabbitControl ! Message.queue(response, opponent.replyTo)
-                        deletePlayerInfo(request.playerName, request.battleId, request.round)
-                        deletePlayerInfo(opponent.name, request.battleId, request.round)
-                        incrementCurrentRound(request.battleId)
+
+                      case Success(opponent) if opponent != null =>
+                        val firstToDelete = if (player.name > opponent.name) player.name else opponent.name
+                        val secondToDelete = if (player.name > opponent.name) opponent.name else player.name
+                        deletePlayerInfo(firstToDelete, request.battleId, request.round).onComplete {
+
+                          case Success(deleteResult1) if deleteResult1.getDeletedCount != 0 =>
+                            deletePlayerInfo(secondToDelete, request.battleId, request.round).onComplete {
+
+                              case Success(deleteResult2) if deleteResult2.getDeletedCount != 0 =>
+                                import Helper._
+                                incrementCurrentRound(request.battleId).onComplete {
+
+                                  case Success(_) =>
+                                    val allSpeedsOrdered = (extractTeamSpeeds(opponent) ++ extractTeamSpeeds(player))
+                                      .sortBy { case (_, speed: Int) => speed }
+                                      .reverse
+                                      .map { case (key: CharacterKey, _) => key }
+                                    val response = StartRoundResponse(Right(allSpeedsOrdered), request.round)
+
+                                    rabbitControl ! Message.queue(response, replyTo.get)
+                                    rabbitControl ! Message.queue(response, opponent.replyTo)
+
+                                  case Failure(e) => println(s"$LogFailurePrefix$e")
+
+                                }
+                              case Success(_) => println("Cannot delete what is not present...")
+                              case Failure(e) => println(s"$LogFailurePrefix$e")
+                            }
+                          case Success(_) => println("Cannot delete what is not present...")
+                          case Failure(e) => println(s"$LogFailurePrefix$e")
+                        }
+                      case Success(_) => println("Opponent not found...")
                       case Failure(e) => println(s"$LogFailurePrefix$e")
                     }
                   case Failure(e) => println(s"$LogFailurePrefix$e")
                 }
-              case Success(round: Int) => println(s"$OldRequestPrint ${request.round} actual $round")
+              case Success(round: Int) => println(s"$OldRequestPrint${request.round} actual $round")
               case Failure(e)          => println(s"$LogFailurePrefix$e")
             }
             ack
@@ -76,10 +99,9 @@ object Main extends App {
 
   private object Helper {
 
-    def extractTeamSpeeds(player: PlayerInfo): List[((String, String), Int)] = {
-      player.teamSpeeds.map {
-        case (characterName, speed) => (player.name, characterName) -> speed
-      }.toList
+    def extractTeamSpeeds(player: PlayerInfo): List[(CharacterKey, Int)] = {
+      player.teamSpeeds.map { case (characterName, speed) => (player.name, characterName) -> speed }.toList
     }
   }
+
 }

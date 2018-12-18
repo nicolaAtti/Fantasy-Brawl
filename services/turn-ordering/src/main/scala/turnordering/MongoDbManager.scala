@@ -15,6 +15,7 @@ import ExecutionContext.Implicits.global
 object MongoDbManager {
 
   import config.DbNaming._
+
   val database = MongoClient(ClientName).getDatabase(DatabaseName)
   val battlesCollection = database.getCollection(Battles.CollectionName)
   val turnOrderingCollection = database.getCollection(TurnOrdering.CollectionName)
@@ -60,8 +61,8 @@ object MongoDbManager {
   /** Retrieves all the player's informations of an old turn-ordering request.
     *
     * @param playerName the player name of the old request
-    * @param battleId the battle id of the old request
-    * @param round the round of the old request
+    * @param battleId   the battle id of the old request
+    * @param round      the round of the old request
     * @return a Future representing the success/failure of the operation
     */
   def getPlayerInfo(playerName: String, battleId: String, round: Int): Future[PlayerInfo] = {
@@ -75,8 +76,8 @@ object MongoDbManager {
   /** Deletes the player's informations of an old turn-ordering request.
     *
     * @param playerName the player name of the old request
-    * @param battleId the battle id of the old request
-    * @param round the round of the old request
+    * @param battleId   the battle id of the old request
+    * @param round      the round of the old request
     * @return a Future representing the success/failure of the operation
     */
   def deletePlayerInfo(playerName: String, battleId: String, round: Int): Future[DeleteResult] = {
@@ -134,6 +135,7 @@ object MongoDbManager {
     }
 
   }
+
 }
 
 /** Very naive test useful both as a usage example and as a verification for the
@@ -141,6 +143,7 @@ object MongoDbManager {
   * (NB: Test only when the remote Database is online!)
   */
 object TestConversion extends App {
+
   import MongoDbManager._
 
   val playerName = "Mark999"
