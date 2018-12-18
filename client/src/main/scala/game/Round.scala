@@ -1,9 +1,9 @@
 package game
 
+import communication.StatusUpdateMessage.CharacterKey
 import controller.BattleController
 import javafx.application.Platform
 import messaging.{BattleManager, RoundManager}
-import model.Move.NewStatuses
 import model._
 import view.ApplicationView
 import view.ViewConfiguration.viewSelector._
@@ -32,6 +32,7 @@ object Round {
       case (playerName, characterName) =>
         Battle.teams.find(char => char.characterName == characterName && char.owner.get == playerName).get
     }
+    turns.foreach(character => println(character.owner.get, character.characterName, character.speed))
     if (roundId == 1)
       ApplicationView changeView BATTLE
     startTurn()
@@ -72,25 +73,35 @@ object Round {
   }
 
   def actCalculation(attacker: Character, moveName: String, targets: List[Character]): Unit = {
-    makeMoveAndUpdateTeamsStatuses(attacker, moveName, targets.toSet)
-    BattleManager.updateOpponentStatus((attacker.owner.get, attacker.characterName),
-                                       moveName,
-                                       targets
-                                         .map(character => (character.owner.get, character.characterName))
-                                         .toSet,
-                                       Round.roundId)
+    var newStatuses: Map[CharacterKey, Status] = Map()
+    if (moveName == PhysicalAttackRepresentation)
+      newStatuses = Move.makeMove(PhysicalAttack, attacker, targets.toSet).map {
+        case (character, status) => (character.owner.get, character.characterName) -> status
+      } else
+      newStatuses = Move.makeMove(attacker.specialMoves(moveName), attacker, targets.toSet).map {
+        case (character, status) => (character.owner.get, character.characterName) -> status
+      }
+    updateTeamsStatuses(newStatuses)
+    BattleManager.updateOpponentStatus(
+      (attacker.owner.get, attacker.characterName),
+      moveName,
+      targets
+        .map(character => (character.owner.get, character.characterName))
+        .toSet,
+      newStatuses,
+      Round.roundId
+    )
+    Platform runLater (() => {
+      BattleController.displayMoveEffect(attacker, moveName, targets.toSet)
+    })
     endTurn()
   }
 
-  def makeMoveAndUpdateTeamsStatuses(attacker: Character, moveName: String, targets: Set[Character]): Unit = {
-    var newStatuses: Move.NewStatuses = Map()
-    if (moveName == PhysicalAttackRepresentation)
-      newStatuses = Move.makeMove(PhysicalAttack, attacker, targets)
-    else
-      newStatuses = Move.makeMove(attacker.specialMoves(moveName), attacker, targets)
-    Battle.teams.foreach(character => if (newStatuses.contains(character)) character.status = newStatuses(character))
-    Platform runLater (() => {
-      BattleController.displayMoveEffect(attacker, moveName, targets)
+  def updateTeamsStatuses(newStatuses: Map[CharacterKey, Status]): Unit = {
+    Battle.teams.foreach(character => {
+      if (newStatuses.contains((character.owner.get, character.characterName))) {
+        character.status = newStatuses((character.owner.get, character.characterName))
+      }
     })
   }
 }
