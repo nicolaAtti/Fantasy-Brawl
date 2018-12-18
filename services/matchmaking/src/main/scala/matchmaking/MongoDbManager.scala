@@ -10,9 +10,9 @@ import org.mongodb.scala.{Completed, Document, MongoClient}
 
 import scala.concurrent.Future
 
-/** Provides functionalities for database asynchronous interations
+/** Provides functionality for the database asynchronous interactions.
   *
-  * @Author Nicola Atti, Marco Canducci
+  * @author Nicola Atti, Marco Canducci
   */
 object MongoDbManager {
 

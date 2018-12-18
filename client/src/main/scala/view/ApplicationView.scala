@@ -16,8 +16,7 @@ import messaging.MatchmakingManager
 object ApplicationView {
   private var stage: Stage = new Stage()
 
-  type ViewSelector = viewSelector.Value
-  import viewSelector._
+  import ViewSelector._
 
   /** Changes the current view to the required view.
     *

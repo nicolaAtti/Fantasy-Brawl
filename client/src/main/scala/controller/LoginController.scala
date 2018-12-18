@@ -5,7 +5,7 @@ import java.util.ResourceBundle
 import javafx.event.ActionEvent
 import javafx.fxml.{FXML, Initializable}
 import view._
-import ViewConfiguration.viewSelector._
+import ViewConfiguration.ViewSelector._
 import messaging.LoginManager
 
 /** Controller of the login view.

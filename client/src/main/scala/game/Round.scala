@@ -6,10 +6,10 @@ import javafx.application.Platform
 import messaging.{BattleManager, RoundManager}
 import model._
 import view.ApplicationView
-import view.ViewConfiguration.viewSelector._
+import view.ViewConfiguration.ViewSelector._
 
 object Round {
-  var roundId: Int = 0
+  var roundId: Int = _
   var turns: List[Character] = List()
   val PhysicalAttackRepresentation: String = "Physical Attack"
 
@@ -41,11 +41,16 @@ object Round {
   def startTurn(): Unit = {
     val activeCharacter = turns.head
     if (activeCharacter.isAlive) {
-      activeCharacter.status = Status.afterTurnStart(activeCharacter.status)
-      Platform runLater (() => {
-        BattleController.setActiveCharacter(activeCharacter)
-        BattleController.roundCounter.setText(roundId.toString)
-      })
+      if (activeCharacter.status.alterations.contains(Alteration.Stunned) || activeCharacter.status.alterations
+            .contains(Alteration.Asleep)) {
+        BattleManager.skipTurn((activeCharacter.owner.get, activeCharacter.characterName), roundId)
+        endTurn()
+      } else {
+        Platform runLater (() => {
+          BattleController.setActiveCharacter(activeCharacter)
+          BattleController.roundCounter.setText(roundId.toString)
+        })
+      }
     } else {
       endTurn()
     }

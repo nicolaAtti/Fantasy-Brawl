@@ -1,5 +1,6 @@
 package turnordering
 
+import communication.turnordering.PlayerInfo
 import org.mongodb.scala.bson.BsonValue
 import org.mongodb.scala.bson.collection.immutable.Document
 import org.mongodb.scala.bson.conversions.Bson
@@ -12,6 +13,10 @@ import scala.util.{Failure, Success}
 import scala.concurrent._
 import ExecutionContext.Implicits.global
 
+/** Provides functionality for the database asynchronous interactions.
+  *
+  * @author Marco Canducci
+  */
 object MongoDbManager {
 
   import config.DbNaming._
@@ -22,7 +27,7 @@ object MongoDbManager {
 
   /** Retrieves the current round of an ongoing battle.
     *
-    * @param battleId the ongoing battle to check
+    * @param battleId the ongoing battle identifier to check
     * @return a Future representing the success/failure of the operation,
     *         containing the current round number
     */
@@ -33,7 +38,7 @@ object MongoDbManager {
       .head
   }
 
-  /** Increments the current round of a given active battle.
+  /** Increments by one the current round of a given active battle.
     *
     * @param battleId the battle identifier
     * @return a Future representing the success/failure of the operation
@@ -47,9 +52,9 @@ object MongoDbManager {
 
   import DbHelper._
 
-  /** Adds all the player's informations for the next round turn-ordering request.
+  /** Adds all the player's information for a turn-ordering request.
     *
-    * @param playerInfo the player informations
+    * @param playerInfo the player information
     * @return a Future representing the success/failure of the operation
     */
   def addPlayerInfo(playerInfo: PlayerInfo): Future[Completed] = {
@@ -58,12 +63,13 @@ object MongoDbManager {
       .head
   }
 
-  /** Retrieves all the player's informations of an old turn-ordering request.
+  /** Retrieves all the player's information relative to an old turn-ordering request.
     *
     * @param playerName the player name of the old request
-    * @param battleId   the battle id of the old request
-    * @param round      the round of the old request
-    * @return a Future representing the success/failure of the operation
+    * @param battleId the battle identifier of the old request
+    * @param round the round of the old request
+    * @return a Future representing the success/failure of the operation,
+    *         containing the requested player information
     */
   def getPlayerInfo(playerName: String, battleId: String, round: Int): Future[PlayerInfo] = {
     turnOrderingCollection
@@ -73,12 +79,12 @@ object MongoDbManager {
       .head
   }
 
-  /** Deletes the player's informations of an old turn-ordering request.
+  /** Deletes the player's information of an old turn-ordering request.
     *
     * @param playerName the player name of the old request
-    * @param battleId   the battle id of the old request
-    * @param round      the round of the old request
-    * @return a Future representing the success/failure of the operation
+    * @param battleId the battle id of the old request
+    * @param round the round of the old request
+    * @return a Future representing the success/failure of the deletion
     */
   def deletePlayerInfo(playerName: String, battleId: String, round: Int): Future[DeleteResult] = {
     turnOrderingCollection
@@ -133,12 +139,11 @@ object MongoDbManager {
         replyTo = document(TurnOrdering.ReplyTo).asString.getValue
       )
     }
-
   }
 
 }
 
-/** Very naive test useful both as a usage example and as a verification for the
+/** Naive test useful both as a usage example and as a verification for the
   * conversion from PlayerInfo to Document and vice-versa.
   * (NB: Test only when the remote Database is online!)
   */
@@ -150,7 +155,7 @@ object TestConversion extends App {
   val speeds = Map("Annabelle" -> 8, "Jacob" -> 5, "Fernando" -> 6)
   val battleId = "88-89"
   val round = 15
-  val clientQueue = "fkjghsdfkjghsdflkjdhlfgoielrjglkdjhfwoghsldgfj"
+  val clientQueue = "fkjghsdfkjghsdflkjdhlfgoielrjglkdjhfwoghsldgfjasd"
 
   val playerInfo =
     PlayerInfo(name = playerName, teamSpeeds = speeds, battleId = battleId, round = round, replyTo = clientQueue)
@@ -159,11 +164,11 @@ object TestConversion extends App {
 
   addPlayerInfo(playerInfo).onComplete {
 
-    case Success(_) => {
+    case Success(_) =>
       println("Player info successfully added to the Database")
       getPlayerInfo(playerName, battleId, round).onComplete {
 
-        case Success(retrievedInfo) => {
+        case Success(retrievedInfo) =>
           println("Player info retrieved from the Database")
           println(s"--> Original:  $playerInfo")
           println(s"--> Retrieved: $retrievedInfo")
@@ -174,10 +179,8 @@ object TestConversion extends App {
 
             case Failure(e) => println(s"$LogFailurePrefix$e")
           }
-        }
         case Failure(e) => println(s"$LogFailurePrefix$e")
       }
-    }
     case Failure(e) => println(s"$LogFailurePrefix$e")
   }
 

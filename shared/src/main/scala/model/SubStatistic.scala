@@ -5,6 +5,8 @@ trait SubStatistic
 /** A module that contains all the possible sub-statistics of a character.
   *
   * The sub-statistics influence the effectiveness of a character in combat.
+  *
+  * @author Nicola Atti
   */
 object SubStatistic {
 

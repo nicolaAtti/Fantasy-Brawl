@@ -45,10 +45,11 @@ object Main extends App {
             }
 
             request.operation match {
-              case PlayerJoinedCasualQueue =>
-                findAnOpponent(PlayerInfo(request.playerName, request.team, request.battleQueue), replyTo.get)
-              case PlayerLeftCasualQueue =>
-                MongoDbManager.notifyPlayerLeft(request.playerName)
+              case JoinCasualQueueRequest.Operation.ADD =>
+                findAnOpponent(PlayerInfo(request.player.name, request.player.teamNames, request.player.battleQueue),
+                               replyTo.get)
+              case JoinCasualQueueRequest.Operation.REMOVE =>
+                MongoDbManager.notifyPlayerLeft(request.player.name)
             }
           }
           ack
@@ -123,8 +124,8 @@ object Main extends App {
 
     /** Given a ticket, evaluates the opponent's ticket number.
       *
-      * @param myTicket the ticket
-      * @return
+      * @param ticket the ticket
+      * @return the opponent ticket number
       */
     def evaluateOpponentTicket(ticket: Int): Int = {
       if (isEven(ticket)) ticket - 1 else ticket + 1

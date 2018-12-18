@@ -2,16 +2,29 @@ package model
 
 import utilities.Misc._
 
+/** Defines the general implementation of a game character
+  *
+  * @author Nicola Atti
+  */
 trait Character {
   val characterName: String
+
+  /** The player owning the character */
   val owner: Option[String]
+
+  /** The character's fighting class */
   val role: String
+
+  /** The character's statistics */
   val statistics: Statistics
+
+  /** The character's statistic multipliers, specific to its role */
   val classMultipliers: ClassMultipliers
+
+  /** The character's special moves */
   val specialMoves: Map[String, SpecialMove]
 
-  /**
-    * Contains the character's status, depending on current HP and MP values and current modifiers and afflictions
+  /** Contains the character's status, depending on current HP and MP values and current modifiers and afflictions
     *
     */
   var status: Status = Status(
@@ -33,56 +46,49 @@ trait Character {
 
   import SubStatistic._
 
-  /**
-    * Calculates the character's physical damage
+  /** Calculates the character's physical damage
     *
     * @return the character's physical damage
     */
   def physicalDamage: Int =
     roundDown(statistics.strength * classMultipliers.strength) + getModifierValues(PhysicalDamage)
 
-  /**
-    * Calculates the character's bonus physical critical strike damage
+  /** Calculates the character's bonus physical critical strike damage
     *
     * @return the character's physical critical strike damage
     */
   def physicalCriticalDamage: Int =
     roundDown((statistics.strength * classMultipliers.strength) / 5 + 150) + getModifierValues(PhysicalCriticalDamage)
 
-  /**
-    * Calculates the character's speed
+  /** Calculates the character's speed
     *
     * @return the character's speed
     */
   def speed: Int =
     roundUp((statistics.agility * classMultipliers.agility) / 10) + getModifierValues(Speed)
 
-  /**
-    * Calculates the character's critical strike chance
+  /** Calculates the character's critical strike chance
     *
     * @return the character's critical strike chance
     */
   def criticalChance: Int =
     roundDown((statistics.agility * classMultipliers.agility) / 2) + getModifierValues(CriticalChance)
 
-  /**
-    * Calculates the character's magical defence
+  /** Calculates the character's magical defence
     *
     * @return the character's magical defence
     */
   def magicalDefence: Int =
     roundDown(statistics.spirit * classMultipliers.spirit) + getModifierValues(MagicalDefence)
 
-  /**
-    * Calculates the character's magical power
+  /** Calculates the character's magical power
     *
     * @return the character's magical power
     */
   def magicalPower: Int =
     roundDown(statistics.intelligence * classMultipliers.intelligence) + getModifierValues(MagicalDamage)
 
-  /**
-    * Calculates the character's bonus magical critical strike power
+  /** Calculates the character's bonus magical critical strike power
     *
     * @return the character's magical critical strike power
     */
@@ -90,23 +96,20 @@ trait Character {
     roundDown((statistics.intelligence * classMultipliers.intelligence) / 10 + 150) + getModifierValues(
       MagicalCriticalDamage)
 
-  /**
-    * Calculates the character's physical defence
+  /** Calculates the character's physical defence
     *
     * @return the character's physical defence
     */
   def physicalDefence: Int =
     roundDown(statistics.resistance * classMultipliers.resistance) + getModifierValues(PhysicalDefence)
 
-  /**
-    * Check if the character is alive
+  /** Check if the character is alive
     *
     * @return true if the character is alive of false if it's dead
     */
   def isAlive: Boolean = status.healthPoints > 0
 
-  /**
-    * Cycles all the character's modifiers for a given sub-statistic and calculates the bonus/malus value
+  /** Cycles all the character's modifiers for a given sub-statistic and calculates the bonus/malus value
     *
     * @param subStatistic the sub-statistic to search for
     * @return the total bonus/malus to the sub-statistic
@@ -123,6 +126,15 @@ trait Character {
 
 import Character._
 
+/** Defines a character of class Warrior
+  *
+  * @param characterName the character's name
+  * @param owner the optional character's owner
+  * @param statistics the character's statistics
+  * @param specialMoves the character's special moves
+  * @param classMultipliers the default statistic multipliers for the warrior fighting class
+  * @param role the character's fighting class
+  */
 private case class Warrior(characterName: String,
                            owner: Option[String],
                            statistics: Statistics,
@@ -131,6 +143,15 @@ private case class Warrior(characterName: String,
                            role: String = WarriorRepresentation)
     extends Character {}
 
+/** Defines a character of class Thief
+  *
+  * @param characterName the character's name
+  * @param owner the optional character's owner
+  * @param statistics the character's statistics
+  * @param specialMoves the character's special moves
+  * @param classMultipliers the default statistic multipliers for the thief fighting class
+  * @param role the character's fighting class
+  */
 private case class Thief(characterName: String,
                          owner: Option[String],
                          statistics: Statistics,
@@ -139,6 +160,15 @@ private case class Thief(characterName: String,
                          role: String = ThiefRepresentation)
     extends Character {}
 
+/** Defines a character of class Wizard
+  *
+  * @param characterName the character's name
+  * @param owner the optional character's owner
+  * @param statistics the character's statistics
+  * @param specialMoves the character's special moves
+  * @param classMultipliers the default statistic multipliers for the wizard fighting class
+  * @param role the character's fighting class
+  */
 private case class Wizard(characterName: String,
                           owner: Option[String],
                           statistics: Statistics,
@@ -147,6 +177,15 @@ private case class Wizard(characterName: String,
                           role: String = WizardRepresentation)
     extends Character {}
 
+/** Defines a character of class Healer
+  *
+  * @param characterName the character's name
+  * @param owner the optional character's owner
+  * @param statistics the character's statistics
+  * @param specialMoves the character's special moves
+  * @param classMultipliers the default statistic multipliers for the healer fighting class
+  * @param role the character's fighting class
+  */
 private case class Healer(characterName: String,
                           owner: Option[String],
                           statistics: Statistics,

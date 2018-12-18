@@ -26,10 +26,11 @@ object ViewConfiguration {
   val MovesManualTitle: String = "Fantasy Brawl - Team Selection"
   val MovesManualForm: String = "MovesManualView.fxml"
 
-  val MovesManualViewBackgroundImage: String = "/view/background4.jpg"
+  val MovesManualViewBackgroundImage: String = "/view/background.jpg"
 
   /** Defines the acceptable views. */
-  object viewSelector extends Enumeration {
+  object ViewSelector extends Enumeration {
     val LOGIN, TEAM, WAITING_TO_LOGIN, WAITING_OPPONENT, BATTLE = Value
   }
+  type ViewSelector = ViewSelector.Value
 }

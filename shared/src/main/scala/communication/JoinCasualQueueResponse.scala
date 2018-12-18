@@ -1,9 +1,16 @@
 package communication
 
+import communication.JoinCasualQueueResponse.BattleId
 import communication.matchmaking.PlayerInfo
 
-/** The response message that the client will receive after an opponent is chosen from the matchmaking service.
+/** The response message that the client will receive after an opponent is chosen
+  * from the matchmaking service.
   *
-  * @param opponentData team with which the opponent player wants to fight.
+  * @param opponentData Right((player, battleId)) player and his battle id,
+  *                     Left(error) details about the error
   */
-case class JoinCasualQueueResponse(opponentData: Either[String, (PlayerInfo, String)])
+case class JoinCasualQueueResponse(opponentData: Either[String, (PlayerInfo, BattleId)])
+
+object JoinCasualQueueResponse {
+  type BattleId = String
+}
