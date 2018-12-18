@@ -1,5 +1,6 @@
 package config
 
+/** Miscellaneous settings and conventions */
 object MiscSettings {
 
   val ServicesLog: Boolean = true
@@ -9,5 +10,4 @@ object MiscSettings {
   val GuestName: String = "guest#"
 
   val TurnDurationInSeconds: Int = 60
-
 }
