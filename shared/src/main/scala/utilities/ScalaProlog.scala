@@ -4,6 +4,10 @@ import scala.io.Source
 import alice.tuprolog._
 import model._
 
+/** Object provinding ad-hoc integration functionalities for Scala and tuProlog
+  *
+  * @author Nicola Atti
+  */
 object ScalaProlog {
   import ScalaPrologHelper._
 

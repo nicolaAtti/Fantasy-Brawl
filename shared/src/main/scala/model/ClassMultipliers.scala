@@ -8,6 +8,8 @@ package model
   * @param intelligence the class modifier impacting intelligence driven statistics
   * @param resistance the class modifier impacting resistence driven statistics
   * @param healthPoints the class modifier impacting maximum HP values
+  *
+  * @author Nicola Atti
   */
 case class ClassMultipliers(strength: Double,
                             agility: Double,

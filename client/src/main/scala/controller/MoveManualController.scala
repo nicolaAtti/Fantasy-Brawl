@@ -9,6 +9,10 @@ import javafx.scene.control.{Button, ChoiceBox, Label}
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.Pane
 
+/** The controller for the move manual GUI
+  *
+  * @author Nicola Atti
+  */
 object MoveManualController extends Initializable with ViewController {
   @FXML var characterChoiceBox: ChoiceBox[String] = _
   @FXML var labelPane: Pane = _
