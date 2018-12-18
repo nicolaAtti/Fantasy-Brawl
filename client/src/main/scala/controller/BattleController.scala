@@ -15,9 +15,11 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.util.Duration
+import messaging.BattleManager
 import model.{Character, Move}
 import view.ApplicationView
 import view.ViewConfiguration.ViewSelector._
+
 import scala.collection.mutable.ListBuffer
 
 //noinspection ScalaDocMissingParameterDescription,FieldFromDelayedInit
@@ -111,7 +113,10 @@ object BattleController extends Initializable with ViewController {
           timerCounter.setText(timeSeconds.toString)
           if (timeSeconds <= 0) {
             timeline.stop()
-            Round.endTurn()
+            if (activeCharacter.owner.get == Battle.playerId) {
+              BattleManager.skipTurn((activeCharacter.owner.get, activeCharacter.characterName), Round.roundId)
+              Round.endTurn()
+            }
           }
         }
       ))
@@ -244,22 +249,26 @@ object BattleController extends Initializable with ViewController {
   def displayMoveEffect(characterUser: Character, moveName: String, moveTargets: Set[Character]): Unit = {
     var moveReport: String = ""
     if (characterUser.owner.get equals Battle.playerId) {
-      moveReport = s"YOUR ${characterUser.characterName} used $moveName on \n"
+      moveReport = s"YOUR ${characterUser.characterName} "
     } else {
-      moveReport = s"ENEMY ${characterUser.characterName} used $moveName on \n"
+      moveReport = s"ENEMY ${characterUser.characterName} "
     }
-    val playerTargets = moveTargets.filter(character => character.owner.get equals Battle.playerId)
-    val opponentTargets = moveTargets.filter(character => character.owner.get equals Battle.opponentId)
+    if (moveName == "") {
+      moveReport = moveReport concat "skipped its turn"
+    } else {
+      moveReport = moveReport concat "used $moveName on \n"
+      val playerTargets = moveTargets.filter(character => character.owner.get equals Battle.playerId)
+      val opponentTargets = moveTargets.filter(character => character.owner.get equals Battle.opponentId)
 
-    if (playerTargets.nonEmpty) {
-      moveReport = moveReport concat " YOUR:"
-      playerTargets.foreach(playerChar => moveReport = moveReport concat " " + playerChar.characterName)
+      if (playerTargets.nonEmpty) {
+        moveReport = moveReport concat " YOUR:"
+        playerTargets.foreach(playerChar => moveReport = moveReport concat " " + playerChar.characterName)
+      }
+      if (opponentTargets.nonEmpty) {
+        moveReport = moveReport concat " ENEMY:"
+        opponentTargets.foreach(opponentChar => moveReport = moveReport concat " " + opponentChar.characterName)
+      }
     }
-    if (opponentTargets.nonEmpty) {
-      moveReport = moveReport concat " ENEMY:"
-      opponentTargets.foreach(opponentChar => moveReport = moveReport concat " " + opponentChar.characterName)
-    }
-
     moveReportLabel.setText(moveReport)
     moveReportLabel.setVisible(true)
     updateStatus()

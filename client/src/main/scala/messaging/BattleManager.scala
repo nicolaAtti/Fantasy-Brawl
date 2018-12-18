@@ -37,7 +37,9 @@ object BattleManager {
             (response.round, response.attacker) match {
               case (round, (owner, characterName))
                   if round == Round.roundId && owner == Round.turns.head.owner.get && characterName == Round.turns.head.characterName =>
-                updateTeamsStatuses(response.newStatuses)
+                if (response.moveName != "") {
+                  updateTeamsStatuses(response.newStatuses)
+                }
                 import BattleManagerHelper._
                 Platform runLater (() => {
                   BattleController.displayMoveEffect(findCharacter(response.attacker),
@@ -60,6 +62,10 @@ object BattleManager {
                            newStatuses: Map[CharacterKey, Status],
                            round: Int): Unit = {
     rabbitControl ! Message(StatusUpdateMessage(character, moveName, targets, newStatuses, round), publisher)
+  }
+
+  def skipTurn(character: CharacterKey, round: Int): Unit = {
+    rabbitControl ! Message(StatusUpdateMessage(character, "", Set(), Map(), round), publisher)
   }
 
   private object BattleManagerHelper {
