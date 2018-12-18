@@ -14,8 +14,19 @@ object MoveManualController extends Initializable with ViewController {
   @FXML var labelPane: Pane = _
   @FXML var choiceButton: Button = _
 
-  val characterList: ObservableList[String] = FXCollections.observableArrayList("Jacob","Annabelle","Albert","Lidya","Noah","Cassandra","Linn","Aster","Norman","Fernando","Rikh","Nora")
-  var characterLabelMap: Map[AnyRef,AnyRef] = Map()
+  val characterList: ObservableList[String] = FXCollections.observableArrayList("Jacob",
+                                                                                "Annabelle",
+                                                                                "Albert",
+                                                                                "Lidya",
+                                                                                "Noah",
+                                                                                "Cassandra",
+                                                                                "Linn",
+                                                                                "Aster",
+                                                                                "Norman",
+                                                                                "Fernando",
+                                                                                "Rikh",
+                                                                                "Nora")
+  var characterLabelMap: Map[AnyRef, AnyRef] = Map()
   var actualSelected: String = _
 
   /** Return the LoginController. */
