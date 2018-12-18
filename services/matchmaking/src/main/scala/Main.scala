@@ -45,10 +45,11 @@ object Main extends App {
             }
 
             request.operation match {
-              case PlayerJoinedCasualQueue =>
-                findAnOpponent(PlayerInfo(request.playerName, request.team, request.battleQueue), replyTo.get)
-              case PlayerLeftCasualQueue =>
-                MongoDbManager.notifyPlayerLeft(request.playerName)
+              case JoinCasualQueueRequest.Operation.ADD =>
+                findAnOpponent(PlayerInfo(request.player.name, request.player.teamNames, request.player.battleQueue),
+                               replyTo.get)
+              case JoinCasualQueueRequest.Operation.REMOVE =>
+                MongoDbManager.notifyPlayerLeft(request.player.name)
             }
           }
           ack
