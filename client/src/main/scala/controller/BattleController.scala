@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.util.Duration
 import messaging.BattleManager
-import model.{Character, Move}
+import model.{Character, Move, PhysicalAttack}
 import view.ApplicationView
 import view.ViewConfiguration.ViewSelector._
 
@@ -420,7 +420,8 @@ object BattleController extends Initializable with ViewController {
         val moveName = moveListView.getSelectionModel.getSelectedItem.split(MovesSeparator).head
         var moveMaxTargets = 1
         moveName match {
-          case PhysicalAttackRepresentation => targetImages.size <= moveMaxTargets
+          case PhysicalAttackRepresentation =>
+            targetImages.size <= moveMaxTargets && Move.canMakeMove(activeCharacter, PhysicalAttack)
           case _ =>
             val selectedMove = activeCharacter.specialMoves(moveName)
             moveMaxTargets = selectedMove.maxTargets
