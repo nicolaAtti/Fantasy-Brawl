@@ -3,10 +3,14 @@ package messaging
 import akka.actor.{ActorRef, ActorSystem, Props}
 import com.spingo.op_rabbit._
 import communication.MessageFormat.MyFormat
+import communication.StatusUpdateMessage.CharacterKey
 import communication._
 import config.MessagingSettings
+import controller.BattleController
+import game.Round.updateTeamsStatuses
 import game.{Battle, Round}
-import model.Character
+import javafx.application.Platform
+import model.{Character, Status}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -33,12 +37,15 @@ object BattleManager {
             (response.round, response.attacker) match {
               case (round, (owner, characterName))
                   if round == Round.roundId && owner == Round.turns.head.owner.get && characterName == Round.turns.head.characterName =>
+                updateTeamsStatuses(response.newStatuses)
                 import BattleManagerHelper._
-                Round.makeMoveAndUpdateTeamsStatuses(findCharacter(response.attacker),
+                Platform runLater (() => {
+                  BattleController.displayMoveEffect(findCharacter(response.attacker),
                                                      response.moveName,
                                                      response.targets.map {
                                                        case target => findCharacter(target)
                                                      })
+                })
                 Round.endTurn()
               case _ => Unit
             }
@@ -52,8 +59,9 @@ object BattleManager {
   def updateOpponentStatus(character: StatusUpdateMessage.CharacterKey,
                            moveName: String,
                            targets: Set[StatusUpdateMessage.CharacterKey],
+                           newStatuses: Map[CharacterKey, Status],
                            round: Int): Unit = {
-    rabbitControl ! Message(StatusUpdateMessage(character, moveName, targets, round), publisher)
+    rabbitControl ! Message(StatusUpdateMessage(character, moveName, targets, newStatuses, round), publisher)
   }
 
   private object BattleManagerHelper {
