@@ -30,7 +30,7 @@ class MoveTest extends FunSuite {
   val berserkStatus = Status(200, 100, 200, 100, Map(), Map((berserk, berserk.roundsDuration)))
   val asleepStatus = Status(200, 100, 200, 100, Map(), Map((asleep, asleep.roundsDuration)))
 
-  val lowManaStatus = Status(200, 15, 200, 100, Map(), Map())
+  val lowManaStatus = Status(200, 10, 200, 100, Map(), Map())
 
   test("The move Physical Attack should have the correct parameters") {
     assert(
@@ -42,7 +42,7 @@ class MoveTest extends FunSuite {
   test("A special move should have the right parameters") {
     assert(
       specialSpell.moveType == MoveType.Spell &&
-        specialSpell.manaCost == 15 &&
+        specialSpell.manaCost == 20 &&
         specialSpell.maxTargets == 1)
   }
 
@@ -113,7 +113,7 @@ class MoveTest extends FunSuite {
   test("A character cannot make a special move that costs more than his actual mana") {
     val character = getCharacter("Jacob")
     character.status = lowManaStatus
-    assert(!Move.canMakeMove(character, specialMelee) && Move.canMakeMove(character, specialSpell))
+    assert(Move.canMakeMove(character, specialMelee) && !Move.canMakeMove(character, specialSpell))
   }
 
   test("A move against another character should yield the correct status reflecting the move effect") {
@@ -121,7 +121,7 @@ class MoveTest extends FunSuite {
     val targetCharacter = getCharacter("Cassandra")
     val newStatuses = Move.makeMove(physicalAttack, userCharacter, Set(targetCharacter))
     assert(
-      (newStatuses(targetCharacter).healthPoints == 693 || newStatuses(targetCharacter).healthPoints == 660) && !newStatuses
+      (newStatuses(targetCharacter).healthPoints == 969 || newStatuses(targetCharacter).healthPoints == 933) && !newStatuses
         .contains(userCharacter))
   }
 
@@ -131,8 +131,8 @@ class MoveTest extends FunSuite {
     val targetCharacter = getCharacter("Cassandra")
     val newStatuses = Move.makeMove(specialMelee, userCharacter, Set(targetCharacter))
     assert(
-      (newStatuses(targetCharacter).healthPoints == 663 || newStatuses(targetCharacter).healthPoints == 609) && newStatuses(
-        userCharacter).manaPoints == userCharacter.status.maxManaPoints - 25)
+      (newStatuses(targetCharacter).healthPoints == 954 || newStatuses(targetCharacter).healthPoints == 908) && newStatuses(
+        userCharacter).manaPoints == 90)
   }
 
   test("Using an healing spell of themselves should produce only one status with the combined health and mana changes") {
@@ -141,8 +141,8 @@ class MoveTest extends FunSuite {
     healerCharacter.status = damagedStatus
     val newStatuses = Move.makeMove(specialSpell, healerCharacter, Set(healerCharacter))
     assert(
-      (newStatuses(healerCharacter).healthPoints == 168 || newStatuses(healerCharacter).healthPoints == 263) && newStatuses(
-        healerCharacter).manaPoints == 85)
+      (newStatuses(healerCharacter).healthPoints == 178 || newStatuses(healerCharacter).healthPoints == 279) && newStatuses(
+        healerCharacter).manaPoints == 80)
   }
 
   test(
@@ -156,11 +156,11 @@ class MoveTest extends FunSuite {
                                     wizardCharacter,
                                     Set(userCharacter, targetCharacter, healerCharacter, anotherCharacter))
     assert(
-      (newStatuses(userCharacter).healthPoints == 393 || newStatuses(userCharacter).healthPoints == 302) &&
-        (newStatuses(targetCharacter).healthPoints == 612 || newStatuses(targetCharacter).healthPoints == 533) &&
-        (newStatuses(healerCharacter).healthPoints == 278 || newStatuses(healerCharacter).healthPoints == 199) &&
-        (newStatuses(anotherCharacter).healthPoints == 267 || newStatuses(anotherCharacter).healthPoints == 181) &&
-        (newStatuses(wizardCharacter).manaPoints == wizardCharacter.status.maxManaPoints - 25))
+      (newStatuses(userCharacter).healthPoints == 610 || newStatuses(userCharacter).healthPoints == 523) &&
+        (newStatuses(targetCharacter).healthPoints == 892 || newStatuses(targetCharacter).healthPoints == 813) &&
+        (newStatuses(healerCharacter).healthPoints == 573 || newStatuses(healerCharacter).healthPoints == 494) &&
+        (newStatuses(anotherCharacter).healthPoints == 537 || newStatuses(anotherCharacter).healthPoints == 451) &&
+        (newStatuses(wizardCharacter).manaPoints == 175))
   }
 
   test("Using a damaging move should remove the Asleep alteration from it's targets") {
@@ -204,10 +204,10 @@ class MoveTest extends FunSuite {
     val anotherCharacter = getCharacter("Annabelle")
 
     val newStatuses = Move.makeMove(percentageMove,wizardCharacter,Set(userCharacter,targetCharacter,healerCharacter,anotherCharacter))
-    assert(newStatuses(userCharacter).healthPoints == 459 &&
-            newStatuses(targetCharacter).healthPoints == 629 &&
-            newStatuses(healerCharacter).healthPoints == 344 &&
-            newStatuses(anotherCharacter).healthPoints == 344)
+    assert(newStatuses(userCharacter).healthPoints == 562 &&
+            newStatuses(targetCharacter).healthPoints == 765 &&
+            newStatuses(healerCharacter).healthPoints == 525 &&
+            newStatuses(anotherCharacter).healthPoints == 506)
   }
   test("A special move that heals for a percentage of the current health should heal for the correct amount"){
     val userCharacter = getCharacter("Jacob")
