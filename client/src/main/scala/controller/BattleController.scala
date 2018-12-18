@@ -27,6 +27,11 @@ import scala.collection.mutable.ListBuffer
   * @author Nicola Atti
   */
 //noinspection ScalaDocMissingParameterDescription,FieldFromDelayedInit
+
+/** Controller for the Battle GUI
+  *
+  * @author Nicola Atti
+  */
 object BattleController extends Initializable with ViewController {
 
   import BattleControllerHelper._
