@@ -22,6 +22,10 @@ import view.ViewConfiguration.ViewSelector._
 
 import scala.collection.mutable.ListBuffer
 
+/** Controller for the Battle GUI
+  *
+  * @author Nicola Atti
+  */
 //noinspection ScalaDocMissingParameterDescription,FieldFromDelayedInit
 
 /** Controller for the Battle GUI
