@@ -4,7 +4,7 @@ import scala.io.Source
 import alice.tuprolog._
 import model._
 
-/** Object providing functionalities for Scala and tuProlog with ad-hoc conversions
+/** Object providing functionalities for Scala and tuProlog with ad-hoc conversions.
   *
   * @author Nicola Atti
   */
@@ -40,7 +40,7 @@ object ScalaProlog {
     )
   }
 
-  /** Creates a character with no owner
+  /** Creates a character with no owner.
     *
     * @param characterName the character's name
     * @return a Character with owner set to "None"
@@ -100,10 +100,14 @@ object ScalaProlog {
     val moveContents: String =
       Source.fromResource("model/PrologMoves.pl").getLines.reduce((line1, line2) => line1 + "\n" + line2)
 
+    /** Changes the current theory.
+      *
+      * @param clauses the new theory
+      */
     def setNewTheory(clauses: String*): Unit =
       engine.setTheory(new Theory(clauses mkString " "))
 
-    /** Extracts an Int value from a Prolog solution
+    /** Extracts an Int value from a Prolog solution.
       *
       * @param solveInfo the solution from a Prolog query
       * @param value the name of the value to extract
@@ -113,7 +117,7 @@ object ScalaProlog {
       solveInfo.getVarValue(value)
     }
 
-    /** Extracts a String from a Prolog solution
+    /** Extracts a String from a Prolog solution.
       *
       * @param solveInfo the solution from a Prolog query
       * @param value the name of the value to extract
@@ -123,7 +127,7 @@ object ScalaProlog {
       solveInfo.getVarValue(value)
     }
 
-    /** Builds a Scala list of strings from a Prolog list
+    /** Builds a Scala list of strings from a Prolog list.
       *
       * @param solveInfo the solution from a Prolog query
       * @param value the name of the value to extract
