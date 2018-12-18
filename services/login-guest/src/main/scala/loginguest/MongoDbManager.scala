@@ -1,6 +1,6 @@
 package loginguest
 
-import org.mongodb.scala.{MongoClient}
+import org.mongodb.scala.MongoClient
 import org.mongodb.scala.model.Filters
 import org.mongodb.scala.model.Updates.inc
 import org.mongodb.scala.bson.conversions.Bson
@@ -8,7 +8,7 @@ import org.mongodb.scala.bson.conversions.Bson
 import scala.concurrent.Future
 
 /** Provides a function and a set of constants to manage the asynchronous
-  * communication with a nosql database.
+  * communication with a Mongo database.
   *
   * @author Marco Canducci
   */
@@ -28,7 +28,6 @@ object MongoDbManager {
     collection
       .findOneAndUpdate(filter = Filters.equal(fieldName = "_id", value = Login.GuestsDocumentId), update = incByOne)
       .map(oldDocument => oldDocument(Login.GuestNumber).asInt32().getValue)
-      .head() // returns the Observable's head in a Future
+      .head
   }
-
 }

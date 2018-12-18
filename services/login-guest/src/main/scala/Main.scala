@@ -53,6 +53,11 @@ object Main extends App {
     }
   }
 
+  /** Sends an unique number to the client that wanted to login as a guest.
+    *
+    * @param number the unique guest number
+    * @param clientQueue the client's response queue
+    */
   def sendGuestNumber(number: Int, clientQueue: String): Unit = {
     val response = LoginGuestResponse(Right(number))
     rabbitControl ! Message.queue(response, clientQueue)
