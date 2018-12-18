@@ -23,6 +23,7 @@ object Battle extends App {
     opponentQueue = opponentInfo.battleQueue
     BattleManager.start()
     teams = setupTeam(player, (opponentInfo.name, opponentInfo.teamNames))
+    Round.roundId = 0
     Round.startNewRound()
   }
 
