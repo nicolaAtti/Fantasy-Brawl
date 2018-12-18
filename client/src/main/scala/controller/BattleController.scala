@@ -225,9 +225,9 @@ object BattleController extends Initializable with ViewController {
   def displayMoveEffect(characterUser: Character, moveName: String, moveTargets: Set[Character]): Unit = {
     var moveReport: String = ""
     if (characterUser.owner.get equals Battle.playerId) {
-      moveReport = s"YOUR ${characterUser.characterName} used $moveName on"
+      moveReport = s"YOUR ${characterUser.characterName} used $moveName on \n"
     } else {
-      moveReport = s"ENEMY ${characterUser.characterName} used $moveName on"
+      moveReport = s"ENEMY ${characterUser.characterName} used $moveName on \n"
     }
     val playerTargets = moveTargets.filter(character => character.owner.get equals Battle.playerId)
     val opponentTargets = moveTargets.filter(character => character.owner.get equals Battle.opponentId)
@@ -282,16 +282,47 @@ object BattleController extends Initializable with ViewController {
       */
     def setDeadCharacters(): Unit = {
       playerCharacterImages.foreach(couple =>
-        if (!couple._2.isAlive) { couple._1.setImage(new Image("view/tombstone1.png")) })
+        if (!couple._2.isAlive) {
+          couple._1.setImage(new Image("view/tombstone1.png"))
+          couple._1.setDisable(true)
+          setDeadLabel(couple._2, couple._2.owner.get)
+      })
       opponentCharacterImages.foreach(couple =>
-        if (!couple._2.isAlive) { couple._1.setImage(new Image("view/tombstone2.png")) })
-      setDeadLabel(playerCharNames)
-      setDeadLabel(opponentCharNames)
+        if (!couple._2.isAlive) {
+          couple._1.setImage(new Image("view/tombstone2.png"))
+          couple._1.setDisable(true)
+          setDeadLabel(couple._2, couple._2.owner.get)
+      })
     }
 
-    def setDeadLabel(charNames: VBox): Unit = {
-      charNames.getChildren.forEach(label =>
-        Battle.teams.find(character => character.characterName == label.asInstanceOf[Label].getText).get.isAlive)
+    def setDeadLabel(deadCharacter: Character, owner: String): Unit = {
+      if (owner equals Battle.playerId) {
+        (playerCharacterImages.values zip playerCharNames.getChildren.toArray)
+          .find(couple => couple._1.characterName == deadCharacter.characterName)
+          .get
+          ._2
+          .asInstanceOf[Label]
+          .setText("K. O.")
+        (playerCharacterImages.values zip playerAlterations.getChildren.toArray)
+          .find(couple => couple._1.characterName == deadCharacter.characterName)
+          .get
+          ._2
+          .asInstanceOf[Label]
+          .setText("")
+      } else {
+        (opponentCharacterImages.values zip opponentCharNames.getChildren.toArray)
+          .find(couple => couple._1.characterName == deadCharacter.characterName)
+          .get
+          ._2
+          .asInstanceOf[Label]
+          .setText("K. O.")
+        (opponentCharacterImages.values zip opponentAlterations.getChildren.toArray)
+          .find(couple => couple._1.characterName == deadCharacter.characterName)
+          .get
+          ._2
+          .asInstanceOf[Label]
+          .setText("")
+      }
     }
 
     /** Adds the player's active character's moves to the listView
