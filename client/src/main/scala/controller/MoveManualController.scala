@@ -8,6 +8,8 @@ import javafx.fxml.{FXML, Initializable}
 import javafx.scene.control.{Button, ChoiceBox, Label}
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.Pane
+import javafx.beans.value.ChangeListener
+import javafx.beans.value.ObservableValue
 
 /** The controller for the move manual GUI
   *
@@ -41,16 +43,12 @@ object MoveManualController extends Initializable with ViewController {
     characterChoiceBox.getSelectionModel.selectFirst()
     actualSelected = characterChoiceBox.getSelectionModel.getSelectedItem
     characterLabelMap = (characterList.toArray zip labelPane.getChildren.toArray).toMap
-  }
-
-  /** Changes the character moves to be displayed
-    *
-    * @param mouseEvent
-    */
-  @FXML def handleChoiceBoxSelection(mouseEvent: MouseEvent): Unit = {
-    val selected = characterChoiceBox.getSelectionModel.getSelectedItem
-    characterLabelMap(actualSelected).asInstanceOf[Label].setVisible(false)
-    characterLabelMap(selected).asInstanceOf[Label].setVisible(true)
-    actualSelected = selected
+    characterChoiceBox.getSelectionModel.selectedIndexProperty.addListener(new ChangeListener[Number]() {
+      override def changed(observableValue: ObservableValue[_ <: Number], number: Number, number2: Number): Unit = {
+        characterLabelMap(actualSelected).asInstanceOf[Label].setVisible(false)
+        actualSelected = characterChoiceBox.getItems.get(number2.asInstanceOf[Integer])
+        characterLabelMap(actualSelected).asInstanceOf[Label].setVisible(true)
+      }
+    })
   }
 }
