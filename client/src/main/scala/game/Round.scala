@@ -42,6 +42,11 @@ object Round {
     val activeCharacter = turns.head
     if (activeCharacter.isAlive) {
       activeCharacter.status = Status.afterTurnStart(activeCharacter.status)
+      if (activeCharacter.status.alterations.contains(Alteration.Stunned) || activeCharacter.status.alterations
+            .contains(Alteration.Asleep)) {
+        BattleManager.skipTurn((activeCharacter.owner.get, activeCharacter.characterName), roundId)
+        endTurn()
+      }
       Platform runLater (() => {
         BattleController.setActiveCharacter(activeCharacter)
         BattleController.roundCounter.setText(roundId.toString)
