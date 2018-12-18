@@ -12,6 +12,7 @@ import communication.matchmaking.PlayerInfo
 case class JoinCasualQueueRequest(player: PlayerInfo, operation: Operation)
 
 object JoinCasualQueueRequest {
+
   object Operation extends Enumeration {
     val ADD, REMOVE = Value
   }
