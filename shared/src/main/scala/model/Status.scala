@@ -75,10 +75,10 @@ object Status {
       * @return the new status after the countdown
       */
     def afterTick(status: Status): Status = {
-      val updatedModifiers = for ((id, modifier) <- status.modifiers if modifier.remainingRounds > 1)
+      val updatedModifiers = for ((id, modifier) <- status.modifiers if modifier.remainingRounds > 0)
         yield (id, modifier.copy(remainingRounds = modifier.remainingRounds - 1))
 
-      val updatedAlterations = for ((alteration, countDown) <- status.alterations if countDown > 1)
+      val updatedAlterations = for ((alteration, countDown) <- status.alterations if countDown > 0)
         yield (alteration, countDown - 1)
 
       status.copy(modifiers = updatedModifiers, alterations = updatedAlterations)
