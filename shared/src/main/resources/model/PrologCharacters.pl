@@ -1,5 +1,5 @@
 % character contains all the informations in order to create a new character in the game
-% character(@Name,@Class,@Strength,@Agility,@Spirit,@Intelligence,@Resistence,@MoveList)
+% character(@Name,@Class,@Strength,@Agility,@Spirit,@Intelligence,@Resistance,@MoveList)
 %
 % Author: Nicola Atti
 

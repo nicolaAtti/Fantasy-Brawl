@@ -265,6 +265,10 @@ object BattleController extends Initializable with ViewController {
     updateStatus()
   }
 
+  /** Provides private operations for the BattleController
+    *
+    * @author Nicola Atti
+    */
   private object BattleControllerHelper {
     val ImageExtension: String = ".png"
     val Separator: String = "/"

@@ -1,4 +1,5 @@
 % specMove -- Defines a special move that can be performed by a character
+%
 % specMove(@Name,@DamageType,@MoveType,@BaseValue,@ModifiersList,@AlterationsList,@RemovedAlterations,@ManaCost,@NOfTargets)
 %
 % Author: Nicola Atti

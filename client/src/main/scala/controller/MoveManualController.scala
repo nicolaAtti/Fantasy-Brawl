@@ -43,6 +43,10 @@ object MoveManualController extends Initializable with ViewController {
     characterLabelMap = (characterList.toArray zip labelPane.getChildren.toArray).toMap
   }
 
+  /** Changes the character moves to be displayed
+    *
+    * @param mouseEvent
+    */
   @FXML def handleChoiceBoxSelection(mouseEvent: MouseEvent): Unit = {
     val selected = characterChoiceBox.getSelectionModel.getSelectedItem
     characterLabelMap(actualSelected).asInstanceOf[Label].setVisible(false)
