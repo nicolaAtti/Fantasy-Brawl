@@ -109,6 +109,13 @@ trait Character {
     */
   def isAlive: Boolean = status.healthPoints > 0
 
+  /** Check if the character is incapacitated
+    *
+    * @return true if the character is stunned or asleep
+    */
+  def isIncapacitated: Boolean =
+    status.alterations.contains(Alteration.Stunned) || status.alterations.contains(Alteration.Asleep)
+
   /** Cycles all the character's modifiers for a given sub-statistic and calculates the bonus/malus value
     *
     * @param subStatistic the sub-statistic to search for
