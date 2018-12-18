@@ -41,7 +41,8 @@ During the battle each character will have their turn depending on it's speed, i
 The last remaining team wins.
 
 ## Releases
-It is possible to download the source code and all release executable jars at the page : https://github.com/nicolaAtti/pps-17-fb/releases
+It is possible to download the source code and all release executable jars at the page :\
+https://github.com/nicolaAtti/pps-17-fb/releases
 
 ## Documentation
 
