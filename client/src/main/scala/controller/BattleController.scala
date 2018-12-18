@@ -447,8 +447,6 @@ object BattleController extends Initializable with ViewController {
   }
 
   @FXML def handleToMenuButtonPressed(mouseEvent: MouseEvent): Unit = {
-    //Change view and reset objects
     ApplicationView changeView TEAM
-
   }
 }
