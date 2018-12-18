@@ -7,7 +7,9 @@ import model.Alteration._
 
 /** A move is described by its type, the amount of mana points that it costs, the
   * maximum targets that it can be applied to, and its move effect: the move effect
-  * will provide the new status of the target character hit by the move.
+  * will define the new status of the target character hit by the move.
+  *
+  * @author Marco Canducci
   */
 sealed trait Move {
   def moveType: MoveType

@@ -1,5 +1,9 @@
 package config
 
+/** A collection with all the database's information and collections/fields names.
+  *
+  * @author Marco Canducci
+  */
 object DbNaming {
 
   val ClientName = "mongodb://fantasy-brawl-service:pps-17-fb@ds039291.mlab.com:39291/heroku_3bppsqjk"

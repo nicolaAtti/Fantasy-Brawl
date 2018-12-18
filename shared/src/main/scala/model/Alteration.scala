@@ -6,6 +6,8 @@ package model
   * An alteration can inhibit some kind of moves, or even modify the status of
   * the affected character at the beginning of its turn (describing for example
   * how many health points it will gain or lose).
+  *
+  * @author Marco Canducci
   */
 sealed trait Alteration {
 

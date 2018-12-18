@@ -13,6 +13,8 @@ package model
   *
   * For example, a silenced character cannot cast any Spell, whilst a blinded
   * character cannot make any Ranged move.
+  *
+  * @author Marco Canducci
   */
 sealed trait MoveType {
 
