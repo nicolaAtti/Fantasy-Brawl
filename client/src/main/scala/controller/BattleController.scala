@@ -17,7 +17,7 @@ import javafx.scene.paint.Color
 import javafx.util.Duration
 import model.{Character, Move}
 import view.ApplicationView
-import view.ViewConfiguration.viewSelector._
+import view.ViewConfiguration.ViewSelector._
 import scala.collection.mutable.ListBuffer
 
 //noinspection ScalaDocMissingParameterDescription,FieldFromDelayedInit

@@ -1,7 +1,7 @@
 import javafx.application.Application
 import javafx.stage.Stage
 import messaging.{LoginManager, MatchmakingManager, RoundManager}
-import view.ViewConfiguration.viewSelector._
+import view.ViewConfiguration.ViewSelector._
 
 class MainApplication extends Application {
 

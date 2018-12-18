@@ -29,7 +29,8 @@ object ViewConfiguration {
   val MovesManualViewBackgroundImage: String = "/view/background4.jpg"
 
   /** Defines the acceptable views. */
-  object viewSelector extends Enumeration {
+  object ViewSelector extends Enumeration {
     val LOGIN, TEAM, WAITING_TO_LOGIN, WAITING_OPPONENT, BATTLE = Value
   }
+  type ViewSelector = ViewSelector.Value
 }

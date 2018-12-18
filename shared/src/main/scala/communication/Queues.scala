@@ -1,6 +1,6 @@
 package communication
 
-/** All the queues that connect the services to themselves and to the client. */
+/** All the queues that connect the services to the clients. */
 object Queues {
   def uuid: String = java.util.UUID.randomUUID.toString
 

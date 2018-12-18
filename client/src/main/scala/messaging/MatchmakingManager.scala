@@ -6,7 +6,7 @@ import properties.ReplyTo
 import communication._
 import MessageFormat.MyFormat
 import view._
-import ViewConfiguration.viewSelector._
+import ViewConfiguration.ViewSelector._
 import config.MessagingSettings
 import game.Battle
 import javafx.application.Platform

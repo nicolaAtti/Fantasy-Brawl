@@ -4,7 +4,7 @@ import akka.actor.{ActorRef, ActorSystem, Props}
 import com.spingo.op_rabbit._
 import view._
 import communication._
-import ViewConfiguration.viewSelector._
+import ViewConfiguration.ViewSelector._
 import com.spingo.op_rabbit.properties.ReplyTo
 import communication.MessageFormat.MyFormat
 import config.MessagingSettings
