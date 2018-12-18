@@ -8,8 +8,8 @@ character('Annabelle','Thief',39,40,22,8,27,['Poison Vial','Flash Grenade','Prep
 character('Albert','Healer',10,25,33,54,27,['Lay On Hands','Holy Smite','Censure','Bolster Faith']).
 character('Lidya','Wizard',7,22,34,58,23,['Ice Lance','Counterspell','Freezing Wind','Concentration']).
 
-character('Cassandra','Warrior',33,22,32,11,37,['Shield Bash','Second Wind','Trip Attack','Sunder Defences']).
-character('Noah','Warrior',70,10,13,5,35,['Adrenaline Rush','Skullcrack','Iron Will','Mighty Slam']).
+character('Cassandra','Warrior',33,22,32,11,37,['Shield Bash','Skullcrack','Iron Will','Sunder Defences']).
+character('Noah','Warrior',70,10,13,5,35,['Adrenaline Rush','Trip Attack','Second Wind','Mighty Slam']).
 character('Aster','Thief',41,28,30,8,28,['Trueshot','Arrow Volley','Aimed Shot','Bear Trap']).
 character('Rikh','Wizard',4,30,40,51,29,['Chrono Shift','Haste','Hypnosis','Arcane Blast']).
 

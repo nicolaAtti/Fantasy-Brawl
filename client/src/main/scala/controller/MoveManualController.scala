@@ -3,73 +3,35 @@ package controller
 import java.net.URL
 import java.util.ResourceBundle
 
+import javafx.collections.{FXCollections, ObservableList}
 import javafx.fxml.{FXML, Initializable}
-import javafx.scene.control.{Button, Label}
+import javafx.scene.control.{Button, ChoiceBox, Label}
 import javafx.scene.input.MouseEvent
+import javafx.scene.layout.Pane
 
 object MoveManualController extends Initializable with ViewController {
+  @FXML var characterChoiceBox: ChoiceBox[String] = _
+  @FXML var labelPane: Pane = _
+  @FXML var choiceButton: Button = _
 
-  @FXML var meleeMoves: Label = _
-  @FXML var rangedMoves: Label = _
-  @FXML var spellMoves: Label = _
-
-  @FXML var meleeDescriptions: Label = _
-  @FXML var rangedDescriptions: Label = _
-  @FXML var spellDescriptions: Label = _
-
-  @FXML var meleeButton: Button = _
-  @FXML var rangedButton: Button = _
-  @FXML var spellButton: Button = _
+  val characterList: ObservableList[String] = FXCollections.observableArrayList("Jacob","Annabelle","Albert","Lidya","Noah","Cassandra","Linn","Aster","Norman","Fernando","Rikh","Nora")
+  var characterLabelMap: Map[AnyRef,AnyRef] = Map()
+  var actualSelected: String = _
 
   /** Return the LoginController. */
   val controller: ViewController = this
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
-    rangedMoves.setVisible(false)
-    spellMoves.setVisible(false)
-    rangedDescriptions.setVisible(false)
-    spellDescriptions.setVisible(false)
-    meleeButton.setDisable(true)
+    characterChoiceBox.setItems(characterList)
+    characterChoiceBox.getSelectionModel.selectFirst()
+    actualSelected = characterChoiceBox.getSelectionModel.getSelectedItem
+    characterLabelMap = (characterList.toArray zip labelPane.getChildren.toArray).toMap
   }
 
-  @FXML def meleeButtonPressed(mouseEvent: MouseEvent): Unit = {
-    rangedMoves.setVisible(false)
-    rangedDescriptions.setVisible(false)
-    spellMoves.setVisible(false)
-    spellDescriptions.setVisible(false)
-    rangedButton.setDisable(false)
-    spellButton.setDisable(false)
-
-    meleeMoves.setVisible(true)
-    meleeDescriptions.setVisible(true)
-    meleeButton.setDisable(true)
-
+  @FXML def handleChoiceBoxSelection(mouseEvent: MouseEvent): Unit = {
+    val selected = characterChoiceBox.getSelectionModel.getSelectedItem
+    characterLabelMap(actualSelected).asInstanceOf[Label].setVisible(false)
+    characterLabelMap(selected).asInstanceOf[Label].setVisible(true)
+    actualSelected = selected
   }
-
-  @FXML def rangedButtonPressed(mouseEvent: MouseEvent): Unit = {
-    meleeMoves.setVisible(false)
-    meleeDescriptions.setVisible(false)
-    spellMoves.setVisible(false)
-    spellDescriptions.setVisible(false)
-    meleeButton.setDisable(false)
-    spellButton.setDisable(false)
-
-    rangedMoves.setVisible(true)
-    rangedDescriptions.setVisible(true)
-    rangedButton.setDisable(true)
-  }
-
-  @FXML def spellButtonPressed(mouseEvent: MouseEvent): Unit = {
-    meleeMoves.setVisible(false)
-    meleeDescriptions.setVisible(false)
-    rangedMoves.setVisible(false)
-    rangedDescriptions.setVisible(false)
-    meleeButton.setDisable(false)
-    rangedButton.setDisable(false)
-
-    spellMoves.setVisible(true)
-    spellDescriptions.setVisible(true)
-    spellButton.setDisable(true)
-  }
-
 }

@@ -42,7 +42,7 @@ spec_move('Trueshot','BuffDebuff','Spell',0,['Trueshot'],[],[],20,1).
 spec_move('Bear Trap','BuffDebuff','Spell',0,[],['Frz'],['Slp'],15,1).
 
 spec_move('Nature Wrath','StandardDamage','Spell',30,[],[],['Slp'],15,1).
-spec_move('Benefic Spores','StandardHeal','Spell',35,[],['Reg'],[],40,4).
+spec_move('Benefic Spores','StandardHeal','Spell',10,[],['Reg'],[],40,4).
 spec_move('Antidote','BuffDebuff','Spell',0,[],[],['Psn'],15,1).
 spec_move('Entangling Roots','BuffDebuff','Spell',0,[],['Frz'],[],15,1).
 spec_move('Quick Stab','StandardDamage','Melee',25,[],[],['Slp'],15,1).
