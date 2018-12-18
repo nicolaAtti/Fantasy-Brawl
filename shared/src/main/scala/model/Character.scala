@@ -127,7 +127,7 @@ private case class Warrior(characterName: String,
                            owner: Option[String],
                            statistics: Statistics,
                            specialMoves: Map[String, SpecialMove],
-                           classMultipliers: ClassMultipliers = ClassMultipliers(2, 1, 1, 0.5, 1.5, 2),
+                           classMultipliers: ClassMultipliers = ClassMultipliers(2, 1, 1, 0.5, 1.5, 3),
                            role: String = WarriorRepresentation)
     extends Character {}
 
@@ -135,7 +135,7 @@ private case class Thief(characterName: String,
                          owner: Option[String],
                          statistics: Statistics,
                          specialMoves: Map[String, SpecialMove],
-                         classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 2, 1, 0.5, 1, 1.5),
+                         classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 2, 1, 0.5, 1, 2.5),
                          role: String = ThiefRepresentation)
     extends Character {}
 
@@ -143,7 +143,7 @@ private case class Wizard(characterName: String,
                           owner: Option[String],
                           statistics: Statistics,
                           specialMoves: Map[String, SpecialMove],
-                          classMultipliers: ClassMultipliers = ClassMultipliers(1, 1, 1.5, 2, 0.5, 1.5),
+                          classMultipliers: ClassMultipliers = ClassMultipliers(1, 1, 1.5, 2, 0.5, 2),
                           role: String = WizardRepresentation)
     extends Character {}
 
@@ -151,7 +151,7 @@ private case class Healer(characterName: String,
                           owner: Option[String],
                           statistics: Statistics,
                           specialMoves: Map[String, SpecialMove],
-                          classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 0.5, 1, 2, 1, 1.5),
+                          classMultipliers: ClassMultipliers = ClassMultipliers(1.5, 0.5, 1, 2, 1, 2),
                           role: String = HealerRepresentation)
     extends Character {}
 

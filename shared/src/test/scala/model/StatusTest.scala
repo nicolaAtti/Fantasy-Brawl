@@ -85,7 +85,8 @@ class StatusTest extends FunSuite {
     assert(afterTurnStatus.healthPoints == 125 && afterTurnStatus.alterations(regeneration) == 1)
   }
   test("After a new turn start, alterations or modifiers that reach duration zero should be removed") {
-    val afterTurnStatus = afterTurnStart(removeStatus)
+    var afterTurnStatus = afterTurnStart(removeStatus)
+    afterTurnStatus = afterTurnStart(afterTurnStatus)
     assert(afterTurnStatus.alterations == Map() && afterTurnStatus.modifiers == Map())
   }
 
