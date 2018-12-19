@@ -6,26 +6,28 @@ import com.spingo.op_rabbit._
 import com.spingo.op_rabbit.properties.ReplyTo
 import communication.MessageFormat.MyFormat
 import config.MessagingSettings
-import loginguest.MongoDbManager
+import loginguest.{AsyncDbManager, MongoDbManager}
+import communication._
+import Queues._
+import config.MiscSettings._
 
 /** Entry point of the service that handles the login for guests users.
+  *
   * @author Marco Canducci
   */
 object Main extends App {
 
-  final val LogMessage = "Received a new login request"
+  val LogMessage = "Received a new login request"
+  val dbManager: AsyncDbManager = MongoDbManager
 
-  val rabbitControl = ActorSystem().actorOf(Props[RabbitControl])
   implicit val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = MessagingSettings.Requeue)
-
-  import communication._
   implicit val requestFormat: MyFormat[LoginGuestRequest] = MessageFormat.format[LoginGuestRequest]
   implicit val responseFormat: MyFormat[LoginGuestResponse] = MessageFormat.format[LoginGuestResponse]
 
-  import Queues._
-
   val requestQueue =
     Queue(LoginGuestRequestQueue, durable = MessagingSettings.Durable, autoDelete = MessagingSettings.AutoDelete)
+
+  val rabbitControl = ActorSystem().actorOf(Props[RabbitControl])
 
   val subscription = Subscription.run(rabbitControl) {
     import Directives._
@@ -33,7 +35,7 @@ object Main extends App {
       consume(requestQueue) {
         (body(as[LoginGuestRequest]) & optionalProperty(ReplyTo)) { (request, replyTo) =>
           {
-            import config.MiscSettings._
+
             if (ServicesLog) {
               println(LogMessage)
               request.details match {
@@ -42,7 +44,7 @@ object Main extends App {
               }
             }
 
-            MongoDbManager.nextGuestNumber.onComplete {
+            dbManager.nextGuestNumber.onComplete {
               case Success(n: Int) => sendGuestNumber(n, clientQueue = replyTo.get)
               case Failure(e)      => println(s"$LogFailurePrefix $e")
             }
@@ -58,7 +60,7 @@ object Main extends App {
     * @param number the unique guest number
     * @param clientQueue the client's response queue
     */
-  def sendGuestNumber(number: Int, clientQueue: String): Unit = {
+  private def sendGuestNumber(number: Int, clientQueue: String): Unit = {
     val response = LoginGuestResponse(Right(number))
     rabbitControl ! Message.queue(response, clientQueue)
   }
