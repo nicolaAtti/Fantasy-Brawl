@@ -50,8 +50,6 @@ object BattleManager {
               case SKIP if expectedMessage(response.round, response.attacker) =>
                 Platform runLater (() => {
                   BattleController.displayMoveEffect(findCharacter(response.attacker),
-                    response.moveName,
-                    response.targets.map(target => findCharacter(target)))
                                                      response.moveName,
                                                      response.targets.map(target => findCharacter(target)))
                 })
