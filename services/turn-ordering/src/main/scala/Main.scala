@@ -64,7 +64,7 @@ object Main extends App {
                       case Success(opponentInfo) if opponentInfo != null =>
                         TurnOrderingHelper.cleanRequestsAndSendOrderedTurns(requestInfo, opponentInfo)
 
-                      case Success(_) => println("Opponent not found...")
+                      case Success(_) => Unit // opponent not found
                       case Failure(e) => println(s"$LogFailurePrefix$e")
                     }
                   case Failure(e) => println(s"$LogFailurePrefix$e")

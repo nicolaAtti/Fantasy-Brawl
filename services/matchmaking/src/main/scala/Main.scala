@@ -8,7 +8,7 @@ import com.spingo.op_rabbit.Directives._
 import communication.MessageFormat.MyFormat
 import communication.matchmaking.PlayerInfo
 import config.MessagingSettings
-import matchmaking.MongoDbManager
+import matchmaking.{AsyncDbManager, MongoDbManager}
 
 /** Entry point for the service that provides matchmaking functionality,
   * pairing two consecutive clients present in the casual queue.
@@ -19,6 +19,7 @@ object Main extends App {
 
   final val LogMessage = "Received a new casual queue join request"
   final val BattleIdSeparator = "-"
+  val dbManager: AsyncDbManager = MongoDbManager
 
   import communication._
   import config.MessagingSettings._
@@ -49,7 +50,7 @@ object Main extends App {
                 findAnOpponent(PlayerInfo(request.player.name, request.player.teamNames, request.player.battleQueue),
                                replyTo.get)
               case JoinCasualQueueRequest.Operation.REMOVE =>
-                MongoDbManager.notifyPlayerLeft(request.player.name)
+                dbManager.notifyPlayerLeft(request.player.name)
             }
           }
           ack
@@ -68,32 +69,32 @@ object Main extends App {
       *                       player who made the request
       */
     def findAnOpponent(requestInfo: PlayerInfo, requestReplyTo: String): Unit = {
-      MongoDbManager.getTicket.onComplete {
+      dbManager.getTicket.onComplete {
 
         case Success(requestTicket) =>
-          MongoDbManager.putPlayerInQueue(requestTicket, requestInfo, requestReplyTo).onComplete {
+          dbManager.putPlayerInQueue(requestTicket, requestInfo, requestReplyTo).onComplete {
 
             case Success(_) =>
               val opponentTicket = evaluateOpponentTicket(requestTicket)
-              MongoDbManager.takePlayerFromQueue(opponentTicket).onComplete {
+              dbManager.takePlayerFromQueue(opponentTicket).onComplete {
 
-                case Success((opponentInfo, opponentReplyTo, opponentHasLeft)) =>
-                  MongoDbManager.removePlayerFromQueue(requestInfo.name)
+                case Success(Some((opponentInfo, opponentReplyTo, opponentHasLeft))) =>
+                  dbManager.removePlayerFromQueue(requestInfo.name)
 
                   if (opponentHasLeft) {
                     findAnOpponent(requestInfo, requestReplyTo) // try again
 
                   } else {
                     val battleId = evaluateBattleId(requestTicket, opponentTicket)
-                    MongoDbManager.createBattleInstance(battleId).onComplete {
+                    dbManager.createBattleInstance(battleId).onComplete {
 
                       case Success(_) =>
                         sendBattleDataToBoth(requestInfo, requestReplyTo, opponentInfo, opponentReplyTo, battleId)
                       case Failure(e) => println(s"$LogFailurePrefix$e")
                     }
                   }
-                case Success(_) => Unit
-                case Failure(e) => println(s"$LogFailurePrefix$e")
+                case Success(None) => Unit
+                case Failure(e)    => println(s"$LogFailurePrefix$e")
               }
             case Failure(e) => println(s"$LogFailurePrefix$e")
           }

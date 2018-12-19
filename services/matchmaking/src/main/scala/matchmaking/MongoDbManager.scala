@@ -5,16 +5,15 @@ import com.mongodb.client.model.Updates
 import communication.matchmaking.PlayerInfo
 import org.mongodb.scala.model.Filters
 import org.mongodb.scala.model.Updates.inc
-import org.mongodb.scala.result.{DeleteResult, UpdateResult}
-import org.mongodb.scala.{Completed, Document, MongoClient}
-
+import org.mongodb.scala.{Document, MongoClient}
 import scala.concurrent.Future
 
-/** Provides functionality for the database asynchronous interactions.
+/** Provides functionality to manage the asynchronous interaction between the
+  * matchmaking service and a MongoDB database.
   *
   * @author Nicola Atti, Marco Canducci
   */
-object MongoDbManager {
+object MongoDbManager extends AsyncDbManager {
 
   import config.DbNaming._
 
@@ -22,12 +21,7 @@ object MongoDbManager {
   val casualQueueCollection = database.getCollection(CasualQueue.CollectionName)
   val battleCollection = database.getCollection(Battles.CollectionName)
 
-  /** Retrieves a ticket from the casual queue and increments the ticket counter.
-    *
-    * @return a Future representing the success/failure of the operation,
-    *         containing the casual queue's ticket number
-    */
-  def getTicket: Future[Int] = {
+  override def getTicket: Future[Int] = {
     casualQueueCollection
       .findOneAndUpdate(filter = Filters.equal(fieldName = "_id", value = CasualQueue.TicketsDocumentId),
                         update = inc(CasualQueue.TicketNumber, number = 1))
@@ -35,14 +29,7 @@ object MongoDbManager {
       .head
   }
 
-  /** Creates a document representing a new player inside the casual queue.
-    *
-    * @param ticket the player's ticket for the matchmaking queue
-    * @param playerInfo the player's information
-    * @param replyTo the player response queue
-    * @return a Future representing the success/failure of the operation
-    */
-  def putPlayerInQueue(ticket: Int, playerInfo: PlayerInfo, replyTo: String): Future[Completed] = {
+  override def putPlayerInQueue(ticket: Int, playerInfo: PlayerInfo, replyTo: String): Future[String] = {
     casualQueueCollection
       .insertOne(
         Document(
@@ -53,17 +40,11 @@ object MongoDbManager {
           CasualQueue.ReplyTo -> replyTo,
           CasualQueue.LeftTheQueue -> false
         ))
+      .map(_ => s"Player ${playerInfo.name} successfully inserted in queue.")
       .head
   }
 
-  /** Searches for the player information associated with the given ticket and,
-    * if present, removes them.
-    *
-    * @return a Future representing the success/failure of the operation,
-    *         containing the player's information, the response queue and a flag
-    *         that represents if the player has left the queue or not.
-    */
-  def takePlayerFromQueue(ticket: Int): Future[(PlayerInfo, String, Boolean)] = {
+  override def takePlayerFromQueue(ticket: Int): Future[Option[(PlayerInfo, String, Boolean)]] = {
     casualQueueCollection
       .findOneAndDelete(filter = Filters.equal(fieldName = "_id", value = ticket))
       .map(document =>
@@ -78,40 +59,28 @@ object MongoDbManager {
          ),
          document(CasualQueue.ReplyTo).asString.getValue,
          document(CasualQueue.LeftTheQueue).asBoolean.getValue))
-      .head
+      .headOption()
   }
 
-  /** Removes the existing document of a queued player given its name.
-    *
-    * @param playerName the player to remove
-    * @return a Future representing the success/failure of the deletion
-    */
-  def removePlayerFromQueue(playerName: String): Future[DeleteResult] = {
+  override def removePlayerFromQueue(playerName: String): Future[Boolean] = {
     casualQueueCollection
       .deleteOne(filter = Filters.equal(CasualQueue.PlayerName, playerName))
+      .map(deleteResult => deleteResult.getDeletedCount > 0)
       .head
   }
 
-  /** Notifies that a player has left the game while waiting for an opponent.
-    *
-    * @param playerName the name of the player that left the queue
-    * @return a Future representing the success/failure of the update
-    */
-  def notifyPlayerLeft(playerName: String): Future[UpdateResult] = {
+  override def notifyPlayerLeft(playerName: String): Future[Boolean] = {
     casualQueueCollection
       .updateOne(filter = Filters.equal(CasualQueue.PlayerName, playerName),
                  update = Updates.set(CasualQueue.LeftTheQueue, true))
+      .map(updateResult => updateResult.getModifiedCount > 0)
       .head
   }
 
-  /** Creates a new battle instance inside the battles collection.
-    *
-    * @param battleId the battle identifier
-    * @return a Future representing the success/failure of the operation
-    */
-  def createBattleInstance(battleId: String): Future[Completed] = {
+  override def createBattleInstance(battleId: String): Future[String] = {
     battleCollection
       .insertOne(Document("_id" -> battleId, Battles.CurrentRound -> 0))
+      .map(_ => s"Battle $battleId created.")
       .head
   }
 
