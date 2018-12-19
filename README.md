@@ -4,7 +4,9 @@
 
 This project is a mostly original concept for a multiplayer, turn-based, fighting game set in a fantasy world with warriors, thieves, wizards and healers fighting in teams against each other for glory and fame.
 
+## Continuous Integration
 
+https://travis-ci.org/nicolaAtti/pps-17-fb.svg?branch=master
 
 ## Getting Started
 
@@ -25,6 +27,7 @@ If the services aren't online, a manual launch of all three of them is required.
 	java -jar pps-17-fb-1.0-matchmaking.jar
 	java -jar pps-18-fb-1.0-turn-ordering.jar
 ```
+In order for the system to work the "AMQP as a service" and "MongoDB as a service" plugins must be online.
 
 ## How to play
 
