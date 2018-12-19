@@ -32,7 +32,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="playerChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="266.0" layoutY="22.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="playerChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="262.0" layoutY="22.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Annabelle1.png" />
                </image>
@@ -46,7 +46,7 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="playerChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="178.0" layoutY="145.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="playerChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="176.0" layoutY="145.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Noah1.png" />
                </image>
@@ -152,7 +152,7 @@
                <effect>
                   <DropShadow height="20.0" offsetX="4.0" offsetY="-4.0" radius="9.5" width="20.0" />
                </effect></Button>
-            <Label fx:id="moveReportLabel" alignment="CENTER" layoutX="148.0" layoutY="328.0" prefHeight="43.0" prefWidth="665.0" text="Your Rick used Chrono Shift on &#10;Opponent: Cassandra,Albert,Fernando and Your Annabelle" textAlignment="CENTER" textFill="WHITE">
+            <Label fx:id="moveReportLabel" alignment="CENTER" layoutX="148.0" layoutY="328.0" prefHeight="43.0" prefWidth="665.0" text="Your Rick used Chrono Shift on &#10;Opponent: Cassandra,Albert,Fernando and Your Annabelle" textAlignment="CENTER" textFill="WHITE" visible="false">
                <font>
                   <Font name="Times New Roman Bold Italic" size="15.0" />
                </font>
