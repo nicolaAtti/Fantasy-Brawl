@@ -76,7 +76,7 @@
                         <Font name="Times New Roman Bold Italic" size="16.0" />
                      </font>
                   </Label>
-                  <Label alignment="TOP_LEFT" prefHeight="400.0" prefWidth="484.0" text="Nora&#10;&#10;[Spell] Nature Wrath: Strike the target with the force of nature inflicting 30 extra damage.   (Mana cost: 15, Max targets: 1)&#10;&#10;[Spell] Benefic Sporse: Shower up to 4 targets with healing spores healing them for 10 extra health points and causing them to Regenerate.   (Mana cost: 40, Max targets: 4)&#10;&#10;[Spell] Antidote: Administer a powerful antidote to the target removing any active Poisons.   (Mana cost: 15)&#10;&#10;[Spell] Entangling Roots: Entangle the target in overgrown roots Freezing them in place.   (Mana cost: 15)" visible="false" wrapText="true">
+                  <Label alignment="TOP_LEFT" prefHeight="400.0" prefWidth="484.0" text="Nora&#10;&#10;[Spell] Nature Wrath: Strike the target with the force of nature inflicting 30 extra damage.   (Mana cost: 15, Max targets: 1)&#10;&#10;[Spell] Benefic Sporse: Shower up to 4 targets with healing spores healing them for 10 extra health points and causing them to Regenerate.   (Mana cost: 40, Max targets: 4)&#10;&#10;[Spell] Antidote: Administer a powerful antidote to the target removing any active Poisons.   (Mana cost: 15, Max targets: 1)&#10;&#10;[Spell] Entangling Roots: Entangle the target in overgrown roots Freezing them in place.   (Mana cost: 15, Max targets: 1)" visible="false" wrapText="true">
                      <font>
                         <Font name="Times New Roman Bold Italic" size="16.0" />
                      </font>
