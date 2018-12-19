@@ -11,6 +11,7 @@ import game.Round.updateTeamsStatuses
 import game.{Battle, Round}
 import javafx.application.Platform
 import model.{Character, Status}
+import StatusUpdateMessage.ActSelector._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -34,20 +35,20 @@ object BattleManager {
       channel(qos = MessagingSettings.Qos) {
         consume(playerQueue) {
           body(as[StatusUpdateMessage]) { response =>
-            (response.round, response.attacker) match {
-              case (round, (owner, characterName))
-                  if round == Round.roundId && owner == Round.turns.head.owner.get && characterName == Round.turns.head.characterName =>
-                if (response.moveName != "") {
-                  updateTeamsStatuses(response.newStatuses)
-                  import BattleManagerHelper._
-                  Platform runLater (() => {
-                    BattleController.displayMoveEffect(findCharacter(response.attacker),
-                                                       response.moveName,
-                                                       response.targets.map(target => findCharacter(target)))
-                  })
-                }
+            import BattleManagerHelper._
+            response.actSelector match {
+              case SURRENDER =>
+                Battle.end(Battle.playerId)
+              case UPDATE if expectedMessage(response.round, response.attacker) =>
+                updateTeamsStatuses(response.newStatuses)
+                Platform runLater (() => {
+                  BattleController.displayMoveEffect(findCharacter(response.attacker),
+                                                     response.moveName,
+                                                     response.targets.map(target => findCharacter(target)))
+                })
                 Round.endTurn()
-              case _ => Unit
+              case SKIP if expectedMessage(response.round, response.attacker) =>
+                Round.endTurn()
             }
             ack
           }
@@ -61,11 +62,15 @@ object BattleManager {
                            targets: Set[CharacterKey],
                            newStatuses: Map[CharacterKey, Status],
                            round: Int): Unit = {
-    rabbitControl ! Message(StatusUpdateMessage(character, moveName, targets, newStatuses, round), publisher)
+    rabbitControl ! Message(StatusUpdateMessage(character, moveName, targets, newStatuses, round, UPDATE), publisher)
   }
 
   def skipTurn(character: CharacterKey, round: Int): Unit = {
-    rabbitControl ! Message(StatusUpdateMessage(character, "", Set(), Map(), round), publisher)
+    rabbitControl ! Message(StatusUpdateMessage(character, "", Set(), Map(), round, SKIP), publisher)
+  }
+
+  def surrender(): Unit = {
+    rabbitControl ! Message(StatusUpdateMessage(("", ""), "", Set(), Map(), 0, SURRENDER), publisher)
   }
 
   private object BattleManagerHelper {
@@ -74,6 +79,10 @@ object BattleManager {
       Battle.teams
         .find(character => character.owner.get == characterKey._1 && character.characterName == characterKey._2)
         .get
+    }
+
+    def expectedMessage(round: Int, turn: (String, String)): Boolean = {
+      round == Round.roundId && turn._1 == Round.turns.head.owner.get && turn._2 == Round.turns.head.characterName
     }
   }
 }
