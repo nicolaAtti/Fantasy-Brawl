@@ -6,7 +6,8 @@ This project is a mostly original concept for a multiplayer, turn-based, fightin
 
 ## Continuous Integration
 
-https://travis-ci.org/nicolaAtti/pps-17-fb.svg?branch=master
+
+[![Build Status](https://travis-ci.org/nicolaAtti/pps-17-fb.svg?branch=master)](https://travis-ci.org/nicolaAtti/pps-17-fb)
 
 ## Getting Started
 
