@@ -8,11 +8,6 @@ This project is a mostly original concept for a multiplayer, turn-based, fightin
 
 ## Getting Started
 
-<Strong>Recomended Settings</Strong>
-
-It's recomended to play this game on a Windows operating system, in order to fully experience it's graphic components.\
-Mac and Linux systems will equally work, but the graphical experience could be reduced.
-
 <Strong>Requirements</Strong>
 
 In order to play the game you need to have the Java 8 installed, and have access to an internet connection.
