@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane prefHeight="420.0" prefWidth="960.0">
          <children>
@@ -32,49 +32,49 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="playerChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="262.0" layoutY="26.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="playerChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="266.0" layoutY="22.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Annabelle1.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="playerChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="47.0" layoutY="140.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="playerChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="40.0" layoutY="140.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Lidya1.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="playerChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="165.0" layoutY="134.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="playerChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="178.0" layoutY="145.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Noah1.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar1Image" fitHeight="200.0" fitWidth="170.0" layoutX="808.0" layoutY="26.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar1Image" fitHeight="200.0" fitWidth="170.0" layoutX="809.0" layoutY="26.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Fernando2.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="675.0" layoutY="14.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar2Image" fitHeight="200.0" fitWidth="170.0" layoutX="661.0" layoutY="14.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Cassandra2.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="626.0" layoutY="133.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar3Image" fitHeight="200.0" fitWidth="170.0" layoutX="615.0" layoutY="138.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@tombstone2.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></ImageView>
-            <ImageView fx:id="opponentChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="763.0" layoutY="149.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="opponentChar4Image" fitHeight="200.0" fitWidth="170.0" layoutX="752.0" layoutY="145.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Albert2.png" />
                </image>
@@ -152,7 +152,7 @@
                <effect>
                   <DropShadow height="20.0" offsetX="4.0" offsetY="-4.0" radius="9.5" width="20.0" />
                </effect></Button>
-            <Label fx:id="moveReportLabel" alignment="CENTER" layoutX="148.0" layoutY="328.0" prefHeight="43.0" prefWidth="665.0" text="Your Rick used Chrono Shift on &#10;Opponent: Cassandra,Albert,Fernando and Your Annabelle" textAlignment="CENTER" textFill="WHITE" visible="false">
+            <Label fx:id="moveReportLabel" alignment="CENTER" layoutX="148.0" layoutY="328.0" prefHeight="43.0" prefWidth="665.0" text="Your Rick used Chrono Shift on &#10;Opponent: Cassandra,Albert,Fernando and Your Annabelle" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Times New Roman Bold Italic" size="15.0" />
                </font>

@@ -7,7 +7,7 @@ import javafx.scene.control.Alert
   * @author Daniele Schiavi
   */
 object ViewConfiguration {
-  val WindowHeight: Double = 540
+  val WindowHeight: Double = 545
   val WindowWidth: Double = 960
 
   val DialogErrorType: Alert.AlertType = Alert.AlertType.ERROR
