@@ -6,8 +6,9 @@ import javafx.scene.Scene
 import javafx.stage.Stage
 import controller._
 import ViewConfiguration._
+import game.Round
 import javafx.scene.control.ScrollPane
-import messaging.MatchmakingManager
+import messaging.{BattleManager, MatchmakingManager}
 
 /** Manages the graphical interface.
   *
@@ -45,6 +46,8 @@ object ApplicationView {
     stage setOnCloseRequest (_ => {
       if (stage.getTitle equals WaitingOpponentTitle) {
         MatchmakingManager.leaveCasualQueueRequest(TeamSelectionController.username)
+      } else if (stage.getTitle equals BattleTitle) {
+        BattleManager.surrender()
       }
       Thread sleep 500
       Platform exit ()

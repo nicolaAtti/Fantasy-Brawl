@@ -1,6 +1,6 @@
 package communication
 
-import communication.StatusUpdateMessage.CharacterKey
+import communication.StatusUpdateMessage.{ActSelector, CharacterKey}
 import model.Status
 
 /**The message that the clients exchange with each other.
@@ -16,10 +16,16 @@ case class StatusUpdateMessage(attacker: CharacterKey,
                                moveName: String,
                                targets: Set[CharacterKey],
                                newStatuses: Map[CharacterKey, Status],
-                               round: Int)
+                               round: Int,
+                               actSelector: ActSelector)
 
 object StatusUpdateMessage {
   type PlayerName = String
   type CharacterName = String
   type CharacterKey = (PlayerName, CharacterName)
+
+  object ActSelector extends Enumeration {
+    val UPDATE, SKIP, SURRENDER = Value
+  }
+  type ActSelector = ActSelector.Value
 }
