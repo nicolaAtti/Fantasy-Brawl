@@ -6,7 +6,7 @@ trait SubStatistic
   *
   * The sub-statistics influence the effectiveness of a character in combat.
   *
-  * @author Nicola Atti
+  * @author Marco Canducci
   */
 object SubStatistic {
 
