@@ -52,6 +52,8 @@ object BattleManager {
                   BattleController.displayMoveEffect(findCharacter(response.attacker),
                     response.moveName,
                     response.targets.map(target => findCharacter(target)))
+                                                     response.moveName,
+                                                     response.targets.map(target => findCharacter(target)))
                 })
                 Round.endTurn()
             }
