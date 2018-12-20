@@ -64,6 +64,7 @@ object BattleController extends Initializable with ViewController {
   @FXML var moveListView: ListView[String] = _
 
   @FXML var actButton: Button = _
+  @FXML var passButton: Button = _
 
   @FXML var winnerLabel: Label = _
   @FXML var toMenuButton: Button = _
@@ -148,6 +149,8 @@ object BattleController extends Initializable with ViewController {
     timeline.stop()
     winnerLabel.setText("WINNER IS " + winner.toUpperCase)
     winnerLabel.setVisible(true)
+    actButton.setDisable(true)
+    passButton.setDisable(true)
     toMenuButton.setDisable(false)
     toMenuButton.setVisible(true)
   }
@@ -217,6 +220,7 @@ object BattleController extends Initializable with ViewController {
       activeLabel.setTextFill(CharacterPlayerSelectionLabelColor)
       activeImage = playerCharacterImages.find(char => char._2 == activeCharacter).get._1
       activeImage.setEffect(ActivePlayerEffect)
+      passButton.setDisable(false)
       setupCharacterMoves(activeCharacter)
     } else {
       activeLabel = opponentCharNames.getChildren.toArray
@@ -473,10 +477,12 @@ object BattleController extends Initializable with ViewController {
     resetTargets()
     resetCharacterMoves()
     actButton.setDisable(true)
+    passButton.setDisable(true)
   }
 
   /** Handles the press of the Pass button */
   @FXML def handlePassButtonPress(): Unit = {
+    passButton.setDisable(true)
     skipTurnAndDisplay()
   }
 
