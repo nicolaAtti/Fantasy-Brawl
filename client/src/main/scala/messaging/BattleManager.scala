@@ -22,12 +22,12 @@ object BattleManager {
   import Queues._
   private val playerQueue =
     Queue(BattleQueue, durable = MessagingSettings.Durable, autoDelete = MessagingSettings.AutoDelete)
-  private val opponentQueue =
+  private def opponentQueue =
     Queue(Battle.opponentQueue, durable = MessagingSettings.Durable, autoDelete = MessagingSettings.AutoDelete)
 
   implicit private val MessagesFormat: MyFormat[StatusUpdateMessage] = MessageFormat.format[StatusUpdateMessage]
 
-  private val publisher: Publisher = Publisher.queue(opponentQueue)
+  private def publisher: Publisher = Publisher.queue(opponentQueue)
 
   def start(): Unit = {
     Subscription.run(rabbitControl) {
@@ -48,11 +48,6 @@ object BattleManager {
                 })
                 Round.endTurn()
               case SKIP if expectedMessage(response.round, response.attacker) =>
-                Platform runLater (() => {
-                  BattleController.displayMoveEffect(findCharacter(response.attacker),
-                                                     response.moveName,
-                                                     response.targets.map(target => findCharacter(target)))
-                })
                 Round.endTurn()
             }
             ack
