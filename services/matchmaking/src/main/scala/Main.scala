@@ -22,6 +22,7 @@ object Main extends App {
   val dbManager: AsyncDbManager = MongoDbManager
 
   import communication._
+  import communication.JoinCasualQueueRequest.Operation._
   import config.MessagingSettings._
   import config.MiscSettings._
 
@@ -46,11 +47,12 @@ object Main extends App {
             }
 
             request.operation match {
-              case JoinCasualQueueRequest.Operation.ADD =>
-                findAnOpponent(PlayerInfo(request.player.name, request.player.teamNames, request.player.battleQueue),
-                               replyTo.get)
-              case JoinCasualQueueRequest.Operation.REMOVE =>
-                dbManager.notifyPlayerLeft(request.player.name)
+
+              case ADD =>
+                val player = request.player
+                findAnOpponent(PlayerInfo(player.name, player.teamNames, player.battleQueue), replyTo.get)
+
+              case REMOVE => dbManager.notifyPlayerLeft(request.player.name)
             }
           }
           ack
@@ -69,36 +71,28 @@ object Main extends App {
       *                       player who made the request
       */
     def findAnOpponent(requestInfo: PlayerInfo, requestReplyTo: String): Unit = {
-      dbManager.getTicket.onComplete {
 
-        case Success(requestTicket) =>
-          dbManager.putPlayerInQueue(requestTicket, requestInfo, requestReplyTo).onComplete {
+      for {
+        requestTicket <- dbManager.getTicket
+        _ <- dbManager.putPlayerInQueue(requestTicket, requestInfo, requestReplyTo)
+        opponent <- dbManager.takePlayerFromQueue(evaluateOpponentTicket(requestTicket)) if opponent.isDefined
+        _ <- dbManager.removePlayerFromQueue(requestInfo.name)
+      } yield {
+        opponent match {
+          case Some((opponentInfo, opponentReplyTo, opponentHasLeft)) =>
+            if (opponentHasLeft) { findAnOpponent(requestInfo, requestReplyTo) } // try again
+            else {
+              val battleId = evaluateBattleId(requestTicket, evaluateOpponentTicket(requestTicket))
+              dbManager.createBattleInstance(battleId).onComplete {
 
-            case Success(_) =>
-              val opponentTicket = evaluateOpponentTicket(requestTicket)
-              dbManager.takePlayerFromQueue(opponentTicket).onComplete {
+                case Success(_) =>
+                  sendBattleDataToBoth(requestInfo, requestReplyTo, opponentInfo, opponentReplyTo, battleId)
 
-                case Success(Some((opponentInfo, opponentReplyTo, opponentHasLeft))) =>
-                  dbManager.removePlayerFromQueue(requestInfo.name)
-
-                  if (opponentHasLeft) {
-                    findAnOpponent(requestInfo, requestReplyTo) // try again
-
-                  } else {
-                    val battleId = evaluateBattleId(requestTicket, opponentTicket)
-                    dbManager.createBattleInstance(battleId).onComplete {
-
-                      case Success(_) =>
-                        sendBattleDataToBoth(requestInfo, requestReplyTo, opponentInfo, opponentReplyTo, battleId)
-                      case Failure(e) => println(s"$LogFailurePrefix$e")
-                    }
-                  }
-                case Success(None) => Unit
-                case Failure(e)    => println(s"$LogFailurePrefix$e")
+                case Failure(e) => println(s"$LogFailurePrefix$e")
               }
-            case Failure(e) => println(s"$LogFailurePrefix$e")
-          }
-        case Failure(e) => println(s"$LogFailurePrefix$e")
+            }
+          case _ => Unit
+        }
       }
     }
 
