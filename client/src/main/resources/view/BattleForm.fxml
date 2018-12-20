@@ -152,7 +152,7 @@
                <effect>
                   <DropShadow height="20.0" offsetX="4.0" offsetY="-4.0" radius="9.5" width="20.0" />
                </effect></Button>
-            <Label fx:id="moveReportLabel" alignment="CENTER" layoutX="148.0" layoutY="328.0" prefHeight="43.0" prefWidth="665.0" text="Your Rick used Chrono Shift on &#10;Opponent: Cassandra,Albert,Fernando and Your Annabelle" textAlignment="CENTER" textFill="WHITE" visible="false">
+            <Label fx:id="moveReportLabel" alignment="CENTER" layoutX="148.0" layoutY="328.0" prefHeight="43.0" prefWidth="665.0" textAlignment="CENTER" textFill="WHITE" visible="false">
                <font>
                   <Font name="Times New Roman Bold Italic" size="15.0" />
                </font>
