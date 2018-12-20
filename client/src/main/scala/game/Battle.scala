@@ -3,7 +3,6 @@ package game
 import communication.matchmaking.PlayerInfo
 import controller.BattleController
 import javafx.application.Platform
-import messaging.BattleManager
 import model._
 import utilities.ScalaProlog._
 
@@ -21,7 +20,6 @@ object Battle extends App {
     playerId = player._1
     opponentId = opponentInfo.name
     opponentQueue = opponentInfo.battleQueue
-    BattleManager.start()
     teams = setupTeam(player, (opponentInfo.name, opponentInfo.teamNames))
     Round.roundId = 0
     Round.startNewRound()

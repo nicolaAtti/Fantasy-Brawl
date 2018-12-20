@@ -6,7 +6,6 @@ import javafx.scene.Scene
 import javafx.stage.Stage
 import controller._
 import ViewConfiguration._
-import game.Round
 import javafx.scene.control.ScrollPane
 import messaging.{BattleManager, MatchmakingManager}
 
@@ -49,7 +48,7 @@ object ApplicationView {
       } else if (stage.getTitle equals BattleTitle) {
         BattleManager.surrender()
       }
-      Thread sleep 500
+      Thread sleep 500 // in order to wait for a successful message send before killing the actor
       Platform exit ()
       System exit 0
     })
@@ -67,6 +66,7 @@ object ApplicationView {
       stage hide ()
     })
 
+  /** Create a new window in order to display the moves manual. */
   def createMovesManualView(): Unit = {
     val loader = new FXMLLoader(getClass getResource MovesManualForm)
     loader.setController(MoveManualController.controller)
