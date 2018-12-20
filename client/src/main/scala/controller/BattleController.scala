@@ -99,10 +99,7 @@ object BattleController extends Initializable with ViewController {
         if (timeSeconds <= 0) {
           timeline.stop()
           if (activeCharacter.owner.get == Battle.playerId) {
-            BattleManager.skipTurn((activeCharacter.owner.get, activeCharacter.characterName), Round.roundId)
-            displayMoveEffect(activeCharacter, "", Set())
-            resetCharacterMoves()
-            Round.endTurn()
+            skipTurnAndDisplay()
           }
         }
       }
@@ -457,11 +454,17 @@ object BattleController extends Initializable with ViewController {
         charImage.setEffect(null)
       }
     }
+
+    /** Initiates the skip turn procedure and displays it */
+    def skipTurnAndDisplay(): Unit = {
+      BattleManager.skipTurn((activeCharacter.owner.get, activeCharacter.characterName), Round.roundId)
+      displayMoveEffect(activeCharacter, "", Set())
+      resetCharacterMoves()
+      Round.endTurn()
+    }
   }
 
-  /** Handles the press of the act button
-    *
-    */
+  /** Handles the press of the Act button */
   @FXML def handleActButtonPress(): Unit = {
     Round.actCalculation(activeCharacter,
                          moveListView.getSelectionModel.getSelectedItem.split(MovesSeparator).head,
@@ -472,7 +475,12 @@ object BattleController extends Initializable with ViewController {
     actButton.setDisable(true)
   }
 
-  /** Handles the pression of the move manual button, showing the move manual GUI
+  /** Handles the press of the Pass button */
+  @FXML def handlePassButtonPress(): Unit = {
+    skipTurnAndDisplay()
+  }
+
+  /** Handles the press of the move manual button, showing the move manual GUI
     *
     * @param event
     */
