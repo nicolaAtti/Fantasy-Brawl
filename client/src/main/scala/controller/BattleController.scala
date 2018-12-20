@@ -101,6 +101,7 @@ object BattleController extends Initializable with ViewController {
           if (activeCharacter.owner.get == Battle.playerId) {
             BattleManager.skipTurn((activeCharacter.owner.get, activeCharacter.characterName), Round.roundId)
             displayMoveEffect(activeCharacter, "", Set())
+            resetCharacterMoves()
             Round.endTurn()
           }
         }
@@ -380,6 +381,12 @@ object BattleController extends Initializable with ViewController {
       moveListView.getSelectionModel.selectFirst()
     }
 
+    /** Empties the move list view */
+    def resetCharacterMoves(): Unit = {
+      moveList = FXCollections.observableArrayList()
+      moveListView.setItems(moveList)
+    }
+
     /** Adds/removes the pressed character to/from the list of targets
       *
       * @param imagePressed the character image pressed
@@ -461,8 +468,7 @@ object BattleController extends Initializable with ViewController {
                          targets.toList)
     activeLabel.setTextFill(Color.BLACK)
     resetTargets()
-    moveList = FXCollections.observableArrayList()
-    moveListView.setItems(moveList)
+    resetCharacterMoves()
     actButton.setDisable(true)
   }
 
