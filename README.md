@@ -4,13 +4,16 @@
 
 This project is a mostly original concept for a multiplayer, turn-based, fighting game set in a fantasy world with warriors, thieves, wizards and healers fighting in teams against each other for glory and fame.
 
+## Continuous Integration
 
+
+[![Build Status](https://travis-ci.org/nicolaAtti/pps-17-fb.svg?branch=master)](https://travis-ci.org/nicolaAtti/pps-17-fb)
 
 ## Getting Started
 
 <Strong>Requirements</Strong>
 
-In order to play the game you need to have the Java 8 installed, and have access to an internet connection.
+In order to play the game you need to have the Java 8 installed and Scala 2.12, and have access to an internet connection.
 
 After the requirements are met, to play simply run the client .jar file provided with the latest release, as the needed services are uploaded on Heroku.
 
@@ -25,6 +28,7 @@ If the services aren't online, a manual launch of all three of them is required.
 	java -jar pps-17-fb-1.0-matchmaking.jar
 	java -jar pps-18-fb-1.0-turn-ordering.jar
 ```
+In order for the system to work the "AMQP as a service" and "MongoDB as a service" plugins must be online.
 
 ## How to play
 
