@@ -486,6 +486,11 @@ object BattleController extends Initializable with ViewController {
     skipTurnAndDisplay()
   }
 
+  /** Handles the press of the Pass button */
+  @FXML def handlePassButtonPress(): Unit = {
+    skipTurnAndDisplay()
+  }
+  
   /** Handles the press of the move manual button, showing the move manual GUI
     *
     * @param event
