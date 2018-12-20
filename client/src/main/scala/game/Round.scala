@@ -32,7 +32,6 @@ object Round {
       case (playerName, characterName) =>
         Battle.teams.find(char => char.characterName == characterName && char.owner.get == playerName).get
     }
-    turns.foreach(character => println(character.owner.get, character.characterName, character.speed))
     if (roundId == 1)
       ApplicationView changeView BATTLE
     Platform runLater (() => {
@@ -50,6 +49,7 @@ object Round {
         endTurn()
       } else {
         Platform runLater (() => {
+          BattleController.updateStatus()
           BattleController.setActiveCharacter(activeCharacter)
         })
       }
