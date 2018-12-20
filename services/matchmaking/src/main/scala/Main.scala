@@ -75,10 +75,11 @@ object Main extends App {
       for {
         requestTicket <- dbManager.getTicket
         _ <- dbManager.putPlayerInQueue(requestTicket, requestInfo, requestReplyTo)
-        opponent <- dbManager.takePlayerFromQueue(evaluateOpponentTicket(requestTicket)) if opponent.isDefined
+        opponentOpt <- dbManager.takePlayerFromQueue(evaluateOpponentTicket(requestTicket)) if opponentOpt.isDefined
         _ <- dbManager.removePlayerFromQueue(requestInfo.name)
       } yield {
-        opponent match {
+        opponentOpt match {
+
           case Some((opponentInfo, opponentReplyTo, opponentHasLeft)) =>
             if (opponentHasLeft) { findAnOpponent(requestInfo, requestReplyTo) } // try again
             else {

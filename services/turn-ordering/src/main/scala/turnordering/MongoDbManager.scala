@@ -133,8 +133,8 @@ object TestConversion extends App {
 
   for {
     _ <- addPlayerInfo(playerInfo)
-    retrievedInfo <- getPlayerInfo(playerName,battleId,round)
-    _ <- deletePlayerInfo(playerName,battleId,round)
+    retrievedInfo <- getPlayerInfo(playerName, battleId, round)
+    _ <- deletePlayerInfo(playerName, battleId, round)
   } yield {
     println(s"Have I done a good job? ${if (playerInfo == retrievedInfo.get) "Yes." else "No."}")
   }
