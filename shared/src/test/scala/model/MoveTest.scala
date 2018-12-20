@@ -181,7 +181,7 @@ class MoveTest extends FunSuite {
     val newStatuses = Move.makeMove(multiModifierMove,
                                     wizardCharacter,
                                     Set(userCharacter, targetCharacter, healerCharacter, wizardCharacter))
-    assert(newStatuses.forall(chars => chars._2.modifiers.contains("Bolstered Faith")))
+    assert(newStatuses.forall(chars => chars._2.modifiers.contains(getModifier("Bolstered Faith"))))
   }
 
   test("A special move that applies a modifier, should apply it to all it's targets") {

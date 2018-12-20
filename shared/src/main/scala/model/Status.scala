@@ -17,7 +17,7 @@ case class Status(healthPoints: Int,
                   manaPoints: Int,
                   maxHealthPoints: Int,
                   maxManaPoints: Int,
-                  modifiers: Map[String, Modifier],
+                  modifiers: Map[Modifier, Int],
                   alterations: Map[Alteration, Int]) {
 
   require(maxHealthPoints > 0, "Max health points must be positive")
@@ -77,13 +77,12 @@ object Status {
       * @return the new status after the countdown
       */
     def afterTick(status: Status): Status = {
-      val updatedModifiers = for ((id, modifier) <- status.modifiers if modifier.remainingRounds > 0)
-        yield (id, modifier.copy(remainingRounds = modifier.remainingRounds - 1))
+      status.copy(modifiers = decreaseCountDown(status.modifiers), alterations = decreaseCountDown(status.alterations))
+    }
 
-      val updatedAlterations = for ((alteration, countDown) <- status.alterations if countDown > 0)
-        yield (alteration, countDown - 1)
-
-      status.copy(modifiers = updatedModifiers, alterations = updatedAlterations)
+    def decreaseCountDown[A](timed: Map[A, Int]): Map[A, Int] = {
+      for ((t, countDown) <- timed if countDown > 0)
+        yield (t, countDown - 1)
     }
   }
 

@@ -6,8 +6,8 @@ import com.spingo.op_rabbit.properties.ReplyTo
 import communication.MessageFormat.MyFormat
 import communication.StatusUpdateMessage.CharacterKey
 import communication.turnordering.PlayerInfo
-import turnordering.MongoDbManager._
 import config.MessagingSettings
+import turnordering.{AsyncDbManager, MongoDbManager}
 
 import scala.util.{Failure, Success}
 
@@ -22,14 +22,16 @@ import scala.util.{Failure, Success}
   */
 object Main extends App {
 
-  final val LogMessage = "Received a new turn ordering request"
-  final val OldRequestPrint = "Received an old round request: "
+  val LogMessage = "Received a new turn ordering request"
+  val OldRequestPrint = "Received an old round request: current "
 
+  val dbManager: AsyncDbManager = MongoDbManager
+
+  import TurnOrderingHelper._
   import communication._
-
   val rabbitControl = ActorSystem().actorOf(Props[RabbitControl])
-  implicit val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = MessagingSettings.Requeue)
 
+  implicit val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = MessagingSettings.Requeue)
   implicit val requestFormat: MyFormat[StartRoundRequest] = MessageFormat.format[StartRoundRequest]
   implicit val responseFormat: MyFormat[StartRoundResponse] = MessageFormat.format[StartRoundResponse]
 
@@ -40,9 +42,7 @@ object Main extends App {
     Queue(StartRoundRequestQueue, durable = MessagingSettings.Durable, autoDelete = MessagingSettings.AutoDelete)
 
   Subscription.run(rabbitControl) {
-
     import com.spingo.op_rabbit.Directives._
-
     channel(qos = MessagingSettings.Qos) {
       consume(requestQueue) {
         (body(as[StartRoundRequest]) & optionalProperty(ReplyTo)) { (request, replyTo) =>
@@ -51,26 +51,19 @@ object Main extends App {
             if (MiscSettings.ServicesLog) {
               println(LogMessage)
             }
-            getCurrentRound(request.battleId).onComplete {
+            val requestInfo =
+              PlayerInfo(request.playerName, request.playerTeamSpeeds, request.battleId, request.round, replyTo.get)
 
-              case Success(round: Int) if request.round == round + 1 =>
-                val requestInfo =
-                  PlayerInfo(request.playerName, request.playerTeamSpeeds, request.battleId, request.round, replyTo.get)
-                addPlayerInfo(requestInfo).onComplete {
-
-                  case Success(_) =>
-                    getPlayerInfo(request.opponentName, request.battleId, request.round).onComplete {
-
-                      case Success(opponentInfo) if opponentInfo != null =>
-                        TurnOrderingHelper.cleanRequestsAndSendOrderedTurns(requestInfo, opponentInfo)
-
-                      case Success(_) => println("Opponent not found...")
-                      case Failure(e) => println(s"$LogFailurePrefix$e")
-                    }
-                  case Failure(e) => println(s"$LogFailurePrefix$e")
-                }
-              case Success(round: Int) => println(s"$OldRequestPrint${request.round} actual $round")
-              case Failure(e)          => println(s"$LogFailurePrefix$e")
+            for {
+              round <- dbManager.getCurrentRound(request.battleId) if request.round == round + 1 // else not interested
+              _ <- dbManager.addPlayerInfo(requestInfo)
+              opponentOpt <- dbManager.getPlayerInfo(request.opponentName, request.battleId, request.round)
+              if opponentOpt.isDefined
+            } yield {
+              opponentOpt match {
+                case Some(opponentInfo) => cleanRequestsAndSendOrderedTurns(requestInfo, opponentInfo)
+                case _                  => Unit
+              }
             }
             ack
           }
@@ -90,28 +83,16 @@ object Main extends App {
     def cleanRequestsAndSendOrderedTurns(requestInfo: PlayerInfo, opponentInfo: PlayerInfo): Unit = {
       val firstToDelete = if (requestInfo.name > opponentInfo.name) requestInfo.name else opponentInfo.name
       val secondToDelete = if (requestInfo.name > opponentInfo.name) opponentInfo.name else requestInfo.name
-      deletePlayerInfo(firstToDelete, requestInfo.battleId, requestInfo.round).onComplete {
-
-        case Success(deleteResult1) if deleteResult1.getDeletedCount != 0 =>
-          deletePlayerInfo(secondToDelete, requestInfo.battleId, requestInfo.round).onComplete {
-
-            case Success(deleteResult2) if deleteResult2.getDeletedCount != 0 =>
-              incrementCurrentRound(requestInfo.battleId).onComplete {
-
-                case Success(_) =>
-                  val allSpeedsOrdered = (extractTeamSpeeds(opponentInfo) ++ extractTeamSpeeds(requestInfo))
-                    .sortBy { case (_, speed: Int) => speed }
-                    .reverse
-                    .map { case (key: CharacterKey, _) => key }
-                  send(allSpeedsOrdered, requestInfo, opponentInfo)
-
-                case Failure(e) => println(s"$LogFailurePrefix$e")
-              }
-            case Success(_) => println("Cannot delete what is not present...")
-            case Failure(e) => println(s"$LogFailurePrefix$e")
-          }
-        case Success(_) => println("Cannot delete what is not present...")
-        case Failure(e) => println(s"$LogFailurePrefix$e")
+      for {
+        deleted1 <- dbManager.deletePlayerInfo(firstToDelete, requestInfo.battleId, requestInfo.round) if deleted1
+        deleted2 <- dbManager.deletePlayerInfo(secondToDelete, requestInfo.battleId, requestInfo.round) if deleted2
+        incremented <- dbManager.incrementCurrentRound(requestInfo.battleId) if incremented
+      } yield {
+        val allSpeedsOrdered = (extractTeamSpeeds(opponentInfo) ++ extractTeamSpeeds(requestInfo))
+          .sortBy { case (_, speed) => speed }
+          .reverse
+          .map { case (key, _) => key }
+        send(allSpeedsOrdered, requestInfo, opponentInfo)
       }
     }
 

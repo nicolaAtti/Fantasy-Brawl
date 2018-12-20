@@ -6,18 +6,17 @@ import org.mongodb.scala.bson.collection.immutable.Document
 import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.Filters
 import org.mongodb.scala.model.Updates.inc
-import org.mongodb.scala.result.{DeleteResult, UpdateResult}
 import org.mongodb.scala.{Completed, MongoClient}
 
-import scala.util.{Failure, Success}
 import scala.concurrent._
 import ExecutionContext.Implicits.global
 
-/** Provides functionality for the database asynchronous interactions.
+/** Provides functionality to manage the asynchronous interaction between the
+  * turn-ordering service and a MongoDB database.
   *
-  * @author Marco Canducci
+  * @author Nicola Atti, Marco Canducci
   */
-object MongoDbManager {
+object MongoDbManager extends AsyncDbManager {
 
   import config.DbNaming._
 
@@ -25,12 +24,6 @@ object MongoDbManager {
   val battlesCollection = database.getCollection(Battles.CollectionName)
   val turnOrderingCollection = database.getCollection(TurnOrdering.CollectionName)
 
-  /** Retrieves the current round of an ongoing battle.
-    *
-    * @param battleId the ongoing battle identifier to check
-    * @return a Future representing the success/failure of the operation,
-    *         containing the current round number
-    */
   def getCurrentRound(battleId: String): Future[Int] = {
     battlesCollection
       .find(filter = Filters.equal("_id", battleId))
@@ -38,60 +31,38 @@ object MongoDbManager {
       .head
   }
 
-  /** Increments by one the current round of a given active battle.
-    *
-    * @param battleId the battle identifier
-    * @return a Future representing the success/failure of the operation
-    */
-  def incrementCurrentRound(battleId: String): Future[UpdateResult] = {
+  def incrementCurrentRound(battleId: String): Future[Boolean] = {
     val incByOne: Bson = inc(Battles.CurrentRound, number = 1)
     battlesCollection
       .updateOne(filter = Filters.equal("_id", battleId), update = incByOne)
+      .map(updateResult => updateResult.getModifiedCount > 0)
       .head
   }
 
   import DbHelper._
 
-  /** Adds all the player's information for a turn-ordering request.
-    *
-    * @param playerInfo the player information
-    * @return a Future representing the success/failure of the operation
-    */
-  def addPlayerInfo(playerInfo: PlayerInfo): Future[Completed] = {
+  def addPlayerInfo(playerInfo: PlayerInfo): Future[String] = {
     turnOrderingCollection
       .insertOne(playerInfo)
+      .map(_ => s"Successfully added ${playerInfo.name} information.")
       .head
   }
 
-  /** Retrieves all the player's information relative to an old turn-ordering request.
-    *
-    * @param playerName the player name of the old request
-    * @param battleId the battle identifier of the old request
-    * @param round the round of the old request
-    * @return a Future representing the success/failure of the operation,
-    *         containing the requested player information
-    */
-  def getPlayerInfo(playerName: String, battleId: String, round: Int): Future[PlayerInfo] = {
+  def getPlayerInfo(playerName: String, battleId: String, round: Int): Future[Option[PlayerInfo]] = {
     turnOrderingCollection
       .find(filter = Filters.equal(TurnOrdering.PlayerName, playerName))
       .first
       .map(documentToPlayerInfo)
-      .head
+      .headOption
   }
 
-  /** Deletes the player's information of an old turn-ordering request.
-    *
-    * @param playerName the player name of the old request
-    * @param battleId the battle id of the old request
-    * @param round the round of the old request
-    * @return a Future representing the success/failure of the deletion
-    */
-  def deletePlayerInfo(playerName: String, battleId: String, round: Int): Future[DeleteResult] = {
+  def deletePlayerInfo(playerName: String, battleId: String, round: Int): Future[Boolean] = {
     turnOrderingCollection
       .deleteOne(
         filter = Filters.and(Filters.equal(TurnOrdering.PlayerName, playerName),
                              Filters.equal(TurnOrdering.BattleId, battleId),
                              Filters.equal(TurnOrdering.Round, round)))
+      .map(deleteResult => deleteResult.getDeletedCount > 0)
       .head
   }
 
@@ -160,28 +131,12 @@ object TestConversion extends App {
   val playerInfo =
     PlayerInfo(name = playerName, teamSpeeds = speeds, battleId = battleId, round = round, replyTo = clientQueue)
 
-  import config.MiscSettings._
-
-  addPlayerInfo(playerInfo).onComplete {
-
-    case Success(_) =>
-      println("Player info successfully added to the Database")
-      getPlayerInfo(playerName, battleId, round).onComplete {
-
-        case Success(retrievedInfo) =>
-          println("Player info retrieved from the Database")
-          println(s"--> Original:  $playerInfo")
-          println(s"--> Retrieved: $retrievedInfo")
-          println(s"--> Have I done a good job? ${playerInfo == retrievedInfo}")
-          deletePlayerInfo(playerName, battleId, round).onComplete {
-
-            case Success(_) => println("Player info successfully deleted from the Database")
-
-            case Failure(e) => println(s"$LogFailurePrefix$e")
-          }
-        case Failure(e) => println(s"$LogFailurePrefix$e")
-      }
-    case Failure(e) => println(s"$LogFailurePrefix$e")
+  for {
+    _ <- addPlayerInfo(playerInfo)
+    retrievedInfo <- getPlayerInfo(playerName, battleId, round)
+    _ <- deletePlayerInfo(playerName, battleId, round)
+  } yield {
+    println(s"Have I done a good job? ${if (playerInfo == retrievedInfo.get) "Yes." else "No."}")
   }
 
   Thread.sleep(10000) // wait for async requests to take place
