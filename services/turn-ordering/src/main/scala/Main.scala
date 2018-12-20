@@ -9,8 +9,6 @@ import communication.turnordering.PlayerInfo
 import config.MessagingSettings
 import turnordering.{AsyncDbManager, MongoDbManager}
 
-import scala.util.{Failure, Success}
-
 /** Entry point for the service that provides turn-ordering functionality at the
   * beginning of every round.
   *
@@ -36,7 +34,6 @@ object Main extends App {
   implicit val responseFormat: MyFormat[StartRoundResponse] = MessageFormat.format[StartRoundResponse]
 
   import Queues._
-  import config.MiscSettings._
 
   val requestQueue =
     Queue(StartRoundRequestQueue, durable = MessagingSettings.Durable, autoDelete = MessagingSettings.AutoDelete)

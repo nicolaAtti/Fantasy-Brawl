@@ -1,6 +1,6 @@
 import javafx.application.Application
 import javafx.stage.Stage
-import messaging.{LoginManager, MatchmakingManager, RoundManager}
+import messaging.{BattleManager, LoginManager, MatchmakingManager, RoundManager}
 import view.ViewConfiguration.ViewSelector._
 
 class MainApplication extends Application {
@@ -24,6 +24,7 @@ object MainApplication {
     LoginManager.start()
     MatchmakingManager.start()
     RoundManager.start()
+    BattleManager.start()
     Application.launch(classOf[MainApplication], args: _*)
   }
 }
