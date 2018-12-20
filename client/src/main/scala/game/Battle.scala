@@ -3,7 +3,6 @@ package game
 import communication.matchmaking.PlayerInfo
 import controller.BattleController
 import javafx.application.Platform
-import messaging.BattleManager
 import model._
 import utilities.ScalaProlog._
 
