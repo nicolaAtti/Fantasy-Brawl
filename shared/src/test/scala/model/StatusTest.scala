@@ -17,7 +17,7 @@ class StatusTest extends FunSuite {
   val regenerateStatus = Status(100, 100, 200, 100, Map(), Map((regeneration, regeneration.roundsDuration)))
 
   val removeStatus: Status =
-    Status(200, 100, 200, 100, Map(("Concentrated", concentratedModifier)), Map((stunned, stunned.roundsDuration)))
+    Status(200, 100, 200, 100, Map((concentratedModifier, concentratedModifier.roundsDuration)), Map((stunned, stunned.roundsDuration)))
 
   test("A newly created status should have correct health values") {
     assert(status.healthPoints == 200 && status.maxHealthPoints == status.healthPoints)

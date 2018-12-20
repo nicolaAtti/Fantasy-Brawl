@@ -25,11 +25,11 @@ object MoveEffectStrategies {
     * @return the appropriate move effect
     */
   def apply(moveEffectStrategyCode: String, moveType: MoveType, baseValue: Int)(
-      addModifiers: Map[String, Modifier],
+      addModifiers: Map[Modifier, Int],
       addAlterations: Map[Alteration, Int],
       removeAlterations: Set[Alteration]): (Attacker, Target) => NewTargetStatus = {
 
-    implicit val modifiersToAdd: Map[String, Modifier] = addModifiers
+    implicit val modifiersToAdd: Map[Modifier, Int] = addModifiers
     implicit val alterationsToAdd: Map[Alteration, Int] = addAlterations
     implicit val alterationsToRemove: Set[Alteration] = removeAlterations
 
@@ -56,7 +56,7 @@ object MoveEffectStrategies {
     *                          target's status
     * @return the move effect modeling an appropriate standard damage
     */
-  def createStandardDamageEffect(moveType: MoveType, baseDamage: Int)(implicit addModifiers: Map[String, Modifier],
+  def createStandardDamageEffect(moveType: MoveType, baseDamage: Int)(implicit addModifiers: Map[Modifier, Int],
                                                                       addAlterations: Map[Alteration, Int],
                                                                       removeAlterations: Set[Alteration]) =
     (attacker: Attacker, target: Target) => {
@@ -82,7 +82,7 @@ object MoveEffectStrategies {
     *                          target's status
     * @return the move effect modeling an appropriate standard healing
     */
-  def createStandardHealEffect(baseHeal: Int)(implicit addModifiers: Map[String, Modifier],
+  def createStandardHealEffect(baseHeal: Int)(implicit addModifiers: Map[Modifier, Int],
                                               addAlterations: Map[Alteration, Int],
                                               removeAlterations: Set[Alteration]) =
     (attacker: Attacker, target: Target) => {
@@ -109,7 +109,7 @@ object MoveEffectStrategies {
     *                          target's status
     * @return the move effect modeling an appropriate percentage modification
     */
-  def createPercentageEffect(percentage: Int)(implicit addModifiers: Map[String, Modifier],
+  def createPercentageEffect(percentage: Int)(implicit addModifiers: Map[Modifier, Int],
                                               addAlterations: Map[Alteration, Int],
                                               removeAlterations: Set[Alteration]) =
     (_: Attacker, target: Target) =>
@@ -126,7 +126,7 @@ object MoveEffectStrategies {
     *                          target's status
     * @return the move effect modeling an appropriate buff/debuff modification
     */
-  def createBuffDebuffEffect(implicit addModifiers: Map[String, Modifier],
+  def createBuffDebuffEffect(implicit addModifiers: Map[Modifier, Int],
                              addAlterations: Map[Alteration, Int],
                              removeAlterations: Set[Alteration]) =
     (_: Attacker, target: Target) =>
@@ -169,7 +169,7 @@ object MoveEffectStrategies {
       * @return the updated status
       */
     def updatedStatus(originalStatus: Status, healthPointsToClamp: Int)(
-        implicit modifiersToAdd: Map[String, Modifier],
+        implicit modifiersToAdd: Map[Modifier, Int],
         alterationsToAdd: Map[Alteration, Int],
         alterationsToRemove: Set[Alteration]): Status = {
 
