@@ -20,7 +20,7 @@ class ModifierTest extends FunSuite {
         testModifier.affectsSubStatistic == rightSubStatistic)
   }
   test("A new Modifier should have the correct duration") {
-    assert(testModifier.remainingRounds == 1)
+    assert(testModifier.roundsDuration == 1)
   }
   test("A new Modifier should have the right delta value") {
     assert(testModifier.delta == 30)

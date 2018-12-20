@@ -64,8 +64,12 @@ object ScalaProlog {
         moveType = MoveType(extractString(solveInfo, "MoveType")),
         baseValue = extractInt(solveInfo, "BaseValue")
       )(
-        addModifiers =
-          extractList(solveInfo, "AddModifiers").map(modifierName => modifierName -> getModifier(modifierName)).toMap,
+        addModifiers = extractList(solveInfo, "AddModifiers")
+          .map(modifierName => {
+            val modifier = getModifier(modifierName)
+            modifier -> modifier.roundsDuration
+          })
+          .toMap,
         addAlterations = extractList(solveInfo, "AddAlterations")
           .map(alteration => Alteration(alteration) -> Alteration(alteration).roundsDuration)
           .toMap,
