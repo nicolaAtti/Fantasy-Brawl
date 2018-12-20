@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane prefHeight="420.0" prefWidth="960.0">
          <children>
@@ -476,7 +476,7 @@
                               <Font name="Eras Demi ITC" size="13.0" />
                            </font>
                         </Button>
-                        <Button fx:id="passButton" disable="true" layoutX="255.0" layoutY="39.0" maxHeight="26.0" maxWidth="67.0" minHeight="26.0" minWidth="67.0" mnemonicParsing="false" onMouseClicked="#handleActButtonPress" prefHeight="26.0" prefWidth="67.0" text="Pass">
+                        <Button fx:id="passButton" disable="true" layoutX="255.0" layoutY="39.0" maxHeight="26.0" maxWidth="67.0" minHeight="26.0" minWidth="67.0" mnemonicParsing="false" onMouseClicked="#handlePassButtonPress" prefHeight="26.0" prefWidth="67.0" text="Pass">
                            <font>
                               <Font name="Eras Demi ITC" size="13.0" />
                            </font>
