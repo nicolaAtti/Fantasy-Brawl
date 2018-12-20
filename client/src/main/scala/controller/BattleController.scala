@@ -89,6 +89,23 @@ object BattleController extends Initializable with ViewController {
 
   val timeline: Timeline = new Timeline()
   var timeSeconds: Int = config.MiscSettings.TurnDurationInSeconds
+  timeline.setCycleCount(Animation.INDEFINITE)
+  timeline.getKeyFrames.add(
+    new KeyFrame(
+      Duration.seconds(1),
+      (_: ActionEvent) => {
+        timeSeconds = timeSeconds - 1
+        timerCounter.setText(timeSeconds.toString)
+        if (timeSeconds <= 0) {
+          timeline.stop()
+          if (activeCharacter.owner.get == Battle.playerId) {
+            BattleManager.skipTurn((activeCharacter.owner.get, activeCharacter.characterName), Round.roundId)
+            displayMoveEffect(activeCharacter, "", Set())
+            Round.endTurn()
+          }
+        }
+      }
+    ))
 
   /** Initializes the graphic and logic elements composing the Battle GUI
     *
@@ -108,23 +125,7 @@ object BattleController extends Initializable with ViewController {
 
     playerImages = List(playerChar1Image, playerChar2Image, playerChar3Image, playerChar4Image)
     opponentImages = List(opponentChar1Image, opponentChar2Image, opponentChar3Image, opponentChar4Image)
-    timeline.setCycleCount(Animation.INDEFINITE)
-    timeline.getKeyFrames.add(
-      new KeyFrame(
-        Duration.seconds(1),
-        (_: ActionEvent) => {
-          timeSeconds = timeSeconds - 1
-          timerCounter.setText(timeSeconds.toString)
-          if (timeSeconds <= 0) {
-            timeline.stop()
-            if (activeCharacter.owner.get == Battle.playerId) {
-              BattleManager.skipTurn((activeCharacter.owner.get, activeCharacter.characterName), Round.roundId)
-              displayMoveEffect(activeCharacter, "", Set())
-              Round.endTurn()
-            }
-          }
-        }
-      ))
+
     setBattlefield()
     timeline.playFromStart()
 
