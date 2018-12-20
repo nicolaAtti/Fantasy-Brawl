@@ -6,10 +6,8 @@ import org.mongodb.scala.bson.collection.immutable.Document
 import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.Filters
 import org.mongodb.scala.model.Updates.inc
-import org.mongodb.scala.result.{DeleteResult, UpdateResult}
 import org.mongodb.scala.{Completed, MongoClient}
 
-import scala.util.{Failure, Success}
 import scala.concurrent._
 import ExecutionContext.Implicits.global
 
@@ -133,28 +131,12 @@ object TestConversion extends App {
   val playerInfo =
     PlayerInfo(name = playerName, teamSpeeds = speeds, battleId = battleId, round = round, replyTo = clientQueue)
 
-  import config.MiscSettings._
-
-  addPlayerInfo(playerInfo).onComplete {
-
-    case Success(_) =>
-      println("Player info successfully added to the Database")
-      getPlayerInfo(playerName, battleId, round).onComplete {
-
-        case Success(retrievedInfo) =>
-          println("Player info retrieved from the Database")
-          println(s"--> Original:  $playerInfo")
-          println(s"--> Retrieved: $retrievedInfo")
-          println(s"--> Have I done a good job? ${playerInfo == retrievedInfo}")
-          deletePlayerInfo(playerName, battleId, round).onComplete {
-
-            case Success(_) => println("Player info successfully deleted from the Database")
-
-            case Failure(e) => println(s"$LogFailurePrefix$e")
-          }
-        case Failure(e) => println(s"$LogFailurePrefix$e")
-      }
-    case Failure(e) => println(s"$LogFailurePrefix$e")
+  for {
+    _ <- addPlayerInfo(playerInfo)
+    retrievedInfo <- getPlayerInfo(playerName,battleId,round)
+    _ <- deletePlayerInfo(playerName,battleId,round)
+  } yield {
+    println(s"Have I done a good job? ${if (playerInfo == retrievedInfo.get) "Yes." else "No."}")
   }
 
   Thread.sleep(10000) // wait for async requests to take place
