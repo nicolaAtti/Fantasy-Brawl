@@ -13,7 +13,7 @@ This project is a mostly original concept for a multiplayer, turn-based, fightin
 
 <Strong>Requirements</Strong>
 
-In order to play the game you need to have the Java 8 installed, and have access to an internet connection.
+In order to play the game you need to have the Java 8 installed and Scala 2.12, and have access to an internet connection.
 
 After the requirements are met, to play simply run the client .jar file provided with the latest release, as the needed services are uploaded on Heroku.
 
