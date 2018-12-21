@@ -230,6 +230,7 @@ object BattleController extends Initializable with ViewController {
       activeLabel.setTextFill(CharacterOpponentSelectionLabelColor)
       activeImage = opponentCharacterImages.find(char => char._2 == activeCharacter).get._1
       activeImage.setEffect(ActiveOpponentEffect)
+      passButton.setDisable(true)
     }
     resetTimer()
   }
