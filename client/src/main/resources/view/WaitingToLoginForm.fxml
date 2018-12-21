@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+   <ImageView fitHeight="525.0" fitWidth="960.0" pickOnBounds="true">
+      <image>
+         <Image url="@FantasyBrawlWelcomeScreen.png" />
+      </image></ImageView>
+<VBox alignment="CENTER" layoutX="237.0" layoutY="263.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="269.0" prefWidth="486.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ProgressIndicator style="-fx-progress-color: red;">
+            <effect>
+               <Glow level="1.0" />
+            </effect></ProgressIndicator>
+      <Label alignment="CENTER" prefHeight="52.0" prefWidth="354.0" text="WAITING TO CONNECT" textFill="WHITE">
+         <font>
+            <Font name="Javanese Text" size="22.0" />
+         </font>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+            <effect>
+               <Reflection bottomOpacity="0.13" fraction="0.5" topOpacity="0.2">
+                  <input>
+                     <Glow level="0.65">
+                        <input>
+                           <Blend mode="RED" />
+                        </input>
+                     </Glow>
+                  </input>
+               </Reflection>
+            </effect>
+      </Label>
+   </children>
+</VBox>
+</AnchorPane>

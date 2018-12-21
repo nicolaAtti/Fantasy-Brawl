@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane hbarPolicy="NEVER" hmax="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="601.0" prefWidth="594.0">
+         <children>
+            <ImageView fitHeight="601.0" fitWidth="600.0" layoutX="-6.0" layoutY="-3.0" pickOnBounds="true">
+               <image>
+                  <Image url="@background.jpg" />
+               </image>
+            </ImageView>
+            <ChoiceBox fx:id="characterChoiceBox" layoutX="324.0" layoutY="21.0" prefHeight="26.0" prefWidth="209.0" />
+            <Pane fx:id="labelPane" layoutX="63.0" layoutY="53.0" prefHeight="703.0" prefWidth="517.0">
+               <children>
+                  <Label alignment="TOP_LEFT" prefHeight="400.0" prefWidth="484.0" text="Jacob&#10;&#10;[Melee] Skullcrack: Inflict a powerful blow to the target's head dealing 20 extra damage and Stunning him.    (Mana cost: 20, Max targets: 1) &#10;&#10;[Spell] Berserker Rage: Incites the target to attack with uncontrollable rage, inflicting them with Berserk.   (Mana cost: 25, Max targets: 1)&#10;&#10;[Melee] Sismic Slam: Slam the ground creating an earthquake, inflicting 20 extra damage up to 4 targets.   (Mana cost :30, Max targets: 4)&#10;&#10;[Spell] Second Wind: Improve the regenerative abilities of the target healing him for 75% of his current health.   (Mana cost: 25, Max targets: 1)" wrapText="true">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" prefHeight="400.0" prefWidth="484.0" text="Annabelle&#10;&#10;[Ranged] Poison Vial: Throw a vial of noxious gas to a target Poisoning him and inflicting 15 extra damage.   (Mana cost: 20, Max targets: 1)&#10;&#10;[Ranged] Flash Grenade: Throw a flash grenade up to 4 targets Blinding them.   (Mana cost: 20, Max targets: 4)&#10;&#10;[Melee] Backstab: Stab the target in the back inflicting 75 extra damage.   (Mana cost: 20, Max targets: 1)&#10;&#10;[Spell] Preparation: Prepares the target to strike from the shadows, increasing their chance to critically hit by 25% for 1 round.   (Mana cost: 15, Max targets: 1)" visible="false" wrapText="true">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" prefHeight="400.0" prefWidth="484.0" text="Albert&#10;&#10;[Spell] Lay On Hands: Use the holy light to heal your target by 60 extra health points.   (Mana cost: 20, Max targets: 1)&#10;&#10;[Spell] Censure: Censure the target Silencing him.   (Mana cost: 15, Max targets: 1)&#10;&#10;[Spell] Bolster Faith: Inspire the faith in your allies increasing their magical defence for 2 rounds.   (Mana cost: 40, Max targets: 4)&#10;&#10;[Melee] Holy Smite: Smites the target with holy light inflicting 15 extra damage.  (Mana cost 10, Max targets: 1)" visible="false" wrapText="true">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" prefHeight="400.0" prefWidth="484.0" text="Lidya&#10;&#10;[Spell] Freezing Wind: Attack up to 4 targets with artic winds inflicting 20 extra damage and Freezing them.   (Mana cost: 35, Max targets: 4)&#10;&#10;[Spell] Ice Lance: Throw a lance made of solid ice to the target inflicting 60 extra damage.   (Mana cost: 20, Max targets: 1)&#10;&#10;[Spell] Concentration: Gather the arcane energies of your target increasing its magical damage for 2 rounds.   (Mana cost: 15, Max targets: 1)&#10;&#10;[Spell] Counterspell: Interfere with the spell casting abilities of your target, Silencing him.   (Mana cost: 20, Max targets: 1)" visible="false" wrapText="true">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" prefHeight="400.0" prefWidth="484.0" text="Noah&#10;&#10;[Spell] Adrenaline Rush: Improve your target instincts increasing it's speed for 2 rounds.   (Mana cost: 20, Max targets: 1)&#10;&#10;[Spell] Second Wind: Improve the regenerative abilities of the target healing him for 75% of his current health.   (Mana cost: 25, Max targets: 1)&#10;&#10;[Melee] Mighty Slam: Hit the target with brutal force inflicting 40 extra damage.   (Mana cost: 20, Max targets: 1)&#10;&#10;[Ranged] Trip Attack: Make the target trip with a rope, inflicting 10 extra damage and reducing his speed by 1 for two rounds.   (Mana cost: 10, Max targets: 1)" visible="false" wrapText="true">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" prefHeight="400.0" prefWidth="484.0" text="Cassandra&#10;&#10;[Melee] Shield Bash: Hit the target with the shield inflicting 10 extra damage and silencing him.   (Mana cost: 25, Max targets: 1)&#10;&#10;[Melee] Sunder Defences: Break the target defences, inflicting 15 extra damage and leaving him vulnerable to phisical damage.   (Mana cost: 15, Max targets: 1)&#10;&#10;[Spell] Iron Will: Augment your target's resolve, increasing it's magical defence for 3 rounds.   (Mana cost: 20, Max targets: 1)&#10;&#10;[Melee] Skullcrack: Inflict a powerful blow to the target's head dealing 20 extra damage and stunning him.    (Mana cost: 20, Max targets: 1) " visible="false" wrapText="true">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" prefHeight="400.0" prefWidth="484.0" text="Linn&#10;&#10;[Spell] Pyroblast: Hurl a massive fireball to the target inflicting 50 extra damage.   (Mana cost 15, Max targets: 1)&#10;&#10;[Spell] Dragon Breath: Emit a fire breath just like a dragon , inflicting 15 extra damage to a target and Stunning him.   (Mana cost: 25, Max targets: 1)&#10;&#10;[Spell] Flamestrike: Call down a column of fire upon a number of targets up to 4, inflicting 40 extra damage to all of them.   (Mana cost: 50, Max targets: 4)&#10;&#10;[Spell] Concentration: Gather the arcane energies of your target increasing its magical damage for 2 rounds.   (Mana cost: 15, Max targets: 1)" visible="false" wrapText="true">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" prefHeight="400.0" prefWidth="484.0" text="Aster&#10;&#10;[Ranged] Aimed Shot: Shoot with careful aim to a target inflicting 35 extra damage.   (Mana cost: 20, Max targets: 1)&#10;&#10;[Ranged] Arrow Volley: Shoot multiple arrows in the air inflicting 20 extra damage up to 4 targets.   (Mana cost: 40, Max targets: 4)&#10;&#10;[Spell] Trueshot: Concentrate the targets aim increasing his physical critical damage by 25% for 5 rounds.   (Mana cost: 20, Max targets: 1)&#10;&#10;[Spell] Bear Trap: Ensnare the target within a bear trap Freezing him.   (Mana cost: 15, Max targets: 1)" visible="false" wrapText="true">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" prefHeight="400.0" prefWidth="484.0" text="Norman&#10;&#10;[Spell] Holy Nova: Erupt with holy light inflicting 20 extra damage up to 4 targets.   (Mana cost: 25, Max targets: 4)&#10;&#10;[Spell] Radiance:  Emanate holy light healing up to 4 targerts for 35% of their current health.   (Mana cost: 40, Max targets: 4)&#10;&#10;[Spell] Chastise: Punish the target for his sins Stunning him.   (Mana cost: 20, Max targets: 1)&#10;&#10;[Spell] Lay On Hands: Use the holy light to heal your target by 60 extra health points.   (Mana cost: 20, Max targets: 1)" visible="false" wrapText="true">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" prefHeight="400.0" prefWidth="484.0" text="Fernando&#10;&#10;[Melee] Quick Stab:  A rapid rapier attack that inflicts 25 extra damage.   (Mana cost: 15, Max targets: 1)&#10;&#10;[Melee] Pummel: Hit your target with a fist inflicting 15 extra damage and silencing him.   (Mana cost: 15, Max targets: 1)&#10;&#10;[Ranged] Fan of Knives: Throw multiple daggers up to 4 targets inflicting 20 extra damage.   (Mana cost: 30, Max targets: 4)&#10;&#10;[Spell] Duelist Step: Increase the target's reflexes increasing his physical defence for 3 roundsand his speed for 2 rounds.   (Mana cost: 30, Max targets: 1)" visible="false" wrapText="true">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" prefHeight="400.0" prefWidth="484.0" text="Rikh&#10;&#10;[Spell] Chrono Shift: Tear a hole through time and space inflicting, up to 4 targets, damage equal to 35% of their current health.   (Mana cost: 50, Max targets: 4)&#10;&#10;[Spell] Haste: Magically alter the target speed, increasing it by 2 for 2 rounds.   (Mana cost: 25, Max targets: 1)&#10;&#10;[Spell] Hypnosis: Hypnotize the target making him fall Asleep.   (Mana cost: 30, Max targets: 1)&#10;&#10;[Spell] Arcane Blast: Strike the target with powerful arcane energy inflicting 70 extra damage.   (Mana cost: 25, Max targets: 1)" visible="false" wrapText="true">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" prefHeight="400.0" prefWidth="484.0" text="Nora&#10;&#10;[Spell] Nature Wrath: Strike the target with the force of nature inflicting 30 extra damage.   (Mana cost: 15, Max targets: 1)&#10;&#10;[Spell] Benefic Sporse: Shower up to 4 targets with healing spores healing them for 10 extra health points and causing them to Regenerate.   (Mana cost: 40, Max targets: 4)&#10;&#10;[Spell] Antidote: Administer a powerful antidote to the target removing any active Poisons.   (Mana cost: 15, Max targets: 1)&#10;&#10;[Spell] Entangling Roots: Entangle the target in overgrown roots Freezing them in place.   (Mana cost: 15, Max targets: 1)" visible="false" wrapText="true">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </AnchorPane>
+   </content>
+</ScrollPane>
