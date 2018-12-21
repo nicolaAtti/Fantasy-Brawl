@@ -10,10 +10,9 @@ import communication.MessageFormat.MyFormat
 import config.MessagingSettings
 import javafx.application.Platform
 import javafx.scene.control.Alert
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
-/** Manages login as a guest request and response messages.
+/** Manages "login as a guest" request and response messages.
   *
   * @author Daniele Schiavi
   */
@@ -32,7 +31,7 @@ object LoginManager {
 
   private val publisher: Publisher = Publisher.queue(loginGuestRequestQueue)
 
-  /** Manages login as a guest response messages. */
+  /** Subscribes the actor to manage "login as a guest" response messages. */
   def start(): Unit = {
     Subscription.run(rabbitControl) {
       import Directives._
@@ -60,7 +59,7 @@ object LoginManager {
     }
   }
 
-  /** Send a login as a guest request message. */
+  /** Sends a "login as a guest" request message. */
   def loginAsGuestRequest(): Unit = {
     rabbitControl ! Message(LoginGuestRequest(None), publisher, Seq(ReplyTo(loginGuestResponseQueue.queueName)))
   }
