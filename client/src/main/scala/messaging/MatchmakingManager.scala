@@ -12,10 +12,12 @@ import config.MessagingSettings
 import game.Battle
 import javafx.application.Platform
 import javafx.scene.control.Alert
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
-/** Manages casual matchmaking request and response messages. */
+/** Manages "casual matchmaking" request and response messages.
+  *
+  * @author Nicola Atti
+  */
 object MatchmakingManager {
   private val rabbitControl: ActorRef = ActorSystem().actorOf(Props[RabbitControl])
   implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = MessagingSettings.Requeue)
@@ -38,7 +40,7 @@ object MatchmakingManager {
 
   private val publisher: Publisher = Publisher.queue(joinCasualMatchmakingRequestQueue)
 
-  /** Manages casual matchmaking response messages. */
+  /** Manages "casual matchmaking" response messages. */
   def start(): Unit = {
     Subscription.run(rabbitControl) {
       import Directives._
@@ -65,9 +67,7 @@ object MatchmakingManager {
     }
   }
 
-  import config.MessagingSettings._
-
-  /** Sends a casual matchmaking request message.
+  /** Sends a "casual matchmaking" request message.
     *
     * @param playerName username of the player that wants to join
     * @param team team with which the player wants to fight
@@ -82,7 +82,7 @@ object MatchmakingManager {
     )
   }
 
-  /** Send a message to remove the player from the casual-queue
+  /** Sends a message to remove the player from the casual-queue.
     *
     * @param playerName username of the player that wants to be removed
     */

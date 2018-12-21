@@ -11,9 +11,12 @@ import javafx.application.Platform
 import javafx.scene.control.Alert
 import view.ViewConfiguration.ViewSelector._
 import view._
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
+/** Manages "turn-ordering" request and response messages.
+  *
+  * @author Daniele Schiavi
+  */
 object RoundManager {
   private val rabbitControl: ActorRef = ActorSystem().actorOf(Props[RabbitControl])
   implicit private val recoveryStrategy: RecoveryStrategy = RecoveryStrategy.nack(requeue = MessagingSettings.Requeue)
@@ -29,6 +32,7 @@ object RoundManager {
 
   private val publisher: Publisher = Publisher.queue(startRoundRequestQueue)
 
+  /** Subscribes the actor to manage "turn-ordering" response messages. */
   def start(): Unit = {
     Subscription.run(rabbitControl) {
       import Directives._
@@ -60,6 +64,7 @@ object RoundManager {
     }
   }
 
+  /** Sends a "turn-ordering" request message. */
   def startRoundRequest(playerName: String,
                         myTeam: Map[String, Int],
                         opponentName: String,
