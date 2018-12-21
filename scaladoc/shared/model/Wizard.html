@@ -1,0 +1,893 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title>shared API  - model.Wizard</title>
+          <meta name="description" content="shared API - model.Wizard" />
+          <meta name="keywords" content="shared API model.Wizard" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../lib/jquery.js"></script>
+      <script type="text/javascript" src="../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../lib/index.js"></script>
+      <script type="text/javascript" src="../index.js"></script>
+      <script type="text/javascript" src="../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../lib/template.js"></script>
+      <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title">shared API<span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="index.html#_root_" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.model" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="model"></a><a id="model:model"></a>
+      <span class="permalink">
+      <a href="index.html#model" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="index.html"><span class="name">model</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li class="current-entities indented1">
+                        <a class="object" href="Alteration$.html" title=""></a>
+                        <a class="trait" href="Alteration.html" title="An alteration is something that affects a character's behavior for a certain amount of rounds."></a>
+                        <a href="Alteration.html" title="An alteration is something that affects a character's behavior for a certain amount of rounds.">Alteration</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Character$.html" title=""></a>
+                        <a class="trait" href="Character.html" title="Defines the general implementation of a game character"></a>
+                        <a href="Character.html" title="Defines the general implementation of a game character">Character</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="ClassMultipliers.html" title="Contains the class modifiers to the Character statistics, based on the Character's class"></a>
+                        <a href="ClassMultipliers.html" title="Contains the class modifiers to the Character statistics, based on the Character's class">ClassMultipliers</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="Healer.html" title="Defines a character of class Healer"></a>
+                        <a href="Healer.html" title="Defines a character of class Healer">Healer</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="Modifier.html" title="Contains all the elements that define a modifier."></a>
+                        <a href="Modifier.html" title="Contains all the elements that define a modifier.">Modifier</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Move$.html" title=""></a>
+                        <a class="trait" href="Move.html" title="A move is described by its type, the amount of mana points that it costs, the maximum targets that it can be applied to, and its move effect: the move effect will define the new status of the target character hit by the move."></a>
+                        <a href="Move.html" title="A move is described by its type, the amount of mana points that it costs, the maximum targets that it can be applied to, and its move effect: the move effect will define the new status of the target character hit by the move.">Move</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="MoveEffectStrategies$.html" title="A factory of the possible move effects present in the game."></a>
+                        <a href="MoveEffectStrategies$.html" title="A factory of the possible move effects present in the game.">MoveEffectStrategies</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="MoveType$.html" title=""></a>
+                        <a class="trait" href="MoveType.html" title="Every move is associated to a move type that has a twofold purpose:"></a>
+                        <a href="MoveType.html" title="Every move is associated to a move type that has a twofold purpose:">MoveType</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="PhysicalAttack$.html" title="The basic move, practicable by every character."></a>
+                        <a href="PhysicalAttack$.html" title="The basic move, practicable by every character.">PhysicalAttack</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="SpecialMove.html" title="A special move."></a>
+                        <a href="SpecialMove.html" title="A special move.">SpecialMove</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="Statistics.html" title="Contains the main statistics of a character."></a>
+                        <a href="Statistics.html" title="Contains the main statistics of a character.">Statistics</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Status$.html" title=""></a>
+                        <a class="class" href="Status.html" title="Represents the current status of a character."></a>
+                        <a href="Status.html" title="Represents the current status of a character.">Status</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="SubStatistic$.html" title="A module that contains all the possible sub-statistics of a character."></a>
+                        <a class="trait" href="SubStatistic.html" title=""></a>
+                        <a href="SubStatistic.html" title="">SubStatistic</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="Thief.html" title="Defines a character of class Thief"></a>
+                        <a href="Thief.html" title="Defines a character of class Thief">Thief</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="Warrior.html" title="Defines a character of class Warrior"></a>
+                        <a href="Warrior.html" title="Defines a character of class Warrior">Warrior</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="" title="Defines a character of class Wizard"></a>
+                        <a href="" title="Defines a character of class Wizard">Wizard</a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="class type">
+      <div id="definition">
+        <div class="big-circle class">c</div>
+        <p id="owner"><a href="index.html" class="extype" name="model">model</a></p>
+        <h1>Wizard<span class="permalink">
+      <a href="../model/Wizard.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        <h3><span class="morelinks"></span></h3>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Wizard</span><span class="params">(<span name="characterName">characterName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="owner">owner: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="statistics">statistics: <a href="Statistics.html" class="extype" name="model.Statistics">Statistics</a></span>, <span name="specialMoves">specialMoves: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="SpecialMove.html" class="extype" name="model.SpecialMove">SpecialMove</a>]</span>, <span name="classMultipliers">classMultipliers: <a href="ClassMultipliers.html" class="extype" name="model.ClassMultipliers">ClassMultipliers</a> = <span class="defval" name="ClassMultipliers(1, 1, 1.5, 2, 0.5, 2)">...</span></span>, <span name="role">role: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="Character$.html">WizardRepresentation</a></span></span></span>)</span><span class="result"> extends <a href="Character.html" class="extype" name="model.Character">Character</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Defines a character of class Wizard
+</p></div><dl class="paramcmts block"><dt class="param">characterName</dt><dd class="cmt"><p>the character's name</p></dd><dt class="param">owner</dt><dd class="cmt"><p>the optional character's owner</p></dd><dt class="param">statistics</dt><dd class="cmt"><p>the character's statistics</p></dd><dt class="param">specialMoves</dt><dd class="cmt"><p>the character's special moves</p></dd><dt class="param">classMultipliers</dt><dd class="cmt"><p>the default statistic multipliers for the wizard fighting class</p></dd><dt class="param">role</dt><dd class="cmt"><p>the character's fighting class</p></dd></dl><div class="toggleContainer block">
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="Character.html" class="extype" name="model.Character">Character</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
+            <ol>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
+            </ol>
+          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="model.Wizard"><span>Wizard</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="model.Character"><span>Character</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="model.Wizard#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(characterName:String,owner:Option[String],statistics:model.Statistics,specialMoves:Map[String,model.SpecialMove],classMultipliers:model.ClassMultipliers,role:String):model.Wizard"></a><a id="&lt;init&gt;:Wizard"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#&lt;init&gt;(characterName:String,owner:Option[String],statistics:model.Statistics,specialMoves:Map[String,model.SpecialMove],classMultipliers:model.ClassMultipliers,role:String):model.Wizard" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Wizard</span><span class="params">(<span name="characterName">characterName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="owner">owner: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="statistics">statistics: <a href="Statistics.html" class="extype" name="model.Statistics">Statistics</a></span>, <span name="specialMoves">specialMoves: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="SpecialMove.html" class="extype" name="model.SpecialMove">SpecialMove</a>]</span>, <span name="classMultipliers">classMultipliers: <a href="ClassMultipliers.html" class="extype" name="model.ClassMultipliers">ClassMultipliers</a> = <span class="defval" name="ClassMultipliers(1, 1, 1.5, 2, 0.5, 2)">...</span></span>, <span name="role">role: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="Character$.html">WizardRepresentation</a></span></span></span>)</span>
+      </span>
+      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">characterName</dt><dd class="cmt"><p>the character's name</p></dd><dt class="param">owner</dt><dd class="cmt"><p>the optional character's owner</p></dd><dt class="param">statistics</dt><dd class="cmt"><p>the character's statistics</p></dd><dt class="param">specialMoves</dt><dd class="cmt"><p>the character's special moves</p></dd><dt class="param">classMultipliers</dt><dd class="cmt"><p>the default statistic multipliers for the wizard fighting class</p></dd><dt class="param">role</dt><dd class="cmt"><p>the character's fighting class</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        <div class="values members">
+              <h3>Value Members</h3>
+              <ol>
+                <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#!=(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html###():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#==(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#asInstanceOf[T0]:T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="model.Wizard#characterName" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="characterName:String"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#characterName:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">characterName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="model.Wizard">Wizard</a> → <a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="model.Wizard#classMultipliers" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="classMultipliers:model.ClassMultipliers"></a><a id="classMultipliers:ClassMultipliers"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#classMultipliers:model.ClassMultipliers" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">classMultipliers</span><span class="result">: <a href="ClassMultipliers.html" class="extype" name="model.ClassMultipliers">ClassMultipliers</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">The character's statistic multipliers, specific to its role</p><div class="fullcomment"><div class="comment cmt"><p>The character's statistic multipliers, specific to its role</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="model.Wizard">Wizard</a> → <a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#clone():Object" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="model.Character#criticalChance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="criticalChance:Int"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#criticalChance:Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">criticalChance</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Calculates the character's critical strike chance
+</p><div class="fullcomment"><div class="comment cmt"><p>Calculates the character's critical strike chance
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the character's critical strike chance</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#getClass():Class[_]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="model.Character#isAlive" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isAlive:Boolean"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#isAlive:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isAlive</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Check if the character is alive
+</p><div class="fullcomment"><div class="comment cmt"><p>Check if the character is alive
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the character is alive of false if it's dead</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="model.Character#isIncapacitated" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isIncapacitated:Boolean"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#isIncapacitated:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isIncapacitated</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Check if the character is incapacitated
+</p><div class="fullcomment"><div class="comment cmt"><p>Check if the character is incapacitated
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the character is stunned or asleep</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#isInstanceOf[T0]:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="model.Character#magicalCriticalPower" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="magicalCriticalPower:Int"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#magicalCriticalPower:Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">magicalCriticalPower</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Calculates the character's bonus magical critical strike power
+</p><div class="fullcomment"><div class="comment cmt"><p>Calculates the character's bonus magical critical strike power
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the character's magical critical strike power</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="model.Character#magicalDefence" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="magicalDefence:Int"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#magicalDefence:Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">magicalDefence</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Calculates the character's magical defence
+</p><div class="fullcomment"><div class="comment cmt"><p>Calculates the character's magical defence
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the character's magical defence</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="model.Character#magicalPower" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="magicalPower:Int"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#magicalPower:Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">magicalPower</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Calculates the character's magical power
+</p><div class="fullcomment"><div class="comment cmt"><p>Calculates the character's magical power
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the character's magical power</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#notify():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#notifyAll():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="model.Wizard#owner" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="owner:Option[String]"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#owner:Option[String]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">owner</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">The player owning the character</p><div class="fullcomment"><div class="comment cmt"><p>The player owning the character</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="model.Wizard">Wizard</a> → <a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="model.Character#physicalCriticalDamage" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="physicalCriticalDamage:Int"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#physicalCriticalDamage:Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">physicalCriticalDamage</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Calculates the character's bonus physical critical strike damage
+</p><div class="fullcomment"><div class="comment cmt"><p>Calculates the character's bonus physical critical strike damage
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the character's physical critical strike damage</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="model.Character#physicalDamage" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="physicalDamage:Int"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#physicalDamage:Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">physicalDamage</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Calculates the character's physical damage
+</p><div class="fullcomment"><div class="comment cmt"><p>Calculates the character's physical damage
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the character's physical damage</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="model.Character#physicalDefence" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="physicalDefence:Int"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#physicalDefence:Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">physicalDefence</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Calculates the character's physical defence
+</p><div class="fullcomment"><div class="comment cmt"><p>Calculates the character's physical defence
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the character's physical defence</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="model.Wizard#role" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="role:String"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#role:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">role</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">The character's fighting class</p><div class="fullcomment"><div class="comment cmt"><p>The character's fighting class</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="model.Wizard">Wizard</a> → <a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="model.Wizard#specialMoves" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="specialMoves:Map[String,model.SpecialMove]"></a><a id="specialMoves:Map[String,SpecialMove]"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#specialMoves:Map[String,model.SpecialMove]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">specialMoves</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="SpecialMove.html" class="extype" name="model.SpecialMove">SpecialMove</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">The character's special moves</p><div class="fullcomment"><div class="comment cmt"><p>The character's special moves</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="model.Wizard">Wizard</a> → <a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="model.Character#speed" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="speed:Int"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#speed:Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">speed</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Calculates the character's speed
+</p><div class="fullcomment"><div class="comment cmt"><p>Calculates the character's speed
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the character's speed</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="model.Wizard#statistics" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="statistics:model.Statistics"></a><a id="statistics:Statistics"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#statistics:model.Statistics" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">statistics</span><span class="result">: <a href="Statistics.html" class="extype" name="model.Statistics">Statistics</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">The character's statistics</p><div class="fullcomment"><div class="comment cmt"><p>The character's statistics</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="model.Wizard">Wizard</a> → <a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="model.Character#status" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="status:model.Status"></a><a id="status:Status"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#status:model.Status" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">status</span><span class="result">: <a href="Status.html" class="extype" name="model.Status">Status</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Contains the character's status, depending on current HP and MP values and current modifiers and afflictions</p><div class="fullcomment"><div class="comment cmt"><p>Contains the character's status, depending on current HP and MP values and current modifiers and afflictions</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Character.html" class="extype" name="model.Character">Character</a></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
+      <span class="permalink">
+      <a href="../model/Wizard.html#wait(x$1:Long):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li>
+              </ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+            </div><div class="parent" name="model.Character">
+              <h3>Inherited from <a href="Character.html" class="extype" name="model.Character">Character</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>
