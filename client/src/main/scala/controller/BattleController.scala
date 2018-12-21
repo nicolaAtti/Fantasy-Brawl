@@ -24,13 +24,7 @@ import ActSelector._
 
 import scala.collection.mutable.ListBuffer
 
-/** Controller for the Battle GUI
-  *
-  * @author Nicola Atti
-  */
-//noinspection ScalaDocMissingParameterDescription,FieldFromDelayedInit
-
-/** Controller for the Battle GUI
+/** Controller for the Battle GUI.
   *
   * @author Nicola Atti
   */
@@ -108,11 +102,6 @@ object BattleController extends Initializable with ViewController {
       }
     ))
 
-  /** Initializes the graphic and logic elements composing the Battle GUI
-    *
-    * @param location
-    * @param resources
-    */
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
     TargetedEffect.setHeight(CharacterSelectionDimension)
     TargetedEffect.setWidth(CharacterSelectionDimension)
@@ -141,11 +130,10 @@ object BattleController extends Initializable with ViewController {
     setupTeams(Battle.teams)
   }
 
-  /** Makes the victory message visible, showing the match winner.
+  /** Shows the match winner and activates the button to return to the TeamSelection
+    * menu.
     *
-    * Also activates a button to return to the TeamSelection menu.
-    *
-    * @param winner the winner of the match
+    * @param winner the winner's name of the match
     */
   def settingWinner(winner: String): Unit = {
     timeline.stop()
@@ -157,9 +145,9 @@ object BattleController extends Initializable with ViewController {
     toMenuButton.setVisible(true)
   }
 
-  /** Sets the player's team images and status description labels
+  /** Sets the player's team images and status description labels.
     *
-    * @param team  the team to setup
+    * @param team the team to setup
     */
   def setupTeams(team: Set[Character]): Unit = {
     playerCharacterImages = (playerImages zip team.filter(character => character.owner.get == Battle.playerId)).toMap
@@ -203,10 +191,10 @@ object BattleController extends Initializable with ViewController {
     setDeadCharacters()
   }
 
-  /** Obtains the current active character from the Battle and changes the corresponding label.
+  /** Given the active character from the Battle changes the corresponding label.
     *
-    * The label is painted green to symbolize which character has now the turn, if the player owns
-    * the character, the GUI will show his move list.
+    * The label is painted green to symbolize which character has now the turn, if
+    * the player owns the character, the GUI will show his move list.
     */
   def setActiveCharacter(character: Character): Unit = {
     if (activeLabel != null) {
@@ -237,23 +225,23 @@ object BattleController extends Initializable with ViewController {
     resetTimer()
   }
 
-  /** Resets the turn timer */
+  /** Resets the turn timer. */
   def resetTimer(): Unit = {
     timeSeconds = config.MiscSettings.TurnDurationInSeconds
     timerCounter.setText(timeSeconds.toString)
     timeline.playFromStart()
   }
 
-  /** Empties the target list */
+  /** Empties the target list. */
   def resetTargets(): Unit = {
     targets = ListBuffer()
     targetImages.foreach(target => setCharacterUnselected(target))
     targetImages = ListBuffer()
   }
 
-  /** Displays the latest move effect showing the user, the move and its targets.
+  /** Displays the move effect showing the player, the move's name and its targets.
     *
-    * @param characterUser the move user
+    * @param characterUser the character using the move
     * @param moveName the move name
     * @param moveTargets the targets
     */
@@ -295,10 +283,7 @@ object BattleController extends Initializable with ViewController {
     }
   }
 
-  /** Provides private operations for the BattleController
-    *
-    * @author Nicola Atti
-    */
+  /** Provides private operations for the BattleController. */
   private object BattleControllerHelper {
     val ImageExtension: String = ".png"
     val Separator: String = "/"
@@ -312,7 +297,7 @@ object BattleController extends Initializable with ViewController {
     val CharacterPlayerSelectionLabelColor: Color = Color.LIMEGREEN
     val CharacterOpponentSelectionLabelColor: Color = Color.ORANGERED
 
-    /** Assigns to each character it's battle image, orientation depends on the player  */
+    /** Assigns to each character it's battle image, orientation depends on the player. */
     def prepareImages(): Unit = {
       playerCharacterImages.foreach(charImage =>
         charImage._1.setImage(new Image("view/" + charImage._2.characterName + "1" + ImageExtension)))
@@ -320,7 +305,7 @@ object BattleController extends Initializable with ViewController {
         charImage._1.setImage(new Image("view/" + charImage._2.characterName + "2" + ImageExtension)))
     }
 
-    /** Writes all the team's labels to display the name of each character in the battle */
+    /** Writes all the team's labels to display the name of each character in the battle. */
     def setupLabels(): Unit = {
       (playerCharacterImages.values zip playerCharNames.getChildren.toArray) foreach (couple =>
         couple._2.asInstanceOf[Label].setText(couple._1.characterName))
@@ -329,8 +314,8 @@ object BattleController extends Initializable with ViewController {
       updateStatus()
     }
 
-    /** Checks if the team members of the player are at zero health points,
-      * and sets their image to a tombstone.
+    /** Checks if the team members of any player are dead and sets their image to
+      * a tombstone.
       */
     def setDeadCharacters(): Unit = {
       playerCharacterImages.foreach(couple =>
@@ -347,7 +332,7 @@ object BattleController extends Initializable with ViewController {
       })
     }
 
-    /** Sets the name and alteration labels of dead characters to symbolize their status
+    /** Changes the name and alteration labels of dead characters to reflect it.
       *
       * @param deadCharacter the dead character
       * @param owner the dead character owner
@@ -382,12 +367,12 @@ object BattleController extends Initializable with ViewController {
       }
     }
 
-    /** Adds the player's active character's moves to the listView
+    /** Shows the player's active character's moves into the listView.
       *
-      * @param character the character who's turn is
+      * @param character the player's active character
       */
     def setupCharacterMoves(character: Character): Unit = {
-      moveList = FXCollections.observableArrayList()
+      moveList.clear()
       moveList.add(PhysicalAttackRepresentation)
       character.specialMoves.foreach(move =>
         moveList.add(move._1 + MovesSeparator + "MP: " + move._2.manaCost + " Max targets: " + move._2.maxTargets))
@@ -395,13 +380,13 @@ object BattleController extends Initializable with ViewController {
       moveListView.getSelectionModel.selectFirst()
     }
 
-    /** Empties the move list view */
+    /** Empties the move list view. */
     def resetCharacterMoves(): Unit = {
-      moveList = FXCollections.observableArrayList()
+      moveList.clear()
       moveListView.setItems(moveList)
     }
 
-    /** Adds/removes the pressed character to/from the list of targets
+    /** Adds/removes the pressed character to/from the list of targets and shows it.
       *
       * @param imagePressed the character image pressed
       * @param character the character associated with the image
@@ -418,7 +403,7 @@ object BattleController extends Initializable with ViewController {
       }
     }
 
-    /** Activates/Deactivates the act button */
+    /** Activates/Deactivates the act button. */
     def actButtonActivation(): Unit = {
       if (canAct) {
         actButton.setDisable(false)
@@ -452,7 +437,7 @@ object BattleController extends Initializable with ViewController {
       }
     }
 
-    /** Applies the selection effect to the targeted character's image
+    /** Applies the selection effect to the targeted character's image.
       *
       * @param charImage the character's image
       */
@@ -460,7 +445,7 @@ object BattleController extends Initializable with ViewController {
       charImage.setEffect(TargetedEffect)
     }
 
-    /** Removes the selection effect to the deselected character's image
+    /** Removes the selection effect to the deselected character's image.
       *
       * @param charImage the character's image
       */
@@ -472,7 +457,7 @@ object BattleController extends Initializable with ViewController {
       }
     }
 
-    /** Initiates the skip turn procedure and displays it */
+    /** Initiates the skip turn procedure and displays it. */
     def skipTurnAndDisplay(): Unit = {
       BattleManager.skipTurn((activeCharacter.owner.get, activeCharacter.characterName), Round.roundId)
       displayMoveEffect(activeCharacter, "", Set(), ActSelector.SKIP)
@@ -481,7 +466,7 @@ object BattleController extends Initializable with ViewController {
     }
   }
 
-  /** Handles the press of the Act button */
+  /** Handles the press of the Act button. */
   @FXML def handleActButtonPress(): Unit = {
     Round.actCalculation(activeCharacter,
                          moveListView.getSelectionModel.getSelectedItem.split(MovesSeparator).head,
@@ -493,31 +478,28 @@ object BattleController extends Initializable with ViewController {
     passButton.setDisable(true)
   }
 
-  /** Handles the press of the Pass button */
+  /** Handles the press of the Pass button. */
   @FXML def handlePassButtonPress(): Unit = {
     passButton.setDisable(true)
     skipTurnAndDisplay()
   }
 
-  /** Handles the press of the move manual button, showing the move manual GUI
-    *
-    * @param event
-    */
-  @FXML def movesManualPressed(event: ActionEvent) {
+  /** Handles the press of the Moves manual button, showing the moves manual GUI. */
+  @FXML def movesManualPressed() {
     ApplicationView.createMovesManualView()
   }
 
-  /** Checks if the act button is to be activated after the selection of a different move
-    *
-    * @param mouseEvent
-    */
-  @FXML def handleMoveSelection(mouseEvent: MouseEvent) {
+  /** Checks if the act button is to be activated after the selection of a different
+    * move.
+    * */
+  @FXML def handleMoveSelection() {
     actButtonActivation()
   }
 
-  /** Adds/Removes the pressed character to/from the target's list, and checks if the act button is to be activated
+  /** Adds/Removes the pressed character to/from the target's list, and checks if
+    * the act button is to be activated.
     *
-    * @param mouseEvent
+    * @param mouseEvent the click of an character's image
     */
   @FXML def handleCharacterToTargetPressed(mouseEvent: MouseEvent) {
     if (activeCharacter.owner.get == Battle.playerId) {
@@ -531,11 +513,10 @@ object BattleController extends Initializable with ViewController {
     }
   }
 
-  /** Handles the pression of the victory button, returning the player to the TeamSelection menu
-    *
-    * @param mouseEvent
+  /** Handles the pression of the victory button, returning the player to the TeamSelection
+    * menu.
     */
-  @FXML def handleToMenuButtonPressed(mouseEvent: MouseEvent): Unit = {
+  @FXML def handleToMenuButtonPressed(): Unit = {
     ApplicationView changeView TEAM
   }
 }

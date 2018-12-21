@@ -24,7 +24,7 @@
                   <Image url="@Backdrop1.png" />
                </image>
             </ImageView>
-            <ListView fx:id="moveReportListView" focusTraversable="false" layoutX="138.0" layoutY="215.0" prefHeight="161.0" prefWidth="636.0" stylesheets="@MoveReportStyle.css" />
+            <ListView fx:id="moveReportListView" focusTraversable="false" layoutX="138.0" layoutY="290.0" prefHeight="86.0" prefWidth="636.0" stylesheets="@MoveReportStyle.css" />
             <ImageView fx:id="playerChar1Image" fitHeight="200.0" fitWidth="170.0" layoutX="101.0" layoutY="14.0" onMouseClicked="#handleCharacterToTargetPressed" pickOnBounds="true" preserveRatio="true" style="-fx-background-color: transparent;">
                <image>
                   <Image url="@Rikh1.png" />
@@ -118,7 +118,7 @@
                   </Label>
                </children>
             </Pane>
-            <Label fx:id="winnerLabel" alignment="CENTER" layoutX="177.0" layoutY="126.0" prefHeight="132.0" prefWidth="607.0" text="WINNER IS GUEST999" textFill="RED" visible="false">
+            <Label fx:id="winnerLabel" alignment="CENTER" layoutX="177.0" layoutY="76.0" prefHeight="132.0" prefWidth="607.0" text="WINNER IS GUEST999" textFill="RED" visible="false">
                <font>
                   <Font name="Javanese Text" size="30.0" />
                </font>
@@ -146,7 +146,7 @@
                   <DropShadow height="10.0" radius="4.5" spread="0.6" width="10.0" />
                </effect>
             </Label>
-            <Button fx:id="toMenuButton" alignment="CENTER" disable="true" layoutX="388.0" layoutY="233.0" mnemonicParsing="false" onMouseClicked="#handleToMenuButtonPressed" prefHeight="33.0" prefWidth="186.0" text="Back to Team Menu" visible="false">
+            <Button fx:id="toMenuButton" alignment="CENTER" disable="true" layoutX="388.0" layoutY="193.0" mnemonicParsing="false" onMouseClicked="#handleToMenuButtonPressed" prefHeight="33.0" prefWidth="186.0" text="Back to Team Menu" visible="false">
                <font>
                   <Font name="Javanese Text" size="14.0" />
                </font>

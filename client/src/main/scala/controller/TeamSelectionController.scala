@@ -23,13 +23,8 @@ object TeamSelectionController extends Initializable with ViewController {
 
   import SelectionHelpers._
 
-  /** Return the TeamSelectionController. */
   val controller: ViewController = this
-
-  /** The username of the player. */
   var username: String = "guest"
-
-  /** Team chosen by the player. */
   var team: Map[String, StackPane] = Map()
 
   /** Visual properties of not chosen characters. */
@@ -48,28 +43,29 @@ object TeamSelectionController extends Initializable with ViewController {
   @FXML var gridToChoose: GridPane = _
   @FXML var joinCasualMatch: Button = _
 
-  /** Pressure handler of the "Logout" button. */
+  /** Handler of the "Logout" button action. */
   @FXML def handleLogout(event: ActionEvent) {
     ApplicationView changeView LOGIN
   }
 
-  /** Pressure handler of the "Join Casual Queue" button. */
+  /** Handler of the "Join Casual Queue" button action. */
   @FXML def handleJoinCasualQueue(event: ActionEvent) {
     ApplicationView changeView WAITING_OPPONENT
     val teamName: Set[String] = team.map { case (_, characterPane) => characterPane.getId }.toSet
     MatchmakingManager.joinCasualQueueRequest(username, teamName)
   }
 
+  /** Handler of the "Moves manual" button action. */
   @FXML def movesManualPressed(event: ActionEvent) {
     ApplicationView.createMovesManualView()
   }
 
-  /** Pressure handler of the characters to choose from. */
+  /** Handles the selection of an available character to choose. */
   @FXML def handleCharacterToChoosePressed(mouseEvent: MouseEvent) {
     changeCharacterToChoose(mouseEvent.getSource.asInstanceOf[StackPane])
   }
 
-  /** Pressure handler of the chosen characters. */
+  /** Handles the selection of a chosen character. */
   @FXML def handleCharacterChosenPressed(mouseEvent: MouseEvent) {
     changeCharacterChosen(mouseEvent.getSource.asInstanceOf[StackPane])
   }
@@ -114,6 +110,11 @@ object TeamSelectionController extends Initializable with ViewController {
         }))
     }
 
+    /** Changes the currently selected character (from all the available characters),
+      * given a new stack pane.
+      *
+      * @param next the newly selected character's stack pane
+      */
     def changeCharacterToChoose(next: StackPane): Unit = {
       changeSelectedCharacter(selectedCharacter, next)
       selectedCharacter = next
@@ -129,6 +130,11 @@ object TeamSelectionController extends Initializable with ViewController {
       }
     }
 
+    /** Changes the currently selected character (from the player's team), given a
+      * new stack pane.
+      *
+      * @param next the newly selected character's stack pane
+      */
     def changeCharacterChosen(next: StackPane): Unit = {
       changeSelectedCharacter(chosenCharacter, next)
       chosenCharacter = next

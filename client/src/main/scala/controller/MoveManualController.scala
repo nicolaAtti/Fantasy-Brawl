@@ -6,7 +6,6 @@ import java.util.ResourceBundle
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.fxml.{FXML, Initializable}
 import javafx.scene.control.{Button, ChoiceBox, Label}
-import javafx.scene.input.MouseEvent
 import javafx.scene.layout.Pane
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
@@ -34,8 +33,6 @@ object MoveManualController extends Initializable with ViewController {
                                                                                 "Nora")
   var characterLabelMap: Map[AnyRef, AnyRef] = Map()
   var actualSelected: String = _
-
-  /** Return the LoginController. */
   val controller: ViewController = this
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {

@@ -1,6 +1,6 @@
 package controller
 
-/** Trait that defines a controller of a view.
+/** Trait that defines the controller of a view.
   *
   * @author Daniele Schiavi
   */
