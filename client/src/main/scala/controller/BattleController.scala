@@ -3,7 +3,7 @@ package controller
 import java.net.URL
 import java.util.ResourceBundle
 
-import communication.StatusUpdateMessage
+import communication.StatusUpdateMessage._
 import game.{Battle, Round}
 import javafx.animation.{Animation, KeyFrame, Timeline}
 import javafx.collections.{FXCollections, ObservableList}
@@ -20,7 +20,7 @@ import messaging.BattleManager
 import model.{Character, Move, PhysicalAttack}
 import view.ApplicationView
 import view.ViewConfiguration.ViewSelector._
-import StatusUpdateMessage.ActSelector._
+import ActSelector._
 
 import scala.collection.mutable.ListBuffer
 
@@ -74,7 +74,7 @@ object BattleController extends Initializable with ViewController {
   @FXML var playerIdLabel: Label = _
   @FXML var opponentIdLabel: Label = _
 
-  @FXML var moveReportLabel: Label = _
+  @FXML var moveReportListView: ListView[String] = _
 
   var playerImages: List[ImageView] = List()
   var opponentImages: List[ImageView] = List()
@@ -251,17 +251,20 @@ object BattleController extends Initializable with ViewController {
     targetImages = ListBuffer()
   }
 
-  /** Displays the latest move efffect showing the user, the move and its targets.
+  /** Displays the latest move effect showing the user, the move and its targets.
     *
     * @param characterUser the move user
     * @param moveName the move name
     * @param moveTargets the targets
     */
-  def displayMoveEffect(characterUser: Character, moveName: String, moveTargets: Set[Character], actSelector: StatusUpdateMessage.ActSelector): Unit = {
+  def displayMoveEffect(characterUser: Character,
+                        moveName: String,
+                        moveTargets: Set[Character],
+                        actSelector: ActSelector): Unit = {
     var moveReport: String = ""
     actSelector match {
       case SURRENDER =>
-          moveReport = "The ENEMY has left the battle, you win by abandonment."
+        moveReport = "The ENEMY has left the battle."
       case UPDATE =>
         initMoveReport()
         moveReport = moveReport concat "used " concat moveName concat " on \n"
@@ -280,8 +283,7 @@ object BattleController extends Initializable with ViewController {
         initMoveReport()
         moveReport = moveReport concat "skipped the turn"
     }
-    moveReportLabel.setText(moveReport)
-    moveReportLabel.setVisible(true)
+    moveReportListView.getItems.add(0, moveReport)
     updateStatus()
 
     def initMoveReport(): Unit = {
@@ -473,7 +475,7 @@ object BattleController extends Initializable with ViewController {
     /** Initiates the skip turn procedure and displays it */
     def skipTurnAndDisplay(): Unit = {
       BattleManager.skipTurn((activeCharacter.owner.get, activeCharacter.characterName), Round.roundId)
-      displayMoveEffect(activeCharacter, "", Set(), SKIP)
+      displayMoveEffect(activeCharacter, "", Set(), ActSelector.SKIP)
       resetCharacterMoves()
       Round.endTurn()
     }

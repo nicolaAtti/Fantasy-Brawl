@@ -3,7 +3,7 @@ package messaging
 import akka.actor.{ActorRef, ActorSystem, Props}
 import com.spingo.op_rabbit._
 import communication.MessageFormat.MyFormat
-import communication.StatusUpdateMessage.CharacterKey
+import communication.StatusUpdateMessage._
 import communication._
 import config.MessagingSettings
 import controller.BattleController
@@ -11,7 +11,7 @@ import game.Round.updateTeamsStatuses
 import game.{Battle, Round}
 import javafx.application.Platform
 import model.{Character, Status}
-import StatusUpdateMessage.ActSelector._
+import ActSelector._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -73,10 +73,9 @@ object BattleManager {
 
   private object BattleManagerHelper {
 
-    def findCharacter(characterKey: CharacterKey): Character = {
+    def findCharacter(characterKey: CharacterKey): Option[Character] = {
       Battle.teams
         .find(character => character.owner.get == characterKey._1 && character.characterName == characterKey._2)
-        .get
     }
 
     def expectedMessage(round: Int, turn: (String, String)): Boolean = {
@@ -85,9 +84,9 @@ object BattleManager {
 
     def displayMoveEffect(response: StatusUpdateMessage): Unit = {
       Platform runLater (() => {
-        BattleController.displayMoveEffect(findCharacter(response.attacker),
+        BattleController.displayMoveEffect(findCharacter(response.attacker).orNull,
                                            response.moveName,
-                                           response.targets.map(target => findCharacter(target)),
+                                           response.targets.map(target => findCharacter(target).orNull),
                                            response.actSelector)
       })
     }
