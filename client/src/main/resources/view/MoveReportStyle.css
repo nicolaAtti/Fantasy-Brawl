@@ -1,0 +1,21 @@
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-font-size: 14pt;
+    -fx-font-family: "Times New Roman";
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,1) , 5, 0.6, 0, 0);
+}
+.list-view {
+    -fx-background-color: transparent;
+}
+
+.list-view > .virtual-flow > .scroll-bar,
+.list-view > .virtual-flow > .scroll-bar .decrement-arrow,
+.list-view > .virtual-flow > .scroll-bar .increment-arrow,
+.list-view > .virtual-flow > .scroll-bar .decrement-button,
+.list-view > .virtual-flow > .scroll-bar .increment-button {
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}

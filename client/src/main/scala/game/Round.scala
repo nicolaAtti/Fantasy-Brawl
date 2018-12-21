@@ -1,12 +1,13 @@
 package game
 
-import communication.StatusUpdateMessage.CharacterKey
+import communication.StatusUpdateMessage._
 import controller.BattleController
 import javafx.application.Platform
 import messaging.{BattleManager, RoundManager}
 import model._
 import view.ApplicationView
 import view.ViewConfiguration.ViewSelector._
+import ActSelector._
 
 object Round {
   var roundId: Int = _
@@ -99,7 +100,7 @@ object Round {
       Round.roundId
     )
     Platform runLater (() => {
-      BattleController.displayMoveEffect(attacker, moveName, targets.toSet)
+      BattleController.displayMoveEffect(attacker, moveName, targets.toSet, UPDATE)
     })
     endTurn()
   }
