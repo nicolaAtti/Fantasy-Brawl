@@ -3,6 +3,7 @@ package controller
 import java.net.URL
 import java.util.ResourceBundle
 
+import communication.StatusUpdateMessage
 import game.{Battle, Round}
 import javafx.animation.{Animation, KeyFrame, Timeline}
 import javafx.collections.{FXCollections, ObservableList}
@@ -19,6 +20,7 @@ import messaging.BattleManager
 import model.{Character, Move, PhysicalAttack}
 import view.ApplicationView
 import view.ViewConfiguration.ViewSelector._
+import StatusUpdateMessage.ActSelector._
 
 import scala.collection.mutable.ListBuffer
 
@@ -255,32 +257,40 @@ object BattleController extends Initializable with ViewController {
     * @param moveName the move name
     * @param moveTargets the targets
     */
-  def displayMoveEffect(characterUser: Character, moveName: String, moveTargets: Set[Character]): Unit = {
+  def displayMoveEffect(characterUser: Character, moveName: String, moveTargets: Set[Character], actSelector: StatusUpdateMessage.ActSelector): Unit = {
     var moveReport: String = ""
-    if (characterUser.owner.get equals Battle.playerId) {
-      moveReport = s"YOUR ${characterUser.characterName} "
-    } else {
-      moveReport = s"ENEMY ${characterUser.characterName} "
-    }
-    if (moveName == "") {
-      moveReport = moveReport concat "skipped the turn"
-    } else {
-      moveReport = moveReport concat "used " concat moveName concat " on \n"
-      val playerTargets = moveTargets.filter(character => character.owner.get equals Battle.playerId)
-      val opponentTargets = moveTargets.filter(character => character.owner.get equals Battle.opponentId)
+    actSelector match {
+      case SURRENDER =>
+          moveReport = "The ENEMY has left the battle, you win by abandonment."
+      case UPDATE =>
+        initMoveReport()
+        moveReport = moveReport concat "used " concat moveName concat " on \n"
+        val playerTargets = moveTargets.filter(character => character.owner.get equals Battle.playerId)
+        val opponentTargets = moveTargets.filter(character => character.owner.get equals Battle.opponentId)
 
-      if (playerTargets.nonEmpty) {
-        moveReport = moveReport concat " YOUR:"
-        playerTargets.foreach(playerChar => moveReport = moveReport concat " " + playerChar.characterName)
-      }
-      if (opponentTargets.nonEmpty) {
-        moveReport = moveReport concat " ENEMY:"
-        opponentTargets.foreach(opponentChar => moveReport = moveReport concat " " + opponentChar.characterName)
-      }
+        if (playerTargets.nonEmpty) {
+          moveReport = moveReport concat " YOUR:"
+          playerTargets.foreach(playerChar => moveReport = moveReport concat " " + playerChar.characterName)
+        }
+        if (opponentTargets.nonEmpty) {
+          moveReport = moveReport concat " ENEMY:"
+          opponentTargets.foreach(opponentChar => moveReport = moveReport concat " " + opponentChar.characterName)
+        }
+      case SKIP =>
+        initMoveReport()
+        moveReport = moveReport concat "skipped the turn"
     }
     moveReportLabel.setText(moveReport)
     moveReportLabel.setVisible(true)
     updateStatus()
+
+    def initMoveReport(): Unit = {
+      if (characterUser.owner.get equals Battle.playerId) {
+        moveReport = s"YOUR ${characterUser.characterName} "
+      } else {
+        moveReport = s"ENEMY ${characterUser.characterName} "
+      }
+    }
   }
 
   /** Provides private operations for the BattleController
@@ -463,7 +473,7 @@ object BattleController extends Initializable with ViewController {
     /** Initiates the skip turn procedure and displays it */
     def skipTurnAndDisplay(): Unit = {
       BattleManager.skipTurn((activeCharacter.owner.get, activeCharacter.characterName), Round.roundId)
-      displayMoveEffect(activeCharacter, "", Set())
+      displayMoveEffect(activeCharacter, "", Set(), SKIP)
       resetCharacterMoves()
       Round.endTurn()
     }

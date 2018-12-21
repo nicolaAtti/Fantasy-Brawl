@@ -38,16 +38,14 @@ object BattleManager {
             import BattleManagerHelper._
             response.actSelector match {
               case SURRENDER =>
+                displayMoveEffect(response)
                 Battle.end(Battle.playerId)
               case UPDATE if expectedMessage(response.round, response.attacker) =>
                 updateTeamsStatuses(response.newStatuses)
-                Platform runLater (() => {
-                  BattleController.displayMoveEffect(findCharacter(response.attacker),
-                                                     response.moveName,
-                                                     response.targets.map(target => findCharacter(target)))
-                })
+                displayMoveEffect(response)
                 Round.endTurn()
               case SKIP if expectedMessage(response.round, response.attacker) =>
+                displayMoveEffect(response)
                 Round.endTurn()
             }
             ack
@@ -83,6 +81,15 @@ object BattleManager {
 
     def expectedMessage(round: Int, turn: (String, String)): Boolean = {
       round == Round.roundId && turn._1 == Round.turns.head.owner.get && turn._2 == Round.turns.head.characterName
+    }
+
+    def displayMoveEffect(response: StatusUpdateMessage): Unit = {
+      Platform runLater (() => {
+        BattleController.displayMoveEffect(findCharacter(response.attacker),
+                                           response.moveName,
+                                           response.targets.map(target => findCharacter(target)),
+                                           response.actSelector)
+      })
     }
   }
 }
