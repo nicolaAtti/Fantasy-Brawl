@@ -9,11 +9,17 @@ import view.ApplicationView
 import view.ViewConfiguration.ViewSelector._
 import ActSelector._
 
+/** Provides the functionality to manage the initialization and termination of each
+  * round.
+  *
+  * @author Daniele Schiavi
+  */
 object Round {
   var roundId: Int = _
   var turns: List[Character] = List()
   val PhysicalAttackRepresentation: String = "Physical Attack"
 
+  /** Start a new round. */
   def startNewRound(): Unit = {
     RoundManager.startRoundRequest(
       Battle.playerId,
@@ -27,6 +33,12 @@ object Round {
     )
   }
 
+  /** Given an ordered list of characters and the starting round, setts the round
+    * information and starts the first turn.
+    *
+    * @param turnInformation the ordered list of characters
+    * @param round the starting round
+    */
   def setupTurns(turnInformation: List[(String, String)], round: Int): Unit = {
     roundId = round
     turns = turnInformation.map {
@@ -41,12 +53,14 @@ object Round {
     startTurn()
   }
 
+  /** Starts a new turn. */
   def startTurn(): Unit = {
     val activeCharacter = turns.head
     if (activeCharacter.isAlive) {
       activeCharacter.status = Status.afterTurnStart(activeCharacter.status)
       if (activeCharacter.owner.get == Battle.playerId && activeCharacter.isIncapacitated) {
         BattleManager.skipTurn((activeCharacter.owner.get, activeCharacter.characterName), roundId)
+        Platform runLater (() => BattleController.displayMoveEffect(activeCharacter, "", Set(), ActSelector.SKIP))
         endTurn()
       } else {
         Platform runLater (() => {
@@ -59,6 +73,7 @@ object Round {
     }
   }
 
+  /** Ends the current turn. */
   def endTurn(): Unit = {
     Platform runLater (() => {
       BattleController.resetTargets()
@@ -80,6 +95,13 @@ object Round {
     }
   }
 
+  /** Given an attacker, his move and a list of targets, applies the move and updates
+    * the state of the battle and the GUI.
+    *
+    * @param attacker the character that makes the move
+    * @param moveName the move name
+    * @param targets the list of characters affected by the move
+    */
   def actCalculation(attacker: Character, moveName: String, targets: List[Character]): Unit = {
     var newStatuses: Map[CharacterKey, Status] = Map()
     if (moveName == PhysicalAttackRepresentation)
@@ -105,6 +127,12 @@ object Round {
     endTurn()
   }
 
+  /** Given a map of characters and their new statuses, updates the current status of
+    * each character.
+    *
+    * @param newStatuses the map that couples each character with his new status
+    *                    (if changed)
+    */
   def updateTeamsStatuses(newStatuses: Map[CharacterKey, Status]): Unit = {
     Battle.teams.foreach(character => {
       if (newStatuses.contains((character.owner.get, character.characterName))) {
