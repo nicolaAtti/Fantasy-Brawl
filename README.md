@@ -43,7 +43,7 @@ The last remaining team wins.
 ## Releases
 It is possible to download the source code and all release executable jars at the following page :                   https://github.com/nicolaAtti/pps-17-fb/releases
 
-## Documentation
+## Documentation and Coverage Report
 
 The latest documentation is available at the following page :  https://nicolaAtti.github.io/pps-17-fb/
 
