@@ -1,5 +1,6 @@
 package model
 
+import model.Alteration._
 import org.scalatest.FunSuite
 
 /** *
@@ -78,5 +79,12 @@ class CharacterTest extends FunSuite {
     val status = Status(0,50,200,100,Map(),Map())
     jacob.status = status
     assert(!jacob.isAlive)
+  }
+  test("A stunned or asleep character should be incapacitated"){
+    val asleepStatus = Status(100,100,100,100,Map(),Map((Asleep,3)))
+    val stunnedStatus = Status(100,100,100,100,Map(),Map((Stunned,1)))
+    jacob.status = asleepStatus
+    annabelle.status = stunnedStatus
+    assert(jacob.isIncapacitated && annabelle.isIncapacitated)
   }
 }
